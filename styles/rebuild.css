@@ -25,7 +25,7 @@ button{color:inherit}
 .home-illustration-slot{
   position:absolute;
   inset:0;
-  background-image:url("../assets/home/home-bg.webp?v=84");
+  background-image:url("../assets/home/home-bg.png?v=84");
   background-size:cover;
   background-position:center center;
   background-repeat:no-repeat;
