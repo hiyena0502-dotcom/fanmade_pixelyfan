@@ -1,0 +1,132 @@
+/* Rebuild v2 — wardrobe keeps behavior, receives a new visual system. */
+html,body{background:#263650!important}
+body{min-height:100vh;color:#302d3b}
+.wardrobe-view{
+  min-height:100vh!important;
+  background:
+    radial-gradient(circle at 84% 8%,rgba(250,213,148,.3),transparent 22%),
+    linear-gradient(160deg,#314565 0%,#657292 42%,#b88988 74%,#d1a576 100%)!important;
+}
+.wardrobe-backdrop{inset:0!important;opacity:1!important;pointer-events:none}
+.wardrobe-rainbow,.wardrobe-cloud,.wardrobe-flowers{display:none!important}
+.wardrobe-backdrop::before{
+  content:"";position:absolute;inset:auto -8% -14% -8%;height:48%;
+  background:
+    linear-gradient(145deg,transparent 30%,rgba(53,65,76,.28) 31% 55%,transparent 56%),
+    linear-gradient(215deg,transparent 34%,rgba(61,64,73,.2) 35% 59%,transparent 60%);
+}
+.wardrobe-backdrop::after{
+  content:"✦";position:absolute;right:7%;top:8%;font-size:70px;color:rgba(255,228,173,.42);
+}
+.subpage-topbar{
+  position:relative;z-index:5;
+  min-height:84px;padding:16px 24px!important;
+  border:0!important;border-bottom:2px solid rgba(55,45,49,.22)!important;
+  background:#e7c491!important;
+  box-shadow:0 6px 0 rgba(43,46,62,.18)!important;
+}
+.subpage-topbar>div small{color:#7b5c5d!important;letter-spacing:.13em}
+.subpage-topbar h2{color:#3b3949!important;font-size:26px!important;letter-spacing:-.03em}
+.back-button,.wardrobe-top-actions button{
+  border:2px solid rgba(74,55,57,.18)!important;border-radius:11px 8px 12px 9px!important;
+  background:#f4dba9!important;color:#594d55!important;box-shadow:3px 4px 0 rgba(64,53,57,.14)!important
+}
+.wardrobe-slot-label{
+  border:0!important;border-radius:9px 13px 9px 12px!important;
+  background:#bc7f83!important;color:#fff3dc!important;box-shadow:3px 4px 0 rgba(67,49,57,.16)!important
+}
+.wardrobe-shell{
+  position:relative;z-index:3;
+  width:min(1500px,calc(100vw - 48px))!important;
+  margin:28px auto 40px!important;gap:20px!important;
+}
+.game-window{border:0!important;box-shadow:8px 10px 0 rgba(39,43,58,.2)!important}
+.wardrobe-stage{
+  border:3px solid rgba(69,54,52,.22)!important;border-radius:24px 17px 22px 16px!important;
+  background:#c58c78!important;overflow:hidden!important;
+}
+.wardrobe-stage::before{
+  background:
+    linear-gradient(90deg,rgba(97,59,48,.16) 1px,transparent 1px),
+    linear-gradient(#e4bd8e,#d6a276)!important;
+  background-size:52px 100%!important;
+  border-radius:16px!important;
+  box-shadow:inset 0 0 0 2px rgba(98,64,52,.13)!important;
+}
+.wardrobe-stage::after{background:#8f6c63!important;opacity:.7}
+.wardrobe-stage-top{
+  position:relative;z-index:4;
+  background:#775f6d!important;color:#fff0d5!important;border-bottom:0!important;
+  letter-spacing:.09em!important
+}
+.wardrobe-stage-bottom{
+  position:relative;z-index:4;
+  background:#775f6d!important;color:#fff0d5!important;border-top:0!important
+}
+.wardrobe-stage-bottom strong{color:#fff0d5!important}
+.wardrobe-stage-bottom span{color:#e8ceb8!important}
+.wardrobe-portrait{
+  background:
+    radial-gradient(circle at 50% 34%,rgba(255,238,200,.36),transparent 36%),
+    repeating-linear-gradient(90deg,rgba(110,75,59,.06) 0 1px,transparent 1px 42px)!important;
+  border:0!important;
+}
+.wardrobe-preview-empty{color:#6f5b58!important}
+.wardrobe-panel.wardrobe-dev-panel{
+  border:3px solid rgba(67,54,55,.18)!important;border-radius:20px 15px 22px 16px!important;
+  background:#e8c99d!important;color:#3c3944!important;
+}
+.wardrobe-dev-heading h3,.wardrobe-dev-section-title b{color:#403c48!important}
+.wardrobe-kicker,.wardrobe-dev-section-title>div>span{color:#865f6b!important}
+.wardrobe-dev-badge{
+  background:#6f8290!important;color:#fff1d9!important;border-radius:8px 12px 8px 11px!important
+}
+.wardrobe-dev-summary,.wardrobe-dev-section .wardrobe-multi-note,.wardrobe-upload-status{
+  background:#d9b98f!important;color:#63565b!important;border-radius:8px 11px 8px 10px!important
+}
+.wardrobe-dev-section{
+  border:2px solid rgba(91,67,63,.15)!important;border-radius:13px 18px 14px 16px!important;
+  background:#f0d8af!important;
+}
+.wardrobe-dev-section-title>div>span{
+  background:#bf8585!important;color:#fff2dc!important;border-radius:7px 10px 7px 9px!important
+}
+.wardrobe-dev-tabs button{
+  border:1px solid rgba(82,66,67,.18)!important;
+  border-radius:8px 11px 8px 10px!important;background:#ddc19a!important;color:#65545a!important
+}
+.wardrobe-dev-tabs button.is-active{
+  border-color:#9b6975!important;background:#9a6976!important;color:#fff1da!important
+}
+.wardrobe-option,.wardrobe-dev-options .wardrobe-option{
+  border:1px solid rgba(81,66,66,.16)!important;background:#ead3ad!important;color:#48414a!important;
+  border-radius:9px 13px 10px 12px!important;box-shadow:none!important
+}
+.wardrobe-option.is-selected,.wardrobe-dev-options .wardrobe-option.is-selected{
+  border-color:#8f6170!important;background:#d7a8a0!important;box-shadow:inset 4px 0 0 #7d5868!important
+}
+.wardrobe-option-group{background:#c5b098!important;color:#665a5d!important}
+.wardrobe-option b{color:#4a4149!important}.wardrobe-option small{color:#76676a!important}
+.wardrobe-dev-form select,.wardrobe-dev-form input[type="text"],
+.wardrobe-layer-picker select,.wardrobe-transform-control>input[type="number"]{
+  border:1px solid rgba(78,63,64,.2)!important;background:#f7e6c5!important;color:#544a50!important
+}
+.wardrobe-dev-file,.wardrobe-file-action,.wardrobe-add-part-button{
+  border:0!important;background:#a66f78!important;color:#fff0da!important;box-shadow:2px 3px 0 rgba(74,51,59,.16)!important
+}
+.wardrobe-cancel-edit-button,.wardrobe-editor-actions button,.wardrobe-layer-order-actions button{
+  border:1px solid rgba(80,65,65,.18)!important;background:#dac09e!important;color:#5e5156!important
+}
+#wardrobe-delete-image{background:#bd7977!important;color:#fff0dc!important}
+.wardrobe-layer-order-box,.wardrobe-file-name,.wardrobe-base-row label{
+  background:#d7bb97!important;color:#625459!important;border-color:rgba(81,64,64,.14)!important
+}
+.wardrobe-sliders input[type="range"]{accent-color:#865f70!important}
+.wardrobe-sliders label>span,.wardrobe-dev-form label>span,.wardrobe-dev-section-title small{color:#735f61!important}
+@media(max-width:900px){.wardrobe-shell{width:min(94vw,820px)!important;margin-top:20px!important}}
+@media(max-width:680px){
+  .subpage-topbar{padding:12px 14px!important}
+  .subpage-topbar h2{font-size:21px!important}
+  .wardrobe-shell{width:94vw!important;margin:16px auto 26px!important}
+  .wardrobe-panel.wardrobe-dev-panel{border-radius:15px!important}
+}
