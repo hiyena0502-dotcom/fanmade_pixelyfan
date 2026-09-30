@@ -4,41 +4,40 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="잠뜰님의 생일을 준비하는 비공식 팬메이드 포인트앤클릭 어드벤처." />
-  <meta name="theme-color" content="#465d85" />
+  <meta name="theme-color" content="#17223d" />
   <title>꿈뜰이의 우당탕 생일 준비 대작전!!</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="styles/rebuild.css?v=77" />
-  <script src="rebuild.js?v=77" defer></script>
+  <link rel="stylesheet" href="styles/rebuild.css?v=78" />
+  <script src="rebuild.js?v=78" defer></script>
 </head>
 <body>
   <main class="rebuild-root">
     <section class="screen home-screen is-active" data-screen="home">
-      <div class="home-sky" aria-hidden="true">
-        <span class="home-moon"></span>
-        <span class="home-star star-a">✦</span>
-        <span class="home-star star-b">·</span>
-        <span class="home-star star-c">✧</span>
-        <span class="home-horizon"></span>
+      <div class="home-illustration-slot" aria-hidden="true"></div>
+
+      <div class="home-copy">
+        <header class="home-title">
+          <img src="assets/home/title-logo.png?v=75" alt="꿈뜰이의 우당탕 생일 준비 대작전!!" />
+        </header>
+
+        <nav class="home-menu" aria-label="메인 메뉴">
+          <button class="title-menu-item" type="button" id="new-story">
+            <span class="menu-mark">✦</span>
+            <strong>새 이야기</strong>
+            <small>NEW STORY</small>
+          </button>
+          <button class="title-menu-item" type="button" id="continue-story" disabled>
+            <span class="menu-mark">✦</span>
+            <strong>이어하기</strong>
+            <small id="continue-copy">NO SAVE DATA</small>
+          </button>
+          <a class="title-menu-item" href="wardrobe.html">
+            <span class="menu-mark">✦</span>
+            <strong>꿈뜰이 옷장</strong>
+            <small>DRESS UP</small>
+          </a>
+        </nav>
       </div>
-
-      <header class="home-title">
-        <img src="assets/home/title-logo.png?v=75" alt="꿈뜰이의 우당탕 생일 준비 대작전!!" />
-      </header>
-
-      <nav class="home-menu" aria-label="메인 메뉴">
-        <button class="paper-button primary" type="button" id="new-story">
-          <strong>새 이야기</strong>
-          <span>12월 28일 아침부터 시작</span>
-        </button>
-        <button class="paper-button" type="button" id="continue-story" disabled>
-          <strong>이어하기</strong>
-          <span id="continue-copy">저장된 이야기가 없습니다</span>
-        </button>
-        <a class="paper-button wardrobe-link" href="wardrobe.html">
-          <strong>꿈뜰이 옷장</strong>
-          <span>꿈뜰이 꾸미기</span>
-        </a>
-      </nav>
     </section>
 
     <section class="screen story-screen" data-screen="story" hidden>
@@ -49,15 +48,9 @@
             <strong id="hud-place">픽셀리 집 앞</strong>
           </div>
           <nav class="hud-tools" aria-label="게임 도구">
-            <button type="button" class="object-tool bag-tool" id="bag-button" aria-label="가방" disabled>
-              <span class="tool-shape">▣</span><small>가방</small>
-            </button>
-            <button type="button" class="object-tool diary-tool" id="diary-button" aria-label="다이어리" disabled>
-              <span class="tool-shape">▤</span><small>다이어리</small>
-            </button>
-            <button type="button" class="object-tool menu-tool" id="story-menu-button" aria-label="메뉴">
-              <span class="tool-shape">☰</span><small>메뉴</small>
-            </button>
+            <button type="button" class="object-tool" id="bag-button" aria-label="가방" disabled><span>▣</span><small>가방</small></button>
+            <button type="button" class="object-tool" id="diary-button" aria-label="다이어리" disabled><span>▤</span><small>다이어리</small></button>
+            <button type="button" class="object-tool" id="story-menu-button" aria-label="메뉴"><span>☰</span><small>메뉴</small></button>
           </nav>
         </header>
 
@@ -74,9 +67,23 @@
             <div class="room-rug-placeholder"></div>
             <div class="room-boxes-placeholder"><i></i><i></i><i></i></div>
           </div>
-          <div class="room-note">
-            <small>CHAPTER 1</small>
-            <strong>생일 준비</strong>
+          <button type="button" class="scene-back-arrow" id="leave-house" aria-label="집 밖으로 나가기">
+            <span>‹</span><small>밖으로</small>
+          </button>
+        </section>
+
+        <section class="story-dialogue-ui" id="story-dialogue-ui" hidden aria-live="polite">
+          <div class="dialogue-character dialogue-character--left" id="dialogue-character-left" hidden>
+            <img id="dialogue-character-left-image" alt="" />
+          </div>
+          <div class="dialogue-character dialogue-character--right" id="dialogue-character-right" hidden>
+            <img id="dialogue-character-right-image" alt="" />
+          </div>
+          <div class="dialogue-rail" aria-hidden="true"><span></span><i>✦</i><span></span></div>
+          <div class="dialogue-copy">
+            <strong id="dialogue-speaker"></strong>
+            <p id="dialogue-text"></p>
+            <button type="button" id="dialogue-next" aria-label="다음 대사">›</button>
           </div>
         </section>
 
@@ -88,10 +95,21 @@
           </div>
         </section>
 
+        <section class="intro-monologue" id="intro-monologue" hidden aria-live="polite">
+          <div class="intro-vignette"></div>
+          <div class="intro-monologue-box">
+            <small>꿈뜰이</small>
+            <p id="intro-monologue-text"></p>
+            <button type="button" id="intro-monologue-next" aria-label="다음">›</button>
+          </div>
+        </section>
+
         <section class="chapter-card" id="chapter-card" hidden aria-live="polite">
-          <small>12월 28일</small>
-          <strong>CHAPTER 1</strong>
+          <div class="chapter-lines" aria-hidden="true"><i></i><span>✦</span><i></i></div>
+          <small>DECEMBER 28</small>
+          <strong>CHAPTER I</strong>
           <span>생일 준비</span>
+          <em>Birthday Preparation</em>
         </section>
 
         <section class="menu-sheet" id="story-menu" hidden>

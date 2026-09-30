@@ -4,23 +4,126 @@ const $=(q,r=document)=>r.querySelector(q);
 const screens=[...document.querySelectorAll("[data-screen]")];
 const scenes=[...document.querySelectorAll("[data-scene]")];
 let toastTimer=0;
-function toast(message){const node=$("#toast");node.textContent=message;node.classList.add("is-visible");clearTimeout(toastTimer);toastTimer=setTimeout(()=>node.classList.remove("is-visible"),1700)}
+
+/* 독백 대사는 사용자와 함께 확정한 뒤 이 배열에 넣는다. */
+const INTRO_LINES=[];
+
+function toast(message){
+  const node=$("#toast");
+  node.textContent=message;
+  node.classList.add("is-visible");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>node.classList.remove("is-visible"),1700);
+}
 function readSave(){try{return JSON.parse(localStorage.getItem(SAVE_KEY)||"null")}catch{return null}}
-function writeSave(scene="exterior"){const data={scene,chapter:scene==="living-room"?1:0,savedAt:Date.now()};localStorage.setItem(SAVE_KEY,JSON.stringify(data));renderContinue();return data}
-function renderContinue(){const save=readSave(),button=$("#continue-story"),copy=$("#continue-copy");button.disabled=!save;copy.textContent=save?(save.scene==="living-room"?"CHAPTER 1 · 거실":"12월 28일 · 픽셀리 집 앞"):"저장된 이야기가 없습니다"}
-function showScreen(name){screens.forEach(screen=>{const on=screen.dataset.screen===name;screen.hidden=!on;screen.classList.toggle("is-active",on)})}
-function showScene(name){scenes.forEach(scene=>{const on=scene.dataset.scene===name;scene.hidden=!on;scene.classList.toggle("is-active",on)});$("#hud-place").textContent=name==="living-room"?"픽셀리 집 · 거실":"픽셀리 집 앞";$("#bag-button").disabled=name!=="living-room";$("#diary-button").disabled=name!=="living-room"}
-function showBubble(message){const bubble=$("#inspect-bubble");bubble.textContent=message;bubble.hidden=false;clearTimeout(showBubble.timer);showBubble.timer=setTimeout(()=>bubble.hidden=true,2600)}
-function startStory(scene="exterior"){showScreen("story");showScene(scene);$("#door-choice").hidden=true;$("#story-menu").hidden=true}
-$("#new-story").addEventListener("click",()=>{writeSave("exterior");startStory("exterior")});
-$("#continue-story").addEventListener("click",()=>{const save=readSave();if(save)startStory(save.scene||"exterior")});
-$("#door-hotspot").addEventListener("click",()=>{$("#inspect-bubble").hidden=true;$("#door-choice").hidden=false});
+function writeSave(scene="exterior"){
+  const data={scene,chapter:scene==="living-room"?1:0,savedAt:Date.now()};
+  localStorage.setItem(SAVE_KEY,JSON.stringify(data));
+  renderContinue();
+  return data;
+}
+function renderContinue(){
+  const save=readSave(),button=$("#continue-story"),copy=$("#continue-copy");
+  button.disabled=!save;
+  copy.textContent=save?(save.scene==="living-room"?"CHAPTER I · 거실":"12월 28일 · 집 앞"):"NO SAVE DATA";
+}
+function showScreen(name){
+  screens.forEach(screen=>{
+    const on=screen.dataset.screen===name;
+    screen.hidden=!on;
+    screen.classList.toggle("is-active",on);
+  });
+}
+function showScene(name){
+  scenes.forEach(scene=>{
+    const on=scene.dataset.scene===name;
+    scene.hidden=!on;
+    scene.classList.toggle("is-active",on);
+  });
+  $("#hud-place").textContent=name==="living-room"?"픽셀리 집 · 거실":"픽셀리 집 앞";
+  $("#bag-button").disabled=name!=="living-room";
+  $("#diary-button").disabled=name!=="living-room";
+}
+function showBubble(message){
+  const bubble=$("#inspect-bubble");
+  bubble.textContent=message;
+  bubble.hidden=false;
+  clearTimeout(showBubble.timer);
+  showBubble.timer=setTimeout(()=>bubble.hidden=true,2600);
+}
+function startStory(scene="exterior"){
+  showScreen("story");
+  showScene(scene);
+  $("#door-choice").hidden=true;
+  $("#story-menu").hidden=true;
+  $("#story-dialogue-ui").hidden=true;
+  $("#intro-monologue").hidden=true;
+}
+function runIntro(){
+  if(!INTRO_LINES.length){
+    startStory("exterior");
+    return;
+  }
+  startStory("exterior");
+  let index=0;
+  const overlay=$("#intro-monologue");
+  const text=$("#intro-monologue-text");
+  const next=$("#intro-monologue-next");
+  overlay.hidden=false;
+  const render=()=>{text.textContent=INTRO_LINES[index]};
+  render();
+  const advance=()=>{
+    index++;
+    if(index>=INTRO_LINES.length){
+      overlay.hidden=true;
+      next.removeEventListener("click",advance);
+      return;
+    }
+    render();
+  };
+  next.addEventListener("click",advance);
+}
+function playChapterCard(after){
+  const card=$("#chapter-card");
+  card.hidden=false;
+  setTimeout(()=>{
+    card.hidden=true;
+    after?.();
+  },2400);
+}
+$("#new-story").addEventListener("click",()=>{
+  writeSave("exterior");
+  runIntro();
+});
+$("#continue-story").addEventListener("click",()=>{
+  const save=readSave();
+  if(save) startStory(save.scene||"exterior");
+});
+$("#door-hotspot").addEventListener("click",()=>{
+  $("#inspect-bubble").hidden=true;
+  $("#door-choice").hidden=false;
+});
 $("#keep-looking").addEventListener("click",()=>{$("#door-choice").hidden=true});
-$("#enter-house").addEventListener("click",()=>{$("#door-choice").hidden=true;const card=$("#chapter-card");card.hidden=false;setTimeout(()=>{card.hidden=true;showScene("living-room");writeSave("living-room")},1450)});
+$("#enter-house").addEventListener("click",()=>{
+  $("#door-choice").hidden=true;
+  playChapterCard(()=>{
+    showScene("living-room");
+    writeSave("living-room");
+  });
+});
+$("#leave-house").addEventListener("click",()=>{
+  showScene("exterior");
+  writeSave("exterior");
+});
 $("#story-menu-button").addEventListener("click",()=>{$("#story-menu").hidden=false});
 $("#close-story-menu").addEventListener("click",()=>{$("#story-menu").hidden=true});
 $("#return-home").addEventListener("click",()=>{$("#story-menu").hidden=true;showScreen("home")});
-$("#save-progress").addEventListener("click",()=>{const current=scenes.find(scene=>!scene.hidden)?.dataset.scene||"exterior";writeSave(current);$("#story-menu").hidden=true;toast("현재 위치를 저장했어.")});
+$("#save-progress").addEventListener("click",()=>{
+  const current=scenes.find(scene=>!scene.hidden)?.dataset.scene||"exterior";
+  writeSave(current);
+  $("#story-menu").hidden=true;
+  toast("현재 위치를 저장했어.");
+});
 $("#bag-button").addEventListener("click",()=>toast("가방은 아직 비어 있어."));
 $("#diary-button").addEventListener("click",()=>toast("아직 적힌 내용이 없어."));
 renderContinue();
