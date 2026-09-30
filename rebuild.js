@@ -6,7 +6,14 @@ const scenes=[...document.querySelectorAll("[data-scene]")];
 let toastTimer=0;
 
 /* 독백 대사는 사용자와 함께 확정한 뒤 이 배열에 넣는다. */
-const INTRO_LINES=[];
+const INTRO_LINES=[
+  "오늘은 12월 28일.",
+  "잠뜰님의 생일이다.",
+  "그래서 아침부터 여기까지 왔다.",
+  "다들 준비하고 있다고 했으니까…",
+  "나도 조금이라도 도울 수 있으면 좋겠는데...",
+  "…뭐, 오늘 하루는 별일 없겠지?"
+];
 
 function toast(message){
   const node=$("#toast");
@@ -65,23 +72,56 @@ function runIntro(){
     return;
   }
   startStory("exterior");
-  let index=0;
+  const frame=$(".story-frame");
   const overlay=$("#intro-monologue");
   const text=$("#intro-monologue-text");
   const next=$("#intro-monologue-next");
+  let index=0;
+
+  frame.classList.add("intro-running");
   overlay.hidden=false;
-  const render=()=>{text.textContent=INTRO_LINES[index]};
-  render();
-  const advance=()=>{
-    index++;
-    if(index>=INTRO_LINES.length){
+
+  const render=()=>{
+    text.classList.remove("is-visible");
+    window.setTimeout(()=>{
+      text.textContent=INTRO_LINES[index];
+      requestAnimationFrame(()=>text.classList.add("is-visible"));
+    },120);
+  };
+
+  const cleanup=()=>{
+    next.removeEventListener("click",advance);
+    document.removeEventListener("keydown",keyAdvance);
+  };
+
+  const finish=()=>{
+    cleanup();
+    frame.classList.add("intro-reveal");
+    window.setTimeout(()=>{
       overlay.hidden=true;
-      next.removeEventListener("click",advance);
+      frame.classList.remove("intro-running","intro-reveal");
+    },1800);
+  };
+
+  const advance=()=>{
+    if(index>=INTRO_LINES.length-1){
+      finish();
       return;
     }
+    index++;
     render();
   };
+
+  const keyAdvance=event=>{
+    if(event.code==="Space"||event.code==="Enter"){
+      event.preventDefault();
+      advance();
+    }
+  };
+
+  render();
   next.addEventListener("click",advance);
+  document.addEventListener("keydown",keyAdvance);
 }
 function playChapterCard(after){
   const card=$("#chapter-card");

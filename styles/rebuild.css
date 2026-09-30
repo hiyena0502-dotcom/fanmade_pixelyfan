@@ -192,22 +192,52 @@ button{color:inherit}
   color:#e6c679;font-size:32px;cursor:pointer
 }
 
-/* Dreamer monologue intro. Text stays empty until the user approves the actual lines. */
+/* Intro monologue: darkness first, then the warm house exterior is revealed. */
+.story-frame.intro-running .minimal-hud{
+  opacity:0;
+  transition:opacity .8s ease;
+}
+.story-frame.intro-running .exterior-scene .scene-art{
+  filter:brightness(.18) saturate(.68) contrast(.96);
+  transform:scale(1.025);
+  transition:filter 1.8s ease,transform 1.8s ease;
+}
+.story-frame.intro-running.intro-reveal .exterior-scene .scene-art{
+  filter:brightness(1.08) saturate(1.06) contrast(1);
+  transform:scale(1);
+}
+.story-frame.intro-running.intro-reveal .minimal-hud{opacity:1}
+.story-frame.intro-running.intro-reveal .intro-monologue{
+  opacity:0;
+  transition:opacity 1.45s ease;
+}
+
+ /* Dreamer monologue intro. */
 .intro-monologue{
   position:absolute;z-index:75;inset:0;
-  background:rgba(7,12,25,.12)
+  background:
+    radial-gradient(circle at 50% 45%,rgba(18,26,46,.38),rgba(4,8,18,.94) 78%);
+  opacity:1
 }
-.intro-vignette{position:absolute;inset:0;background:radial-gradient(circle,transparent 35%,rgba(4,8,18,.58) 100%)}
+.intro-vignette{
+  position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 45%,transparent 24%,rgba(1,4,12,.5) 72%,rgba(1,4,12,.82) 100%)
+}
 .intro-monologue-box{
-  position:absolute;left:8%;right:8%;bottom:8%;
-  min-height:132px;padding:22px 62px 22px 26px;
-  border-left:3px solid var(--gold);
-  background:linear-gradient(90deg,rgba(8,13,27,.88),rgba(8,13,27,.45),transparent)
+  position:absolute;left:50%;bottom:11%;transform:translateX(-50%);
+  width:min(980px,84vw);min-height:132px;padding:24px 70px 24px 28px;
+  border-left:2px solid rgba(226,191,114,.78);
+  background:linear-gradient(90deg,rgba(7,12,25,.84),rgba(7,12,25,.44) 74%,transparent)
 }
 .intro-monologue-box small{
   display:block;margin-bottom:8px;font-size:10px;letter-spacing:.16em;color:#e0c68c
 }
-.intro-monologue-box p{margin:0;max-width:900px;font-size:18px;line-height:1.7;color:#fbf4e5}
+.intro-monologue-box p{
+  margin:0;max-width:900px;font-size:18px;line-height:1.7;color:#fbf4e5;
+  opacity:0;transform:translateY(7px);
+  transition:opacity .42s ease,transform .42s ease
+}
+.intro-monologue-box p.is-visible{opacity:1;transform:translateY(0)}
 .intro-monologue-box button{
   position:absolute;right:18px;bottom:14px;border:0;background:transparent;color:#e4c478;font-size:34px;cursor:pointer
 }
