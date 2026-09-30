@@ -4,7 +4,7 @@ const $=(q,r=document)=>r.querySelector(q);
 const screens=[...document.querySelectorAll("[data-screen]")];
 const scenes=[...document.querySelectorAll("[data-scene]")];
 let toastTimer=0;
-const OPENING_TITLE_SRC="assets/ui/opening-title.webp?v=81";
+const OPENING_TITLE_SRC="assets/home/title-logo.png?v=85";
 const openingTitlePreload=new Image();
 openingTitlePreload.src=OPENING_TITLE_SRC;
 
@@ -105,15 +105,15 @@ function runIntro(){
     openingTitle.hidden=false;
     openingTitle.classList.remove("is-showing","is-leaving");
     void openingTitle.offsetWidth;
-    requestAnimationFrame(()=>openingTitle.classList.add("is-showing"));
+    openingTitle.classList.add("is-showing");
 
-    window.setTimeout(()=>openingTitle.classList.add("is-leaving"),2450);
+    window.setTimeout(()=>openingTitle.classList.add("is-leaving"),2600);
     window.setTimeout(()=>{
       overlay.hidden=true;
       openingTitle.hidden=true;
       openingTitle.classList.remove("is-showing","is-leaving");
       frame.classList.remove("intro-running","intro-reveal");
-    },3500);
+    },3900);
   };
 
   const advance=()=>{
@@ -141,14 +141,14 @@ function playChapterCard(after){
   card.hidden=false;
   card.classList.remove("is-active","is-leaving");
   void card.offsetWidth;
-  requestAnimationFrame(()=>card.classList.add("is-active"));
+  card.classList.add("is-active");
 
-  window.setTimeout(()=>card.classList.add("is-leaving"),2350);
+  window.setTimeout(()=>card.classList.add("is-leaving"),2850);
   window.setTimeout(()=>{
     card.hidden=true;
     card.classList.remove("is-active","is-leaving");
     after?.();
-  },3550);
+  },4250);
 }
 
 function enterHouse(){

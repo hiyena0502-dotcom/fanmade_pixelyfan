@@ -574,3 +574,74 @@ button{color:inherit}
   .opening-title-card,.opening-title-card img,.house-entry-transition::before,.house-entry-transition::after,.entry-vignette,
   .chapter-card,.chapter-card::before,.chapter-card::after,.chapter-card *,.living-room-scene .room-placeholder{animation:none!important;transition:none!important}
 }
+
+
+/* v85 — ensure opening title and CHAPTER I are always visible when activated. */
+.opening-title-card{
+  z-index:96!important;
+  display:grid!important;
+  place-items:center!important;
+  background:radial-gradient(circle at 50% 50%,rgba(255,252,244,.14),transparent 48%);
+}
+.opening-title-card[hidden]{display:none!important}
+.opening-title-card.is-showing{
+  opacity:1!important;
+  visibility:visible!important;
+}
+.opening-title-card.is-showing img{
+  opacity:1!important;
+  visibility:visible!important;
+  width:min(1120px,82vw)!important;
+  max-height:78vh!important;
+  transform:scale(1)!important;
+}
+.opening-title-card.is-leaving{
+  opacity:0!important;
+  transition:opacity 1.2s ease!important;
+}
+
+.chapter-card{
+  z-index:110!important;
+}
+.chapter-card.is-active{
+  opacity:1!important;
+  visibility:visible!important;
+}
+.chapter-card.is-active .chapter-lines,
+.chapter-card.is-active small,
+.chapter-card.is-active strong,
+.chapter-card.is-active>span,
+.chapter-card.is-active em{
+  opacity:1;
+}
+.chapter-card.is-active strong{
+  color:#fff2d2!important;
+  text-shadow:0 0 28px rgba(226,191,114,.28),0 4px 24px rgba(0,0,0,.35);
+}
+.chapter-card.is-leaving{
+  opacity:0!important;
+  transition:opacity 1.35s ease!important;
+}
+
+@media(prefers-reduced-motion:reduce){
+  .opening-title-card.is-showing,
+  .opening-title-card.is-showing img,
+  .chapter-card.is-active,
+  .chapter-card.is-active .chapter-lines,
+  .chapter-card.is-active small,
+  .chapter-card.is-active strong,
+  .chapter-card.is-active>span,
+  .chapter-card.is-active em{
+    opacity:1!important;
+    visibility:visible!important;
+    transform:none!important;
+    filter:none!important;
+    animation:none!important;
+  }
+  .chapter-card::before,
+  .chapter-card::after{
+    opacity:.65!important;
+    transform:scaleX(1)!important;
+    animation:none!important;
+  }
+}
