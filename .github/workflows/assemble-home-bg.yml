@@ -1,0 +1,41 @@
+name: Build HQ home background
+
+on:
+  push:
+    branches:
+      - rebuild-v2
+    paths:
+      - 'assets/home/q98parts/**'
+      - 'assets/home/q98ready'
+
+permissions:
+  contents: write
+
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: rebuild-v2
+      - name: Check ready marker
+        id: ready
+        run: |
+          if [ -f assets/home/q98ready ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Assemble high quality background
+        if: steps.ready.outputs.run == 'true'
+        run: |
+          cat assets/home/q98parts/*.txt | tr -d '\n\r ' | base64 -d > assets/home/home-bg.webp
+          rm -rf assets/home/q98parts assets/home/q98ready
+      - name: Commit generated asset
+        if: steps.ready.outputs.run == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Use high quality winter home background" || exit 0
+          git push origin HEAD:rebuild-v2
