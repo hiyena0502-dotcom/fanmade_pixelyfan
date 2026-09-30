@@ -115,13 +115,13 @@ function runIntro(){
     void openingTitle.offsetWidth;
     openingTitle.classList.add("is-showing");
 
-    window.setTimeout(()=>openingTitle.classList.add("is-leaving"),2600);
+    window.setTimeout(()=>openingTitle.classList.add("is-leaving"),2950);
     window.setTimeout(()=>{
       overlay.hidden=true;
       openingTitle.hidden=true;
       openingTitle.classList.remove("is-showing","is-leaving");
       frame.classList.remove("intro-running","intro-reveal");
-    },3900);
+    },4300);
   };
 
   const advance=()=>{
