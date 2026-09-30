@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="잠뜰님의 생일을 준비하며 여러 이야기의 세계를 여행하는 비공식 팬메이드 포인트앤클릭 어드벤처." />
+  <meta name="theme-color" content="#b9e9fa" />
+  <title>꿈뜰이의 우당탕 생일 준비 대작전!!</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="style.css?v=75" />
+  <script src="data/game-config.js?v=75" defer></script>
+  <script src="data/editor-schema.js?v=75" defer></script>
+  <script src="app.js?v=75" defer></script>
+</head>
+<body>
+  <div class="game-root">
+    <section class="view title-view is-active" data-view="home">
+      <div class="title-backdrop" aria-hidden="true">
+        <div class="backdrop-sky"></div>
+        <div class="backdrop-stars"></div>
+        <div class="backdrop-horizon"></div>
+      </div>
+      <header class="title-hero">
+        <h1 class="title-artwork">
+          <img class="title-logo" src="assets/home/title-logo.png?v=75" alt="꿈뜰이의 우당탕 생일 준비 대작전!!" />
+        </h1>
+      </header>
+      <button class="wardrobe-shortcut" type="button" data-open-wardrobe aria-label="꿈뜰이 옷장 열기">
+        <span aria-hidden="true">✿</span>
+        <b>꿈뜰이 옷장</b>
+        <small>DRESS UP</small>
+      </button>
+
+      <button class="dev-shortcut" type="button" data-open-dev aria-label="컬렉션 편집 열기">
+        <span aria-hidden="true">▤</span>
+        <b>컬렉션 편집</b>
+        <small>COLLECTION EDITOR</small>
+      </button>
+
+      <aside class="command-window game-window">
+        <div class="window-caption"><span>MAIN MENU</span><i>✦</i></div>
+
+        <button class="command-button" type="button" id="continue-button">
+          <span class="command-cursor">▶</span>
+          <span><b>이어하기</b><small id="continue-subtitle">저장된 이야기가 없습니다</small></span>
+        </button>
+
+        <button class="command-button" type="button" id="new-game-button">
+          <span class="command-cursor">▶</span>
+          <span><b>새 이야기</b><small>처음부터 시작합니다</small></span>
+        </button>
+
+        <button class="command-button" type="button" id="quick-save-button">
+          <span class="command-cursor">▶</span>
+          <span><b>저장하기</b><small id="quick-save-subtitle">현재 진행 상황 저장</small></span>
+        </button>
+
+        <button class="command-button command-button--chapter" type="button" data-open-chapters>
+          <span class="command-cursor">▶</span>
+          <span><b>CHAPTERS</b><small>이야기 진행 기록</small></span>
+        </button>
+
+        <button class="command-button command-button--collection" type="button" data-open-collection>
+          <span class="command-cursor">▶</span>
+          <span><b>COLLECTION</b><small>인물 · 아이템 · 엽서 기록</small></span>
+        </button>
+
+        <button class="command-button" type="button" id="save-manager-button">
+          <span class="command-cursor">▶</span>
+          <span><b>저장 관리</b><small>세이브 슬롯 확인</small></span>
+        </button>
+      </aside>
+
+      <section class="save-summary game-window">
+        <div class="summary-label">
+          <span>CURRENT SAVE</span>
+          <b id="current-slot-label">NO DATA</b>
+        </div>
+        <div class="summary-progress">
+          <small>진행도</small>
+          <div class="summary-track"><i id="summary-progress-bar"></i></div>
+          <b id="summary-progress-text">0%</b>
+        </div>
+        <dl>
+          <div><dt>현재 위치</dt><dd id="summary-location">―</dd></div>
+          <div><dt>플레이 시간</dt><dd id="summary-playtime">00:00</dd></div>
+          <div><dt>마지막 저장</dt><dd id="summary-saved-at">―</dd></div>
+        </dl>
+      </section>
+
+    </section>
+
+    <section class="view game-ui-view" data-view="story" hidden>
+      <main class="story-stage">
+        <div class="story-room" id="story-room" aria-label="챕터 1 파티방">
+          <div class="story-room-art" aria-hidden="true">
+            <div class="room-wall-panels"></div>
+            <div class="room-window">
+              <span class="room-moon"></span>
+              <span class="room-window-cross room-window-cross--v"></span>
+              <span class="room-window-cross room-window-cross--h"></span>
+            </div>
+            <div class="room-curtain room-curtain--left"></div>
+            <div class="room-curtain room-curtain--right"></div>
+            <div class="room-chandelier"><i></i><i></i><i></i></div>
+            <div class="room-sideboard room-sideboard--left"></div>
+            <div class="room-bookshelf"><span></span><span></span><span></span><span></span></div>
+            <div class="room-gramophone"><i></i></div>
+            <div class="room-rug"></div>
+            <div class="room-table"><i></i><i></i><i></i><i></i></div>
+            <div class="room-chair room-chair--one"></div>
+            <div class="room-chair room-chair--two"></div>
+            <div class="room-door room-door--left"></div>
+            <div class="room-door room-door--right"></div>
+          </div>
+
+          <header class="story-hud">
+            <div class="story-heading">
+              <small>CHAPTER 1</small>
+              <b id="story-chapter-name">생일 전날</b>
+              <span><i></i><em id="story-location-name">파티방</em></span>
+            </div>
+            <div class="story-hud-actions">
+              <button class="story-home-button" type="button" data-go-home aria-label="메인 화면으로">⌂</button>
+            </div>
+          </header>
+
+          <button class="story-exit story-exit--left" type="button" data-story-exit="left" aria-label="왼쪽으로 이동">‹</button>
+          <button class="story-exit story-exit--right" type="button" data-story-exit="right" aria-label="오른쪽으로 이동">›</button>
+
+          <button class="story-hotspot story-hotspot--window" type="button" data-story-hotspot="window"><span>창문 조사</span></button>
+          <button class="story-hotspot story-hotspot--table" type="button" data-story-hotspot="table"><span>테이블 조사</span></button>
+          <button class="story-hotspot story-hotspot--bookshelf" type="button" data-story-hotspot="bookshelf"><span>책장 조사</span></button>
+          <button class="story-hotspot story-hotspot--gramophone" type="button" data-story-hotspot="gramophone"><span>축음기 조사</span></button>
+
+          <section class="story-dialogue" id="story-dialogue" hidden aria-live="polite">
+            <div class="story-dialogue-mark">✦</div>
+            <div class="story-dialogue-copy">
+              <small id="story-dialogue-label">조사</small>
+              <p id="story-dialogue-text">아직 아무것도 없다.</p>
+            </div>
+            <button type="button" id="story-dialogue-close" aria-label="대화 닫기">×</button>
+          </section>
+
+          <aside class="story-side-panel" id="story-inventory-panel" hidden>
+            <header><div><small>INVENTORY</small><h3>가방</h3></div><button type="button" data-story-close-panel>×</button></header>
+            <p>현재 가지고 있는 물건입니다. 아이템을 누르면 선택할 수 있어요.</p>
+            <div class="story-inventory-list" id="story-inventory-list"></div>
+          </aside>
+
+          <aside class="story-side-panel" id="story-missions-panel" hidden>
+            <header><div><small>MISSIONS</small><h3>현재 목표</h3></div><button type="button" data-story-close-panel>×</button></header>
+            <ul class="story-mission-list" id="story-mission-list"></ul>
+          </aside>
+
+          <aside class="story-side-panel story-map-panel" id="story-map-panel" hidden>
+            <header><div><small>MAP</small><h3 id="story-map-title">이동</h3></div><button type="button" data-story-close-panel>×</button></header>
+            <p id="story-map-description">한 번 가 본 장소는 나중에 빠르게 이동할 수 있게 됩니다.</p>
+            <div class="story-map" id="story-map">
+              <button type="button" class="is-current" data-story-map-node="party-room">파티방<small>현재 위치</small></button>
+              <button type="button" disabled>복도<small>아직 잠김</small></button>
+              <button type="button" disabled>주방<small>아직 잠김</small></button>
+              <button type="button" disabled>창고<small>아직 잠김</small></button>
+            </div>
+          </aside>
+        </div>
+
+
+        <section class="story-intro-overlay" id="story-intro" hidden aria-live="polite">
+          <div class="story-intro-backdrop" aria-hidden="true">
+            <div class="intro-house">
+              <div class="intro-house-roof"></div>
+              <div class="intro-house-body">
+                <div class="intro-house-window intro-house-window--left"></div>
+                <div class="intro-house-door"></div>
+                <div class="intro-house-window intro-house-window--right"></div>
+              </div>
+              <div class="intro-house-bush intro-house-bush--one"></div>
+              <div class="intro-house-bush intro-house-bush--two"></div>
+              <div class="intro-house-path"></div>
+            </div>
+            <div class="intro-ground"></div>
+            <div class="intro-leaves" aria-hidden="true">
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            </div>
+          </div>
+          <div class="story-sky-clouds" aria-hidden="true">
+            <i class="sky-cloud-sprite sky-cloud-sprite--1"></i>
+            <i class="sky-cloud-sprite sky-cloud-sprite--2"></i>
+            <i class="sky-cloud-sprite sky-cloud-sprite--3"></i>
+            <i class="sky-cloud-sprite sky-cloud-sprite--4"></i>
+            <i class="sky-cloud-sprite sky-cloud-sprite--5"></i>
+          </div>
+
+<button class="intro-house-hit" id="story-intro-house" type="button" hidden aria-label="문 조사하기">
+            <span aria-hidden="true">⌕</span>
+          </button>
+
+          <button class="story-intro-next" id="story-intro-next" type="button" aria-label="인트로 다음 장면">
+            <div class="story-intro-copy">
+              <small id="story-intro-kicker"></small>
+              <h2 id="story-intro-title"></h2>
+              <p id="story-intro-text"></p>
+              <div class="story-intro-voices" id="story-intro-voices"></div>
+            </div>
+            <span class="story-intro-hint"><i></i><span id="story-intro-hint-text">CLICK / SPACE</span></span>
+          </button>
+
+          <button class="story-intro-home" type="button" data-go-home aria-label="메인 화면으로"><span aria-hidden="true">⌂</span><b>홈</b></button>
+          <button class="story-intro-back" id="story-intro-back" type="button" hidden aria-label="집 앞 전경으로 돌아가기"><span aria-hidden="true">←</span><b>집 앞</b></button>
+
+          <div class="story-intro-explore" id="story-intro-explore" hidden>
+            <button type="button" class="intro-inspect intro-inspect--left" data-intro-inspect="left" aria-label="왼쪽 주변 조사"><span>⌕</span></button>
+            <button type="button" class="intro-inspect intro-inspect--door" data-intro-inspect="door" aria-label="문 주변 조사"><span>⌕</span></button>
+            <button type="button" class="intro-inspect intro-inspect--right" data-intro-inspect="right" aria-label="오른쪽 주변 조사"><span>⌕</span></button>
+            <div class="story-intro-explore-message" id="story-intro-explore-message" aria-live="polite"></div>
+            <button type="button" class="story-intro-door-action" id="story-intro-door-action" hidden><span>→</span><b>집 안으로 들어가기</b></button>
+          </div>
+        </section>
+
+        <footer class="story-toolbar">
+          <button class="story-bag-button" type="button" data-story-drawer="inventory">
+            <span class="story-bag-icon">▣</span>
+            <span><b>가방</b><small><em id="story-inventory-count">0</em> ITEMS</small></span>
+          </button>
+
+          <div class="story-quick-inventory" id="story-quick-inventory" aria-label="빠른 인벤토리"></div>
+
+          <button class="story-objective" type="button" id="story-objective-button" data-story-drawer="missions">
+            <small>현재 목표</small>
+            <b id="story-current-objective">파티방을 둘러보자.</b>
+          </button>
+
+          <nav class="story-actions" aria-label="게임 메뉴">
+            <button type="button" data-story-drawer="map"><span>⌖</span><b>지도</b></button>
+            <button type="button" data-open-collection><span>▤</span><b>여행일지</b></button>
+            <button type="button" id="story-save-button"><span>▣</span><b>저장</b></button>
+          </nav>
+        </footer>
+      </main>
+    </section>
+
+    <section class="view chapters-view" data-view="chapters" hidden>
+      <div class="chapters-bg" aria-hidden="true"></div>
+      <header class="subpage-topbar">
+        <button class="back-button" type="button" data-go-home>←</button>
+        <div><small>STORY LOG</small><h2>CHAPTERS</h2></div>
+        <div class="chapter-summary"><small>PROGRESS</small><b id="chapters-progress">0%</b></div>
+      </header>
+
+      <main class="chapters-shell">
+        <section class="chapter-intro">
+          <small>YOUR JOURNEY</small>
+          <h3>이야기 기록</h3>
+          <p>진행한 이야기는 챕터 단위로 이곳에 남습니다. 아직 만나지 못한 세계는 흐릿하게 잠겨 있어요.</p>
+        </section>
+        <div class="chapter-list" id="chapter-list"></div>
+      </main>
+    </section>
+
+    <section class="view collection-view" data-view="collection" hidden>
+      <div class="diary-desk" aria-hidden="true"></div>
+      <header class="subpage-topbar collection-topbar">
+        <button class="back-button" type="button" id="collection-back-button" aria-label="이전 화면으로">←</button>
+        <div><small>COLLECTION</small><h2>여행 다이어리</h2></div>
+        <div class="collection-count"><small>DISCOVERED</small><b><span id="collection-owned">0</span> / <span id="collection-total">0</span></b><em>TRAVEL RECORD</em></div>
+      </header>
+
+      <main class="diary-wrap">
+        <section class="diary-book">
+          <div class="diary-spine" aria-hidden="true"></div>
+
+          <aside class="diary-left-page">
+            <p class="diary-date">PIXELY TRAVEL NOTE</p>
+            <h3>여행 다이어리</h3>
+            <p class="diary-note">여행 중 만난 인물과 손에 넣은 물건, 기억에 남는 순간을 한 장씩 기록해둡니다.</p>
+
+            <nav class="diary-tabs" aria-label="컬렉션 분류" role="tablist">
+              <button class="is-active" type="button" role="tab" aria-selected="true" data-collection-tab="cards"><span>CARD</span>카드</button>
+              <button type="button" role="tab" aria-selected="false" data-collection-tab="items"><span>ITEM</span>아이템</button>
+              <button type="button" role="tab" aria-selected="false" data-collection-tab="postcards"><span>POST</span>엽서</button>
+            </nav>
+
+            <div class="diary-decoration" aria-hidden="true">
+              <span class="tape tape--one"></span>
+              <span class="tape tape--two"></span>
+              <span class="doodle">✦</span>
+              <span class="doodle doodle--small">☁</span>
+            </div>
+          </aside>
+
+          <section class="diary-right-page">
+            <div class="diary-page-heading">
+              <div>
+                <small id="collection-eyebrow">CARD FILE</small>
+                <h3 id="collection-heading">만난 카드</h3>
+              </div>
+              <p id="collection-description">여행 중 직접 만난 인물과 생물이 카드로 기록됩니다.</p>
+            </div>
+            <nav class="collection-filters" id="collection-filters" aria-label="세부 분류"></nav>
+            <div class="collection-grid" id="collection-grid"></div>
+          </section>
+        </section>
+      </main>
+    </section>
+
+    <section class="view wardrobe-view" data-view="wardrobe" hidden>
+      <div class="wardrobe-backdrop" aria-hidden="true">
+        <span class="wardrobe-rainbow"></span>
+        <span class="wardrobe-cloud wardrobe-cloud--one">☁</span>
+        <span class="wardrobe-cloud wardrobe-cloud--two">☁</span>
+        <span class="wardrobe-flowers">✿　❀　✾　❁　✿</span>
+      </div>
+      <header class="subpage-topbar">
+        <button class="back-button" type="button" id="wardrobe-back-button" aria-label="돌아가기">←</button>
+        <div><small>CHARACTER CUSTOMIZE</small><h2>꿈뜰이 옷장</h2></div>
+        <div class="wardrobe-slot-label" id="wardrobe-slot-label">NO SAVE</div>
+      </header>
+      <main class="wardrobe-shell">
+        <section class="wardrobe-stage game-window">
+          <div class="wardrobe-stage-top"><span>MY CHARACTER</span><span>✦ DRESS UP ✦</span></div>
+          <div class="wardrobe-portrait" id="wardrobe-preview">
+            <div class="wardrobe-preview-empty"><span aria-hidden="true">✧</span><p>베이스 이미지를 먼저 추가해 주세요.</p><small>PNG 투명 배경을 그대로 겹쳐서 사용할 수 있어요.</small></div>
+          </div>
+          <div class="wardrobe-stage-bottom"><strong>꿈뜰이</strong><span id="wardrobe-equipped">기본 복장</span></div>
+        </section>
+        <section class="wardrobe-panel wardrobe-dev-panel game-window">
+          <div class="wardrobe-dev-heading">
+            <div>
+              <small class="wardrobe-kicker">DEVELOPER EDITOR</small>
+              <h3>꿈뜰이 파츠 편집</h3>
+            </div>
+            <span class="wardrobe-dev-badge">AUTO SAVE</span>
+          </div>
+          <p class="wardrobe-dev-summary">모든 분류는 여러 파츠를 동시에 켤 수 있어요. <b>소품</b>은 캐릭터가 들거나 착용하는 물건, <b>장식</b>은 주변 이펙트·스티커예요.</p>
+
+          <section class="wardrobe-dev-section">
+            <header class="wardrobe-dev-section-title">
+              <div><span>01</span><b>등록된 파츠</b></div>
+              <small id="wardrobe-selected-count">0개 적용 중</small>
+            </header>
+            <nav class="wardrobe-tabs wardrobe-dev-tabs" id="wardrobe-tabs" aria-label="꾸미기 파츠">
+              <button type="button" data-wardrobe-slot="outfit">옷</button>
+              <button type="button" data-wardrobe-slot="accessory">소품</button>
+              <button type="button" data-wardrobe-slot="face">얼굴</button>
+              <button type="button" data-wardrobe-slot="decoration">장식</button>
+            </nav>
+            <p class="wardrobe-multi-note" id="wardrobe-tab-note">모든 파츠는 여러 개를 함께 켤 수 있어요.</p>
+            <div class="wardrobe-options wardrobe-dev-options" id="wardrobe-options"></div>
+          </section>
+
+          <section class="wardrobe-dev-section">
+            <header class="wardrobe-dev-section-title">
+              <div><span>02</span><b id="wardrobe-upload-heading">새 파츠 등록</b></div>
+              <small id="wardrobe-storage-meter">저장 공간 계산 중</small>
+            </header>
+            <div class="wardrobe-dev-form">
+              <label><span>분류</span><select id="wardrobe-upload-slot"><option value="outfit">옷</option><option value="accessory">소품</option><option value="face">얼굴</option><option value="decoration">장식</option></select></label>
+              <label><span>세부 파츠</span><select id="wardrobe-part-group"><option value="top">상의</option></select></label>
+              <label class="wardrobe-dev-name"><span>이름</span><input type="text" id="wardrobe-image-name" maxlength="40" placeholder="예: 웃는 입"></label>
+              <label class="wardrobe-dev-file">
+                <span>이미지</span>
+                <b id="wardrobe-file-action-label">파일 선택</b>
+                <input type="file" id="wardrobe-image-file" accept="image/png,image/webp,image/jpeg">
+              </label>
+              <div class="wardrobe-file-name" id="wardrobe-file-name">선택된 파일 없음</div>
+              <div class="wardrobe-part-submit-row"><button type="button" class="wardrobe-add-part-button" id="wardrobe-add-part-button" disabled>등록하고 켜기</button><button type="button" class="wardrobe-cancel-edit-button" id="wardrobe-cancel-edit-button" hidden>수정 취소</button></div>
+            </div>
+            <p class="wardrobe-upload-status" id="wardrobe-upload-status" data-state="idle">파일을 고른 뒤 <b>등록하고 켜기</b>를 누르세요.</p>
+            <div class="wardrobe-base-row">
+              <div><b>베이스 이미지</b><small>항상 가장 아래에 있는 몸체 이미지</small></div>
+              <label>추가 / 교체<input type="file" id="wardrobe-base-file" accept="image/png,image/webp,image/jpeg"></label>
+            </div>
+          </section>
+
+          <section class="wardrobe-dev-section">
+            <header class="wardrobe-dev-section-title">
+              <div><span>03</span><b>선택 레이어 조정</b></div>
+              <small id="wardrobe-layer-order">베이스는 항상 맨 아래</small>
+            </header>
+            <label class="wardrobe-layer-picker wardrobe-dev-layer-picker">
+              <span>편집할 레이어</span>
+              <select id="wardrobe-layer-select"><option value="base">베이스 이미지</option></select>
+            </label>
+            <div class="wardrobe-sliders wardrobe-dev-sliders">
+              <label>
+                <span>좌우 <output data-wardrobe-transform-value="x">0</output></span>
+                <div class="wardrobe-transform-control">
+                  <input type="range" min="-100" max="100" step="1" value="0" data-wardrobe-transform="x">
+                  <input type="number" min="-100" max="100" step="1" value="0" data-wardrobe-transform-number="x" aria-label="좌우 위치 숫자 입력">
+                </div>
+              </label>
+              <label>
+                <span>위아래 <output data-wardrobe-transform-value="y">0</output></span>
+                <div class="wardrobe-transform-control">
+                  <input type="range" min="-100" max="100" step="1" value="0" data-wardrobe-transform="y">
+                  <input type="number" min="-100" max="100" step="1" value="0" data-wardrobe-transform-number="y" aria-label="위아래 위치 숫자 입력">
+                </div>
+              </label>
+              <label>
+                <span>크기 <output data-wardrobe-transform-value="scale">100%</output></span>
+                <div class="wardrobe-transform-control">
+                  <input type="range" min="20" max="300" step="1" value="100" data-wardrobe-transform="scale">
+                  <input type="number" min="20" max="300" step="1" value="100" data-wardrobe-transform-number="scale" aria-label="크기 퍼센트 숫자 입력">
+                </div>
+              </label>
+              <label>
+                <span>회전 <output data-wardrobe-transform-value="rotation">0°</output></span>
+                <div class="wardrobe-transform-control">
+                  <input type="range" min="-180" max="180" step="1" value="0" data-wardrobe-transform="rotation">
+                  <input type="number" min="-180" max="180" step="1" value="0" data-wardrobe-transform-number="rotation" aria-label="회전 각도 숫자 입력">
+                </div>
+              </label>
+            </div>
+            <div class="wardrobe-layer-order-actions wardrobe-dev-order-actions">
+              <button type="button" data-layer-move="bottom">맨 아래</button>
+              <button type="button" data-layer-move="down">↓ 한 칸</button>
+              <button type="button" data-layer-move="up">↑ 한 칸</button>
+              <button type="button" data-layer-move="top">맨 위</button>
+            </div>
+            <div class="wardrobe-editor-actions wardrobe-dev-editor-actions">
+              <button type="button" id="wardrobe-reset-transform">위치 초기화</button>
+              <button type="button" id="wardrobe-delete-image">선택 레이어 삭제</button>
+            </div>
+          </section>
+
+          <div class="wardrobe-actions wardrobe-dev-footer">
+            <span id="wardrobe-status" role="status">개발자 설정은 자동 저장됩니다.</span>
+            <button type="button" id="wardrobe-save-button">기본값 저장</button>
+          </div>
+        </section>
+      </main>
+    </section>
+
+    <section class="view dev-settings-view" data-view="dev" hidden>
+      <header class="subpage-topbar dev-topbar">
+        <button class="back-button" type="button" data-go-home aria-label="홈으로">←</button>
+        <div><small>COLLECTION EDITOR</small><h2 id="dev-context-label">컬렉션 편집</h2></div>
+        <div class="dev-top-actions">
+          <button type="button" id="dev-undo" title="실행 취소">↶ UNDO</button>
+          <button type="button" id="dev-redo" title="다시 실행">↷ REDO</button>
+          <span class="dev-autosave-label" id="dev-global-status" role="status">저장됨</span>
+          <button type="button" class="dev-save-all" id="dev-save-all">저장</button>
+        </div>
+      </header>
+
+      <main class="dev-settings-shell dev-collection-only-shell">
+        <section class="dev-settings-main game-window">
+          <header class="dev-settings-main-header">
+            <div>
+              <small id="dev-current-section">컬렉션 카드</small>
+              <h3>컬렉션 데이터 편집</h3>
+            </div>
+            <div class="dev-header-meta">
+              <span id="dev-entry-count">0개</span>
+              <span id="dev-save-status">컬렉션 데이터</span>
+            </div>
+          </header>
+
+          <div class="dev-subtabs" id="dev-collection-types">
+            <button type="button" class="is-active" data-dev-collection-type="cards">카드</button>
+            <button type="button" data-dev-collection-type="items">아이템</button>
+            <button type="button" data-dev-collection-type="postcards">엽서</button>
+          </div>
+
+          <div class="dev-settings-toolbar">
+            <button type="button" id="dev-new-entry">＋ 새 항목</button>
+            <p>현재 등록된 카드·아이템·엽서를 수정합니다.</p>
+          </div>
+
+          <div class="dev-settings-workspace">
+            <aside class="dev-entry-pane">
+              <div class="dev-entry-pane-title"><b>목록</b><small>ID 기준</small></div>
+              <div class="dev-entry-list" id="dev-entry-list"></div>
+            </aside>
+
+            <section class="dev-editor-pane">
+              <div class="dev-editor-pane-title">
+                <div><small>COLLECTION</small><h4 id="dev-editor-title">항목을 선택하세요</h4></div>
+              </div>
+              <div class="dev-editor-fields" id="dev-editor-fields">
+                <div class="dev-editor-empty">왼쪽에서 항목을 선택하거나 + 새 항목을 눌러 주세요.</div>
+              </div>
+              <div class="dev-editor-actions">
+                <button type="button" class="danger" id="dev-delete-entry" disabled>삭제</button>
+                <button type="button" class="primary" id="dev-save-entry" disabled>초안에 반영</button>
+              </div>
+            </section>
+          </div>
+
+          <footer class="dev-settings-note">
+            <b>COLLECTION ONLY</b>
+            <span>이 에디터에서는 컬렉션 카드·아이템·엽서만 수정합니다. 챕터·상호작용·옷장 설정은 포함하지 않습니다.</span>
+          </footer>
+        </section>
+      </main>
+    </section>
+
+    <div class="modal" id="save-modal" hidden>
+      <button class="modal-backdrop" type="button" data-close-modal aria-label="닫기"></button>
+      <section class="save-window game-window">
+        <header class="save-window-header">
+          <div><small>SAVE DATA</small><h2 id="save-modal-title">저장 관리</h2></div>
+          <button type="button" class="close-button" data-close-modal>×</button>
+        </header>
+        <p class="save-window-guide" id="save-modal-guide">사용할 세이브 슬롯을 선택하세요.</p>
+        <div class="save-slot-list" id="save-slot-list"></div>
+      </section>
+    </div>
+
+    <div class="modal update-modal" id="update-modal" hidden>
+      <div class="modal-backdrop update-backdrop" aria-hidden="true"></div>
+      <section class="update-window game-window" role="dialog" aria-modal="true" aria-labelledby="update-title">
+        <span class="update-spark" aria-hidden="true">✦</span>
+        <small>NEW VERSION</small>
+        <h2 id="update-title">새 버전이 준비됐어요!</h2>
+        <p>사이트가 수정되었습니다. 최신 내용으로 보려면 페이지를 새로고침해 주세요.</p>
+        <div class="update-actions">
+          <button type="button" class="update-later" id="update-later-button">나중에</button>
+          <button type="button" class="update-refresh" id="update-refresh-button">새로고침</button>
+        </div>
+      </section>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </div>
+
+<script>
+window.addEventListener("load",()=>{
+  const open=document.querySelector("[data-open-wardrobe]");
+  if(open) open.click();
+  const back=document.getElementById("wardrobe-back-button");
+  if(back){
+    back.addEventListener("click",(event)=>{
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      window.location.href="./";
+    },true);
+  }
+});
+</script>
+</body>
+</html>
