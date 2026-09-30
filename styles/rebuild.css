@@ -213,6 +213,42 @@ button{color:inherit}
   opacity:0;
   transition:opacity 1.55s ease;
 }
+.opening-title-card{
+  position:absolute;z-index:86;inset:0;
+  display:grid!important;place-items:center;
+  pointer-events:none;
+  opacity:0;
+}
+.opening-title-card[hidden]{display:none!important}
+.opening-title-card img{
+  display:block;
+  width:min(980px,72vw);
+  max-height:72vh;
+  object-fit:contain;
+  filter:drop-shadow(0 16px 28px rgba(31,28,33,.25));
+  transform:scale(.86) translateY(12px);
+  opacity:0;
+}
+.opening-title-card.is-showing{
+  animation:openingTitleLayer 3.35s ease forwards;
+}
+.opening-title-card.is-showing img{
+  animation:openingTitleArt 3.35s cubic-bezier(.2,.72,.26,1) forwards;
+}
+.opening-title-card.is-leaving img{
+  filter:drop-shadow(0 12px 22px rgba(31,28,33,.18));
+}
+@keyframes openingTitleLayer{
+  0%{opacity:0}
+  16%,72%{opacity:1}
+  100%{opacity:0}
+}
+@keyframes openingTitleArt{
+  0%{opacity:0;transform:scale(.86) translateY(12px)}
+  18%{opacity:1;transform:scale(1.025) translateY(0)}
+  34%,72%{opacity:1;transform:scale(1) translateY(0)}
+  100%{opacity:0;transform:scale(1.035) translateY(-5px)}
+}
 .intro-monologue{
   position:absolute;z-index:75;inset:0;
   display:grid;place-items:center;

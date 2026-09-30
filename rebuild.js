@@ -95,11 +95,21 @@ function runIntro(){
 
   const finish=()=>{
     cleanup();
+    const openingTitle=$("#opening-title-card");
     frame.classList.add("intro-reveal");
     window.setTimeout(()=>{
+      openingTitle.hidden=false;
+      openingTitle.classList.add("is-showing");
+    },520);
+    window.setTimeout(()=>{
+      openingTitle.classList.add("is-leaving");
+    },2850);
+    window.setTimeout(()=>{
       overlay.hidden=true;
+      openingTitle.hidden=true;
+      openingTitle.classList.remove("is-showing","is-leaving");
       frame.classList.remove("intro-running","intro-reveal");
-    },1800);
+    },3900);
   };
 
   const advance=()=>{
