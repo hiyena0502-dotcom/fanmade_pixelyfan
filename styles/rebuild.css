@@ -29,7 +29,7 @@ button{color:inherit}
   background-size:cover;
   background-position:center center;
   background-repeat:no-repeat;
-  transform:scale(1.002);
+  transform:none;
 }
 .home-illustration-slot::after{
   content:"";
