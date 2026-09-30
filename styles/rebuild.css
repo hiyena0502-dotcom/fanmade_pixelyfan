@@ -343,3 +343,165 @@ button{color:inherit}
   .intro-monologue-box{width:88vw;padding:0}
 }
 @media(prefers-reduced-motion:reduce){.chapter-card,.chapter-card::before,.chapter-card::after{animation:none}}
+
+/* v81 — opening title reliability + detailed house entry */
+.opening-title-card{
+  z-index:88;
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .5s ease,visibility 0s linear .5s;
+}
+.opening-title-card img{
+  width:min(1080px,80vw);
+  max-height:78vh;
+  opacity:1;
+  transform:scale(.94) translateY(10px);
+  transition:transform 1.05s cubic-bezier(.18,.78,.24,1),opacity .7s ease;
+}
+.opening-title-card.is-showing{
+  opacity:1;
+  visibility:visible;
+  animation:none;
+  transition:opacity .55s ease,visibility 0s linear 0s;
+}
+.opening-title-card.is-showing img{
+  opacity:1;
+  transform:scale(1) translateY(0);
+  animation:none;
+}
+.opening-title-card.is-leaving{
+  opacity:0;
+  transition:opacity 1.05s ease;
+}
+.opening-title-card.is-leaving img{
+  opacity:0;
+  transform:scale(1.025) translateY(-5px);
+  transition:transform 1.15s ease,opacity 1.05s ease;
+}
+.story-frame.intro-running.intro-reveal .intro-monologue{
+  opacity:0;
+  transition:opacity .72s ease;
+}
+.story-frame.intro-running.intro-reveal .exterior-scene .scene-art{
+  filter:brightness(1.07) saturate(1.06);
+  transform:scale(1);
+  transition:filter 1.45s ease,transform 1.45s ease;
+}
+
+/* Entering the front door: push toward the door, darken, then reveal the chapter. */
+.exterior-scene .scene-art{
+  transition:transform .85s cubic-bezier(.22,.68,.22,1),filter .85s ease;
+  transform-origin:50% 58%;
+}
+.story-frame.house-entering .exterior-scene .scene-art{
+  transform:scale(1.18);
+  filter:brightness(.72) saturate(.86) blur(1.2px);
+}
+.story-frame.house-entering .minimal-hud{
+  opacity:0;
+  transform:translateY(-8px);
+  transition:opacity .35s ease,transform .35s ease;
+}
+.house-entry-transition{
+  position:absolute;
+  z-index:87;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+  background:rgba(5,8,16,0);
+}
+.house-entry-transition[hidden]{display:none!important}
+.house-entry-transition::before,
+.house-entry-transition::after{
+  content:"";
+  position:absolute;
+  top:0;bottom:0;
+  width:51%;
+  background:#070a12;
+  transform:scaleX(0);
+  transition:transform .78s cubic-bezier(.56,.02,.35,1);
+}
+.house-entry-transition::before{left:0;transform-origin:left center}
+.house-entry-transition::after{right:0;transform-origin:right center}
+.house-entry-transition.is-active::before,
+.house-entry-transition.is-active::after{transform:scaleX(1)}
+.entry-vignette{
+  position:absolute;
+  z-index:2;
+  inset:0;
+  opacity:0;
+  background:radial-gradient(circle at 50% 57%,transparent 0 8%,rgba(5,8,16,.14) 24%,rgba(5,8,16,.88) 76%,#070a12 100%);
+  transition:opacity .68s ease;
+}
+.house-entry-transition.is-active .entry-vignette{opacity:1}
+
+.living-room-scene.is-preparing{filter:brightness(.72)}
+.living-room-scene.is-arriving .room-placeholder{
+  animation:roomArrival 1.35s cubic-bezier(.16,.7,.22,1) both;
+}
+@keyframes roomArrival{
+  0%{opacity:.2;transform:scale(1.035);filter:brightness(.72) saturate(.86)}
+  45%{opacity:1}
+  100%{opacity:1;transform:scale(1);filter:brightness(1) saturate(1)}
+}
+
+/* CHAPTER I — staged motion, then a long soft fade. */
+.chapter-card{
+  opacity:0;
+  filter:none;
+  animation:none;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 50% 49%,rgba(102,119,169,.21),transparent 24%),
+    linear-gradient(180deg,#070b17 0%,#121b33 52%,#080d1c 100%);
+  transition:opacity .5s ease;
+}
+.chapter-card::before,.chapter-card::after{animation:none;transform:scaleX(0);opacity:0}
+.chapter-card .chapter-lines,
+.chapter-card small,
+.chapter-card strong,
+.chapter-card>span,
+.chapter-card em{opacity:0}
+.chapter-card.is-active{opacity:1}
+.chapter-card.is-active::before,
+.chapter-card.is-active::after{
+  animation:chapterRuleIn 1.15s .12s cubic-bezier(.2,.7,.2,1) both;
+}
+.chapter-card.is-active .chapter-lines{animation:chapterOrnamentIn .85s .22s ease both}
+.chapter-card.is-active small{animation:chapterTextRise .7s .38s ease both}
+.chapter-card.is-active strong{animation:chapterTitleIn 1.05s .48s cubic-bezier(.16,.8,.2,1) both}
+.chapter-card.is-active>span{animation:chapterTextRise .8s .78s ease both}
+.chapter-card.is-active em{animation:chapterTextRise .8s .95s ease both}
+.chapter-card.is-active::selection{background:transparent}
+.chapter-card.is-leaving{
+  opacity:0;
+  transition:opacity 1.18s cubic-bezier(.35,0,.2,1);
+}
+.chapter-card.is-leaving strong{transform:scale(1.035);filter:blur(.3px);transition:transform 1.2s ease,filter 1.2s ease}
+@keyframes chapterRuleIn{
+  0%{transform:scaleX(.02);opacity:0}
+  35%{opacity:.9}
+  100%{transform:scaleX(1);opacity:.68}
+}
+@keyframes chapterOrnamentIn{
+  0%{opacity:0;transform:scale(.72) rotate(-2deg)}
+  100%{opacity:1;transform:scale(1) rotate(0)}
+}
+@keyframes chapterTitleIn{
+  0%{opacity:0;transform:scale(1.18);filter:blur(7px);letter-spacing:.22em}
+  55%{opacity:1;filter:blur(0)}
+  100%{opacity:1;transform:scale(1);filter:blur(0);letter-spacing:.14em}
+}
+@keyframes chapterTextRise{
+  0%{opacity:0;transform:translateY(12px)}
+  100%{opacity:1;transform:translateY(0)}
+}
+
+@media(max-width:820px){
+  .opening-title-card img{width:min(980px,92vw);max-height:70vh}
+  .story-frame.house-entering .exterior-scene .scene-art{transform:scale(1.14)}
+}
+@media(prefers-reduced-motion:reduce){
+  .opening-title-card,.opening-title-card img,.house-entry-transition::before,.house-entry-transition::after,.entry-vignette,
+  .chapter-card,.chapter-card::before,.chapter-card::after,.chapter-card *,.living-room-scene .room-placeholder{animation:none!important;transition:none!important}
+}

@@ -130,3 +130,28 @@ body{min-height:100vh;color:#302d3b}
   .wardrobe-shell{width:94vw!important;margin:16px auto 26px!important}
   .wardrobe-panel.wardrobe-dev-panel{border-radius:15px!important}
 }
+
+/* v81 — calmer game-like wardrobe backdrop */
+html,body{background:#11182b!important}
+.wardrobe-view{
+  background:
+    radial-gradient(ellipse at 18% 18%,rgba(112,137,188,.25) 0%,rgba(112,137,188,0) 34%),
+    radial-gradient(ellipse at 82% 76%,rgba(116,78,119,.22) 0%,rgba(116,78,119,0) 35%),
+    linear-gradient(160deg,#10192e 0%,#243653 47%,#3b405f 72%,#252c46 100%)!important;
+}
+.wardrobe-backdrop::before{
+  inset:0!important;
+  height:auto!important;
+  background:
+    radial-gradient(circle at 14% 72%,rgba(232,218,184,.08) 0 1px,transparent 2px),
+    radial-gradient(circle at 76% 26%,rgba(232,218,184,.1) 0 1px,transparent 2px),
+    radial-gradient(circle at 48% 14%,rgba(232,218,184,.07) 0 1px,transparent 2px)!important;
+  background-size:160px 160px,210px 210px,270px 270px!important;
+}
+.wardrobe-backdrop::after{
+  content:""!important;
+  right:-8%!important;top:-16%!important;
+  width:38vw!important;height:38vw!important;
+  border-radius:50%!important;
+  background:radial-gradient(circle,rgba(233,206,154,.13),rgba(233,206,154,0) 68%)!important;
+}

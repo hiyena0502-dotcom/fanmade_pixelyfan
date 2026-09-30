@@ -4,6 +4,9 @@ const $=(q,r=document)=>r.querySelector(q);
 const screens=[...document.querySelectorAll("[data-screen]")];
 const scenes=[...document.querySelectorAll("[data-scene]")];
 let toastTimer=0;
+const OPENING_TITLE_SRC="assets/ui/opening-title.webp?v=81";
+const openingTitlePreload=new Image();
+openingTitlePreload.src=OPENING_TITLE_SRC;
 
 /* 독백 대사는 사용자와 함께 확정한 뒤 이 배열에 넣는다. */
 const INTRO_LINES=[
@@ -96,20 +99,21 @@ function runIntro(){
   const finish=()=>{
     cleanup();
     const openingTitle=$("#opening-title-card");
+    text.classList.remove("is-visible");
     frame.classList.add("intro-reveal");
-    window.setTimeout(()=>{
-      openingTitle.hidden=false;
-      openingTitle.classList.add("is-showing");
-    },520);
-    window.setTimeout(()=>{
-      openingTitle.classList.add("is-leaving");
-    },2850);
+
+    openingTitle.hidden=false;
+    openingTitle.classList.remove("is-showing","is-leaving");
+    void openingTitle.offsetWidth;
+    requestAnimationFrame(()=>openingTitle.classList.add("is-showing"));
+
+    window.setTimeout(()=>openingTitle.classList.add("is-leaving"),2450);
     window.setTimeout(()=>{
       overlay.hidden=true;
       openingTitle.hidden=true;
       openingTitle.classList.remove("is-showing","is-leaving");
       frame.classList.remove("intro-running","intro-reveal");
-    },3900);
+    },3500);
   };
 
   const advance=()=>{
@@ -135,11 +139,49 @@ function runIntro(){
 function playChapterCard(after){
   const card=$("#chapter-card");
   card.hidden=false;
-  setTimeout(()=>{
+  card.classList.remove("is-active","is-leaving");
+  void card.offsetWidth;
+  requestAnimationFrame(()=>card.classList.add("is-active"));
+
+  window.setTimeout(()=>card.classList.add("is-leaving"),2350);
+  window.setTimeout(()=>{
     card.hidden=true;
+    card.classList.remove("is-active","is-leaving");
     after?.();
-  },2400);
+  },3550);
 }
+
+function enterHouse(){
+  const frame=$(".story-frame");
+  const transition=$("#house-entry-transition");
+  const living=$('[data-scene="living-room"]');
+
+  $("#door-choice").hidden=true;
+  frame.classList.add("house-entering");
+
+  transition.hidden=false;
+  transition.classList.remove("is-active");
+  void transition.offsetWidth;
+  requestAnimationFrame(()=>transition.classList.add("is-active"));
+
+  window.setTimeout(()=>{
+    showScene("living-room");
+    living.classList.add("is-preparing");
+  },720);
+
+  window.setTimeout(()=>{
+    playChapterCard(()=>{
+      transition.hidden=true;
+      transition.classList.remove("is-active");
+      frame.classList.remove("house-entering");
+      living.classList.remove("is-preparing");
+      living.classList.add("is-arriving");
+      writeSave("living-room");
+      window.setTimeout(()=>living.classList.remove("is-arriving"),1450);
+    });
+  },860);
+}
+
 $("#new-story").addEventListener("click",()=>{
   writeSave("exterior");
   runIntro();
@@ -153,13 +195,7 @@ $("#door-hotspot").addEventListener("click",()=>{
   $("#door-choice").hidden=false;
 });
 $("#keep-looking").addEventListener("click",()=>{$("#door-choice").hidden=true});
-$("#enter-house").addEventListener("click",()=>{
-  $("#door-choice").hidden=true;
-  playChapterCard(()=>{
-    showScene("living-room");
-    writeSave("living-room");
-  });
-});
+$("#enter-house").addEventListener("click",enterHouse);
 $("#leave-house").addEventListener("click",()=>{
   showScene("exterior");
   writeSave("exterior");
