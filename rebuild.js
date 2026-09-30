@@ -75,7 +75,6 @@ function runIntro(){
   const frame=$(".story-frame");
   const overlay=$("#intro-monologue");
   const text=$("#intro-monologue-text");
-  const next=$("#intro-monologue-next");
   let index=0;
 
   frame.classList.add("intro-running");
@@ -90,7 +89,7 @@ function runIntro(){
   };
 
   const cleanup=()=>{
-    next.removeEventListener("click",advance);
+    overlay.removeEventListener("click",advance);
     document.removeEventListener("keydown",keyAdvance);
   };
 
@@ -120,7 +119,7 @@ function runIntro(){
   };
 
   render();
-  next.addEventListener("click",advance);
+  overlay.addEventListener("click",advance);
   document.addEventListener("keydown",keyAdvance);
 }
 function playChapterCard(after){

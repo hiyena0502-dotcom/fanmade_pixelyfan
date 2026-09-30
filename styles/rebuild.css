@@ -149,12 +149,14 @@ button{color:inherit}
 .room-boxes-placeholder i{display:block;width:54px;height:49px;background:#91684e;border:2px solid rgba(60,42,34,.25)}
 .room-boxes-placeholder i:nth-child(2){height:72px}.room-boxes-placeholder i:nth-child(3){width:40px;height:38px}
 .scene-back-arrow{
-  position:absolute;z-index:18;left:18px;top:50%;transform:translateY(-50%);
-  width:66px;height:92px;border:0;background:linear-gradient(90deg,rgba(9,15,29,.86),rgba(9,15,29,.18));
+  position:absolute;z-index:18;left:50%;bottom:18px;top:auto;
+  transform:translateX(-50%);
+  width:82px;height:62px;border:0;
+  background:linear-gradient(180deg,rgba(9,15,29,.12),rgba(9,15,29,.8));
   color:#f1dfb8;cursor:pointer
 }
-.scene-back-arrow span{display:block;font-family:Georgia,serif;font-size:52px;line-height:.8}
-.scene-back-arrow small{display:block;margin-top:5px;font-size:9px;letter-spacing:.08em}
+.scene-back-arrow span{display:block;font-family:Georgia,serif;font-size:38px;line-height:.7}
+.scene-back-arrow small{display:block;margin-top:7px;font-size:9px;letter-spacing:.08em}
 
 /* NPC dialogue shell: large character bust + cinematic lower dialogue strip. */
 .story-dialogue-ui{position:absolute;z-index:55;inset:0;pointer-events:none}
@@ -192,55 +194,52 @@ button{color:inherit}
   color:#e6c679;font-size:32px;cursor:pointer
 }
 
-/* Intro monologue: darkness first, then the warm house exterior is revealed. */
+/* Intro monologue: a blank dark screen with only the line in the center. */
 .story-frame.intro-running .minimal-hud{
   opacity:0;
   transition:opacity .8s ease;
 }
 .story-frame.intro-running .exterior-scene .scene-art{
-  filter:brightness(.18) saturate(.68) contrast(.96);
-  transform:scale(1.025);
+  filter:brightness(.82) saturate(.92);
+  transform:scale(1.018);
   transition:filter 1.8s ease,transform 1.8s ease;
 }
 .story-frame.intro-running.intro-reveal .exterior-scene .scene-art{
-  filter:brightness(1.08) saturate(1.06) contrast(1);
+  filter:brightness(1.08) saturate(1.06);
   transform:scale(1);
 }
 .story-frame.intro-running.intro-reveal .minimal-hud{opacity:1}
 .story-frame.intro-running.intro-reveal .intro-monologue{
   opacity:0;
-  transition:opacity 1.45s ease;
+  transition:opacity 1.55s ease;
 }
-
- /* Dreamer monologue intro. */
 .intro-monologue{
   position:absolute;z-index:75;inset:0;
-  background:
-    radial-gradient(circle at 50% 45%,rgba(18,26,46,.38),rgba(4,8,18,.94) 78%);
-  opacity:1
-}
-.intro-vignette{
-  position:absolute;inset:0;
-  background:radial-gradient(circle at 50% 45%,transparent 24%,rgba(1,4,12,.5) 72%,rgba(1,4,12,.82) 100%)
+  display:grid;place-items:center;
+  background:#060912;
+  opacity:1;
+  cursor:pointer
 }
 .intro-monologue-box{
-  position:absolute;left:50%;bottom:11%;transform:translateX(-50%);
-  width:min(980px,84vw);min-height:132px;padding:24px 70px 24px 28px;
-  border-left:2px solid rgba(226,191,114,.78);
-  background:linear-gradient(90deg,rgba(7,12,25,.84),rgba(7,12,25,.44) 74%,transparent)
-}
-.intro-monologue-box small{
-  display:block;margin-bottom:8px;font-size:10px;letter-spacing:.16em;color:#e0c68c
+  width:min(980px,86vw);
+  padding:0;
+  text-align:center;
+  background:transparent;
+  border:0;
 }
 .intro-monologue-box p{
-  margin:0;max-width:900px;font-size:18px;line-height:1.7;color:#fbf4e5;
-  opacity:0;transform:translateY(7px);
+  margin:0;
+  color:#f8f1e3;
+  font-size:clamp(18px,1.45vw,25px);
+  font-weight:450;
+  line-height:1.75;
+  letter-spacing:.015em;
+  text-shadow:0 2px 14px rgba(0,0,0,.4);
+  opacity:0;
+  transform:translateY(6px);
   transition:opacity .42s ease,transform .42s ease
 }
 .intro-monologue-box p.is-visible{opacity:1;transform:translateY(0)}
-.intro-monologue-box button{
-  position:absolute;right:18px;bottom:14px;border:0;background:transparent;color:#e4c478;font-size:34px;cursor:pointer
-}
 
 /* Chapter reveal: broad, ceremonial, cinematic rather than a small card. */
 .chapter-card{
@@ -300,11 +299,11 @@ button{color:inherit}
   .minimal-hud{padding:11px}.object-tool{min-width:46px;height:43px}
   .hotspot-door{left:40%;width:22%}
   .choice-sheet div{grid-template-columns:1fr}
-  .scene-back-arrow{left:8px;width:52px;height:78px}
+  .scene-back-arrow{left:50%;bottom:10px;top:auto;width:72px;height:56px;transform:translateX(-50%)}
   .dialogue-character{width:54vw;height:78%}
   .dialogue-rail{left:8%;right:3%;bottom:151px}
   .dialogue-copy{left:6%;right:3%;bottom:15px;min-height:136px;padding:22px 44px 20px 18px}
   .dialogue-copy strong{font-size:21px}.dialogue-copy p{font-size:14px}
-  .intro-monologue-box{left:4%;right:4%;bottom:5%;padding-left:18px}
+  .intro-monologue-box{width:88vw;padding:0}
 }
 @media(prefers-reduced-motion:reduce){.chapter-card,.chapter-card::before,.chapter-card::after{animation:none}}
