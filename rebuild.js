@@ -26,8 +26,15 @@ function toast(message){
   toastTimer=setTimeout(()=>node.classList.remove("is-visible"),1700);
 }
 function readSave(){try{return JSON.parse(localStorage.getItem(SAVE_KEY)||"null")}catch{return null}}
-function writeSave(scene="exterior"){
-  const data={scene,chapter:scene==="living-room"?1:0,savedAt:Date.now()};
+function writeSave(scene="exterior",patch={}){
+  const previous=readSave()||{};
+  const data={
+    ...previous,
+    scene,
+    chapter:previous.chapterIntroSeen||scene==="living-room"?1:0,
+    ...patch,
+    savedAt:Date.now()
+  };
   localStorage.setItem(SAVE_KEY,JSON.stringify(data));
   renderContinue();
   return data;
@@ -180,15 +187,24 @@ function enterHouse(){
   },980);
 
   window.setTimeout(()=>{
+    const save=readSave();
+    const chapterAlreadyPlayed=Boolean(save?.chapterIntroSeen);
+
+    if(chapterAlreadyPlayed){
+      writeSave("living-room",{chapter:1,chapterIntroSeen:true});
+      window.setTimeout(()=>living.classList.remove("is-arriving"),250);
+      return;
+    }
+
     playChapterCard(()=>{
-      writeSave("living-room");
+      writeSave("living-room",{chapter:1,chapterIntroSeen:true});
       window.setTimeout(()=>living.classList.remove("is-arriving"),250);
     });
   },1280);
 }
 
 $("#new-story").addEventListener("click",()=>{
-  writeSave("exterior");
+  writeSave("exterior",{chapter:0,chapterIntroSeen:false});
   runIntro();
 });
 $("#continue-story").addEventListener("click",()=>{
