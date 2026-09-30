@@ -45,6 +45,7 @@ function showScreen(name){
   });
 }
 function showScene(name){
+  $(".story-frame").dataset.scene=name;
   scenes.forEach(scene=>{
     const on=scene.dataset.scene===name;
     scene.hidden=!on;
@@ -138,6 +139,8 @@ function runIntro(){
 }
 function playChapterCard(after){
   const card=$("#chapter-card");
+  const frame=$(".story-frame");
+  frame.classList.add("chapter-playing");
   card.hidden=false;
   card.classList.remove("is-active","is-leaving");
   void card.offsetWidth;
@@ -147,6 +150,7 @@ function playChapterCard(after){
   window.setTimeout(()=>{
     card.hidden=true;
     card.classList.remove("is-active","is-leaving");
+    frame.classList.remove("chapter-playing");
     after?.();
   },4700);
 }
@@ -166,20 +170,21 @@ function enterHouse(){
 
   window.setTimeout(()=>{
     showScene("living-room");
-    living.classList.add("is-preparing");
-  },720);
+    living.classList.add("is-arriving");
+  },650);
+
+  window.setTimeout(()=>{
+    transition.hidden=true;
+    transition.classList.remove("is-active");
+    frame.classList.remove("house-entering");
+  },980);
 
   window.setTimeout(()=>{
     playChapterCard(()=>{
-      transition.hidden=true;
-      transition.classList.remove("is-active");
-      frame.classList.remove("house-entering");
-      living.classList.remove("is-preparing");
-      living.classList.add("is-arriving");
       writeSave("living-room");
-      window.setTimeout(()=>living.classList.remove("is-arriving"),1450);
+      window.setTimeout(()=>living.classList.remove("is-arriving"),250);
     });
-  },860);
+  },1280);
 }
 
 $("#new-story").addEventListener("click",()=>{

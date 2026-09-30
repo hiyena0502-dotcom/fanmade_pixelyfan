@@ -746,3 +746,332 @@ button{color:inherit}
   }
   .living-room-scene.is-arriving .living-room-art{animation:none!important}
 }
+
+
+/* v87 — puzzle-adventure game chrome */
+.game-frame-ui{
+  position:absolute;
+  z-index:24;
+  inset:0;
+  pointer-events:none;
+}
+.frame-corner{
+  position:absolute;
+  width:54px;
+  height:54px;
+  opacity:.88;
+  filter:drop-shadow(0 3px 8px rgba(25,16,10,.22));
+}
+.frame-corner::before,
+.frame-corner::after{
+  content:"";
+  position:absolute;
+  background:linear-gradient(90deg,#e8d6ad,#b88a4d);
+  border-radius:2px;
+}
+.frame-corner::before{width:42px;height:2px}
+.frame-corner::after{width:2px;height:42px}
+.frame-corner--tl{left:14px;top:14px}
+.frame-corner--tr{right:14px;top:14px;transform:scaleX(-1)}
+.frame-corner--bl{left:14px;bottom:14px;transform:scaleY(-1)}
+.frame-corner--br{right:14px;bottom:14px;transform:scale(-1)}
+
+.minimal-hud{
+  position:absolute;
+  z-index:32;
+  inset:0;
+  display:block;
+  padding:0;
+  pointer-events:none;
+}
+.hud-date{
+  position:absolute;
+  left:22px;
+  top:22px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:205px;
+  padding:9px 14px 9px 10px;
+  border:1px solid rgba(236,215,173,.64);
+  border-radius:5px;
+  background:
+    linear-gradient(180deg,rgba(47,35,27,.88),rgba(29,24,22,.84));
+  box-shadow:
+    0 8px 22px rgba(20,14,10,.2),
+    inset 0 1px 0 rgba(255,245,218,.16);
+  color:#f6e9ca;
+  text-shadow:0 2px 5px rgba(0,0,0,.35);
+}
+.hud-date::after{
+  content:"";
+  position:absolute;
+  inset:4px;
+  border:1px solid rgba(211,171,103,.24);
+  pointer-events:none;
+}
+.hud-date-stamp{
+  position:relative;
+  z-index:1;
+  min-width:58px;
+  padding:8px 6px;
+  border-right:1px solid rgba(229,199,142,.34);
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:16px;
+  letter-spacing:.08em;
+  text-align:center;
+  color:#e8c98c;
+}
+.hud-place-copy{
+  position:relative;
+  z-index:1;
+  display:grid;
+  gap:1px;
+}
+.hud-place-copy small{
+  font-size:7px;
+  letter-spacing:.22em;
+  color:#bba98a;
+}
+.hud-place-copy strong{
+  font-size:14px;
+  font-weight:700;
+  color:#fff6df;
+  letter-spacing:-.02em;
+}
+
+.hud-tools{
+  position:absolute;
+  right:22px;
+  top:86px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+  pointer-events:auto;
+}
+.inventory-rack{
+  display:grid;
+  grid-template-columns:repeat(1,46px);
+  gap:6px;
+  padding:10px 8px 8px;
+  border:1px solid rgba(231,207,161,.52);
+  border-radius:5px;
+  background:
+    linear-gradient(180deg,rgba(46,35,28,.9),rgba(27,23,22,.86));
+  box-shadow:0 9px 24px rgba(15,10,8,.22),inset 0 1px 0 rgba(255,246,220,.12);
+}
+.inventory-rack>span{
+  font-family:Georgia,serif;
+  font-size:7px;
+  letter-spacing:.18em;
+  text-align:center;
+  color:#d8bd88;
+}
+.inventory-rack i{
+  width:46px;
+  height:46px;
+  display:block;
+  border:1px solid rgba(222,196,145,.38);
+  border-radius:3px;
+  background:
+    radial-gradient(circle at 42% 34%,rgba(255,245,218,.08),transparent 42%),
+    rgba(13,16,19,.52);
+  box-shadow:inset 0 0 0 3px rgba(118,89,51,.12);
+}
+.object-tool{
+  width:58px;
+  min-width:58px;
+  height:54px;
+  display:grid;
+  grid-template-rows:1fr auto;
+  place-items:center;
+  padding:7px 4px 5px;
+  border:1px solid rgba(231,207,161,.56);
+  border-radius:5px;
+  background:
+    linear-gradient(180deg,rgba(48,37,29,.92),rgba(28,24,22,.88));
+  box-shadow:0 7px 18px rgba(15,10,8,.22),inset 0 1px 0 rgba(255,246,220,.12);
+  color:#f3dfb4;
+  cursor:pointer;
+  transition:transform .15s ease,background .15s ease,border-color .15s ease;
+}
+.object-tool span{
+  font-size:18px;
+  line-height:1;
+  color:#e2c483;
+}
+.object-tool small{
+  margin:0;
+  font-size:8px;
+  letter-spacing:.08em;
+  color:#e8d8b8;
+}
+.object-tool:disabled{
+  opacity:.34;
+  filter:saturate(.45);
+  cursor:not-allowed;
+}
+@media(hover:hover){
+  .object-tool:not(:disabled):hover{
+    transform:translateX(-3px);
+    background:linear-gradient(180deg,rgba(67,49,34,.96),rgba(35,28,24,.94));
+    border-color:rgba(246,219,163,.82);
+  }
+}
+
+.story-frame[data-scene="exterior"] .inventory-rack{
+  opacity:.46;
+}
+.story-frame[data-scene="living-room"] .inventory-rack i:first-of-type{
+  box-shadow:
+    inset 0 0 0 3px rgba(118,89,51,.12),
+    0 0 0 1px rgba(236,207,150,.08);
+}
+
+.inspect-bubble{
+  border:1px solid rgba(231,207,161,.72)!important;
+  border-left:3px solid #d1a65c!important;
+  border-radius:4px!important;
+  background:linear-gradient(180deg,rgba(51,39,30,.95),rgba(31,26,24,.95))!important;
+  color:#fff1d2!important;
+  box-shadow:0 14px 34px rgba(28,18,12,.25)!important;
+}
+.choice-sheet{
+  border:1px solid rgba(231,207,161,.74)!important;
+  border-radius:6px!important;
+  background:
+    linear-gradient(180deg,rgba(58,44,34,.97),rgba(34,28,25,.97))!important;
+  box-shadow:
+    0 24px 54px rgba(26,17,11,.34),
+    inset 0 1px 0 rgba(255,247,224,.14)!important;
+}
+.choice-sheet::before{
+  content:"";
+  position:absolute;
+  inset:5px;
+  border:1px solid rgba(214,177,112,.22);
+  border-radius:3px;
+  pointer-events:none;
+}
+.choice-sheet p{color:#fff0cf!important;font-family:Georgia,"Times New Roman",serif}
+.choice-sheet button,
+.menu-sheet>button{
+  border-color:rgba(226,195,139,.32)!important;
+  background:rgba(255,244,216,.055)!important;
+}
+.choice-sheet button:hover,
+.menu-sheet>button:hover{
+  background:rgba(226,191,114,.14)!important;
+}
+
+.scene-back-arrow{
+  width:74px!important;
+  height:58px!important;
+  bottom:18px!important;
+  border:1px solid rgba(234,208,158,.58)!important;
+  border-radius:50% 50% 8px 8px!important;
+  background:linear-gradient(180deg,rgba(48,37,29,.72),rgba(27,23,22,.94))!important;
+  box-shadow:0 8px 22px rgba(21,13,9,.25),inset 0 1px 0 rgba(255,248,226,.14)!important;
+  backdrop-filter:blur(4px);
+}
+.scene-back-arrow span{color:#e5c782!important}
+.scene-back-arrow small{color:#f1dfbd!important}
+
+/* Opening title: burst large, settle smaller, then blur away. */
+.opening-title-card{
+  background:transparent!important;
+}
+.opening-title-card.is-showing img{
+  animation:openingTitleGameIn 2.55s cubic-bezier(.18,.78,.18,1) both!important;
+}
+.opening-title-card.is-leaving{
+  opacity:1!important;
+}
+.opening-title-card.is-leaving img{
+  animation:none!important;
+  opacity:0!important;
+  filter:blur(14px) drop-shadow(0 10px 22px rgba(31,28,33,.12))!important;
+  transform:scale(.9) translateY(-6px)!important;
+  transition:opacity 1.15s ease,filter 1.15s ease,transform 1.15s ease!important;
+}
+@keyframes openingTitleGameIn{
+  0%{
+    opacity:0;
+    transform:scale(1.42) translateY(8px);
+    filter:blur(16px) drop-shadow(0 18px 30px rgba(31,28,33,.22));
+  }
+  24%{
+    opacity:1;
+    filter:blur(2px) drop-shadow(0 16px 28px rgba(31,28,33,.22));
+  }
+  58%{
+    transform:scale(1.05) translateY(0);
+    filter:blur(0) drop-shadow(0 15px 26px rgba(31,28,33,.2));
+  }
+  100%{
+    opacity:1;
+    transform:scale(.94) translateY(0);
+    filter:blur(0) drop-shadow(0 12px 22px rgba(31,28,33,.18));
+  }
+}
+
+/* CHAPTER I now sits over the room and persistent interface instead of replacing them. */
+.chapter-card{
+  background:
+    radial-gradient(circle at 50% 50%,rgba(16,18,25,.13),transparent 38%),
+    linear-gradient(180deg,rgba(12,14,20,.10),rgba(12,14,20,.04))!important;
+  backdrop-filter:none!important;
+  pointer-events:none;
+}
+.chapter-card::before,
+.chapter-card::after{
+  background:linear-gradient(90deg,transparent,rgba(243,218,166,.9),transparent)!important;
+}
+.chapter-card strong,
+.chapter-card>span,
+.chapter-card small,
+.chapter-card em{
+  text-shadow:
+    0 3px 16px rgba(25,15,10,.7),
+    0 0 2px rgba(25,15,10,.85)!important;
+}
+.story-frame.chapter-playing .living-room-art{
+  filter:brightness(.83) saturate(.93)!important;
+  transform:scale(1.008)!important;
+  transition:filter .75s ease,transform 4.5s ease!important;
+}
+.story-frame.chapter-playing .minimal-hud{
+  opacity:.9;
+  transition:opacity .5s ease;
+}
+
+/* The entry closes briefly, then reveals the room before chapter text appears. */
+.living-room-scene.is-arriving .living-room-art{
+  animation:livingRoomReveal 1.35s cubic-bezier(.16,.72,.2,1) both!important;
+}
+
+.menu-sheet{
+  border-color:rgba(230,202,151,.55)!important;
+  border-radius:5px!important;
+  background:linear-gradient(180deg,rgba(51,39,30,.98),rgba(29,25,23,.98))!important;
+  box-shadow:0 18px 48px rgba(19,12,9,.32)!important;
+}
+
+@media(max-width:820px){
+  .frame-corner{width:38px;height:38px}
+  .frame-corner::before{width:30px}.frame-corner::after{height:30px}
+  .hud-date{left:12px;top:12px;min-width:172px;padding:7px 10px 7px 7px}
+  .hud-date-stamp{min-width:48px;font-size:13px}
+  .hud-place-copy strong{font-size:12px}
+  .hud-tools{right:10px;top:72px;gap:6px}
+  .inventory-rack{grid-template-columns:repeat(1,40px);padding:8px 6px 6px}
+  .inventory-rack i{width:40px;height:40px}
+  .object-tool{width:50px;min-width:50px;height:48px}
+  .object-tool span{font-size:15px}
+}
+@media(max-width:560px){
+  .inventory-rack i:nth-of-type(n+3){display:none}
+  .hud-tools{top:auto;bottom:82px;right:8px}
+  .hud-date{max-width:170px}
+}
