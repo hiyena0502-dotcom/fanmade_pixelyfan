@@ -55,6 +55,7 @@
   width:min(650px,65vw);
   aspect-ratio:2.1;
   pointer-events:none;
+  transform-origin:center center;
   animation:title-float 5s ease-in-out 1s infinite;
 }
 .title-artwork{
@@ -76,8 +77,8 @@
   to{opacity:1;transform:translateY(0) scale(1)}
 }
 @keyframes title-float{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-7px)}
+  0%,100%{transform:translateY(0) scale(1)}
+  50%{transform:translateY(-6px) scale(1.02)}
 }
 @media(prefers-reduced-motion:reduce){
   .title-hero,.title-logo{animation:none}
