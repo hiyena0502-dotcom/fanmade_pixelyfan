@@ -143,12 +143,12 @@ function playChapterCard(after){
   void card.offsetWidth;
   card.classList.add("is-active");
 
-  window.setTimeout(()=>card.classList.add("is-leaving"),2850);
+  window.setTimeout(()=>card.classList.add("is-leaving"),3200);
   window.setTimeout(()=>{
     card.hidden=true;
     card.classList.remove("is-active","is-leaving");
     after?.();
-  },4250);
+  },4700);
 }
 
 function enterHouse(){
