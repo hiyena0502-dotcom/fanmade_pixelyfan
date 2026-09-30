@@ -25,7 +25,7 @@ button{color:inherit}
 .home-illustration-slot{
   position:absolute;
   inset:0;
-  background-image:url("../assets/home/home-bg.webp?v=83");
+  background-image:url("../assets/home/home-bg.webp?v=84");
   background-size:cover;
   background-position:center center;
   background-repeat:no-repeat;
@@ -43,9 +43,9 @@ button{color:inherit}
 .home-copy{
   position:absolute;
   z-index:2;
-  top:4.5vh;
-  right:3.8vw;
-  width:min(720px,47vw);
+  top:5vh;
+  right:3.2vw;
+  width:min(760px,48vw);
   height:91vh;
   display:flex;
   flex-direction:column;
@@ -62,7 +62,7 @@ button{color:inherit}
 }
 .home-title img{
   display:block;
-  width:min(700px,43vw);
+  width:min(740px,44vw);
   max-height:43vh;
   object-fit:contain;
   object-position:center;
@@ -75,7 +75,7 @@ button{color:inherit}
   display:grid;
   gap:10px;
   width:min(350px,72%);
-  margin-top:1.3vh;
+  margin-top:.6vh;
 }
 .title-menu-item{
   position:relative;
