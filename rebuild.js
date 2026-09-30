@@ -4,9 +4,6 @@ const $=(q,r=document)=>r.querySelector(q);
 const screens=[...document.querySelectorAll("[data-screen]")];
 const scenes=[...document.querySelectorAll("[data-scene]")];
 let toastTimer=0;
-const OPENING_TITLE_SRC="assets/home/title-logo.png?v=85";
-const openingTitlePreload=new Image();
-openingTitlePreload.src=OPENING_TITLE_SRC;
 
 /* 독백 대사는 사용자와 함께 확정한 뒤 이 배열에 넣는다. */
 const INTRO_LINES=[
@@ -106,22 +103,13 @@ function runIntro(){
 
   const finish=()=>{
     cleanup();
-    const openingTitle=$("#opening-title-card");
     text.classList.remove("is-visible");
     frame.classList.add("intro-reveal");
 
-    openingTitle.hidden=false;
-    openingTitle.classList.remove("is-showing","is-leaving");
-    void openingTitle.offsetWidth;
-    openingTitle.classList.add("is-showing");
-
-    window.setTimeout(()=>openingTitle.classList.add("is-leaving"),2950);
     window.setTimeout(()=>{
       overlay.hidden=true;
-      openingTitle.hidden=true;
-      openingTitle.classList.remove("is-showing","is-leaving");
       frame.classList.remove("intro-running","intro-reveal");
-    },4300);
+    },1500);
   };
 
   const advance=()=>{
