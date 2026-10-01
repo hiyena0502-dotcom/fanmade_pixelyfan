@@ -48,6 +48,7 @@ function toast(message){
 function readSave(){try{return JSON.parse(localStorage.getItem(SAVE_KEY)||"null")}catch{return null}}
 function writeSave(scene="exterior",patch={}){
   const previous=readSave()||{};
+  scene=normalizeStoryScene(scene);
   const data={
     ...previous,
     scene,
@@ -95,7 +96,11 @@ function showBubble(message){
   clearTimeout(showBubble.timer);
   showBubble.timer=setTimeout(()=>bubble.hidden=true,2600);
 }
+function normalizeStoryScene(scene){
+  return scene==="door-closeup"?"exterior":scene;
+}
 function startStory(scene="exterior"){
+  scene=normalizeStoryScene(scene);
   showScreen("story");
   showScene(scene);
   $("#door-choice").hidden=true;

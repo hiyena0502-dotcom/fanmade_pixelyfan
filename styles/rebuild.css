@@ -2259,3 +2259,21 @@ button{color:inherit}
   width:24.8%!important;
   height:69.2%!important;
 }
+
+
+/* v105 — door close-up is only reached from the real house-front scene */
+.door-closeup-back{
+  position:absolute!important;
+  left:26px!important;
+  bottom:24px!important;
+  right:auto!important;
+  top:auto!important;
+  z-index:80!important;
+  display:flex!important;
+  opacity:1!important;
+  visibility:visible!important;
+  pointer-events:auto!important;
+}
+.door-closeup-back small{
+  display:block!important;
+}

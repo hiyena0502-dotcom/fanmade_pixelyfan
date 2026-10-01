@@ -861,3 +861,120 @@ html,body{
 .wardrobe-option b{
   pointer-events:none!important;
 }
+
+
+/* v105 — stable game-wardrobe grid: visible original art, 3 compact square cards per row */
+.wardrobe-options.wardrobe-dev-options{
+  display:grid!important;
+  grid-template-columns:repeat(3,156px)!important;
+  grid-auto-flow:row!important;
+  justify-content:start!important;
+  align-content:start!important;
+  gap:10px!important;
+  max-height:376px!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  padding:2px 8px 6px 1px!important;
+}
+.wardrobe-option-wrap{
+  position:relative!important;
+  width:156px!important;
+  max-width:156px!important;
+  height:156px!important;
+  aspect-ratio:1 / 1!important;
+  overflow:visible!important;
+}
+.wardrobe-option-wrap>.wardrobe-option{
+  position:relative!important;
+  display:block!important;
+  width:156px!important;
+  height:156px!important;
+  min-height:156px!important;
+  max-height:156px!important;
+  aspect-ratio:1 / 1!important;
+  padding:6px!important;
+  overflow:hidden!important;
+  border-radius:10px!important;
+}
+.wardrobe-option-art{
+  position:absolute!important;
+  inset:6px 6px 27px!important;
+  width:auto!important;
+  height:auto!important;
+  display:grid!important;
+  place-items:center!important;
+  overflow:hidden!important;
+  border-radius:8px!important;
+  background:#d9bd98!important;
+}
+.wardrobe-option-art img{
+  position:static!important;
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:100%!important;
+  max-height:100%!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  transform:none!important;
+  opacity:1!important;
+  visibility:visible!important;
+  image-rendering:auto!important;
+}
+.wardrobe-option b{
+  position:absolute!important;
+  left:7px!important;
+  right:7px!important;
+  bottom:6px!important;
+  z-index:3!important;
+  height:18px!important;
+  padding:3px 6px!important;
+  margin:0!important;
+  border-radius:5px!important;
+  background:rgba(248,237,216,.94)!important;
+  color:#55484b!important;
+  font-size:9px!important;
+  line-height:12px!important;
+  overflow:hidden!important;
+  white-space:nowrap!important;
+  text-overflow:ellipsis!important;
+}
+.wardrobe-option-edit{
+  top:5px!important;
+  right:5px!important;
+  min-width:34px!important;
+  height:21px!important;
+  z-index:5!important;
+}
+@media(max-width:1500px){
+  .wardrobe-options.wardrobe-dev-options{
+    grid-template-columns:repeat(3,148px)!important;
+  }
+  .wardrobe-option-wrap,
+  .wardrobe-option-wrap>.wardrobe-option{
+    width:148px!important;
+    max-width:148px!important;
+    height:148px!important;
+    min-height:148px!important;
+    max-height:148px!important;
+  }
+}
+@media(max-width:1100px){
+  .wardrobe-options.wardrobe-dev-options{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  }
+  .wardrobe-option-wrap,
+  .wardrobe-option-wrap>.wardrobe-option{
+    width:100%!important;
+    max-width:none!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    aspect-ratio:1 / 1!important;
+  }
+}
+@media(max-width:680px){
+  .wardrobe-options.wardrobe-dev-options{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}

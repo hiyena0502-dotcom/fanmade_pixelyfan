@@ -1777,12 +1777,11 @@
       const unlocked=wardrobeOptionUnlocked(option,owned);
       const selected=(outfitDraft.layers||[]).includes(option.id);
       const editing=wardrobeEditingId===option.id;
-      const art=option.image?'<img src="'+escapeHTML(option.image)+'" data-wardrobe-thumb="1" alt="">':escapeHTML(unlocked?(option.symbol||"IMG"):"?");
+      const art=option.image?'<img src="'+escapeHTML(option.image)+'" alt="">':escapeHTML(unlocked?(option.symbol||"IMG"):"?");
       const main='<button type="button" data-wardrobe-item="'+escapeHTML(option.id)+'" class="wardrobe-option '+(selected?"is-selected ":"")+(unlocked?"":"is-locked")+'" aria-pressed="'+selected+'" '+(unlocked?"":"disabled")+'><span class="wardrobe-option-art">'+art+'</span><b>'+escapeHTML(unlocked?option.name:"???")+'</b></button>';
       const edit=option.custom?'<button type="button" class="wardrobe-option-edit '+(editing?"is-active":"")+'" data-wardrobe-edit="'+escapeHTML(option.id)+'">'+(editing?"수정 중":"수정")+'</button>':"";
       return '<div class="wardrobe-option-wrap '+(editing?"is-editing":"")+'">'+main+edit+'</div>';
     }).join(""):"")+(choices.length===0?'<p class="wardrobe-empty">'+emptyMessage+'</p>':"");
-    hydrateWardrobeThumbnails();
     renderWardrobePreview();
     renderWardrobeEditor();
     renderWardrobePresets();
