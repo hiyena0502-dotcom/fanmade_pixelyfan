@@ -569,3 +569,38 @@ html,body{
   }
   .wardrobe-option b{font-size:7px!important}
 }
+
+
+/* v99 — game-wardrobe style thumbnails: the visible part fills the square */
+.wardrobe-option-wrap>.wardrobe-option{
+  aspect-ratio:1 / 1!important;
+  grid-template-rows:minmax(0,1fr) 18px!important;
+  padding:5px!important;
+  gap:3px!important;
+}
+.wardrobe-option-art{
+  width:100%!important;
+  height:100%!important;
+  aspect-ratio:1 / 1!important;
+  padding:0!important;
+  margin:0!important;
+  overflow:hidden!important;
+  background:#d9bd98!important;
+}
+.wardrobe-option-art img{
+  position:static!important;
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:none!important;
+  max-height:none!important;
+  object-fit:contain!important;
+  transform:scale(1.04)!important;
+  transform-origin:center!important;
+}
+.wardrobe-option b{
+  max-width:96%!important;
+  margin:0!important;
+  font-size:10px!important;
+  line-height:1.1!important;
+}

@@ -517,6 +517,8 @@
   let wardrobeSlot="outfit";
   let wardrobeGroupFilter="all";
   let wardrobeEditorTarget="base";
+  const wardrobeThumbnailCache=new Map();
+  const wardrobeThumbnailPending=new Map();
   let pendingWardrobeFile=null;
   let wardrobeEditingId=null;
   let wardrobeEditingSnapshot=null;
@@ -1624,6 +1626,113 @@
     $("#wardrobe-delete-image").disabled=!asset?.image;
     $("#wardrobe-delete-image").textContent=wardrobeEditorTarget==="base"?"베이스 이미지 제거":"선택 파츠 삭제";
   }
+  function createWardrobeThumbnail(src,callback){
+    if(!src){callback(src);return}
+    if(wardrobeThumbnailCache.has(src)){
+      callback(wardrobeThumbnailCache.get(src));
+      return;
+    }
+    const waiting=wardrobeThumbnailPending.get(src);
+    if(waiting){
+      waiting.push(callback);
+      return;
+    }
+    wardrobeThumbnailPending.set(src,[callback]);
+
+    const finish=value=>{
+      const finalValue=value||src;
+      wardrobeThumbnailCache.set(src,finalValue);
+      const callbacks=wardrobeThumbnailPending.get(src)||[];
+      wardrobeThumbnailPending.delete(src);
+      callbacks.forEach(fn=>fn(finalValue));
+    };
+
+    try{
+      const image=new Image();
+      image.onload=()=>{
+        try{
+          const naturalW=image.naturalWidth||image.width||1;
+          const naturalH=image.naturalHeight||image.height||1;
+          const sampleMax=520;
+          const scale=Math.min(1,sampleMax/Math.max(naturalW,naturalH));
+          const sw=Math.max(1,Math.round(naturalW*scale));
+          const sh=Math.max(1,Math.round(naturalH*scale));
+          const sample=document.createElement("canvas");
+          sample.width=sw;
+          sample.height=sh;
+          const ctx=sample.getContext("2d",{willReadFrequently:true});
+          if(!ctx){finish(src);return}
+          ctx.clearRect(0,0,sw,sh);
+          ctx.drawImage(image,0,0,sw,sh);
+          const pixels=ctx.getImageData(0,0,sw,sh).data;
+
+          let minX=sw,minY=sh,maxX=-1,maxY=-1;
+          for(let y=0;y<sh;y++){
+            for(let x=0;x<sw;x++){
+              const alpha=pixels[(y*sw+x)*4+3];
+              if(alpha>18){
+                if(x<minX) minX=x;
+                if(x>maxX) maxX=x;
+                if(y<minY) minY=y;
+                if(y>maxY) maxY=y;
+              }
+            }
+          }
+          if(maxX<minX||maxY<minY){finish(src);return}
+
+          const visibleW=maxX-minX+1;
+          const visibleH=maxY-minY+1;
+          const pad=Math.max(3,Math.round(Math.max(visibleW,visibleH)*.08));
+          minX=Math.max(0,minX-pad);
+          minY=Math.max(0,minY-pad);
+          maxX=Math.min(sw-1,maxX+pad);
+          maxY=Math.min(sh-1,maxY+pad);
+
+          const cropW=maxX-minX+1;
+          const cropH=maxY-minY+1;
+          const side=Math.max(cropW,cropH);
+          let sx=Math.round((minX+maxX-side+1)/2);
+          let sy=Math.round((minY+maxY-side+1)/2);
+          sx=Math.max(0,Math.min(sw-side,sx));
+          sy=Math.max(0,Math.min(sh-side,sy));
+          const sourceSide=Math.min(side,sw,sh);
+
+          const out=document.createElement("canvas");
+          out.width=420;
+          out.height=420;
+          const outCtx=out.getContext("2d");
+          if(!outCtx){finish(src);return}
+          outCtx.clearRect(0,0,420,420);
+          const inset=8;
+          outCtx.drawImage(sample,sx,sy,sourceSide,sourceSide,inset,inset,420-inset*2,420-inset*2);
+          let result="";
+          try{result=out.toDataURL("image/webp",.93)}catch{}
+          if(!result||!result.startsWith("data:image/")){
+            try{result=out.toDataURL("image/png")}catch{}
+          }
+          finish(result||src);
+        }catch{
+          finish(src);
+        }
+      };
+      image.onerror=()=>finish(src);
+      image.src=src;
+    }catch{
+      finish(src);
+    }
+  }
+
+  function hydrateWardrobeThumbnails(){
+    document.querySelectorAll("#wardrobe-options img[data-wardrobe-thumb]").forEach(img=>{
+      const original=img.dataset.originalSrc||img.getAttribute("src")||"";
+      if(!original) return;
+      img.dataset.originalSrc=original;
+      createWardrobeThumbnail(original,thumb=>{
+        if(img.isConnected && img.dataset.originalSrc===original) img.src=thumb;
+      });
+    });
+  }
+
   function renderWardrobe(){
     const save=wardrobeSave();
     const owned=new Set(save?.collection?.items||[]);
@@ -1665,11 +1774,12 @@
       const unlocked=wardrobeOptionUnlocked(option,owned);
       const selected=(outfitDraft.layers||[]).includes(option.id);
       const editing=wardrobeEditingId===option.id;
-      const art=option.image?'<img src="'+escapeHTML(option.image)+'" alt="">':escapeHTML(unlocked?(option.symbol||"IMG"):"?");
+      const art=option.image?'<img src="'+escapeHTML(option.image)+'" data-wardrobe-thumb="1" alt="">':escapeHTML(unlocked?(option.symbol||"IMG"):"?");
       const main='<button type="button" data-wardrobe-item="'+escapeHTML(option.id)+'" class="wardrobe-option '+(selected?"is-selected ":"")+(unlocked?"":"is-locked")+'" aria-pressed="'+selected+'" '+(unlocked?"":"disabled")+'><span class="wardrobe-option-art">'+art+'</span><b>'+escapeHTML(unlocked?option.name:"???")+'</b></button>';
       const edit=option.custom?'<button type="button" class="wardrobe-option-edit '+(editing?"is-active":"")+'" data-wardrobe-edit="'+escapeHTML(option.id)+'">'+(editing?"수정 중":"수정")+'</button>':"";
       return '<div class="wardrobe-option-wrap '+(editing?"is-editing":"")+'">'+main+edit+'</div>';
     }).join(""):"")+(choices.length===0?'<p class="wardrobe-empty">'+emptyMessage+'</p>':"");
+    hydrateWardrobeThumbnails();
     renderWardrobePreview();
     renderWardrobeEditor();
     renderWardrobePresets();

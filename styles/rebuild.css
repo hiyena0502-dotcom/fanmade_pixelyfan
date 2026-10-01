@@ -2063,3 +2063,31 @@ button{color:inherit}
 @media(prefers-reduced-motion:reduce){
   .home-title img{animation:none!important}
 }
+
+
+/* v99 — enlarge only the title; keep the background framing unchanged */
+.home-illustration-slot{
+  transform:none!important;
+  animation:none!important;
+}
+.home-title img{
+  width:min(1280px,70vw)!important;
+  max-width:none!important;
+  max-height:64vh!important;
+}
+.home-menu{
+  transform:translateX(34px)!important;
+}
+@media(max-width:980px){
+  .home-menu{transform:none!important}
+  .home-title img{
+    width:min(1020px,96vw)!important;
+    max-height:48vh!important;
+  }
+}
+@media(max-width:560px){
+  .home-title img{
+    width:99vw!important;
+    max-height:36vh!important;
+  }
+}
