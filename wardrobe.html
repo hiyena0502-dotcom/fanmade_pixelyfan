@@ -8,10 +8,10 @@
   <title>꿈뜰이의 우당탕 생일 준비 대작전!!</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="style.css?v=75" />
-  <link rel="stylesheet" href="styles/wardrobe-rebuild.css?v=81" />
+  <link rel="stylesheet" href="styles/wardrobe-rebuild.css?v=94" />
   <script src="data/game-config.js?v=75" defer></script>
   <script src="data/editor-schema.js?v=75" defer></script>
-  <script src="app.js?v=75" defer></script>
+  <script src="app.js?v=94" defer></script>
 </head>
 <body>
   <div class="game-root">
@@ -348,6 +348,7 @@
               <button type="button" data-wardrobe-slot="decoration">장식</button>
             </nav>
             <p class="wardrobe-multi-note" id="wardrobe-tab-note">모든 파츠는 여러 개를 함께 켤 수 있어요.</p>
+            <div class="wardrobe-part-filter-block"><small>세부 파츠</small><nav class="wardrobe-part-filters" id="wardrobe-part-filters" aria-label="세부 파츠 분류"></nav></div>
             <div class="wardrobe-options wardrobe-dev-options" id="wardrobe-options"></div>
           </section>
 
@@ -426,9 +427,17 @@
             </div>
           </section>
 
+          <section class="wardrobe-dev-section wardrobe-preset-section">
+            <header class="wardrobe-dev-section-title">
+              <div><span>04</span><b>내 캐릭터 저장</b></div>
+              <small>꾸민 모습을 5개까지 보관</small>
+            </header>
+            <div class="wardrobe-preset-slots" id="wardrobe-preset-slots"></div>
+          </section>
+
           <div class="wardrobe-actions wardrobe-dev-footer">
-            <span id="wardrobe-status" role="status">개발자 설정은 자동 저장됩니다.</span>
-            <button type="button" id="wardrobe-save-button">기본값 저장</button>
+            <span id="wardrobe-status" role="status">파츠를 고른 뒤 현재 모습 적용 또는 코디 슬롯 저장을 사용할 수 있어요.</span>
+            <button type="button" id="wardrobe-save-button">현재 모습 적용 ✦</button>
           </div>
         </section>
       </main>

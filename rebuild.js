@@ -5,6 +5,24 @@ const screens=[...document.querySelectorAll("[data-screen]")];
 const scenes=[...document.querySelectorAll("[data-scene]")];
 let toastTimer=0;
 
+function buildHomeSnow(){
+  const layer=$("#home-snow");
+  if(!layer || layer.childElementCount) return;
+  const fragment=document.createDocumentFragment();
+  for(let i=0;i<52;i++){
+    const flake=document.createElement("i");
+    flake.style.setProperty("--snow-x",(Math.random()*100).toFixed(2)+"%");
+    flake.style.setProperty("--snow-size",(5+Math.random()*10).toFixed(1)+"px");
+    flake.style.setProperty("--snow-duration",(8+Math.random()*10).toFixed(2)+"s");
+    flake.style.setProperty("--snow-delay",(-Math.random()*18).toFixed(2)+"s");
+    flake.style.setProperty("--snow-drift",((Math.random()-.5)*140).toFixed(0)+"px");
+    flake.style.setProperty("--snow-opacity",(0.38+Math.random()*.55).toFixed(2));
+    fragment.appendChild(flake);
+  }
+  layer.appendChild(fragment);
+}
+buildHomeSnow();
+
 /* 독백 대사는 사용자와 함께 확정한 뒤 이 배열에 넣는다. */
 const INTRO_LINES=[
   "오늘은 12월 28일.",

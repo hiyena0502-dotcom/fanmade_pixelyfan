@@ -4,6 +4,7 @@
   const STORAGE_KEY = "pixely-lost-sky-saves-v2";
   const SESSION_SAVE_KEY = STORAGE_KEY+"-session-fallback";
   const WARDROBE_ASSET_KEY = "pixely-lost-sky-wardrobe-assets-v1";
+  const WARDROBE_PRESET_KEY = "pixely-lost-sky-wardrobe-presets-v1";
   const DEV_CONTENT_KEY = "pixely-lost-sky-dev-content-v2";
   const DEV_BACKUP_KEY = "pixely-lost-sky-dev-backup-v2";
   const DEV_DB_NAME = "pixely-dev-data-v1";
@@ -514,6 +515,7 @@
   let collectionReturnView="home";
   let wardrobeReturnView="home";
   let wardrobeSlot="outfit";
+  let wardrobeGroupFilter="all";
   let wardrobeEditorTarget="base";
   let pendingWardrobeFile=null;
   let wardrobeEditingId=null;
@@ -521,6 +523,7 @@
   let wardrobeEditingOrderSnapshot=null;
   let wardrobeEditingWasSelected=false;
   let outfitDraft={layers:[]};
+  let wardrobePresetSlots=readWardrobePresets();
   let devCollectionType="cards";
   let devSelectedId=null;
   let saveMode="manage";
@@ -1294,6 +1297,116 @@
   function selectedLayerIds(){
     return orderedLayerIds(outfitDraft.layers||[]);
   }
+
+  function readWardrobePresets(){
+    try{
+      const raw=JSON.parse(localStorage.getItem(WARDROBE_PRESET_KEY)||"null");
+      const list=Array.isArray(raw)?raw:[];
+      return Array.from({length:5},(_,index)=>{
+        const slot=list[index];
+        if(!slot||!Array.isArray(slot.layers)) return null;
+        return {
+          layers:[...new Set(slot.layers.filter(id=>typeof id==="string"))],
+          transforms:slot.transforms&&typeof slot.transforms==="object"?slot.transforms:{},
+          savedAt:Number(slot.savedAt)||0
+        };
+      });
+    }catch{
+      return Array(5).fill(null);
+    }
+  }
+  function persistWardrobePresets(){
+    try{
+      localStorage.setItem(WARDROBE_PRESET_KEY,JSON.stringify(wardrobePresetSlots));
+      return true;
+    }catch{
+      toast("코디 슬롯을 저장하지 못했어요.");
+      return false;
+    }
+  }
+  function wardrobePresetSnapshot(){
+    const transforms={base:normalizeWardrobeTransform(wardrobeAssets.base?.transform),custom:{}};
+    selectedLayerIds().forEach(id=>{
+      const asset=wardrobeAssets.custom.find(item=>item.id===id);
+      if(asset) transforms.custom[id]=normalizeWardrobeTransform(asset.transform);
+    });
+    return {layers:selectedLayerIds(),transforms,savedAt:Date.now()};
+  }
+  function saveWardrobePreset(index){
+    if(index<0||index>=5) return;
+    wardrobePresetSlots[index]=wardrobePresetSnapshot();
+    if(!persistWardrobePresets()) return;
+    renderWardrobePresets();
+    toast("코디 "+(index+1)+"에 현재 모습을 저장했어요.");
+  }
+  function loadWardrobePreset(index){
+    const preset=wardrobePresetSlots[index];
+    if(!preset) return;
+    const save=wardrobeSave();
+    const available=(preset.layers||[]).filter(id=>Boolean(wardrobeOptionByIdAny(id)));
+    outfitDraft=save
+      ? validOutfit({layers:available},save.collection?.items||[])
+      : {layers:available};
+    outfitDraft.layers=[...(outfitDraft.layers||[])];
+
+    if(preset.transforms?.base && wardrobeAssets.base?.image){
+      wardrobeAssets.base.transform=normalizeWardrobeTransform(preset.transforms.base);
+    }
+    const customTransforms=preset.transforms?.custom||{};
+    wardrobeAssets.custom.forEach(asset=>{
+      if(customTransforms[asset.id]) asset.transform=normalizeWardrobeTransform(customTransforms[asset.id]);
+    });
+    persistWardrobeAssets();
+    wardrobeEditorTarget="base";
+    renderWardrobe();
+    toast("코디 "+(index+1)+"을 불러왔어요.");
+  }
+  function deleteWardrobePreset(index){
+    if(index<0||index>=5||!wardrobePresetSlots[index]) return;
+    wardrobePresetSlots[index]=null;
+    persistWardrobePresets();
+    renderWardrobePresets();
+    toast("코디 "+(index+1)+"을 비웠어요.");
+  }
+  function wardrobePresetPreviewMarkup(preset){
+    if(!preset) return '<span class="wardrobe-preset-empty-mark">＋</span>';
+    const layers=[];
+    if(wardrobeAssets.base?.image){
+      layers.push('<img class="wardrobe-preset-layer" src="'+escapeHTML(wardrobeAssets.base.image)+'" alt="" style="'+imageLayerStyle(preset.transforms?.base||wardrobeAssets.base.transform)+';z-index:1">');
+    }
+    (preset.layers||[]).forEach((id,index)=>{
+      const option=wardrobeOptionByIdAny(id);
+      if(!option?.image) return;
+      const transform=preset.transforms?.custom?.[id]||option.transform;
+      layers.push('<img class="wardrobe-preset-layer" src="'+escapeHTML(option.image)+'" alt="" style="'+imageLayerStyle(transform)+';z-index:'+(index+2)+'">');
+    });
+    return layers.join("")||'<span class="wardrobe-preset-empty-mark">＋</span>';
+  }
+  function renderWardrobePresets(){
+    const node=$("#wardrobe-preset-slots");
+    if(!node) return;
+    node.innerHTML=wardrobePresetSlots.map((preset,index)=>{
+      const saved=preset?new Date(preset.savedAt).toLocaleDateString("ko-KR",{month:"2-digit",day:"2-digit"}):"빈 슬롯";
+      return '<article class="wardrobe-preset '+(preset?"has-data":"is-empty")+'">'+
+        '<div class="wardrobe-preset-preview">'+wardrobePresetPreviewMarkup(preset)+'</div>'+
+        '<div class="wardrobe-preset-copy"><b>코디 '+(index+1)+'</b><small>'+escapeHTML(saved)+'</small></div>'+
+        '<div class="wardrobe-preset-actions">'+
+          '<button type="button" data-wardrobe-preset-save="'+index+'">저장</button>'+
+          '<button type="button" data-wardrobe-preset-load="'+index+'" '+(preset?"":"disabled")+'>불러오기</button>'+
+          '<button type="button" data-wardrobe-preset-delete="'+index+'" '+(preset?"":"disabled")+'>삭제</button>'+
+        '</div>'+
+      '</article>';
+    }).join("");
+  }
+  function renderWardrobeGroupFilters(){
+    const node=$("#wardrobe-part-filters");
+    if(!node) return;
+    const groups=wardrobeGroups[wardrobeSlot]||[];
+    if(wardrobeGroupFilter!=="all"&&!groups.some(([id])=>id===wardrobeGroupFilter)) wardrobeGroupFilter="all";
+    node.innerHTML=[["all","전체"],...groups].map(([id,label])=>
+      '<button type="button" data-wardrobe-group="'+escapeHTML(id)+'" class="'+(wardrobeGroupFilter===id?"is-active":"")+'">'+escapeHTML(label)+'</button>'
+    ).join("");
+  }
   function renderWardrobePreview(){
     const preview=$("#wardrobe-preview");
     if(!preview) return;
@@ -1522,10 +1635,10 @@
     if(selectedCount) selectedCount.textContent=selected.length+"개 적용 중";
     updateWardrobeStorageMeter();
     $("#wardrobe-save-button").disabled=false;
-    $("#wardrobe-save-button").textContent=save?"이 모습 저장하기 ✦":"개발자 기본 모습 저장";
+    $("#wardrobe-save-button").textContent="현재 모습 적용 ✦";
     $("#wardrobe-status").textContent=save
-      ? "모든 분류에서 여러 파츠를 동시에 선택할 수 있어요. 저장하면 이 슬롯의 모습으로 기록됩니다."
-      : "세이브 없이 파츠를 등록·겹치기·순서 변경할 수 있고 선택은 자동 저장됩니다.";
+      ? "현재 모습 적용은 진행 중인 게임 캐릭터에 반영되고, 아래 코디 슬롯에는 원하는 모습을 5개까지 따로 저장할 수 있어요."
+      : "현재 모습 적용은 기본 플레이어 모습에 반영되고, 아래 코디 슬롯에는 원하는 모습을 5개까지 따로 저장할 수 있어요.";
     const uploadSlot=$("#wardrobe-upload-slot");
     if(uploadSlot) uploadSlot.value=wardrobeSlot;
     renderUploadGroupOptions();
@@ -1542,20 +1655,24 @@
       button.classList.toggle("is-active",active);
       button.setAttribute("aria-pressed",active?"true":"false");
     });
-    const choices=wardrobeOptionsFor(wardrobeSlot);
-    const emptyMessage="아직 등록된 "+wardrobeLabels[wardrobeSlot]+" 파츠가 없어요. 아래 개발자 도구에서 새 이미지를 추가할 수 있습니다.";
+    renderWardrobeGroupFilters();
+    const allChoices=wardrobeOptionsFor(wardrobeSlot);
+    const choices=wardrobeGroupFilter==="all"
+      ? allChoices
+      : allChoices.filter(option=>(option.group||option.wardrobeGroup||"other")===wardrobeGroupFilter);
+    const emptyMessage="이 세부 분류에는 아직 등록된 "+wardrobeLabels[wardrobeSlot]+" 파츠가 없어요.";
     $("#wardrobe-options").innerHTML=(choices.length?choices.map(option=>{
       const unlocked=wardrobeOptionUnlocked(option,owned);
       const selected=(outfitDraft.layers||[]).includes(option.id);
       const editing=wardrobeEditingId===option.id;
       const art=option.image?'<img src="'+escapeHTML(option.image)+'" alt="">':escapeHTML(unlocked?(option.symbol||"IMG"):"?");
-      const group=option.custom?'<em class="wardrobe-option-group">'+escapeHTML(wardrobeGroupLabel(option.slot,option.group))+'</em>':"";
-      const main='<button type="button" data-wardrobe-item="'+escapeHTML(option.id)+'" class="wardrobe-option '+(selected?"is-selected ":"")+(unlocked?"":"is-locked")+'" aria-pressed="'+selected+'" '+(unlocked?"":"disabled")+'><span class="wardrobe-option-art">'+art+'</span>'+group+'<b>'+escapeHTML(unlocked?option.name:"???")+'</b><small>'+(editing?"수정 중":selected?"레이어 켜짐":unlocked?(option.custom?"눌러서 함께 적용":"획득한 파츠"):"여행 중 발견")+'</small></button>';
+      const main='<button type="button" data-wardrobe-item="'+escapeHTML(option.id)+'" class="wardrobe-option '+(selected?"is-selected ":"")+(unlocked?"":"is-locked")+'" aria-pressed="'+selected+'" '+(unlocked?"":"disabled")+'><span class="wardrobe-option-art">'+art+'</span><b>'+escapeHTML(unlocked?option.name:"???")+'</b></button>';
       const edit=option.custom?'<button type="button" class="wardrobe-option-edit '+(editing?"is-active":"")+'" data-wardrobe-edit="'+escapeHTML(option.id)+'">'+(editing?"수정 중":"수정")+'</button>':"";
       return '<div class="wardrobe-option-wrap '+(editing?"is-editing":"")+'">'+main+edit+'</div>';
     }).join(""):"")+(choices.length===0?'<p class="wardrobe-empty">'+emptyMessage+'</p>':"");
     renderWardrobePreview();
     renderWardrobeEditor();
+    renderWardrobePresets();
     if(wardrobeEditingId) syncWardrobePartEditForm();
   }
   function optimizeWardrobeDataURL(original,callback){
@@ -1737,7 +1854,7 @@
   function saveOutfit(){
     const save=wardrobeSave();
     if(!save){
-      if(rememberDeveloperOutfit()) toast("현재 모습을 개발자 기본 설정으로 저장했어요.");
+      if(rememberDeveloperOutfit()) toast("현재 모습을 기본 플레이어 모습으로 적용했어요.");
       renderWardrobe();
       return;
     }
@@ -2061,7 +2178,22 @@
       const button=event.target.closest("[data-wardrobe-slot]");
       if(!button || !wardrobeSlots.includes(button.dataset.wardrobeSlot)) return;
       wardrobeSlot=button.dataset.wardrobeSlot;
+      wardrobeGroupFilter="all";
       renderWardrobe();
+    });
+    $("#wardrobe-part-filters")?.addEventListener("click",event=>{
+      const button=event.target.closest("[data-wardrobe-group]");
+      if(!button) return;
+      wardrobeGroupFilter=button.dataset.wardrobeGroup||"all";
+      renderWardrobe();
+    });
+    $("#wardrobe-preset-slots")?.addEventListener("click",event=>{
+      const saveButton=event.target.closest("[data-wardrobe-preset-save]");
+      const loadButton=event.target.closest("[data-wardrobe-preset-load]");
+      const deleteButton=event.target.closest("[data-wardrobe-preset-delete]");
+      if(saveButton) saveWardrobePreset(Number(saveButton.dataset.wardrobePresetSave));
+      else if(loadButton) loadWardrobePreset(Number(loadButton.dataset.wardrobePresetLoad));
+      else if(deleteButton) deleteWardrobePreset(Number(deleteButton.dataset.wardrobePresetDelete));
     });
     $("#wardrobe-options").addEventListener("click",event=>{
       const editButton=event.target.closest("[data-wardrobe-edit]");
