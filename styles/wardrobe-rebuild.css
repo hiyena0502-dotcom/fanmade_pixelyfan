@@ -728,3 +728,57 @@ html,body{
     grid-template-columns:repeat(2,minmax(145px,1fr))!important;
   }
 }
+
+
+/* v102 — three tiles per row, vertical scrolling only; keep the current tile scale */
+.wardrobe-options.wardrobe-dev-options{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,290px))!important;
+  grid-auto-flow:row!important;
+  justify-content:start!important;
+  align-content:start!important;
+  column-gap:18px!important;
+  row-gap:16px!important;
+  max-height:430px!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  padding-right:10px!important;
+}
+.wardrobe-option-wrap{
+  width:290px!important;
+  max-width:290px!important;
+}
+.wardrobe-option-wrap>.wardrobe-option{
+  width:290px!important;
+}
+@media(max-width:1500px){
+  .wardrobe-options.wardrobe-dev-options{
+    grid-template-columns:repeat(3,minmax(0,260px))!important;
+  }
+  .wardrobe-option-wrap,
+  .wardrobe-option-wrap>.wardrobe-option{
+    width:260px!important;
+    max-width:260px!important;
+  }
+}
+@media(max-width:1100px){
+  .wardrobe-options.wardrobe-dev-options{
+    grid-template-columns:repeat(2,minmax(0,245px))!important;
+  }
+  .wardrobe-option-wrap,
+  .wardrobe-option-wrap>.wardrobe-option{
+    width:245px!important;
+    max-width:245px!important;
+  }
+}
+@media(max-width:680px){
+  .wardrobe-options.wardrobe-dev-options{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    max-height:360px!important;
+  }
+  .wardrobe-option-wrap,
+  .wardrobe-option-wrap>.wardrobe-option{
+    width:100%!important;
+    max-width:none!important;
+  }
+}

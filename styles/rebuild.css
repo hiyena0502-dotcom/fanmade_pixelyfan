@@ -2188,3 +2188,39 @@ button{color:inherit}
     height:78%!important;
   }
 }
+
+
+/* v102 — show the supplied door illustration at its real 16:9 framing, not zoomed/cropped */
+.door-closeup-scene{
+  display:grid!important;
+  place-items:center!important;
+  background:#f3d897!important;
+}
+.door-closeup-stage{
+  position:relative!important;
+  width:min(100%,calc(100vh * 16 / 9))!important;
+  height:min(100%,calc(100vw * 9 / 16))!important;
+  aspect-ratio:16 / 9!important;
+  overflow:hidden!important;
+  flex:none!important;
+}
+.door-closeup-art{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  image-rendering:auto!important;
+  transform:none!important;
+  filter:none!important;
+}
+.hotspot-door-closeup{
+  left:37.6%!important;
+  top:13.7%!important;
+  width:24.8%!important;
+  height:69.2%!important;
+}
+.door-closeup-back{
+  z-index:30!important;
+}

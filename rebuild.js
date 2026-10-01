@@ -244,7 +244,6 @@ $("#door-closeup-back").addEventListener("click",()=>{
 });
 $("#keep-looking").addEventListener("click",()=>{
   $("#door-choice").hidden=true;
-  showScene("exterior");
 });
 $("#enter-house").addEventListener("click",enterHouse);
 $("#leave-house").addEventListener("click",()=>{
