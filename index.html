@@ -10,8 +10,9 @@
   <link rel="preload" as="image" href="assets/home/home-bg.png?v=84" />
   <link rel="preload" as="image" href="assets/story/chapter1/living-room.webp?v=90" />
 <link rel="preload" as="image" href="assets/home/home-bg.webp?v=84" />
-  <link rel="stylesheet" href="styles/rebuild.css?v=107" />
-  <script src="rebuild.js?v=107" defer></script>
+  <link rel="preload" as="image" href="assets/story/chapter1/house-wide-v108.png" />
+  <link rel="stylesheet" href="styles/rebuild.css?v=108" />
+  <script src="rebuild.js?v=108" defer></script>
 </head>
 <body>
   <main class="rebuild-root">
@@ -74,24 +75,26 @@
         </header>
 
         <section class="scene exterior-scene is-active" data-scene="exterior" aria-label="픽셀리 집 앞">
-          <img class="scene-art" src="assets/story/chapter1/house-wide.webp?v=107" alt="눈 덮인 픽셀리 집의 아침 풍경" draggable="false" />
+          <div class="scene-art-stage exterior-stage">
+          <img class="scene-art" src="assets/story/chapter1/house-wide-v108.png" width="2048" height="1152" alt="눈 덮인 픽셀리 집의 아침 풍경" draggable="false" />
           <button type="button" class="hotspot hotspot-door" id="door-hotspot" aria-label="현관문 살펴보기"></button>
           <button type="button" class="hotspot exterior-inspect exterior-inspect--laundry" data-inspect="laundry" aria-label="빨랫줄 살펴보기"></button>
           <button type="button" class="hotspot exterior-inspect exterior-inspect--birdhouse" data-inspect="birdhouse" aria-label="새집 살펴보기"></button>
           <button type="button" class="hotspot exterior-inspect exterior-inspect--garden" data-inspect="garden" aria-label="화단 살펴보기"></button>
           <div class="inspect-bubble" id="inspect-bubble" role="status" aria-live="polite" hidden></div>
+          </div>
         </section>
 
         <section class="scene door-closeup-scene" data-scene="door-closeup" hidden aria-label="픽셀리 집 현관문">
           <div class="door-closeup-stage">
-            <img class="door-closeup-art" src="assets/story/chapter1/door-closeup.webp?v=107" alt="꽃과 화분이 놓인 픽셀리 집 현관문" draggable="false" />
+            <img class="door-closeup-art" src="assets/story/chapter1/door-closeup-v108.png" width="1672" height="941" alt="꽃과 화분이 놓인 픽셀리 집 현관문" draggable="false" />
             <button type="button" class="hotspot hotspot-door-closeup" id="door-closeup-hotspot" aria-label="현관문 두드리기"></button>
           </div>
           <button type="button" class="scene-back-arrow door-closeup-back" id="door-closeup-back" aria-label="집 앞으로 돌아가기">
             <span>‹</span><small>집 앞</small>
           </button>
-          <section class="choice-sheet" id="door-choice" hidden aria-live="polite">
-            <p>집 안으로 들어갈까?</p>
+          <section class="choice-sheet" id="door-choice" role="dialog" aria-modal="true" aria-labelledby="door-choice-title" hidden>
+            <p id="door-choice-title">집 안으로 들어갈까?</p>
             <div>
               <button type="button" id="enter-house">들어간다</button>
               <button type="button" id="keep-looking">조금 더 둘러본다</button>
@@ -101,6 +104,7 @@
 
         <section class="scene living-room-scene" data-scene="living-room" hidden aria-label="픽셀리 집 거실">
           <img class="scene-art living-room-art" src="assets/story/chapter1/living-room.webp?v=90" alt="따뜻한 겨울 아침의 픽셀리 집 거실" draggable="false" />
+          <button type="button" class="room-talk-button" id="talk-gongryong">공룡과 대화</button>
           <button type="button" class="scene-back-arrow" id="leave-house" aria-label="집 밖으로 나가기">
             <span>⌄</span><small>밖으로</small>
           </button>
@@ -145,6 +149,10 @@
           </header>
           <button type="button" id="save-progress">현재 위치 저장</button>
           <button type="button" id="return-home">메인 화면으로</button>
+        </section>
+        <section class="tool-sheet" id="tool-sheet" role="dialog" aria-modal="true" aria-labelledby="tool-title" hidden>
+          <header><h2 id="tool-title"></h2><button type="button" id="close-tool-sheet" aria-label="닫기">×</button></header>
+          <div id="tool-content"></div>
         </section>
       </div>
     </section>

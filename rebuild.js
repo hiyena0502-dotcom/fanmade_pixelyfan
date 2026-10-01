@@ -4,6 +4,19 @@ const $=(q,r=document)=>r.querySelector(q);
 const screens=[...document.querySelectorAll("[data-screen]")];
 const scenes=[...document.querySelectorAll("[data-scene]")];
 let toastTimer=0;
+let dialogueIndex=0;
+let introCleanup=null;
+let busy=false;
+let activeDialogue=[];
+let sessionSave;
+const OPENING_DIALOGUE=[
+  ["공룡","잘 왔어! 안 그래도 지금 사람 하나 필요했는데..."],
+  ["라더","사람은 많은데?"],
+  ["공룡","쓸 수 있는 사람이 필요하다고."],
+  ["공룡","요정들한테 생일 장식을 맡겼는데, 아직 하나도 안 왔어."],
+  ["덕개 · 주방에서","야, 정형준!"],
+  ["공룡","집 안에 있는 요정들한테 장식 좀 받아다 줄래?"]
+];
 
 function buildHomeSnow(){
   const layer=$("#home-snow");
@@ -39,7 +52,7 @@ const INTRO_LINES=[
 ];
 
 const EXTERIOR_INSPECTIONS={
-  laundry:"빨랫줄에 천들이 걸려 있다.",
+  laundry:"눈이 쌓인 빨랫줄이다. 지금은 아무것도 걸려 있지 않다.",
   birdhouse:"눈이 쌓인 작은 새집이다.",
   garden:"화단에도 눈이 소복하게 쌓여 있다."
 };
@@ -51,7 +64,14 @@ function toast(message){
   clearTimeout(toastTimer);
   toastTimer=setTimeout(()=>node.classList.remove("is-visible"),1700);
 }
-function readSave(){try{return JSON.parse(localStorage.getItem(SAVE_KEY)||"null")}catch{return null}}
+function readSave(){
+  if(sessionSave!==undefined) return sessionSave;
+  try{
+    const save=JSON.parse(localStorage.getItem(SAVE_KEY)||"null");
+    sessionSave=save&&typeof save==="object"&&!Array.isArray(save)&&scenes.some(s=>s.dataset.scene===save.scene)?save:null;
+  }catch{sessionSave=null}
+  return sessionSave;
+}
 function writeSave(scene="exterior",patch={}){
   const previous=readSave()||{};
   scene=normalizeStoryScene(scene);
@@ -62,14 +82,17 @@ function writeSave(scene="exterior",patch={}){
     ...patch,
     savedAt:Date.now()
   };
-  localStorage.setItem(SAVE_KEY,JSON.stringify(data));
+  sessionSave=data;
+  try{localStorage.setItem(SAVE_KEY,JSON.stringify(data))}
+  catch{renderContinue();toast("이번 진행은 현재 탭에서만 유지돼. 브라우저 저장 공간을 사용할 수 없어.");return null}
   renderContinue();
   return data;
 }
 function renderContinue(){
   const save=readSave(),button=$("#continue-story"),copy=$("#continue-copy");
   button.disabled=!save;
-  copy.textContent=save?(save.scene==="living-room"?"CHAPTER I · 거실":"12월 28일 · 집 앞"):"NO SAVE DATA";
+  const labels={"exterior":"12월 28일 · 집 앞","door-closeup":"12월 28일 · 문 앞","living-room":"CHAPTER I · 거실"};
+  copy.textContent=save?labels[save.scene]:"NO SAVE DATA";
 }
 function showScreen(name){
   screens.forEach(screen=>{
@@ -79,6 +102,7 @@ function showScreen(name){
   });
 }
 function showScene(name){
+  $("#inspect-bubble").hidden=true;
   $(".story-frame").dataset.scene=name;
   scenes.forEach(scene=>{
     const on=scene.dataset.scene===name;
@@ -95,17 +119,33 @@ function showScene(name){
   $("#bag-button").disabled=name!=="living-room";
   $("#diary-button").disabled=name!=="living-room";
 }
-function showBubble(message){
+function showBubble(message,anchor){
   const bubble=$("#inspect-bubble");
+  const x=anchor.offsetLeft+anchor.offsetWidth/2;
+  const y=anchor.offsetTop;
+  const stage=anchor.parentElement;
+  const width=Math.min(380,stage.clientWidth*.85);
+  const margin=width/2+8;
+  bubble.style.setProperty("--bubble-x",Math.min(Math.max(x,margin),Math.max(margin,stage.clientWidth-margin))+"px");
+  bubble.style.setProperty("--bubble-y",Math.max(42,y-8)+"px");
   bubble.textContent=message;
   bubble.hidden=false;
   clearTimeout(showBubble.timer);
   showBubble.timer=setTimeout(()=>bubble.hidden=true,2600);
 }
 function normalizeStoryScene(scene){
-  return scene==="door-closeup"?"exterior":scene;
+  return scenes.some(s=>s.dataset.scene===scene)?scene:"exterior";
+}
+function setBusy(on){
+  busy=on;
+  $(".story-frame").classList.toggle("is-busy",on);
+  scenes.forEach(scene=>{scene.inert=on});
+  $(".minimal-hud").inert=on;
 }
 function startStory(scene="exterior"){
+  introCleanup?.();
+  introCleanup=null;
+  setBusy(false);
   scene=normalizeStoryScene(scene);
   showScreen("story");
   showScene(scene);
@@ -113,6 +153,8 @@ function startStory(scene="exterior"){
   $("#story-menu").hidden=true;
   $("#story-dialogue-ui").hidden=true;
   $("#intro-monologue").hidden=true;
+  $("#tool-sheet").hidden=true;
+  if(scene==="living-room"&&!readSave()?.openingSeen) beginOpeningDialogue();
 }
 function runIntro(){
   if(!INTRO_LINES.length){
@@ -124,16 +166,15 @@ function runIntro(){
   const overlay=$("#intro-monologue");
   const text=$("#intro-monologue-text");
   let index=0;
+  let finished=false;
+  setBusy(true);
 
   frame.classList.add("intro-running");
   overlay.hidden=false;
 
   const render=()=>{
-    text.classList.remove("is-visible");
-    window.setTimeout(()=>{
-      text.textContent=INTRO_LINES[index];
-      requestAnimationFrame(()=>text.classList.add("is-visible"));
-    },120);
+    text.textContent=INTRO_LINES[index];
+    text.classList.add("is-visible");
   };
 
   const cleanup=()=>{
@@ -142,17 +183,23 @@ function runIntro(){
   };
 
   const finish=()=>{
+    if(finished) return;
+    finished=true;
     cleanup();
+    introCleanup=null;
     text.classList.remove("is-visible");
     frame.classList.add("intro-reveal");
 
     window.setTimeout(()=>{
       overlay.hidden=true;
       frame.classList.remove("intro-running","intro-reveal");
+      setBusy(false);
+      $("#door-hotspot").focus({preventScroll:true});
     },1500);
   };
 
   const advance=()=>{
+    if(finished) return;
     if(index>=INTRO_LINES.length-1){
       finish();
       return;
@@ -162,6 +209,7 @@ function runIntro(){
   };
 
   const keyAdvance=event=>{
+    if(event.repeat) return;
     if(event.code==="Space"||event.code==="Enter"){
       event.preventDefault();
       advance();
@@ -171,6 +219,7 @@ function runIntro(){
   render();
   overlay.addEventListener("click",advance);
   document.addEventListener("keydown",keyAdvance);
+  introCleanup=cleanup;
 }
 function playChapterCard(after){
   const card=$("#chapter-card");
@@ -193,6 +242,8 @@ function playChapterCard(after){
 }
 
 function enterHouse(){
+  if(busy) return;
+  setBusy(true);
   $("#door-choice").hidden=true;
   const frame=$(".story-frame");
   const transition=$("#house-entry-transition");
@@ -224,19 +275,64 @@ function enterHouse(){
 
     if(chapterAlreadyPlayed){
       writeSave("living-room",{chapter:1,chapterIntroSeen:true});
+      setBusy(false);
+      if(!save?.openingSeen) beginOpeningDialogue();
       window.setTimeout(()=>living.classList.remove("is-arriving"),250);
       return;
     }
 
     playChapterCard(()=>{
       writeSave("living-room",{chapter:1,chapterIntroSeen:true});
+      setBusy(false);
+      beginOpeningDialogue();
       window.setTimeout(()=>living.classList.remove("is-arriving"),250);
     });
   },790);
 }
 
+function beginOpeningDialogue(){
+  activeDialogue=OPENING_DIALOGUE;
+  dialogueIndex=0;
+  setBusy(true);
+  $("#story-dialogue-ui").hidden=false;
+  renderDialogue();
+  $("#dialogue-next").focus({preventScroll:true});
+}
+function renderDialogue(){
+  const [speaker,line]=activeDialogue[dialogueIndex];
+  $("#dialogue-speaker").textContent=speaker;
+  $("#dialogue-text").textContent=line;
+  $("#dialogue-next").setAttribute("aria-label",dialogueIndex===activeDialogue.length-1?"대화 마치기":"다음 대사");
+}
+$("#dialogue-next").addEventListener("click",()=>{
+  if(++dialogueIndex<activeDialogue.length){renderDialogue();return}
+  $("#story-dialogue-ui").hidden=true;
+  setBusy(false);
+  writeSave("living-room",{openingSeen:true,decorationQuest:"accepted"});
+  $("#talk-gongryong").focus({preventScroll:true});
+});
+$("#talk-gongryong").addEventListener("click",beginOpeningDialogue);
+function openTool(kind){
+  const sheet=$("#tool-sheet"),content=$("#tool-content"),save=readSave();
+  $("#story-menu").hidden=true;
+  sheet.className="tool-sheet tool-sheet--"+kind;
+  $("#tool-title").textContent=kind==="bag"?"꿈뜰이의 가방":"꿈뜰이의 기록장";
+  content.replaceChildren();
+  const paragraph=document.createElement("p");
+  paragraph.textContent=kind==="bag"?"가방이 비어 있다.":save?.decorationQuest==="accepted"?"12월 28일 · 생일 준비\n공룡이 요정들에게 맡긴 생일 장식을 받아다 달라고 부탁했다.":"12월 28일. 잠뜰님의 생일을 축하하러 픽셀리 집에 왔다.";
+  content.appendChild(paragraph);
+  sheet.hidden=false;
+  $("#close-tool-sheet").focus();
+}
+function closeTool(){
+  const bag=$("#tool-sheet").classList.contains("tool-sheet--bag");
+  $("#tool-sheet").hidden=true;
+  $(bag?"#bag-button":"#diary-button").focus();
+}
+$("#close-tool-sheet").addEventListener("click",closeTool);
+
 $("#new-story").addEventListener("click",()=>{
-  writeSave("exterior",{chapter:0,chapterIntroSeen:false});
+  writeSave("exterior",{chapter:0,chapterIntroSeen:false,openingSeen:false,decorationQuest:null});
   runIntro();
 });
 $("#continue-story").addEventListener("click",()=>{
@@ -246,7 +342,7 @@ $("#continue-story").addEventListener("click",()=>{
 document.querySelectorAll("[data-inspect]").forEach(button=>{
   button.addEventListener("click",()=>{
     const message=EXTERIOR_INSPECTIONS[button.dataset.inspect];
-    if(message) showBubble(message);
+    if(message) showBubble(message,button);
   });
 });
 
@@ -254,32 +350,47 @@ $("#door-hotspot").addEventListener("click",()=>{
   $("#inspect-bubble").hidden=true;
   $("#door-choice").hidden=true;
   showScene("door-closeup");
+  writeSave("door-closeup");
+  $("#door-closeup-hotspot").focus({preventScroll:true});
 });
 $("#door-closeup-hotspot").addEventListener("click",()=>{
   $("#door-choice").hidden=false;
+  $("#enter-house").focus({preventScroll:true});
 });
 $("#door-closeup-back").addEventListener("click",()=>{
   $("#door-choice").hidden=true;
   showScene("exterior");
+  writeSave("exterior");
+  $("#door-hotspot").focus({preventScroll:true});
 });
 $("#keep-looking").addEventListener("click",()=>{
   $("#door-choice").hidden=true;
+  $("#door-closeup-hotspot").focus({preventScroll:true});
 });
 $("#enter-house").addEventListener("click",enterHouse);
 $("#leave-house").addEventListener("click",()=>{
   showScene("exterior");
   writeSave("exterior");
 });
-$("#story-menu-button").addEventListener("click",()=>{$("#story-menu").hidden=false});
+$("#story-menu-button").addEventListener("click",()=>{
+  $("#tool-sheet").hidden=true;$("#door-choice").hidden=true;
+  $("#story-menu").hidden=false;$("#close-story-menu").focus();
+});
 $("#close-story-menu").addEventListener("click",()=>{$("#story-menu").hidden=true});
 $("#return-home").addEventListener("click",()=>{$("#story-menu").hidden=true;showScreen("home")});
 $("#save-progress").addEventListener("click",()=>{
   const current=scenes.find(scene=>!scene.hidden)?.dataset.scene||"exterior";
-  writeSave(current);
+  const saved=writeSave(current);
   $("#story-menu").hidden=true;
-  toast("현재 위치를 저장했어.");
+  if(saved) toast("현재 위치를 저장했어.");
 });
-$("#bag-button").addEventListener("click",()=>toast("가방은 아직 비어 있어."));
-$("#diary-button").addEventListener("click",()=>toast("아직 적힌 내용이 없어."));
+$("#bag-button").addEventListener("click",()=>openTool("bag"));
+$("#diary-button").addEventListener("click",()=>openTool("diary"));
+document.addEventListener("keydown",event=>{
+  if(event.key!=="Escape"||busy) return;
+  if(!$("#tool-sheet").hidden){closeTool();return}
+  if(!$("#door-choice").hidden){$("#keep-looking").click();return}
+  if(!$("#story-menu").hidden){$("#story-menu").hidden=true;$("#story-menu-button").focus()}
+});
 renderContinue();
 })();

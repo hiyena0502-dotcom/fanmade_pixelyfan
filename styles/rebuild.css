@@ -2102,219 +2102,107 @@ button{color:inherit}
 }
 
 
-/* v101 — two-step door inspection, precise hotspots, and non-draggable game UI */
-.rebuild-root,
-.rebuild-root *{
-  -webkit-user-select:none!important;
-  user-select:none!important;
+/* Scene framing: the artwork and its hotspots share the same coordinate space. */
+.rebuild-root img{-webkit-user-drag:none;user-select:none}
+.screen[hidden],.scene[hidden],.tool-sheet[hidden]{display:none!important}
+.story-frame{width:100%;height:100dvh}
+.exterior-scene,.door-closeup-scene{
+  display:grid!important;place-items:center!important;
+  background:#c6e5f5!important;
 }
-.rebuild-root img{
-  -webkit-user-drag:none!important;
-  user-drag:none!important;
-}
-
-/* Front exterior: match the clickable area to the actual wooden door. */
-.hotspot-door{
-  left:45.25%!important;
-  top:51.1%!important;
-  width:9.1%!important;
-  height:23.2%!important;
-}
-
-/* Close-up scene supplied by the user. */
-.door-closeup-scene{
-  background:#f5d898!important;
-  overflow:hidden!important;
-}
-.door-closeup-art{
-  width:100%!important;
-  height:100%!important;
-  object-fit:cover!important;
-  object-position:center center!important;
-}
-.hotspot-door-closeup{
-  left:37.7%!important;
-  top:12.3%!important;
-  width:24.5%!important;
-  height:76%!important;
-}
-.door-closeup-back{
-  left:30px!important;
-  bottom:28px!important;
-  transform:none!important;
-}
-.door-closeup-back span{
-  font-size:42px!important;
-  line-height:.62!important;
-}
-
-/* Home comment: same position family, but slightly larger and higher. */
-.home-menu{
-  width:min(390px,76%)!important;
-  transform:translate(72px,-30px)!important;
-  gap:12px!important;
-}
-.title-menu-item{
-  min-height:56px!important;
-  padding:9px 18px 9px 15px!important;
-}
-.title-menu-item strong{
-  font-size:18px!important;
-}
-
-@media(max-width:980px){
-  .home-menu{
-    width:min(380px,90vw)!important;
-    transform:translateY(-12px)!important;
-  }
-  .hotspot-door{
-    left:45.1%!important;
-    top:49.8%!important;
-    width:9.4%!important;
-    height:24.5%!important;
-  }
-}
-@media(max-width:560px){
-  .hotspot-door{
-    left:44.6%!important;
-    top:46.5%!important;
-    width:10.5%!important;
-    height:28%!important;
-  }
-  .hotspot-door-closeup{
-    left:35.5%!important;
-    top:10%!important;
-    width:29%!important;
-    height:78%!important;
-  }
-}
-
-
-/* v102 — show the supplied door illustration at its real 16:9 framing, not zoomed/cropped */
-.door-closeup-scene{
-  display:grid!important;
-  place-items:center!important;
-  background:#f3d897!important;
-}
-.door-closeup-stage{
+.scene-art-stage,.door-closeup-stage{
   position:relative!important;
-  width:min(100%,calc(100vh * 16 / 9))!important;
-  height:min(100%,calc(100vw * 9 / 16))!important;
-  aspect-ratio:16 / 9!important;
-  overflow:hidden!important;
-  flex:none!important;
-}
-.door-closeup-art{
-  position:absolute!important;
-  inset:0!important;
-  width:100%!important;
-  height:100%!important;
-  object-fit:contain!important;
-  object-position:center!important;
-  image-rendering:auto!important;
-  transform:none!important;
-  filter:none!important;
-}
-.hotspot-door-closeup{
-  left:37.6%!important;
-  top:13.7%!important;
-  width:24.8%!important;
-  height:69.2%!important;
-}
-.door-closeup-back{
-  z-index:30!important;
-}
-
-
-/* v103 — door close-up fills the game frame at full quality; cropping is intentional */
-.door-closeup-scene{
-  position:relative!important;
-  display:grid!important;
-  place-items:center!important;
-  overflow:hidden!important;
-  background:#f3d897!important;
-}
-.door-closeup-stage{
-  position:relative!important;
-  width:max(100vw,calc(100vh * 16 / 9))!important;
-  height:max(100vh,calc(100vw * 9 / 16))!important;
-  aspect-ratio:16 / 9!important;
-  flex:none!important;
+  width:min(100%,calc(100dvh * 16 / 9))!important;
+  height:auto!important;aspect-ratio:16 / 9!important;
   overflow:visible!important;
 }
-.door-closeup-art{
-  position:absolute!important;
-  inset:0!important;
-  width:100%!important;
-  height:100%!important;
-  object-fit:fill!important;
-  object-position:center!important;
-  image-rendering:auto!important;
-  transform:none!important;
-  filter:none!important;
+.door-closeup-scene{background:#f5e3ca!important}
+.door-closeup-stage{
+  width:min(100%,calc(100dvh * 1672 / 941))!important;
+  aspect-ratio:1672 / 941!important;
+}
+.exterior-stage>.scene-art,.door-closeup-art{
+  position:relative!important;display:block;
+  width:100%!important;height:100%!important;
+  object-fit:contain!important;object-position:center!important;
+  transform:none!important;filter:none!important;
+}
+.hotspot-door{
+  left:46.8%!important;top:56.2%!important;
+  width:5.8%!important;height:16.6%!important;
 }
 .hotspot-door-closeup{
-  left:37.6%!important;
-  top:13.7%!important;
-  width:24.8%!important;
-  height:69.2%!important;
+  left:38%!important;top:20.2%!important;
+  width:23.2%!important;height:61.8%!important;
 }
+.exterior-inspect--laundry{left:10%;top:66%;width:16%;height:13%}
+.exterior-inspect--birdhouse{left:69.5%;top:54%;width:6%;height:22%}
+.exterior-inspect--garden{left:64%;top:78%;width:27%;height:12%}
+.hotspot:focus-visible{outline:3px solid #a47030;outline-offset:2px}
+.inspect-bubble{
+  left:var(--bubble-x,50%);top:var(--bubble-y,70%);bottom:auto;
+  transform:translate(-50%,-100%);width:max-content;
+  max-width:min(380px,85%);font-size:16px;line-height:1.6;
+  pointer-events:none;
+}
+.door-closeup-back{z-index:30!important}
+.door-closeup-scene>.choice-sheet{z-index:90;bottom:8%;font-size:16px}
+.choice-sheet button:focus-visible,.object-tool:focus-visible,.room-talk-button:focus-visible,
+.menu-sheet button:focus-visible,.tool-sheet button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.home-menu{width:min(390px,76%)!important;transform:translate(72px,-30px)!important;gap:12px!important}
+.title-menu-item{min-height:56px!important;padding:9px 18px 9px 15px!important}
+.title-menu-item strong{font-size:18px!important}
 
-
-/* v105 — door close-up is only reached from the real house-front scene */
-.door-closeup-back{
-  position:absolute!important;
-  left:26px!important;
-  bottom:24px!important;
-  right:auto!important;
-  top:auto!important;
-  z-index:80!important;
-  display:flex!important;
-  opacity:1!important;
-  visibility:visible!important;
-  pointer-events:auto!important;
+/* Only show tools that are available, and keep them out of dialogue and transitions. */
+.story-frame[data-scene="exterior"] .inventory-rack,
+.story-frame[data-scene="door-closeup"] .inventory-rack{display:none!important}
+.story-frame[data-scene="living-room"] .inventory-rack{display:none!important}
+.story-frame.is-busy .minimal-hud,
+.story-frame.is-busy .scene-back-arrow,
+.story-frame.is-busy .room-talk-button{visibility:hidden!important;pointer-events:none!important}
+.room-talk-button{
+  position:absolute;right:30px;top:28px;z-index:20;min-height:44px;
+  padding:10px 18px;border:1px solid rgba(226,191,114,.6);
+  border-radius:8px;background:rgba(15,23,43,.88);color:var(--ink);cursor:pointer;
 }
-.door-closeup-back small{
-  display:block!important;
+.dialogue-rail{display:none}
+.dialogue-copy{
+  left:5%!important;right:5%!important;bottom:24px!important;
+  min-height:150px;max-height:45dvh;overflow-y:auto;
+  padding:22px 72px 22px 26px!important;
 }
-
-
-/* v107 — house-front first, then door close-up */
-.exterior-scene .scene-art{
-  width:100%!important;
-  height:100%!important;
-  object-fit:cover!important;
-  object-position:center center!important;
-  transform:none!important;
-  filter:none!important;
+.dialogue-copy p{font-size:18px;line-height:1.75;overflow-wrap:anywhere}
+.dialogue-copy button{width:44px;height:44px}
+.dialogue-copy strong{font-family:inherit;font-size:22px}
+.tool-sheet{
+  position:absolute;z-index:105;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:min(600px,calc(100% - 32px));max-height:75dvh;overflow:auto;
+  padding:24px;border:1px solid #cba86c;border-radius:12px;
+  color:#493d32;background:#fcf3de;box-shadow:0 24px 80px #0007;
 }
-
-/* Optional house-front inspection points. */
-.exterior-inspect{
-  z-index:7!important;
+.tool-sheet header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.tool-sheet h2{font-size:22px;margin:0}
+.tool-sheet header button{border:0;background:transparent;color:inherit;width:44px;height:44px;font-size:28px;cursor:pointer}
+.tool-sheet p{font-size:16px;line-height:1.8}
+.tool-sheet ul{padding-left:22px;font-size:16px;line-height:1.8}
+.tool-sheet--diary{background:repeating-linear-gradient(#fcf3de 0 31px,#cfc2a6 32px,#fcf3de 33px)}
+.tool-sheet--bag{background:#dbc1a0;border:8px solid #806448}
+@media(max-width:980px){
+  .home-menu{width:min(380px,90vw)!important;transform:translateY(-12px)!important}
 }
-.exterior-inspect--laundry{
-  left:5.5%!important;
-  top:60%!important;
-  width:18%!important;
-  height:18%!important;
+@media(max-width:560px){
+  .hud-place-copy strong{font-size:14px!important}
+  .hud-place-copy small{display:none}
+  .hud-date{min-width:190px!important}
+  .room-talk-button{top:76px;right:10px}
+  .dialogue-copy{left:3%!important;right:3%!important;bottom:76px!important;max-height:42dvh;padding:16px 58px 16px 18px!important}
+  .dialogue-copy p{font-size:16px}
+  .dialogue-copy strong{font-size:18px}
+  .choice-sheet{bottom:80px!important;padding:14px;max-height:50dvh;overflow:auto}
+  .inspect-bubble{max-width:90%;font-size:14px;padding:8px 10px}
+  .hotspot{min-width:28px;min-height:28px}
+  .tool-sheet{max-height:70dvh;padding:18px}
 }
-.exterior-inspect--birdhouse{
-  left:70%!important;
-  top:47%!important;
-  width:11%!important;
-  height:18%!important;
-}
-.exterior-inspect--garden{
-  left:66%!important;
-  top:72%!important;
-  width:24%!important;
-  height:19%!important;
-}
-
-/* The entry choice belongs only to the door-closeup scene. */
-.door-closeup-scene>.choice-sheet{
-  left:50%!important;
-  bottom:7%!important;
-  z-index:90!important;
+@media(prefers-reduced-motion:reduce){
+  .scene-art,.living-room-art,.chapter-card{animation:none!important;transition:none!important}
 }
