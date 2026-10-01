@@ -4,19 +4,9 @@ const $=(q,r=document)=>r.querySelector(q);
 const screens=[...document.querySelectorAll("[data-screen]")];
 const scenes=[...document.querySelectorAll("[data-scene]")];
 let toastTimer=0;
-let dialogueIndex=0;
 let introCleanup=null;
 let busy=false;
-let activeDialogue=[];
 let sessionSave;
-const OPENING_DIALOGUE=[
-  ["공룡","잘 왔어! 안 그래도 지금 사람 하나 필요했는데..."],
-  ["라더","사람은 많은데?"],
-  ["공룡","쓸 수 있는 사람이 필요하다고."],
-  ["공룡","요정들한테 생일 장식을 맡겼는데, 아직 하나도 안 왔어."],
-  ["덕개 · 주방에서","야, 정형준!"],
-  ["공룡","집 안에 있는 요정들한테 장식 좀 받아다 줄래?"]
-];
 
 function buildHomeSnow(){
   const layer=$("#home-snow");
@@ -51,11 +41,6 @@ const INTRO_LINES=[
   "…뭐, 오늘 하루는 별일 없겠지?"
 ];
 
-const EXTERIOR_INSPECTIONS={
-  laundry:"눈이 쌓인 빨랫줄이다. 지금은 아무것도 걸려 있지 않다.",
-  birdhouse:"눈이 쌓인 작은 새집이다.",
-  garden:"화단에도 눈이 소복하게 쌓여 있다."
-};
 
 function toast(message){
   const node=$("#toast");
@@ -102,7 +87,6 @@ function showScreen(name){
   });
 }
 function showScene(name){
-  $("#inspect-bubble").hidden=true;
   $(".story-frame").dataset.scene=name;
   scenes.forEach(scene=>{
     const on=scene.dataset.scene===name;
@@ -118,20 +102,6 @@ function showScene(name){
   if(name!=="door-closeup") $("#door-choice").hidden=true;
   $("#bag-button").disabled=name!=="living-room";
   $("#diary-button").disabled=name!=="living-room";
-}
-function showBubble(message,anchor){
-  const bubble=$("#inspect-bubble");
-  const x=anchor.offsetLeft+anchor.offsetWidth/2;
-  const y=anchor.offsetTop;
-  const stage=anchor.parentElement;
-  const width=Math.min(380,stage.clientWidth*.85);
-  const margin=width/2+8;
-  bubble.style.setProperty("--bubble-x",Math.min(Math.max(x,margin),Math.max(margin,stage.clientWidth-margin))+"px");
-  bubble.style.setProperty("--bubble-y",Math.max(42,y-8)+"px");
-  bubble.textContent=message;
-  bubble.hidden=false;
-  clearTimeout(showBubble.timer);
-  showBubble.timer=setTimeout(()=>bubble.hidden=true,2600);
 }
 function normalizeStoryScene(scene){
   return scenes.some(s=>s.dataset.scene===scene)?scene:"exterior";
@@ -151,10 +121,8 @@ function startStory(scene="exterior"){
   showScene(scene);
   $("#door-choice").hidden=true;
   $("#story-menu").hidden=true;
-  $("#story-dialogue-ui").hidden=true;
   $("#intro-monologue").hidden=true;
   $("#tool-sheet").hidden=true;
-  if(scene==="living-room"&&!readSave()?.openingSeen) beginOpeningDialogue();
 }
 function runIntro(){
   if(!INTRO_LINES.length){
@@ -276,7 +244,6 @@ function enterHouse(){
     if(chapterAlreadyPlayed){
       writeSave("living-room",{chapter:1,chapterIntroSeen:true});
       setBusy(false);
-      if(!save?.openingSeen) beginOpeningDialogue();
       window.setTimeout(()=>living.classList.remove("is-arriving"),250);
       return;
     }
@@ -284,42 +251,19 @@ function enterHouse(){
     playChapterCard(()=>{
       writeSave("living-room",{chapter:1,chapterIntroSeen:true});
       setBusy(false);
-      beginOpeningDialogue();
       window.setTimeout(()=>living.classList.remove("is-arriving"),250);
     });
   },790);
 }
 
-function beginOpeningDialogue(){
-  activeDialogue=OPENING_DIALOGUE;
-  dialogueIndex=0;
-  setBusy(true);
-  $("#story-dialogue-ui").hidden=false;
-  renderDialogue();
-  $("#dialogue-next").focus({preventScroll:true});
-}
-function renderDialogue(){
-  const [speaker,line]=activeDialogue[dialogueIndex];
-  $("#dialogue-speaker").textContent=speaker;
-  $("#dialogue-text").textContent=line;
-  $("#dialogue-next").setAttribute("aria-label",dialogueIndex===activeDialogue.length-1?"대화 마치기":"다음 대사");
-}
-$("#dialogue-next").addEventListener("click",()=>{
-  if(++dialogueIndex<activeDialogue.length){renderDialogue();return}
-  $("#story-dialogue-ui").hidden=true;
-  setBusy(false);
-  writeSave("living-room",{openingSeen:true,decorationQuest:"accepted"});
-  $("#talk-gongryong").focus({preventScroll:true});
-});
-$("#talk-gongryong").addEventListener("click",beginOpeningDialogue);
 function openTool(kind){
-  const sheet=$("#tool-sheet"),content=$("#tool-content"),save=readSave();
+  const sheet=$("#tool-sheet"),content=$("#tool-content");
   $("#story-menu").hidden=true;
   sheet.className="tool-sheet tool-sheet--"+kind;
   $("#tool-title").textContent=kind==="bag"?"꿈뜰이의 가방":"꿈뜰이의 기록장";
   content.replaceChildren();
   const paragraph=document.createElement("p");
-  paragraph.textContent=kind==="bag"?"가방이 비어 있다.":save?.decorationQuest==="accepted"?"12월 28일 · 생일 준비\n공룡이 요정들에게 맡긴 생일 장식을 받아다 달라고 부탁했다.":"12월 28일. 잠뜰님의 생일을 축하하러 픽셀리 집에 왔다.";
+  paragraph.textContent=kind==="bag"?"가방이 비어 있다.":"아직 적힌 내용이 없다.";
   content.appendChild(paragraph);
   sheet.hidden=false;
   $("#close-tool-sheet").focus();
@@ -339,15 +283,7 @@ $("#continue-story").addEventListener("click",()=>{
   const save=readSave();
   if(save) startStory(save.scene||"exterior");
 });
-document.querySelectorAll("[data-inspect]").forEach(button=>{
-  button.addEventListener("click",()=>{
-    const message=EXTERIOR_INSPECTIONS[button.dataset.inspect];
-    if(message) showBubble(message,button);
-  });
-});
-
 $("#door-hotspot").addEventListener("click",()=>{
-  $("#inspect-bubble").hidden=true;
   $("#door-choice").hidden=true;
   showScene("door-closeup");
   writeSave("door-closeup");

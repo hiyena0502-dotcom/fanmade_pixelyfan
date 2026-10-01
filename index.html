@@ -11,8 +11,8 @@
   <link rel="preload" as="image" href="assets/story/chapter1/living-room.webp?v=90" />
 <link rel="preload" as="image" href="assets/home/home-bg.webp?v=84" />
   <link rel="preload" as="image" href="assets/story/chapter1/house-wide-v108.png" />
-  <link rel="stylesheet" href="styles/rebuild.css?v=109" />
-  <script src="rebuild.js?v=109" defer></script>
+  <link rel="stylesheet" href="styles/rebuild.css?v=110" />
+  <script src="rebuild.js?v=110" defer></script>
 </head>
 <body>
   <main class="rebuild-root">
@@ -78,10 +78,6 @@
           <div class="scene-art-stage exterior-stage">
           <img class="scene-art" src="assets/story/chapter1/house-wide-v108.png" width="2048" height="1152" alt="눈 덮인 픽셀리 집의 아침 풍경" draggable="false" />
           <button type="button" class="hotspot hotspot-door" id="door-hotspot" aria-label="현관문 살펴보기"></button>
-          <button type="button" class="hotspot exterior-inspect exterior-inspect--laundry" data-inspect="laundry" aria-label="빨랫줄 살펴보기"></button>
-          <button type="button" class="hotspot exterior-inspect exterior-inspect--birdhouse" data-inspect="birdhouse" aria-label="새집 살펴보기"></button>
-          <button type="button" class="hotspot exterior-inspect exterior-inspect--garden" data-inspect="garden" aria-label="화단 살펴보기"></button>
-          <div class="inspect-bubble" id="inspect-bubble" role="status" aria-live="polite" hidden></div>
           </div>
         </section>
 
@@ -104,25 +100,9 @@
 
         <section class="scene living-room-scene" data-scene="living-room" hidden aria-label="픽셀리 집 거실">
           <img class="scene-art living-room-art" src="assets/story/chapter1/living-room.webp?v=90" alt="따뜻한 겨울 아침의 픽셀리 집 거실" draggable="false" />
-          <button type="button" class="room-talk-button" id="talk-gongryong">공룡과 대화</button>
           <button type="button" class="scene-back-arrow" id="leave-house" aria-label="집 밖으로 나가기">
             <span>⌄</span><small>밖으로</small>
           </button>
-        </section>
-
-        <section class="story-dialogue-ui" id="story-dialogue-ui" hidden aria-live="polite">
-          <div class="dialogue-character dialogue-character--left" id="dialogue-character-left" hidden>
-            <img id="dialogue-character-left-image" alt="" />
-          </div>
-          <div class="dialogue-character dialogue-character--right" id="dialogue-character-right" hidden>
-            <img id="dialogue-character-right-image" alt="" />
-          </div>
-          <div class="dialogue-rail" aria-hidden="true"><span></span><i>✦</i><span></span></div>
-          <div class="dialogue-copy">
-            <strong id="dialogue-speaker"></strong>
-            <p id="dialogue-text"></p>
-            <button type="button" id="dialogue-next" aria-label="다음 대사">›</button>
-          </div>
         </section>
 
         <section class="intro-monologue" id="intro-monologue" hidden aria-live="polite" aria-label="꿈뜰이 독백">

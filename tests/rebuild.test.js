@@ -72,21 +72,20 @@ test('house exploration, two door clicks, cancellation, and resume retain the co
   assert.equal(resumed.save().scene,'exterior');
 });
 
-test('first entry plays the chapter and greeting once, then remembers the request',()=>{
+test('entry finishes the chapter without adding dialogue or a quest',()=>{
   const app=boot();app.start();app.click('#door-hotspot');app.click('#door-closeup-hotspot');app.click('#enter-house');app.flush();
   assert.equal(app.scenes[2].hidden,false);
-  assert.equal(app.node('#story-dialogue-ui').hidden,false);
-  assert.equal(app.node('#dialogue-speaker').textContent,'공룡');
-  assert.match(app.node('#dialogue-text').textContent,/잘 왔어/);
-  app.click('#dialogue-next');assert.equal(app.node('#dialogue-speaker').textContent,'라더');
-  for(let i=0;i<5;i++) app.click('#dialogue-next');
-  assert.equal(app.node('#story-dialogue-ui').hidden,true);
-  assert.equal(app.save().decorationQuest,'accepted');
-  app.click('#diary-button');assert.match(app.node('#tool-content').children[0].textContent,/생일 장식/);
+  assert.equal(app.scenes[2].inert,false);
+  assert.equal(app.node('#chapter-card').hidden,true);
+  assert.equal(app.save().chapterIntroSeen,true);
+  assert.notEqual(app.save().decorationQuest,'accepted');
+  app.click('#diary-button');assert.equal(app.node('#tool-content').children[0].textContent,'아직 적힌 내용이 없다.');
   app.escape();assert.equal(app.node('#tool-sheet').hidden,true);
   app.click('#leave-house');app.click('#door-hotspot');app.click('#door-closeup-hotspot');app.click('#enter-house');app.flush();
   assert.equal(app.node('#chapter-card').hidden,true);
-  assert.equal(app.node('#story-dialogue-ui').hidden,true);
+  assert.equal(app.scenes[2].inert,false);
+  const html=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');
+  assert.doesNotMatch(html,/data-inspect=|id="talk-gongryong"|id="story-dialogue-ui"/);
 });
 
 test('invalid saves and unavailable storage cannot prevent starting a playable story',()=>{

@@ -2107,24 +2107,25 @@ button{color:inherit}
 .screen[hidden],.scene[hidden],.tool-sheet[hidden]{display:none!important}
 .story-frame{width:100%;height:100dvh}
 .exterior-scene,.door-closeup-scene{
-  display:grid!important;place-items:center!important;
+  overflow:hidden!important;
   background:#c6e5f5!important;
 }
 .scene-art-stage,.door-closeup-stage{
-  position:relative!important;
-  width:min(100%,calc(100dvh * 16 / 9))!important;
+  position:absolute!important;left:50%!important;top:50%!important;
+  transform:translate(-50%,-50%)!important;
+  width:max(100%,calc(100dvh * 16 / 9))!important;
   height:auto!important;aspect-ratio:16 / 9!important;
   overflow:visible!important;
 }
 .door-closeup-scene{background:#f5e3ca!important}
 .door-closeup-stage{
-  width:min(100%,calc(100dvh * 1672 / 941))!important;
+  width:max(100%,calc(100dvh * 1672 / 941))!important;
   aspect-ratio:1672 / 941!important;
 }
 .exterior-stage>.scene-art,.door-closeup-art{
   position:relative!important;display:block;
   width:100%!important;height:100%!important;
-  object-fit:contain!important;object-position:center!important;
+  object-fit:cover!important;object-position:center!important;
   transform:none!important;filter:none!important;
 }
 .hotspot-door{
@@ -2135,45 +2136,21 @@ button{color:inherit}
   left:38%!important;top:20.2%!important;
   width:23.2%!important;height:61.8%!important;
 }
-.exterior-inspect--laundry{left:10%;top:66%;width:16%;height:13%}
-.exterior-inspect--birdhouse{left:69.5%;top:54%;width:6%;height:22%}
-.exterior-inspect--garden{left:64%;top:78%;width:27%;height:12%}
 .hotspot:focus-visible{outline:3px solid #a47030;outline-offset:2px}
-.inspect-bubble{
-  left:var(--bubble-x,50%);top:var(--bubble-y,70%);bottom:auto;
-  transform:translate(-50%,-100%);width:max-content;
-  max-width:min(380px,85%);font-size:16px;line-height:1.6;
-  pointer-events:none;
-}
 .door-closeup-back{z-index:30!important}
 .door-closeup-scene>.choice-sheet{z-index:90;bottom:8%;font-size:16px}
-.choice-sheet button:focus-visible,.object-tool:focus-visible,.room-talk-button:focus-visible,
+.choice-sheet button:focus-visible,.object-tool:focus-visible,
 .menu-sheet button:focus-visible,.tool-sheet button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 .home-menu{width:min(390px,76%)!important;transform:translate(72px,-30px)!important;gap:12px!important}
 .title-menu-item{min-height:56px!important;padding:9px 18px 9px 15px!important}
 .title-menu-item strong{font-size:18px!important}
 
-/* Only show tools that are available, and keep them out of dialogue and transitions. */
+/* Keep controls out of intro and chapter transitions. */
 .story-frame[data-scene="exterior"] .inventory-rack,
 .story-frame[data-scene="door-closeup"] .inventory-rack{display:none!important}
 .story-frame[data-scene="living-room"] .inventory-rack{display:none!important}
 .story-frame.is-busy .minimal-hud,
-.story-frame.is-busy .scene-back-arrow,
-.story-frame.is-busy .room-talk-button{visibility:hidden!important;pointer-events:none!important}
-.room-talk-button{
-  position:absolute;right:30px;top:28px;z-index:20;min-height:44px;
-  padding:10px 18px;border:1px solid rgba(226,191,114,.6);
-  border-radius:8px;background:rgba(15,23,43,.88);color:var(--ink);cursor:pointer;
-}
-.dialogue-rail{display:none}
-.dialogue-copy{
-  left:5%!important;right:5%!important;bottom:24px!important;
-  min-height:150px;max-height:45dvh;overflow-y:auto;
-  padding:22px 72px 22px 26px!important;
-}
-.dialogue-copy p{font-size:18px;line-height:1.75;overflow-wrap:anywhere}
-.dialogue-copy button{width:44px;height:44px}
-.dialogue-copy strong{font-family:inherit;font-size:22px}
+.story-frame.is-busy .scene-back-arrow{visibility:hidden!important;pointer-events:none!important}
 .tool-sheet{
   position:absolute;z-index:105;left:50%;top:50%;transform:translate(-50%,-50%);
   width:min(600px,calc(100% - 32px));max-height:75dvh;overflow:auto;
@@ -2200,12 +2177,7 @@ button{color:inherit}
   .hud-place-copy strong{font-size:14px!important}
   .hud-place-copy small{display:none}
   .hud-date{min-width:190px!important}
-  .room-talk-button{top:76px;right:10px}
-  .dialogue-copy{left:3%!important;right:3%!important;bottom:76px!important;max-height:42dvh;padding:16px 58px 16px 18px!important}
-  .dialogue-copy p{font-size:16px}
-  .dialogue-copy strong{font-size:18px}
   .choice-sheet{bottom:80px!important;padding:14px;max-height:50dvh;overflow:auto}
-  .inspect-bubble{max-width:90%;font-size:14px;padding:8px 10px}
   .hotspot{min-width:28px;min-height:28px}
   .tool-sheet{max-height:70dvh;padding:18px}
 }
