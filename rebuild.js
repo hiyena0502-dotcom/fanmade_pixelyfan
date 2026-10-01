@@ -180,8 +180,9 @@ function enterHouse(){
 
   transition.hidden=false;
   transition.classList.remove("is-active");
-  void transition.offsetWidth;
-  requestAnimationFrame(()=>transition.classList.add("is-active"));
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>transition.classList.add("is-active"));
+  });
 
   window.setTimeout(()=>{
     showScene("living-room");
