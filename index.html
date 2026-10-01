@@ -11,7 +11,7 @@
   <link rel="preload" as="image" href="assets/story/chapter1/living-room.webp?v=90" />
 <link rel="preload" as="image" href="assets/home/home-bg.webp?v=84" />
   <link rel="preload" as="image" href="assets/story/chapter1/house-wide-v108.png" />
-  <link rel="stylesheet" href="styles/rebuild.css?v=111" />
+  <link rel="stylesheet" href="styles/rebuild.css?v=112" />
   <script src="rebuild.js?v=110" defer></script>
 </head>
 <body>
@@ -63,11 +63,12 @@
             </span>
           </div>
 
+          <div class="inventory-rack" aria-hidden="true">
+            <span>아이템</span>
+            <i></i><i></i><i></i><i></i>
+          </div>
+
           <nav class="hud-tools" aria-label="게임 도구">
-            <div class="inventory-rack" aria-hidden="true">
-              <span>ITEMS</span>
-              <i></i><i></i><i></i>
-            </div>
             <button type="button" class="object-tool" id="bag-button" aria-label="가방" disabled><span class="tool-icon tool-icon--bag" aria-hidden="true"></span><small>가방</small></button>
             <button type="button" class="object-tool" id="diary-button" aria-label="다이어리" disabled><span class="tool-icon tool-icon--diary" aria-hidden="true"></span><small>기록</small></button>
             <button type="button" class="object-tool" id="story-menu-button" aria-label="메뉴"><span class="tool-icon tool-icon--menu" aria-hidden="true"></span><small>메뉴</small></button>
