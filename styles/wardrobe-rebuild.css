@@ -604,3 +604,66 @@ html,body{
   font-size:10px!important;
   line-height:1.1!important;
 }
+
+
+/* v100 — wider game-wardrobe browsing area */
+.wardrobe-shell{
+  width:min(1740px,calc(100vw - 54px))!important;
+  grid-template-columns:minmax(340px,.72fr) minmax(760px,1.48fr)!important;
+  gap:28px!important;
+}
+.wardrobe-panel.wardrobe-dev-panel{
+  min-width:0!important;
+}
+.wardrobe-options.wardrobe-dev-options{
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  column-gap:16px!important;
+  row-gap:14px!important;
+  padding-right:10px!important;
+}
+.wardrobe-option-wrap{
+  width:100%!important;
+}
+.wardrobe-option-wrap>.wardrobe-option{
+  width:100%!important;
+}
+.wardrobe-option-art{
+  width:100%!important;
+  height:100%!important;
+}
+
+/* Give the picture a little side breathing room while keeping the visible part large. */
+.wardrobe-option-art img{
+  width:94%!important;
+  height:94%!important;
+  margin:auto!important;
+  object-fit:contain!important;
+}
+
+@media(max-width:1500px){
+  .wardrobe-shell{
+    width:min(1450px,calc(100vw - 42px))!important;
+    grid-template-columns:minmax(320px,.78fr) minmax(650px,1.32fr)!important;
+    gap:22px!important;
+  }
+  .wardrobe-options.wardrobe-dev-options{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    column-gap:14px!important;
+  }
+}
+@media(max-width:1100px){
+  .wardrobe-shell{
+    width:min(94vw,1000px)!important;
+    grid-template-columns:minmax(280px,.9fr) minmax(500px,1.1fr)!important;
+  }
+  .wardrobe-options.wardrobe-dev-options{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
+@media(max-width:900px){
+  .wardrobe-shell{
+    display:flex!important;
+    flex-direction:column!important;
+    width:94vw!important;
+  }
+}

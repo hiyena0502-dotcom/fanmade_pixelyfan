@@ -2091,3 +2091,12 @@ button{color:inherit}
     max-height:36vh!important;
   }
 }
+
+
+/* v100 — nudge the home menu farther right without moving the title/background */
+.home-menu{
+  transform:translateX(72px)!important;
+}
+@media(max-width:980px){
+  .home-menu{transform:none!important}
+}
