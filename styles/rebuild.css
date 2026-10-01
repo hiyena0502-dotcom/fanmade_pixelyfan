@@ -2277,3 +2277,44 @@ button{color:inherit}
 .door-closeup-back small{
   display:block!important;
 }
+
+
+/* v107 — house-front first, then door close-up */
+.exterior-scene .scene-art{
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+  object-position:center center!important;
+  transform:none!important;
+  filter:none!important;
+}
+
+/* Optional house-front inspection points. */
+.exterior-inspect{
+  z-index:7!important;
+}
+.exterior-inspect--laundry{
+  left:5.5%!important;
+  top:60%!important;
+  width:18%!important;
+  height:18%!important;
+}
+.exterior-inspect--birdhouse{
+  left:70%!important;
+  top:47%!important;
+  width:11%!important;
+  height:18%!important;
+}
+.exterior-inspect--garden{
+  left:66%!important;
+  top:72%!important;
+  width:24%!important;
+  height:19%!important;
+}
+
+/* The entry choice belongs only to the door-closeup scene. */
+.door-closeup-scene>.choice-sheet{
+  left:50%!important;
+  bottom:7%!important;
+  z-index:90!important;
+}

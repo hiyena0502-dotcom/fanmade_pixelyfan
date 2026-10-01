@@ -38,6 +38,12 @@ const INTRO_LINES=[
   "…뭐, 오늘 하루는 별일 없겠지?"
 ];
 
+const EXTERIOR_INSPECTIONS={
+  laundry:"빨랫줄에 천들이 걸려 있다.",
+  birdhouse:"눈이 쌓인 작은 새집이다.",
+  garden:"화단에도 눈이 소복하게 쌓여 있다."
+};
+
 function toast(message){
   const node=$("#toast");
   node.textContent=message;
@@ -237,6 +243,13 @@ $("#continue-story").addEventListener("click",()=>{
   const save=readSave();
   if(save) startStory(save.scene||"exterior");
 });
+document.querySelectorAll("[data-inspect]").forEach(button=>{
+  button.addEventListener("click",()=>{
+    const message=EXTERIOR_INSPECTIONS[button.dataset.inspect];
+    if(message) showBubble(message);
+  });
+});
+
 $("#door-hotspot").addEventListener("click",()=>{
   $("#inspect-bubble").hidden=true;
   $("#door-choice").hidden=true;
