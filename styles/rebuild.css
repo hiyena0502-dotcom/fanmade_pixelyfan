@@ -309,10 +309,10 @@ button{color:inherit}
 .chapter-card.is-active .chapter-glint{animation:chapter-glint 1.2s .95s ease both}
 .chapter-card.is-leaving{opacity:0;transform:translateY(-6px) scale(1.025);transition:opacity 1.6s ease-in,transform 1.6s ease-out}
 .story-frame.chapter-playing .minimal-hud,.story-frame.chapter-playing .scene-back-arrow{visibility:hidden}
-@keyframes chapter-impact{from{opacity:0;transform:scale(1.35) translateY(8px)}70%{opacity:1;transform:scale(.995)}to{opacity:1;transform:scale(1)}}
-@keyframes chapter-caption{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-@keyframes chapter-ornament{from{opacity:0;transform:scale(.78) rotate(-8deg)}to{opacity:.95;transform:scale(1) rotate(0)}}
-@keyframes chapter-flourish{from{opacity:0;transform:scaleX(.4)}to{opacity:.9;transform:scaleX(1)}}
+@keyframes chapter-impact{from{opacity:1;transform:scale(1.35) translateY(8px)}70%{opacity:1;transform:scale(.995)}to{opacity:1;transform:scale(1)}}
+@keyframes chapter-caption{from{opacity:1;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes chapter-ornament{from{opacity:.95;transform:scale(.78) rotate(-8deg)}to{opacity:.95;transform:scale(1) rotate(0)}}
+@keyframes chapter-flourish{from{opacity:.9;transform:scaleX(.4)}to{opacity:.9;transform:scaleX(1)}}
 @keyframes chapter-halo{0%{opacity:0;transform:scale(.65)}55%{opacity:1;transform:scale(1.05)}100%{opacity:.8;transform:scale(1)}}
 @keyframes chapter-glint{0%,100%{opacity:0;transform:scale(.2) rotate(0)}40%{opacity:1;transform:scale(1.8) rotate(80deg)}70%{opacity:.6;transform:scale(1) rotate(120deg)}}
 .toast{position:fixed;z-index:150;left:50%;bottom:24px;transform:translate(-50%,12px);opacity:0;pointer-events:none;max-width:calc(100% - 32px);padding:12px 20px;border-radius:14px;background:#524956;color:#fff9e9;font-size:13px;line-height:1.5;transition:opacity .18s ease,transform .18s ease}
