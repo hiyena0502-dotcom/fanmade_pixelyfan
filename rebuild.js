@@ -387,6 +387,16 @@ $("#save-progress").addEventListener("click",()=>{
 $("#bag-button").addEventListener("click",()=>openTool("bag"));
 $("#diary-button").addEventListener("click",()=>openTool("diary"));
 document.addEventListener("keydown",event=>{
+  if(event.key==="Tab"){
+    const panel=["#tool-sheet","#story-menu","#door-choice"].map(selector=>$(selector)).find(node=>!node.hidden);
+    if(panel){
+      const buttons=[...panel.querySelectorAll("button:not(:disabled)")];
+      const first=buttons[0],last=buttons[buttons.length-1];
+      if(first&&event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus()}
+      else if(last&&!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus()}
+    }
+    return;
+  }
   if(event.key!=="Escape"||busy) return;
   if(!$("#tool-sheet").hidden){closeTool();return}
   if(!$("#door-choice").hidden){$("#keep-looking").click();return}

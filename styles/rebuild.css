@@ -2183,10 +2183,16 @@ button{color:inherit}
 .tool-sheet header{display:flex;align-items:center;justify-content:space-between;gap:16px}
 .tool-sheet h2{font-size:22px;margin:0}
 .tool-sheet header button{border:0;background:transparent;color:inherit;width:44px;height:44px;font-size:28px;cursor:pointer}
-.tool-sheet p{font-size:16px;line-height:1.8}
+.tool-sheet p{font-size:16px;line-height:1.8;white-space:pre-line;word-break:keep-all;overflow-wrap:anywhere}
 .tool-sheet ul{padding-left:22px;font-size:16px;line-height:1.8}
 .tool-sheet--diary{background:repeating-linear-gradient(#fcf3de 0 31px,#cfc2a6 32px,#fcf3de 33px)}
 .tool-sheet--bag{background:#dbc1a0;border:8px solid #806448}
+.story-frame:has(.tool-sheet:not([hidden])) .scene button,
+.story-frame:has(.tool-sheet:not([hidden])) .hud-tools,
+.story-frame:has(.menu-sheet:not([hidden])) .scene button,
+.story-frame:has(#door-choice:not([hidden])) .door-closeup-stage,
+.story-frame:has(#door-choice:not([hidden])) .door-closeup-back,
+.story-frame:has(#door-choice:not([hidden])) .hud-tools{pointer-events:none!important}
 @media(max-width:980px){
   .home-menu{width:min(380px,90vw)!important;transform:translateY(-12px)!important}
 }
