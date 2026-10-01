@@ -156,16 +156,18 @@ function playChapterCard(after){
   frame.classList.add("chapter-playing");
   card.hidden=false;
   card.classList.remove("is-active","is-leaving");
-  void card.offsetWidth;
-  card.classList.add("is-active");
 
-  window.setTimeout(()=>card.classList.add("is-leaving"),3200);
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>card.classList.add("is-active"));
+  });
+
+  window.setTimeout(()=>card.classList.add("is-leaving"),2850);
   window.setTimeout(()=>{
     card.hidden=true;
     card.classList.remove("is-active","is-leaving");
     frame.classList.remove("chapter-playing");
     after?.();
-  },4700);
+  },3650);
 }
 
 function enterHouse(){
@@ -184,13 +186,13 @@ function enterHouse(){
   window.setTimeout(()=>{
     showScene("living-room");
     living.classList.add("is-arriving");
-  },650);
+  },420);
 
   window.setTimeout(()=>{
     transition.hidden=true;
     transition.classList.remove("is-active");
     frame.classList.remove("house-entering");
-  },980);
+  },720);
 
   window.setTimeout(()=>{
     const save=readSave();
@@ -206,7 +208,7 @@ function enterHouse(){
       writeSave("living-room",{chapter:1,chapterIntroSeen:true});
       window.setTimeout(()=>living.classList.remove("is-arriving"),250);
     });
-  },1280);
+  },790);
 }
 
 $("#new-story").addEventListener("click",()=>{
