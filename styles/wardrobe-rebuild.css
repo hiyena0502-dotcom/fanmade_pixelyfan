@@ -839,3 +839,25 @@ html,body{
   background:rgba(143,104,117,.92)!important;
   color:#fff4df!important;
 }
+
+
+/* v104 — keep wardrobe item art large, but never crop or blow it past the tile */
+.wardrobe-option-art{
+  overflow:hidden!important;
+  background:#d9bd98!important;
+}
+.wardrobe-option-art img{
+  position:absolute!important;
+  inset:50% auto auto 50%!important;
+  width:90%!important;
+  height:90%!important;
+  max-width:90%!important;
+  max-height:90%!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  transform:translate(-50%,-50%)!important;
+  image-rendering:auto!important;
+}
+.wardrobe-option b{
+  pointer-events:none!important;
+}

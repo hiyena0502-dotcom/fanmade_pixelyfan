@@ -1653,10 +1653,10 @@
         try{
           const naturalW=image.naturalWidth||image.width||1;
           const naturalH=image.naturalHeight||image.height||1;
-          const sampleMax=520;
-          const scale=Math.min(1,sampleMax/Math.max(naturalW,naturalH));
-          const sw=Math.max(1,Math.round(naturalW*scale));
-          const sh=Math.max(1,Math.round(naturalH*scale));
+          const sampleMax=760;
+          const sampleScale=Math.min(1,sampleMax/Math.max(naturalW,naturalH));
+          const sw=Math.max(1,Math.round(naturalW*sampleScale));
+          const sh=Math.max(1,Math.round(naturalH*sampleScale));
           const sample=document.createElement("canvas");
           sample.width=sw;
           sample.height=sh;
@@ -1664,13 +1664,13 @@
           if(!ctx){finish(src);return}
           ctx.clearRect(0,0,sw,sh);
           ctx.drawImage(image,0,0,sw,sh);
-          const pixels=ctx.getImageData(0,0,sw,sh).data;
 
+          const pixels=ctx.getImageData(0,0,sw,sh).data;
           let minX=sw,minY=sh,maxX=-1,maxY=-1;
           for(let y=0;y<sh;y++){
             for(let x=0;x<sw;x++){
               const alpha=pixels[(y*sw+x)*4+3];
-              if(alpha>18){
+              if(alpha>12){
                 if(x<minX) minX=x;
                 if(x>maxX) maxX=x;
                 if(y<minY) minY=y;
@@ -1682,31 +1682,34 @@
 
           const visibleW=maxX-minX+1;
           const visibleH=maxY-minY+1;
-          const pad=Math.max(3,Math.round(Math.max(visibleW,visibleH)*.08));
-          minX=Math.max(0,minX-pad);
-          minY=Math.max(0,minY-pad);
-          maxX=Math.min(sw-1,maxX+pad);
-          maxY=Math.min(sh-1,maxY+pad);
+          const padding=Math.max(8,Math.round(Math.max(visibleW,visibleH)*.16));
+          minX=Math.max(0,minX-padding);
+          minY=Math.max(0,minY-padding);
+          maxX=Math.min(sw-1,maxX+padding);
+          maxY=Math.min(sh-1,maxY+padding);
 
           const cropW=maxX-minX+1;
           const cropH=maxY-minY+1;
-          const side=Math.max(cropW,cropH);
-          let sx=Math.round((minX+maxX-side+1)/2);
-          let sy=Math.round((minY+maxY-side+1)/2);
-          sx=Math.max(0,Math.min(sw-side,sx));
-          sy=Math.max(0,Math.min(sh-side,sy));
-          const sourceSide=Math.min(side,sw,sh);
+          const outSize=640;
+          const targetSize=560;
+          const fit=Math.min(targetSize/cropW,targetSize/cropH);
+          const drawW=Math.max(1,Math.round(cropW*fit));
+          const drawH=Math.max(1,Math.round(cropH*fit));
+          const dx=Math.round((outSize-drawW)/2);
+          const dy=Math.round((outSize-drawH)/2);
 
           const out=document.createElement("canvas");
-          out.width=420;
-          out.height=420;
+          out.width=outSize;
+          out.height=outSize;
           const outCtx=out.getContext("2d");
           if(!outCtx){finish(src);return}
-          outCtx.clearRect(0,0,420,420);
-          const inset=8;
-          outCtx.drawImage(sample,sx,sy,sourceSide,sourceSide,inset,inset,420-inset*2,420-inset*2);
+          outCtx.clearRect(0,0,outSize,outSize);
+          outCtx.imageSmoothingEnabled=true;
+          outCtx.imageSmoothingQuality="high";
+          outCtx.drawImage(sample,minX,minY,cropW,cropH,dx,dy,drawW,drawH);
+
           let result="";
-          try{result=out.toDataURL("image/webp",.93)}catch{}
+          try{result=out.toDataURL("image/webp",.96)}catch{}
           if(!result||!result.startsWith("data:image/")){
             try{result=out.toDataURL("image/png")}catch{}
           }
