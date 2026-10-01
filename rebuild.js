@@ -205,9 +205,15 @@ function runIntro(){
   document.addEventListener("keydown",keyAdvance);
   introCleanup=cleanup;
 }
-function playChapterCard(after){
+function playChapterCard({number,title},after){
   const card=$("#chapter-card");
   const frame=$(".story-frame");
+  const roman=[[1000,"M"],[900,"CM"],[500,"D"],[400,"CD"],[100,"C"],[90,"XC"],[50,"L"],[40,"XL"],[10,"X"],[9,"IX"],[5,"V"],[4,"IV"],[1,"I"]];
+  let remaining=number,numeral="";
+  for(const [value,glyph] of roman){while(remaining>=value){numeral+=glyph;remaining-=value}}
+  $("#chapter-number").textContent=numeral;
+  $("#chapter-number").setAttribute("aria-label",`챕터 ${number}`);
+  $("#chapter-title").textContent=title;
   frame.classList.add("chapter-playing");
   card.hidden=false;
   card.classList.remove("is-active","is-leaving");
@@ -216,13 +222,13 @@ function playChapterCard(after){
     requestAnimationFrame(()=>card.classList.add("is-active"));
   });
 
-  window.setTimeout(()=>card.classList.add("is-leaving"),2650);
+  window.setTimeout(()=>card.classList.add("is-leaving"),3400);
   window.setTimeout(()=>{
     card.hidden=true;
     card.classList.remove("is-active","is-leaving");
     frame.classList.remove("chapter-playing");
     after?.();
-  },4250);
+  },5000);
 }
 
 async function enterHouse(){
@@ -251,7 +257,7 @@ async function enterHouse(){
       $("#leave-house").focus({preventScroll:true});
     };
     if(readSave()?.chapterIntroSeen){finish();return}
-    playChapterCard(finish);
+    playChapterCard({number:1,title:"생일 준비"},finish);
   },340);
 }
 

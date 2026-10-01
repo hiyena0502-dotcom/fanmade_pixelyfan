@@ -266,38 +266,48 @@ button{color:inherit}
 .house-entry-transition.is-active{opacity:1}
 .entry-vignette{display:none}
 
-/* Only the number and title animate; the room remains fully visible. */
+/* Shared chapter reveal: vector ornament, typography and compositor-only motion. */
 .chapter-card{
-  position:absolute;inset:0;z-index:120;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  overflow:hidden;background:transparent;color:#fff4de;opacity:0;
-  text-shadow:0 2px 3px #342b26b3,0 8px 26px #33292080;
-  transition:opacity .35s ease;pointer-events:none;
+  --chapter-gold:#edcd8e;--chapter-light:#fff2cf;
+  position:absolute;inset:0;z-index:120;display:grid;place-items:center;
+  overflow:hidden;background:transparent;color:var(--chapter-light);opacity:0;
+  transition:opacity .4s ease;pointer-events:none;
 }
 .chapter-card.is-active{opacity:1}
-.chapter-card>strong{
-  font-family:Georgia,"Times New Roman",serif;font-size:clamp(130px,21dvh,220px);
-  font-weight:400;line-height:.85;letter-spacing:-.06em;padding-right:.06em;
-  margin:0 0 36px;opacity:0;
+.chapter-emblem{width:min(600px,88vw);display:flex;flex-direction:column;align-items:center;position:relative}
+.chapter-kicker{display:flex;align-items:center;gap:18px;color:var(--chapter-gold);font:500 11px/1.5 Georgia,serif;letter-spacing:.42em;padding-left:.42em;opacity:0;text-shadow:0 2px 6px #211710}
+.chapter-kicker span{display:block;width:40px;height:1px;background:linear-gradient(90deg,transparent,var(--chapter-gold))}
+.chapter-kicker span:last-child{transform:rotate(180deg)}
+.chapter-crest{position:relative;width:min(460px,76vw,58dvh);aspect-ratio:460/280;display:grid;place-items:center;margin:12px 0 22px}
+.chapter-halo{position:absolute;inset:-16%;background:radial-gradient(ellipse,#ffe2a426 0%,#edb95812 32%,transparent 65%);opacity:0;border-radius:50%}
+.chapter-ornament{position:absolute;inset:0;width:100%;height:100%;color:var(--chapter-gold);opacity:0}
+.chapter-number{
+  position:relative;font-family:Georgia,"Times New Roman",serif;font-size:clamp(70px,15dvh,150px);
+  font-weight:400;line-height:1;letter-spacing:-.04em;padding-right:.04em;opacity:0;
+  color:var(--chapter-light);text-shadow:0 2px 1px #6d431d,0 4px 14px #241708a6,0 0 30px #f4ce8d55;
 }
-.chapter-card>span{
-  font-size:clamp(32px,4.5vw,58px);font-weight:600;letter-spacing:.15em;padding-left:.15em;
-  opacity:0;
+.chapter-title{
+  max-width:100%;margin:0;text-align:center;text-wrap:balance;font-family:"Noto Serif KR",Georgia,serif;
+  font-size:clamp(28px,4vw,48px);font-weight:600;line-height:1.5;letter-spacing:.16em;padding-left:.16em;
+  color:#fff5de;text-shadow:0 2px 3px #302015,0 5px 16px #261d14c2;opacity:0;
 }
-.chapter-card.is-active>strong{animation:chapter-impact 1.25s .04s cubic-bezier(.12,.72,.22,1) both}
-.chapter-card.is-active>span{animation:chapter-caption 1.15s .22s cubic-bezier(.16,.8,.25,1) both}
-.chapter-card.is-leaving{
-  opacity:0;transform:scale(1.035);
-  transition:opacity 1.6s ease-in,transform 1.6s ease-out;
-}
-@keyframes chapter-impact{
-  0%{opacity:0;transform:translateY(12px) scale(1.35)}
-  70%{opacity:1;transform:translateY(0) scale(.995)}
-  100%{opacity:1;transform:translateY(0) scale(1)}
-}
-@keyframes chapter-caption{
-  from{opacity:0;transform:translateY(24px) scale(.94)}
-  to{opacity:1;transform:translateY(0) scale(1)}
-}
+.chapter-flourish{width:min(460px,76vw);height:36px;margin-top:16px;color:var(--chapter-gold);opacity:0}
+.chapter-glint{position:absolute;top:16%;right:28%;width:10px;height:10px;background:#fff7d9;clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);opacity:0}
+.chapter-card.is-active .chapter-kicker{animation:chapter-caption .8s .05s ease both}
+.chapter-card.is-active .chapter-halo{animation:chapter-halo 2.5s .05s ease both}
+.chapter-card.is-active .chapter-ornament{animation:chapter-ornament 1.5s .12s cubic-bezier(.16,.8,.25,1) both}
+.chapter-card.is-active .chapter-number{animation:chapter-impact 1.35s .22s cubic-bezier(.12,.72,.22,1) both}
+.chapter-card.is-active .chapter-title{animation:chapter-caption 1.2s .55s cubic-bezier(.16,.8,.25,1) both}
+.chapter-card.is-active .chapter-flourish{animation:chapter-flourish 1.3s .7s cubic-bezier(.16,.8,.25,1) both}
+.chapter-card.is-active .chapter-glint{animation:chapter-glint 1.2s .95s ease both}
+.chapter-card.is-leaving{opacity:0;transform:translateY(-6px) scale(1.025);transition:opacity 1.6s ease-in,transform 1.6s ease-out}
+.story-frame.chapter-playing .minimal-hud,.story-frame.chapter-playing .scene-back-arrow{visibility:hidden}
+@keyframes chapter-impact{from{opacity:0;transform:scale(1.35) translateY(8px)}70%{opacity:1;transform:scale(.995)}to{opacity:1;transform:scale(1)}}
+@keyframes chapter-caption{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes chapter-ornament{from{opacity:0;transform:scale(.78) rotate(-8deg)}to{opacity:.95;transform:scale(1) rotate(0)}}
+@keyframes chapter-flourish{from{opacity:0;transform:scaleX(.4)}to{opacity:.9;transform:scaleX(1)}}
+@keyframes chapter-halo{0%{opacity:0;transform:scale(.65)}55%{opacity:1;transform:scale(1.05)}100%{opacity:.8;transform:scale(1)}}
+@keyframes chapter-glint{0%,100%{opacity:0;transform:scale(.2) rotate(0)}40%{opacity:1;transform:scale(1.8) rotate(80deg)}70%{opacity:.6;transform:scale(1) rotate(120deg)}}
 .toast{position:fixed;z-index:150;left:50%;bottom:24px;transform:translate(-50%,12px);opacity:0;pointer-events:none;max-width:calc(100% - 32px);padding:12px 20px;border-radius:14px;background:#524956;color:#fff9e9;font-size:13px;line-height:1.5;transition:opacity .18s ease,transform .18s ease}
 .toast.is-visible{opacity:1;transform:translate(-50%,0)}
 
@@ -316,17 +326,23 @@ button{color:inherit}
   .choice-sheet>div{grid-template-columns:1fr}
   .menu-sheet{right:12px;bottom:92px;width:min(300px,calc(100% - 24px))}
   .tool-sheet{padding:26px;max-height:70dvh}
-  .chapter-card>span{font-size:30px}
+  .chapter-kicker{font-size:9px;gap:12px}
+  .chapter-crest{margin-bottom:16px}
+  .chapter-title{font-size:28px}
+  .chapter-flourish{margin-top:10px}
 }
 @media(max-height:500px){
   .inventory-rack{top:44%;grid-template-columns:32px;gap:5px;padding:9px 8px}
   .inventory-rack i{width:32px;height:32px}
-  .chapter-card>strong{font-size:100px;margin-bottom:22px}
-  .chapter-card>span{font-size:28px}
+  .chapter-crest{width:min(330px,64dvh);margin:6px 0 10px}
+  .chapter-number{font-size:clamp(58px,18dvh,90px)}
+  .chapter-title{font-size:25px}
+  .chapter-flourish{height:24px;margin-top:6px}
 }
 @media(prefers-reduced-motion:reduce){
   .home-snow i{animation:none;display:none}
   .chapter-card,.house-entry-transition,.intro-monologue,.toast,.object-tool{transition:none}
-  .chapter-card.is-active>strong,.chapter-card.is-active>span{animation:none;opacity:1;transform:none}
+  .chapter-card.is-active .chapter-emblem>* , .chapter-card.is-active .chapter-crest>*{animation:none;opacity:1;transform:none}
+  .chapter-card.is-active .chapter-glint{display:none}
   .chapter-card.is-leaving{transition:none;transform:none}
 }
