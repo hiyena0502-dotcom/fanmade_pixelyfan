@@ -522,3 +522,50 @@ html,body{
   }
   .wardrobe-option b{font-size:8px!important}
 }
+
+
+/* v98 — square image window; enlarge the actual transparent PNG artwork inside it */
+.wardrobe-option-wrap>.wardrobe-option{
+  aspect-ratio:1 / 1!important;
+  display:grid!important;
+  grid-template-rows:minmax(0,1fr) 14px!important;
+  padding:5px 5px 6px!important;
+  gap:2px!important;
+  overflow:hidden!important;
+}
+.wardrobe-option-art{
+  position:relative!important;
+  width:100%!important;
+  height:100%!important;
+  aspect-ratio:1 / 1!important;
+  max-width:none!important;
+  border-radius:8px!important;
+  overflow:hidden!important;
+  background:#d9bd98!important;
+}
+.wardrobe-option-art img{
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:none!important;
+  max-height:none!important;
+  object-fit:contain!important;
+  transform:translate(-50%,-50%) scale(1.62)!important;
+  transform-origin:center!important;
+}
+.wardrobe-option b{
+  align-self:center!important;
+  margin:0!important;
+  max-width:92%!important;
+  font-size:8px!important;
+  line-height:1!important;
+  font-weight:800!important;
+}
+@media(max-width:680px){
+  .wardrobe-option-art img{
+    transform:translate(-50%,-50%) scale(1.52)!important;
+  }
+  .wardrobe-option b{font-size:7px!important}
+}

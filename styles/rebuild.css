@@ -2007,3 +2007,59 @@ button{color:inherit}
     max-height:35vh!important;
   }
 }
+
+
+/* v98 — keep the home illustration at its original framing; move/animate only the title */
+.home-illustration-slot{
+  transform:none!important;
+  animation:none!important;
+  background-size:cover!important;
+  background-position:center center!important;
+}
+.home-copy{
+  top:1.5vh!important;
+  right:7vw!important;
+  width:min(900px,55vw)!important;
+  height:95vh!important;
+}
+.home-title{
+  margin-top:0!important;
+  overflow:visible!important;
+  transform:translateX(-2vw);
+}
+.home-title img{
+  width:min(1120px,64vw)!important;
+  max-width:none!important;
+  max-height:58vh!important;
+  transform-origin:center center!important;
+  animation:homeTitleFloatV98 5.8s ease-in-out infinite alternate!important;
+  will-change:transform;
+}
+@keyframes homeTitleFloatV98{
+  0%{transform:translate3d(0,-3px,0) scale(1)}
+  55%{transform:translate3d(-5px,-10px,0) scale(1.018)}
+  100%{transform:translate3d(2px,-5px,0) scale(1.008)}
+}
+@media(max-width:980px){
+  .home-illustration-slot{
+    transform:none!important;
+    animation:none!important;
+  }
+  .home-copy{
+    right:0!important;
+    top:auto!important;
+    bottom:3vh!important;
+    width:100%!important;
+    height:auto!important;
+  }
+  .home-title{
+    transform:none!important;
+  }
+  .home-title img{
+    width:min(930px,94vw)!important;
+    max-height:46vh!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .home-title img{animation:none!important}
+}
