@@ -782,3 +782,60 @@ html,body{
     max-width:none!important;
   }
 }
+
+
+/* v103 — make each wardrobe tile itself square while keeping the same tile width */
+.wardrobe-option-wrap{
+  aspect-ratio:1 / 1!important;
+  height:auto!important;
+  overflow:hidden!important;
+}
+.wardrobe-option-wrap>.wardrobe-option{
+  position:relative!important;
+  width:100%!important;
+  height:100%!important;
+  aspect-ratio:1 / 1!important;
+  display:block!important;
+  padding:6px!important;
+  overflow:hidden!important;
+}
+.wardrobe-option-art{
+  position:absolute!important;
+  inset:6px!important;
+  width:auto!important;
+  height:auto!important;
+  aspect-ratio:auto!important;
+  display:grid!important;
+  place-items:center!important;
+  border-radius:11px!important;
+}
+.wardrobe-option-art img{
+  width:94%!important;
+  height:94%!important;
+  object-fit:contain!important;
+  transform:scale(1.02)!important;
+}
+.wardrobe-option b{
+  position:absolute!important;
+  left:12px!important;
+  right:12px!important;
+  bottom:9px!important;
+  z-index:3!important;
+  width:auto!important;
+  max-width:none!important;
+  padding:5px 7px!important;
+  margin:0!important;
+  border-radius:7px!important;
+  background:rgba(247,232,205,.88)!important;
+  color:#55484b!important;
+  font-size:10px!important;
+  line-height:1.05!important;
+  overflow:hidden!important;
+  white-space:nowrap!important;
+  text-overflow:ellipsis!important;
+  backdrop-filter:blur(3px);
+}
+.wardrobe-option.is-selected b{
+  background:rgba(143,104,117,.92)!important;
+  color:#fff4df!important;
+}

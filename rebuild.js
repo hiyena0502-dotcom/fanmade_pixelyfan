@@ -81,9 +81,10 @@ function showScene(name){
   const placeLabel=name==="living-room"
     ?"픽셀리 집 · 거실"
     :name==="door-closeup"
-      ?"픽셀리 집 · 현관문"
+      ?"픽셀리 집 · 문 앞"
       :"픽셀리 집 앞";
   $("#hud-place").textContent=placeLabel;
+  if(name!=="door-closeup") $("#door-choice").hidden=true;
   $("#bag-button").disabled=name!=="living-room";
   $("#diary-button").disabled=name!=="living-room";
 }
@@ -181,6 +182,7 @@ function playChapterCard(after){
 }
 
 function enterHouse(){
+  $("#door-choice").hidden=true;
   const frame=$(".story-frame");
   const transition=$("#house-entry-transition");
   const living=$('[data-scene="living-room"]');

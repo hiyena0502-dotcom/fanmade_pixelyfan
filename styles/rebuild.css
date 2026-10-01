@@ -2224,3 +2224,38 @@ button{color:inherit}
 .door-closeup-back{
   z-index:30!important;
 }
+
+
+/* v103 — door close-up fills the game frame at full quality; cropping is intentional */
+.door-closeup-scene{
+  position:relative!important;
+  display:grid!important;
+  place-items:center!important;
+  overflow:hidden!important;
+  background:#f3d897!important;
+}
+.door-closeup-stage{
+  position:relative!important;
+  width:max(100vw,calc(100vh * 16 / 9))!important;
+  height:max(100vh,calc(100vw * 9 / 16))!important;
+  aspect-ratio:16 / 9!important;
+  flex:none!important;
+  overflow:visible!important;
+}
+.door-closeup-art{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  object-fit:fill!important;
+  object-position:center!important;
+  image-rendering:auto!important;
+  transform:none!important;
+  filter:none!important;
+}
+.hotspot-door-closeup{
+  left:37.6%!important;
+  top:13.7%!important;
+  width:24.8%!important;
+  height:69.2%!important;
+}
