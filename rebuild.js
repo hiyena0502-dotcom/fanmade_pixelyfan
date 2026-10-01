@@ -216,13 +216,13 @@ function playChapterCard(after){
     requestAnimationFrame(()=>card.classList.add("is-active"));
   });
 
-  window.setTimeout(()=>card.classList.add("is-leaving"),2250);
+  window.setTimeout(()=>card.classList.add("is-leaving"),2650);
   window.setTimeout(()=>{
     card.hidden=true;
     card.classList.remove("is-active","is-leaving");
     frame.classList.remove("chapter-playing");
     after?.();
-  },2850);
+  },4250);
 }
 
 async function enterHouse(){
