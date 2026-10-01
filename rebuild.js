@@ -7,12 +7,14 @@ let toastTimer=0;
 let introCleanup=null;
 let busy=false;
 let sessionSave;
+let panelOpener=null;
+const panelSelectors=["#tool-sheet","#story-menu","#door-choice"];
 
 function buildHomeSnow(){
   const layer=$("#home-snow");
   if(!layer || layer.childElementCount) return;
   const fragment=document.createDocumentFragment();
-  for(let i=0;i<52;i++){
+  for(let i=0;i<24;i++){
     const flake=document.createElement("i");
     flake.style.setProperty("--snow-x",(Math.random()*100).toFixed(2)+"%");
     flake.style.setProperty("--snow-size",(5+Math.random()*10).toFixed(1)+"px");
@@ -112,6 +114,22 @@ function setBusy(on){
   scenes.forEach(scene=>{scene.inert=on});
   $(".minimal-hud").inert=on;
 }
+function closePanels(restoreFocus=true){
+  panelSelectors.forEach(selector=>$(selector).hidden=true);
+  $("#panel-backdrop").hidden=true;
+  const opener=panelOpener;
+  panelOpener=null;
+  if(restoreFocus) opener?.focus({preventScroll:true});
+}
+function openPanel(selector,opener,focusTarget=selector){
+  closePanels(false);
+  panelOpener=$(opener);
+  $(selector).hidden=false;
+  $("#panel-backdrop").hidden=false;
+  $(focusTarget).focus({preventScroll:true});
+}
+$("#panel-backdrop").addEventListener("click",()=>closePanels());
+
 function startStory(scene="exterior"){
   introCleanup?.();
   introCleanup=null;
@@ -119,10 +137,8 @@ function startStory(scene="exterior"){
   scene=normalizeStoryScene(scene);
   showScreen("story");
   showScene(scene);
-  $("#door-choice").hidden=true;
-  $("#story-menu").hidden=true;
+  closePanels(false);
   $("#intro-monologue").hidden=true;
-  $("#tool-sheet").hidden=true;
 }
 function runIntro(){
   if(!INTRO_LINES.length){
@@ -163,7 +179,7 @@ function runIntro(){
       frame.classList.remove("intro-running","intro-reveal");
       setBusy(false);
       $("#door-hotspot").focus({preventScroll:true});
-    },1500);
+    },950);
   };
 
   const advance=()=>{
@@ -200,81 +216,55 @@ function playChapterCard(after){
     requestAnimationFrame(()=>card.classList.add("is-active"));
   });
 
-  window.setTimeout(()=>card.classList.add("is-leaving"),2850);
+  window.setTimeout(()=>card.classList.add("is-leaving"),2250);
   window.setTimeout(()=>{
     card.hidden=true;
     card.classList.remove("is-active","is-leaving");
     frame.classList.remove("chapter-playing");
     after?.();
-  },3650);
+  },2850);
 }
 
-function enterHouse(){
+async function enterHouse(){
   if(busy) return;
+  closePanels(false);
   setBusy(true);
-  $("#door-choice").hidden=true;
   const frame=$(".story-frame");
   const transition=$("#house-entry-transition");
-  const living=$('[data-scene="living-room"]');
-
-  $("#door-choice").hidden=true;
+  const image=$(".living-room-art");
+  // Finish image decoding before changing the scene, rather than during its reveal.
+  if(typeof image?.decode==="function"){
+    try{await image.decode()}catch{/* The browser still displays its normal image fallback. */}
+  }
   frame.classList.add("house-entering");
-
   transition.hidden=false;
   transition.classList.remove("is-active");
-  requestAnimationFrame(()=>{
-    requestAnimationFrame(()=>transition.classList.add("is-active"));
-  });
-
-  window.setTimeout(()=>{
-    showScene("living-room");
-    living.classList.add("is-arriving");
-  },420);
-
+  requestAnimationFrame(()=>requestAnimationFrame(()=>transition.classList.add("is-active")));
+  window.setTimeout(()=>showScene("living-room"),180);
   window.setTimeout(()=>{
     transition.hidden=true;
     transition.classList.remove("is-active");
     frame.classList.remove("house-entering");
-  },720);
-
-  window.setTimeout(()=>{
-    const save=readSave();
-    const chapterAlreadyPlayed=Boolean(save?.chapterIntroSeen);
-
-    if(chapterAlreadyPlayed){
+    const finish=()=>{
       writeSave("living-room",{chapter:1,chapterIntroSeen:true});
       setBusy(false);
-      window.setTimeout(()=>living.classList.remove("is-arriving"),250);
-      return;
-    }
-
-    playChapterCard(()=>{
-      writeSave("living-room",{chapter:1,chapterIntroSeen:true});
-      setBusy(false);
-      window.setTimeout(()=>living.classList.remove("is-arriving"),250);
-    });
-  },790);
+      $("#leave-house").focus({preventScroll:true});
+    };
+    if(readSave()?.chapterIntroSeen){finish();return}
+    playChapterCard(finish);
+  },340);
 }
 
 function openTool(kind){
   const sheet=$("#tool-sheet"),content=$("#tool-content");
-  $("#story-menu").hidden=true;
   sheet.className="tool-sheet tool-sheet--"+kind;
   $("#tool-title").textContent=kind==="bag"?"꿈뜰이의 가방":"꿈뜰이의 기록장";
   content.replaceChildren();
   const paragraph=document.createElement("p");
   paragraph.textContent=kind==="bag"?"가방이 비어 있다.":"아직 적힌 내용이 없다.";
   content.appendChild(paragraph);
-  sheet.hidden=false;
-  $("#close-tool-sheet").focus();
+  openPanel("#tool-sheet",kind==="bag"?"#bag-button":"#diary-button");
 }
-function closeTool(){
-  const bag=$("#tool-sheet").classList.contains("tool-sheet--bag");
-  $("#tool-sheet").hidden=true;
-  $(bag?"#bag-button":"#diary-button").focus();
-}
-$("#close-tool-sheet").addEventListener("click",closeTool);
-
 $("#new-story").addEventListener("click",()=>{
   writeSave("exterior",{chapter:0,chapterIntroSeen:false,openingSeen:false,decorationQuest:null});
   runIntro();
@@ -284,24 +274,22 @@ $("#continue-story").addEventListener("click",()=>{
   if(save) startStory(save.scene||"exterior");
 });
 $("#door-hotspot").addEventListener("click",()=>{
-  $("#door-choice").hidden=true;
+  closePanels(false);
   showScene("door-closeup");
   writeSave("door-closeup");
   $("#door-closeup-hotspot").focus({preventScroll:true});
 });
 $("#door-closeup-hotspot").addEventListener("click",()=>{
-  $("#door-choice").hidden=false;
-  $("#enter-house").focus({preventScroll:true});
+  openPanel("#door-choice","#door-closeup-hotspot","#enter-house");
 });
 $("#door-closeup-back").addEventListener("click",()=>{
-  $("#door-choice").hidden=true;
+  closePanels(false);
   showScene("exterior");
   writeSave("exterior");
   $("#door-hotspot").focus({preventScroll:true});
 });
 $("#keep-looking").addEventListener("click",()=>{
-  $("#door-choice").hidden=true;
-  $("#door-closeup-hotspot").focus({preventScroll:true});
+  closePanels();
 });
 $("#enter-house").addEventListener("click",enterHouse);
 $("#leave-house").addEventListener("click",()=>{
@@ -309,24 +297,23 @@ $("#leave-house").addEventListener("click",()=>{
   writeSave("exterior");
 });
 $("#story-menu-button").addEventListener("click",()=>{
-  $("#tool-sheet").hidden=true;$("#door-choice").hidden=true;
-  $("#story-menu").hidden=false;$("#close-story-menu").focus();
+  openPanel("#story-menu","#story-menu-button","#save-progress");
 });
-$("#close-story-menu").addEventListener("click",()=>{$("#story-menu").hidden=true});
-$("#return-home").addEventListener("click",()=>{$("#story-menu").hidden=true;showScreen("home")});
+$("#return-home").addEventListener("click",()=>{closePanels(false);showScreen("home")});
 $("#save-progress").addEventListener("click",()=>{
   const current=scenes.find(scene=>!scene.hidden)?.dataset.scene||"exterior";
   const saved=writeSave(current);
-  $("#story-menu").hidden=true;
+  closePanels();
   if(saved) toast("현재 위치를 저장했어.");
 });
 $("#bag-button").addEventListener("click",()=>openTool("bag"));
 $("#diary-button").addEventListener("click",()=>openTool("diary"));
 document.addEventListener("keydown",event=>{
   if(event.key==="Tab"){
-    const panel=["#tool-sheet","#story-menu","#door-choice"].map(selector=>$(selector)).find(node=>!node.hidden);
+    const panel=panelSelectors.map(selector=>$(selector)).find(node=>!node.hidden);
     if(panel){
       const buttons=[...panel.querySelectorAll("button:not(:disabled)")];
+      if(!buttons.length){event.preventDefault();panel.focus({preventScroll:true});return}
       const first=buttons[0],last=buttons[buttons.length-1];
       if(first&&event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus()}
       else if(last&&!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus()}
@@ -334,9 +321,12 @@ document.addEventListener("keydown",event=>{
     return;
   }
   if(event.key!=="Escape"||busy) return;
-  if(!$("#tool-sheet").hidden){closeTool();return}
-  if(!$("#door-choice").hidden){$("#keep-looking").click();return}
-  if(!$("#story-menu").hidden){$("#story-menu").hidden=true;$("#story-menu-button").focus()}
+  closePanels();
 });
 renderContinue();
+window.setTimeout(()=>{
+  document.querySelectorAll(".scene img").forEach(img=>{
+    if(typeof img.decode==="function") img.decode().catch(()=>{});
+  });
+},0);
 })();

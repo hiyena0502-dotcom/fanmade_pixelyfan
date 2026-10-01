@@ -19,7 +19,11 @@ function boot(saved,{failStorage=false}={}){
         classList:{add(...values){values.forEach(v=>classes.add(v))},remove(...values){values.forEach(v=>classes.delete(v))},toggle(v,on){on?classes.add(v):classes.delete(v)},contains(v){return classes.has(v)}},
         addEventListener(name,fn){this.listeners[name]=fn},removeEventListener(name){delete this.listeners[name]},
         appendChild(child){this.children.push(child);this.childElementCount++},replaceChildren(){this.children=[]},
-        setAttribute(name,value){this[name]=value},focus(){},click(){this.listeners.click?.({})}};
+        setAttribute(name,value){this[name]=value},focus(){document.activeElement=this},click(){this.listeners.click?.({})},
+        querySelectorAll(){
+          const selectors=selector==='#story-menu'?['#save-progress','#return-home']:selector==='#door-choice'?['#enter-house','#keep-looking']:[];
+          return selectors.map(node);
+        }};
       nodes.set(selector,element);
     }
     return nodes.get(selector);
@@ -51,6 +55,8 @@ function boot(saved,{failStorage=false}={}){
   }
   return {node,scenes,flush,click:selector=>node(selector).click(),save:()=>JSON.parse(storage.get(key)||'null'),
     start(){node('#new-story').click();for(let i=0;i<6;i++) node('#intro-monologue').click();flush()},
+    activeElement:()=>document.activeElement,
+    key(event){documentListeners.get('keydown').forEach(fn=>fn(event))},
     escape(){documentListeners.get('keydown').forEach(fn=>fn({key:'Escape'}))}};
 }
 
@@ -96,4 +102,59 @@ test('invalid saves and unavailable storage cannot prevent starting a playable s
   assert.equal(blocked.scenes[0].hidden,false);
   assert.equal(blocked.scenes[0].inert,false);
   assert.equal(blocked.node('#continue-story').disabled,false);
+});
+
+
+test('outside clicks dismiss only the active panel and restore its opener',()=>{
+  const app=boot({scene:'living-room',chapterIntroSeen:true});app.click('#continue-story');
+  app.click('#story-menu-button');
+  assert.equal(app.node('#story-menu').hidden,false);
+  assert.equal(app.node('#panel-backdrop').hidden,false);
+  app.click('#panel-backdrop');
+  assert.equal(app.node('#story-menu').hidden,true);
+  assert.equal(app.node('#panel-backdrop').hidden,true);
+  assert.equal(app.scenes[2].hidden,false);
+  assert.equal(app.activeElement(),app.node('#story-menu-button'));
+  for(const opener of ['#bag-button','#diary-button']){
+    app.click(opener);
+    app.click('#tool-content');
+    assert.equal(app.node('#tool-sheet').hidden,false);
+    app.click('#panel-backdrop');
+    assert.equal(app.node('#tool-sheet').hidden,true);
+    assert.equal(app.activeElement(),app.node(opener));
+  }
+  app.click('#leave-house');app.click('#door-hotspot');app.click('#door-closeup-hotspot');
+  app.click('#panel-backdrop');
+  assert.equal(app.node('#door-choice').hidden,true);
+  assert.equal(app.scenes[1].hidden,false);
+  assert.equal(app.activeElement(),app.node('#door-closeup-hotspot'));
+});
+
+test('panels are mutually exclusive and keyboard users can close a panel without a close button',()=>{
+  const app=boot({scene:'living-room',chapterIntroSeen:true});app.click('#continue-story');
+  app.click('#story-menu-button');app.click('#diary-button');
+  assert.equal(app.node('#story-menu').hidden,true);
+  assert.equal(app.node('#tool-sheet').hidden,false);
+  let prevented=false;app.key({key:'Tab',preventDefault(){prevented=true}});
+  assert.equal(prevented,true);
+  assert.equal(app.activeElement(),app.node('#tool-sheet'));
+  app.escape();
+  assert.equal(app.node('#panel-backdrop').hidden,true);
+  assert.equal(app.activeElement(),app.node('#diary-button'));
+});
+
+test('entry waits for image decoding, prevents duplicate entry, and recovers when decoding fails',async()=>{
+  const app=boot({scene:'door-closeup'});app.click('#continue-story');
+  let rejectDecode,count=0;
+  app.node('.living-room-art').decode=()=>{count++;return new Promise((resolve,reject)=>{rejectDecode=reject})};
+  app.click('#door-closeup-hotspot');app.click('#enter-house');app.click('#enter-house');
+  assert.equal(count,1);
+  assert.equal(app.scenes[1].hidden,false);
+  assert.equal(app.scenes[1].inert,true);
+  rejectDecode(Error('decode unavailable'));
+  await new Promise(setImmediate);
+  app.flush();
+  assert.equal(app.scenes[2].hidden,false);
+  assert.equal(app.scenes[2].inert,false);
+  assert.equal(app.save().chapterIntroSeen,true);
 });

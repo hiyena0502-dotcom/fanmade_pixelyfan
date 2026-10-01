@@ -7,12 +7,11 @@
   <meta name="theme-color" content="#17223d" />
   <title>꿈뜰이의 우당탕 생일 준비 대작전!!</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-  <link rel="preload" as="image" href="assets/home/home-bg.png?v=84" />
+  <link rel="preload" as="image" href="assets/home/home-bg.png?v=85" />
   <link rel="preload" as="image" href="assets/story/chapter1/living-room.webp?v=90" />
-<link rel="preload" as="image" href="assets/home/home-bg.webp?v=84" />
   <link rel="preload" as="image" href="assets/story/chapter1/house-wide-v108.png" />
-  <link rel="stylesheet" href="styles/rebuild.css?v=113" />
-  <script src="rebuild.js?v=110" defer></script>
+  <link rel="stylesheet" href="styles/rebuild.css?v=114" />
+  <script src="rebuild.js?v=114" defer></script>
 </head>
 <body>
   <main class="rebuild-root">
@@ -118,22 +117,24 @@
         <section class="chapter-card" id="chapter-card" hidden aria-live="polite">
           <div class="chapter-lines" aria-hidden="true"><i></i><span>✦</span><i></i></div>
           <small>DECEMBER 28</small>
-          <strong>CHAPTER I</strong>
+          <strong aria-label="CHAPTER I"><span class="chapter-word">CHAPTER</span><span class="chapter-number">I</span></strong>
           <span>생일 준비</span>
           <em>Birthday Preparation</em>
         </section>
 
-        <section class="menu-sheet" id="story-menu" hidden>
+        <div class="panel-backdrop" id="panel-backdrop" hidden aria-hidden="true"></div>
+        <section class="menu-sheet" id="story-menu" role="dialog" aria-modal="true" aria-labelledby="story-menu-title" tabindex="-1" hidden>
           <header>
-            <strong>메뉴</strong>
-            <button type="button" id="close-story-menu" aria-label="메뉴 닫기">×</button>
+            <strong id="story-menu-title">메뉴</strong>
           </header>
           <button type="button" id="save-progress">현재 위치 저장</button>
           <button type="button" id="return-home">메인 화면으로</button>
+          <p class="panel-hint">창 밖을 누르면 닫혀요</p>
         </section>
-        <section class="tool-sheet" id="tool-sheet" role="dialog" aria-modal="true" aria-labelledby="tool-title" hidden>
-          <header><h2 id="tool-title"></h2><button type="button" id="close-tool-sheet" aria-label="닫기">×</button></header>
+        <section class="tool-sheet" id="tool-sheet" role="dialog" aria-modal="true" aria-labelledby="tool-title" tabindex="-1" hidden>
+          <header><h2 id="tool-title"></h2></header>
           <div id="tool-content"></div>
+          <p class="panel-hint">창 밖을 누르면 닫혀요</p>
         </section>
       </div>
     </section>
