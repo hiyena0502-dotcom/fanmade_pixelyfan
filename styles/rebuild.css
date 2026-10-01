@@ -1881,3 +1881,42 @@ button{color:inherit}
   .home-illustration-slot{animation:none!important;transform:scale(1.055)!important}
   .home-snow i{animation:none!important;display:none!important}
 }
+
+
+/* v95 — larger, clearly animated home illustration */
+.home-illustration-slot{
+  transform:scale(1.14)!important;
+  transform-origin:50% 52%!important;
+  animation:homeSceneBreathV95 9s cubic-bezier(.45,.05,.55,.95) infinite alternate!important;
+  will-change:transform;
+}
+@keyframes homeSceneBreathV95{
+  0%{
+    transform:scale(1.14) translate3d(-.25%,.15%,0);
+  }
+  38%{
+    transform:scale(1.18) translate3d(.3%,-.25%,0);
+  }
+  72%{
+    transform:scale(1.155) translate3d(-.15%,-.1%,0);
+  }
+  100%{
+    transform:scale(1.19) translate3d(.35%,.2%,0);
+  }
+}
+@media(max-width:980px){
+  .home-illustration-slot{
+    transform:scale(1.11)!important;
+    animation:homeSceneBreathMobileV95 10s ease-in-out infinite alternate!important;
+  }
+  @keyframes homeSceneBreathMobileV95{
+    0%{transform:scale(1.11) translate3d(-.2%,0,0)}
+    100%{transform:scale(1.15) translate3d(.2%,-.2%,0)}
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .home-illustration-slot{
+    animation:none!important;
+    transform:scale(1.14)!important;
+  }
+}

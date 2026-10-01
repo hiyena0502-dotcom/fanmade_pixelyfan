@@ -394,3 +394,84 @@ html,body{
   .wardrobe-option-art{width:88px!important;height:88px!important}
   .wardrobe-preset-slots{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
+
+
+/* v95 — square part cards + balanced wardrobe viewport spacing */
+.wardrobe-shell{
+  height:calc(100vh - 120px)!important;
+  margin:18px auto 18px!important;
+  padding-bottom:0!important;
+  box-sizing:border-box!important;
+}
+.wardrobe-panel.wardrobe-dev-panel{
+  height:100%!important;
+  min-height:0!important;
+  box-sizing:border-box!important;
+}
+
+/* Registered parts are square tiles instead of tall cards. */
+.wardrobe-options.wardrobe-dev-options{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  align-items:start!important;
+}
+.wardrobe-option-wrap{
+  aspect-ratio:1 / 1!important;
+  min-height:0!important;
+  height:auto!important;
+}
+.wardrobe-option-wrap>.wardrobe-option{
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  aspect-ratio:1 / 1!important;
+  padding:10px 9px 11px!important;
+  gap:7px!important;
+  justify-content:center!important;
+}
+.wardrobe-option-art{
+  width:min(116px,72%)!important;
+  height:auto!important;
+  aspect-ratio:1 / 1!important;
+  flex:0 0 auto!important;
+}
+.wardrobe-option b{
+  flex:0 0 auto!important;
+  margin-top:1px!important;
+}
+
+/* Preserve breathing room beneath the right editor, matching the top gap. */
+.wardrobe-dev-footer{
+  padding-bottom:8px!important;
+}
+
+@media(max-width:1100px){
+  .wardrobe-options.wardrobe-dev-options{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
+@media(max-width:900px){
+  .wardrobe-shell{
+    height:auto!important;
+    margin:18px auto 18px!important;
+  }
+  .wardrobe-panel.wardrobe-dev-panel{
+    height:auto!important;
+  }
+}
+@media(max-width:680px){
+  .wardrobe-option-wrap{
+    aspect-ratio:1 / 1!important;
+    min-height:0!important;
+    height:auto!important;
+  }
+  .wardrobe-option-wrap>.wardrobe-option{
+    aspect-ratio:1 / 1!important;
+    min-height:0!important;
+    height:100%!important;
+  }
+  .wardrobe-option-art{
+    width:min(96px,70%)!important;
+    height:auto!important;
+    aspect-ratio:1 / 1!important;
+  }
+}
