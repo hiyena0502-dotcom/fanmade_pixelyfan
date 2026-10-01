@@ -23,6 +23,11 @@ function buildHomeSnow(){
 }
 buildHomeSnow();
 
+document.querySelectorAll("img").forEach(img=>{img.draggable=false});
+document.addEventListener("dragstart",event=>{
+  if(event.target instanceof HTMLImageElement) event.preventDefault();
+});
+
 /* 독백 대사는 사용자와 함께 확정한 뒤 이 배열에 넣는다. */
 const INTRO_LINES=[
   "오늘은 12월 28일.",
@@ -73,7 +78,12 @@ function showScene(name){
     scene.hidden=!on;
     scene.classList.toggle("is-active",on);
   });
-  $("#hud-place").textContent=name==="living-room"?"픽셀리 집 · 거실":"픽셀리 집 앞";
+  const placeLabel=name==="living-room"
+    ?"픽셀리 집 · 거실"
+    :name==="door-closeup"
+      ?"픽셀리 집 · 현관문"
+      :"픽셀리 집 앞";
+  $("#hud-place").textContent=placeLabel;
   $("#bag-button").disabled=name!=="living-room";
   $("#diary-button").disabled=name!=="living-room";
 }
@@ -222,9 +232,20 @@ $("#continue-story").addEventListener("click",()=>{
 });
 $("#door-hotspot").addEventListener("click",()=>{
   $("#inspect-bubble").hidden=true;
+  $("#door-choice").hidden=true;
+  showScene("door-closeup");
+});
+$("#door-closeup-hotspot").addEventListener("click",()=>{
   $("#door-choice").hidden=false;
 });
-$("#keep-looking").addEventListener("click",()=>{$("#door-choice").hidden=true});
+$("#door-closeup-back").addEventListener("click",()=>{
+  $("#door-choice").hidden=true;
+  showScene("exterior");
+});
+$("#keep-looking").addEventListener("click",()=>{
+  $("#door-choice").hidden=true;
+  showScene("exterior");
+});
 $("#enter-house").addEventListener("click",enterHouse);
 $("#leave-house").addEventListener("click",()=>{
   showScene("exterior");

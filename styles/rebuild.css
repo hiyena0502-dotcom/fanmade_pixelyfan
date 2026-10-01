@@ -2100,3 +2100,91 @@ button{color:inherit}
 @media(max-width:980px){
   .home-menu{transform:none!important}
 }
+
+
+/* v101 — two-step door inspection, precise hotspots, and non-draggable game UI */
+.rebuild-root,
+.rebuild-root *{
+  -webkit-user-select:none!important;
+  user-select:none!important;
+}
+.rebuild-root img{
+  -webkit-user-drag:none!important;
+  user-drag:none!important;
+}
+
+/* Front exterior: match the clickable area to the actual wooden door. */
+.hotspot-door{
+  left:45.25%!important;
+  top:51.1%!important;
+  width:9.1%!important;
+  height:23.2%!important;
+}
+
+/* Close-up scene supplied by the user. */
+.door-closeup-scene{
+  background:#f5d898!important;
+  overflow:hidden!important;
+}
+.door-closeup-art{
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+  object-position:center center!important;
+}
+.hotspot-door-closeup{
+  left:37.7%!important;
+  top:12.3%!important;
+  width:24.5%!important;
+  height:76%!important;
+}
+.door-closeup-back{
+  left:30px!important;
+  bottom:28px!important;
+  transform:none!important;
+}
+.door-closeup-back span{
+  font-size:42px!important;
+  line-height:.62!important;
+}
+
+/* Home comment: same position family, but slightly larger and higher. */
+.home-menu{
+  width:min(390px,76%)!important;
+  transform:translate(72px,-30px)!important;
+  gap:12px!important;
+}
+.title-menu-item{
+  min-height:56px!important;
+  padding:9px 18px 9px 15px!important;
+}
+.title-menu-item strong{
+  font-size:18px!important;
+}
+
+@media(max-width:980px){
+  .home-menu{
+    width:min(380px,90vw)!important;
+    transform:translateY(-12px)!important;
+  }
+  .hotspot-door{
+    left:45.1%!important;
+    top:49.8%!important;
+    width:9.4%!important;
+    height:24.5%!important;
+  }
+}
+@media(max-width:560px){
+  .hotspot-door{
+    left:44.6%!important;
+    top:46.5%!important;
+    width:10.5%!important;
+    height:28%!important;
+  }
+  .hotspot-door-closeup{
+    left:35.5%!important;
+    top:10%!important;
+    width:29%!important;
+    height:78%!important;
+  }
+}

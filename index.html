@@ -10,8 +10,8 @@
   <link rel="preload" as="image" href="assets/home/home-bg.png?v=84" />
   <link rel="preload" as="image" href="assets/story/chapter1/living-room.webp?v=90" />
 <link rel="preload" as="image" href="assets/home/home-bg.webp?v=84" />
-  <link rel="stylesheet" href="styles/rebuild.css?v=100" />
-  <script src="rebuild.js?v=97" defer></script>
+  <link rel="stylesheet" href="styles/rebuild.css?v=101" />
+  <script src="rebuild.js?v=101" defer></script>
 </head>
 <body>
   <main class="rebuild-root">
@@ -74,13 +74,21 @@
         </header>
 
         <section class="scene exterior-scene is-active" data-scene="exterior" aria-label="픽셀리 집 앞">
-          <img class="scene-art" src="assets/story/chapter1/house-wide.webp?v=75" alt="눈 덮인 픽셀리 집의 아침 풍경" />
+          <img class="scene-art" src="assets/story/chapter1/house-wide.webp?v=75" alt="눈 덮인 픽셀리 집의 아침 풍경" draggable="false" />
           <button type="button" class="hotspot hotspot-door" id="door-hotspot" aria-label="현관문 살펴보기"></button>
           <div class="inspect-bubble" id="inspect-bubble" role="status" aria-live="polite" hidden></div>
         </section>
 
+        <section class="scene door-closeup-scene" data-scene="door-closeup" hidden aria-label="픽셀리 집 현관문">
+          <img class="scene-art door-closeup-art" src="assets/story/chapter1/door-closeup.webp?v=101" alt="꽃과 화분이 놓인 픽셀리 집 현관문" draggable="false" />
+          <button type="button" class="hotspot hotspot-door-closeup" id="door-closeup-hotspot" aria-label="현관문 두드리기"></button>
+          <button type="button" class="scene-back-arrow door-closeup-back" id="door-closeup-back" aria-label="집 앞으로 돌아가기">
+            <span>‹</span><small>집 앞</small>
+          </button>
+        </section>
+
         <section class="scene living-room-scene" data-scene="living-room" hidden aria-label="픽셀리 집 거실">
-          <img class="scene-art living-room-art" src="assets/story/chapter1/living-room.webp?v=90" alt="따뜻한 겨울 아침의 픽셀리 집 거실" />
+          <img class="scene-art living-room-art" src="assets/story/chapter1/living-room.webp?v=90" alt="따뜻한 겨울 아침의 픽셀리 집 거실" draggable="false" />
           <button type="button" class="scene-back-arrow" id="leave-house" aria-label="집 밖으로 나가기">
             <span>⌄</span><small>밖으로</small>
           </button>
