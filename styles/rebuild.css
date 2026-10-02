@@ -380,7 +380,7 @@ button{color:inherit}
 .menu-sheet button:disabled{opacity:.45;cursor:default}
 .active-quest{position:absolute;left:24px;top:108px;bottom:auto;z-index:12;max-width:min(340px,calc(100% - 48px));margin:0;padding:10px 16px;background:#ffffffe0;border-radius:12px;color:#524956;font-size:13px;pointer-events:none}
 .active-quest:empty,.is-busy .active-quest{display:none}
-.exterior-stage>.hotspot{display:none;pointer-events:none}
+.exterior-stage>.exterior-inspect{display:none;pointer-events:none}
 .inspect-birdhouse{left:67%;top:55%;width:5.5%;height:17%}
 .inspect-pot{left:44.5%;top:67%;width:4%;height:5.5%}
 .inspect-garden{left:62%;top:74%;width:25%;height:10%}
