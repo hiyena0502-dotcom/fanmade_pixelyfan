@@ -173,7 +173,7 @@ button{color:inherit}
 .exterior-layer{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:fill;pointer-events:none}
 .exterior-cloud{height:calc(100% * 1339 * 2047 / 2048 / 1200);animation:exterior-cloud-flow var(--cloud-duration,160s) linear infinite;animation-delay:var(--cloud-delay,0s)}
 .exterior-scene[hidden] .exterior-cloud{animation-play-state:paused}
-[data-exterior-layer="foreground-bushes"]{transform:none}
+[data-exterior-layer="foreground-bushes"]{transform:translateY(-7%) scale(1.12);transform-origin:center bottom}
 @keyframes exterior-cloud-flow{from{transform:translate(var(--cloud-start,130%),var(--cloud-y,0%))}to{transform:translate(var(--cloud-end,-170%),var(--cloud-y,0%))}}
 @media(prefers-reduced-motion:reduce){:root:not([data-game-motion="full"]) .exterior-cloud{height:calc(100% * 1339 * 2047 / 2048 / 1200);animation:none;transform:none}}
 .exterior-stage>.scene-art,.door-closeup-art{display:block;width:100%;height:100%;object-fit:cover}
@@ -378,9 +378,9 @@ button{color:inherit}
 :root[data-game-motion="reduced"] *, :root[data-game-motion="reduced"] *::before{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 :root[data-game-motion="reduced"] .scene-snow,:root[data-game-motion="reduced"] .home-snow{display:none}
 .menu-sheet button:disabled{opacity:.45;cursor:default}
-.active-quest{position:absolute;left:24px;bottom:26px;z-index:12;max-width:calc(100% - 250px);margin:0;padding:10px 16px;background:#ffffffe0;border-radius:12px;color:#524956;font-size:13px;pointer-events:none}
+.active-quest{position:absolute;left:24px;top:108px;bottom:auto;z-index:12;max-width:min(340px,calc(100% - 48px));margin:0;padding:10px 16px;background:#ffffffe0;border-radius:12px;color:#524956;font-size:13px;pointer-events:none}
 .active-quest:empty,.is-busy .active-quest{display:none}
-.story-frame[data-scene="living-room"] .active-quest{bottom:78px}
+.exterior-stage>.hotspot{display:none;pointer-events:none}
 .inspect-birdhouse{left:67%;top:55%;width:5.5%;height:17%}
 .inspect-pot{left:44.5%;top:67%;width:4%;height:5.5%}
 .inspect-garden{left:62%;top:74%;width:25%;height:10%}
