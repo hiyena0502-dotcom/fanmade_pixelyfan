@@ -378,3 +378,21 @@ button{color:inherit}
 :root[data-game-motion="reduced"] *, :root[data-game-motion="reduced"] *::before{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 :root[data-game-motion="reduced"] .scene-snow,:root[data-game-motion="reduced"] .home-snow{display:none}
 .menu-sheet button:disabled{opacity:.45;cursor:default}
+.active-quest{position:absolute;left:24px;bottom:26px;z-index:12;max-width:calc(100% - 250px);margin:0;padding:10px 16px;background:#ffffffe0;border-radius:12px;color:#524956;font-size:13px;pointer-events:none}
+.active-quest:empty,.is-busy .active-quest{display:none}
+.story-frame[data-scene="living-room"] .active-quest{bottom:78px}
+.inspect-birdhouse{left:70%;top:54%;width:5%;height:20%}
+.inspect-pot{left:42%;top:67%;width:5%;height:6%}
+.inspect-garden{left:64%;top:78%;width:28%;height:9%}
+.exterior-inspect:hover{filter:none;box-shadow:0 0 14px #fff5;border-radius:16px}
+.story-frame[data-door-effect="knock"] .door-closeup-art{animation:door-knock .5s ease-in-out}
+.story-frame[data-door-effect="crash"] .door-closeup-art{animation:door-knock .3s ease-in-out}
+.house-entering .door-closeup-art{animation:door-enter .7s .2s ease-in both}
+@keyframes door-knock{0%,100%{translate:0 0}25%,75%{translate:2px 0}50%{translate:-2px 0}}
+@keyframes door-enter{to{transform:scale(1.08);opacity:0}}
+
+.door-opening{display:none;position:absolute;left:38.2%;top:20.3%;width:23%;height:61%;border-radius:50% 50% 0 0 / 33% 33% 0 0;background:linear-gradient(100deg,#201612,#62432a);overflow:hidden;pointer-events:none;perspective:800px}
+.house-entering .door-opening{display:block}
+.door-opening-leaf{position:absolute;inset:0;overflow:hidden;border-radius:inherit;transform-origin:right center;animation:door-leaf-open .65s ease-in-out both}
+.door-opening-leaf img{position:absolute;width:434.8%;height:163.9%;max-width:none;left:-166.1%;top:-33.3%}
+@keyframes door-leaf-open{to{transform:rotateY(-85deg)}}

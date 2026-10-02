@@ -48,11 +48,14 @@ const members={
   gongryong:{name:"공룡",portrait:"assets/characters/gongryong-placeholder.png"},
   rader:{name:"라더",portrait:null},
   deokgae:{name:"덕개",portrait:null},
-  dreamer:{name:"꿈뜰이",portrait:null}
+  dreamer:{name:"꿈뜰이",portrait:null},
+  unknown:{name:"???",portrait:null},
+  stage:{name:"",portrait:null}
 };
 const ui=$("#story-dialogue-ui");
 let state=null,onProgress=()=>{},onComplete=()=>{};
 let readChoices=new Set();
+let sequence=null,sequenceTimer=0;
 function normalize(saved){
   if(!saved||!["opening","repeat","choices","reply"].includes(saved.phase)) return {phase:"opening",index:0,choice:null};
   if(saved.phase==="choices") return {phase:"choices",index:0,choice:null,repeat:Boolean(saved.repeat)};
@@ -66,17 +69,19 @@ function normalize(saved){
 }
 function snapshot(){return {...state,revision:2}}
 function lastMain(){
+  if(sequence) return sequence.lines[Math.min(state.index,sequence.lines.length-1)];
   if(state.phase==="opening") return opening.slice(0,state.index+1).filter(l=>l.member!=="deokgae").at(-1);
   if(state.phase==="repeat") return repeatOpening[state.index];
   if(state.phase==="reply") return choices[state.choice].lines.slice(0,state.index+1).filter(l=>l.member!=="deokgae").at(-1)||opening.at(-1);
   return state.repeat?repeatOpening.at(-1):opening.at(-1);
 }
 function render(){
-  const picking=state.phase==="choices";
-  const line=picking?null:(state.phase==="opening"?opening:state.phase==="repeat"?repeatOpening:choices[state.choice].lines)[state.index];
+  const picking=state.phase==="choices"||state.phase==="scene-choices";
+  const line=picking?null:sequence?lastMain():(state.phase==="opening"?opening:state.phase==="repeat"?repeatOpening:choices[state.choice].lines)[state.index];
   const interruption=!picking&&line.member==="deokgae";
   const mainLine=lastMain(),member=members[mainLine.member];
   ui.dataset.speaker=mainLine.member;
+  ui.setAttribute("aria-label",member.name?member.name+"의 대화":"상황 묘사");
   $("#dialogue-text").textContent=mainLine.text;
   $("#dialogue-speaker").textContent=member.name;
   document.querySelectorAll("[data-motif]").forEach(motif=>{
@@ -89,8 +94,9 @@ function render(){
     if(image.getAttribute("src")!==member.portrait) image.src=member.portrait;
     image.alt="대화 중인 "+member.name;
   }
-  $("#dialogue-next").disabled=picking;
-  $("#dialogue-next").setAttribute("aria-label",picking?"대답을 선택해 주세요":"다음 대사");
+  const waiting=Boolean(sequence&&!picking&&mainLine.delay);
+  $("#dialogue-next").disabled=picking||waiting;
+  $("#dialogue-next").setAttribute("aria-label",picking?"대답을 선택해 주세요":waiting?"잠시 기다려 주세요":"다음 대사");
   $("#dialogue-interruption").hidden=!interruption;
   if(interruption){
     $("#dialogue-interruption").dataset.member=line.member;
@@ -101,12 +107,14 @@ function render(){
   $("#dialogue-choices").hidden=!picking;
   $("#dialogue-choices").replaceChildren();
   if(picking){
-    choices.forEach((choice,index)=>{
+    (sequence?sequence.choices:choices).forEach((choice,index)=>{
       const button=document.createElement("button");
       button.type="button";button.textContent=choice.label;
-      button.classList.toggle("is-read",readChoices.has(index));
-      if(readChoices.has(index)) button.setAttribute("aria-label",choice.label+" (이미 읽은 대화)");
+      button.classList.toggle("is-read",!sequence&&readChoices.has(index));
+      if(!sequence&&readChoices.has(index)) button.setAttribute("aria-label",choice.label+" (이미 읽은 대화)");
       button.addEventListener("click",()=>{
+        if(!state)return;
+        if(sequence){const callback=sequence.choose;close();callback(index);return}
         state={phase:"reply",index:0,choice:index};
         onProgress(snapshot());render();$("#dialogue-next").focus({preventScroll:true});
       });
@@ -116,15 +124,23 @@ function render(){
   }
 }
 function advance(){
-  if(!state||state.phase==="choices") return;
+  if(!state||state.phase==="choices"||state.phase==="scene-choices") return;
+  if(sequence){
+    clearTimeout(sequenceTimer);
+    if(state.index+1<sequence.lines.length) state.index++;
+    else if(sequence.choices.length) state.phase="scene-choices";
+    else {const callback=onComplete;close();callback();return}
+    onProgress(snapshot());render();scheduleSequence();return;
+  }
   const lines=state.phase==="opening"?opening:state.phase==="repeat"?repeatOpening:choices[state.choice].lines;
   if(state.index+1<lines.length) state.index++;
   else if(state.phase==="opening"||state.phase==="repeat") state={phase:"choices",index:0,choice:null,repeat:state.phase==="repeat"};
   else {const choice=state.choice;close();onComplete({choice});return}
   onProgress(snapshot());render();
 }
-function close(){ui.hidden=true;$("#dialogue-portrait").hidden=true;state=null;$("#dialogue-interruption").hidden=true;$("#dialogue-choices").hidden=true}
+function close(){clearTimeout(sequenceTimer);sequenceTimer=0;sequence=null;ui.hidden=true;$("#dialogue-portrait").hidden=true;state=null;$("#dialogue-interruption").hidden=true;$("#dialogue-choices").hidden=true}
 function open({saved=null,repeat=false,answeredChoices=[],progress=()=>{},complete=()=>{}}={}){
+  sequence=null;clearTimeout(sequenceTimer);
   readChoices=new Set((Array.isArray(answeredChoices)?answeredChoices:[]).filter(choice=>Number.isInteger(choice)&&choices[choice]));
   state=normalize(saved||(repeat?{phase:"repeat",index:0}:null));
   onProgress=progress;onComplete=complete;
@@ -135,7 +151,7 @@ $("#dialogue-next").addEventListener("click",advance);
 $("#interruption-next").addEventListener("click",advance);
 document.addEventListener("keydown",event=>{
   if(!state||event.repeat) return;
-  if(state.phase==="choices"){
+  if(state.phase==="choices"||state.phase==="scene-choices"){
     if(event.key==="Tab"){
       const buttons=[...$("#dialogue-choices").querySelectorAll("button")];
       const first=buttons[0],last=buttons.at(-1);
@@ -144,7 +160,7 @@ document.addEventListener("keydown",event=>{
     }
     return;
   }
-  if(event.code==="Space"||event.code==="Enter") {event.preventDefault();advance()}
+  if(event.code==="Space"||event.code==="Enter") {event.preventDefault();if(!$("#dialogue-next").disabled)advance()}
   if(event.key==="Tab"){event.preventDefault();$("#dialogue-next").focus({preventScroll:true})}
 });
 function fitPortrait(image){
@@ -165,5 +181,16 @@ function fitPortrait(image){
   }catch{/* Keep CSS framing if alpha measurement is unavailable. */}
 }
 document.querySelectorAll("[data-member-image]").forEach(image=>{image.addEventListener("load",()=>fitPortrait(image));if(image.complete)fitPortrait(image)});
-window.PixelyDialogue={open,close,isOpen:()=>Boolean(state)};
+function scheduleSequence(){
+  if(sequence&&state.phase==="scene"&&lastMain().delay) sequenceTimer=setTimeout(advance,lastMain().delay);
+}
+function play({lines,choices:options=[],saved=null,progress=()=>{},complete=()=>{},choose=()=>{}}){
+  close();sequence={lines,choices:options,choose};onProgress=progress;onComplete=complete;
+  const picking=saved?.phase==="scene-choices"&&options.length;
+  const index=Number.isInteger(saved?.index)&&saved.index>=0&&saved.index<lines.length?saved.index:0;
+  state={phase:picking?"scene-choices":"scene",index};
+  ui.hidden=false;onProgress(snapshot());render();scheduleSequence();
+  if(!picking) $("#dialogue-next").focus({preventScroll:true});
+}
+window.PixelyDialogue={open,play,close,isOpen:()=>Boolean(state)};
 })();

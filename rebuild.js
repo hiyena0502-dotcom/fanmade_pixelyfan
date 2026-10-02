@@ -8,7 +8,7 @@ let introCleanup=null;
 let busy=false;
 let sessionSave;
 let panelOpener=null;
-const panelSelectors=["#tool-sheet","#story-menu","#door-choice"];
+const panelSelectors=["#tool-sheet","#story-menu"];
 
 // Game motion is explicit: the requested effects must not silently disappear
 // when Windows/Chrome reports reduced motion. Players can still turn it off.
@@ -55,17 +55,6 @@ document.addEventListener("dragstart",event=>{
   if(event.target instanceof HTMLImageElement) event.preventDefault();
 });
 
-/* 독백 대사는 사용자와 함께 확정한 뒤 이 배열에 넣는다. */
-const INTRO_LINES=[
-  "오늘은 12월 28일.",
-  "잠뜰님의 생일이다.",
-  "그래서 아침부터 여기까지 왔다.",
-  "다들 준비하고 있다고 했으니까…",
-  "나도 조금이라도 도울 수 있으면 좋겠는데...",
-  "…뭐, 오늘 하루는 별일 없겠지?"
-];
-
-
 function toast(message){
   const node=$("#toast");
   node.textContent=message;
@@ -92,6 +81,7 @@ function writeSave(scene="exterior",patch={}){
     savedAt:Date.now()
   };
   sessionSave=data;
+  $("#active-quest").textContent=data.decorationQuest==="accepted"?"공룡에게 부탁받은 생일 장식 찾기":data.chapterIntroSeen?"":"집에 들어가자";
   try{localStorage.setItem(SAVE_KEY,JSON.stringify(data))}
   catch{renderContinue();toast("이번 진행은 현재 탭에서만 유지돼. 브라우저 저장 공간을 사용할 수 없어.");return null}
   renderContinue();
@@ -123,7 +113,7 @@ function showScene(name){
       ?"픽셀리 집 · 문 앞"
       :"픽셀리 집 앞";
   $("#hud-place").textContent=placeLabel;
-  if(name!=="door-closeup") $("#door-choice").hidden=true;
+
   $("#bag-button").disabled=name!=="living-room";
   $("#diary-button").disabled=name!=="living-room";
 }
@@ -161,73 +151,64 @@ function startStory(scene="exterior"){
   showScreen("story");
   showScene(scene);
   closePanels(false);
-  $("#intro-monologue").hidden=true;
+
+  $("#active-quest").textContent=readSave()?.decorationQuest==="accepted"?"공룡에게 부탁받은 생일 장식 찾기":readSave()?.chapterIntroSeen?"":"집에 들어가자";
+  const pending=readSave()?.outsideDialogue;
+  if(scene!=="living-room"&&pending){playOutside(pending.kind,pending.state);return}
   if(scene==="living-room"&&(readSave()?.dialogueProgress||!readSave()?.openingSeen)) beginGongryongDialogue();
 }
-function runIntro(){
-  if(!INTRO_LINES.length){
-    startStory("exterior");
-    return;
-  }
+function runIntro(saved=null){
   startStory("exterior");
-  const frame=$(".story-frame");
-  const overlay=$("#intro-monologue");
-  const text=$("#intro-monologue-text");
-  let index=0;
-  let finished=false;
-  setBusy(true);
-
-  frame.classList.add("intro-running");
-  overlay.hidden=false;
-
-  const render=()=>{
-    text.textContent=INTRO_LINES[index];
-    text.classList.add("is-visible");
-  };
-
-  const cleanup=()=>{
-    overlay.removeEventListener("click",advance);
-    document.removeEventListener("keydown",keyAdvance);
-  };
-
-  const finish=()=>{
-    if(finished) return;
-    finished=true;
-    cleanup();
-    introCleanup=null;
-    text.classList.remove("is-visible");
-    frame.classList.add("intro-reveal");
-
-    window.setTimeout(()=>{
-      overlay.hidden=true;
-      frame.classList.remove("intro-running","intro-reveal");
-      setBusy(false);
-      $("#door-hotspot").focus({preventScroll:true});
-    },950);
-  };
-
-  const advance=()=>{
-    if(finished) return;
-    if(index>=INTRO_LINES.length-1){
-      finish();
-      return;
+  playOutside("arrival",saved);
+}
+const outsideScripts={
+  birdhouse:{lines:[{member:"dreamer",text:"작은 새집이다. 입구에도 눈이 조금 쌓여 있다."}]},
+  pot:{lines:[{member:"dreamer",text:"추운데도 화분은 잘 정돈되어 있네."}]},
+  garden:{lines:[{member:"dreamer",text:"텃밭도 눈으로 덮여 있네."}]},
+  arrival:{lines:[
+    {member:"dreamer",text:"여기구나."},
+    {member:"dreamer",text:"생각보다 조용한데… 다들 벌써 준비하고 있으려나?"}
+  ]},
+  door:{lines:[{member:"dreamer",text:"바로 들어가도 되려나?"}],choices:[{label:"노크해본다"},{label:"조금 더 둘러본다"}]},
+  knock:{lines:[
+    {member:"stage",text:"똑똑—",delay:1000,effect:"knock"},
+    {member:"stage",text:"……",delay:800},
+    {member:"stage",text:"집 안쪽에서 무언가 우당탕 넘어지는 소리가 난다.",delay:1500,effect:"crash"},
+    {member:"unknown",text:"잠깐만!"},
+    {member:"stage",text:"……",delay:1000},
+    {member:"unknown",text:"문 열려 있어! 들어와!"},
+    {member:"dreamer",text:"……들어가도 되는 것 같네."}
+  ],choices:[{label:"들어간다"},{label:"그래도 조금 더 둘러본다"}]},
+  invited:{lines:[{member:"dreamer",text:"……들어가도 되는 것 같네."}],choices:[{label:"들어간다"},{label:"그래도 조금 더 둘러본다"}]}
+};
+function finishOutside(){
+  window.PixelyDialogue.close();setBusy(false);
+  $(".story-frame").dataset.doorEffect="";
+  showScene("exterior");writeSave("exterior",{outsideDialogue:null,arrivalSeen:true});
+  $("#door-hotspot").focus({preventScroll:true});
+}
+function playOutside(kind,saved=null){
+  const script=outsideScripts[kind];if(!script){finishOutside();return}
+  closePanels(false);setBusy(true);
+  const scene=["door","knock","invited"].includes(kind)?"door-closeup":"exterior";
+  showScene(scene);
+  window.PixelyDialogue.play({...script,saved,
+    progress:state=>{
+      $(".story-frame").dataset.doorEffect=script.lines[state.index]?.effect||"";
+      writeSave(scene,{outsideDialogue:{kind,state}});
+    },
+    complete:()=>{finishOutside();if(kind==="arrival")toast("집에 들어가자")},
+    choose:index=>{
+      if(index===1){if(kind!=="door")writeSave("door-closeup",{doorInvited:true});finishOutside();return}
+      if(kind==="door"){writeSave("door-closeup",{doorInvited:false});playOutside("knock");return}
+      writeSave("door-closeup",{outsideDialogue:null,doorInvited:true,arrivalSeen:true});
+      setBusy(false);enterHouse();
     }
-    index++;
-    render();
-  };
-
-  const keyAdvance=event=>{
-    if(event.repeat) return;
-    if(event.code==="Space"||event.code==="Enter"){
-      event.preventDefault();
-      advance();
-    }
-  };
-
-  render();
-  overlay.addEventListener("click",advance);
-  document.addEventListener("keydown",keyAdvance);
-  introCleanup=cleanup;
+  });
+}
+function beginDoor(){
+  if(busy)return;
+  playOutside(readSave()?.doorInvited?"invited":"door");
 }
 function playChapterCard({number,title},after){
   const card=$("#chapter-card");
@@ -270,7 +251,7 @@ async function enterHouse(){
   transition.hidden=false;
   transition.classList.remove("is-active");
   requestAnimationFrame(()=>requestAnimationFrame(()=>transition.classList.add("is-active")));
-  window.setTimeout(()=>showScene("living-room"),180);
+  window.setTimeout(()=>showScene("living-room"),700);
   window.setTimeout(()=>{
     transition.hidden=true;
     transition.classList.remove("is-active");
@@ -283,7 +264,7 @@ async function enterHouse(){
     };
     if(readSave()?.chapterIntroSeen){finish();return}
     playChapterCard({number:1,title:"생일 준비"},finish);
-  },340);
+  },860);
 }
 
 function beginGongryongDialogue(){
@@ -308,6 +289,7 @@ function beginGongryongDialogue(){
   });
 }
 $("#talk-gongryong").addEventListener("click",beginGongryongDialogue);
+document.querySelectorAll("[data-outside-object]").forEach(button=>button.addEventListener("click",()=>{if(!busy)playOutside(button.dataset.outsideObject)}));
 
 function openTool(kind){
   const sheet=$("#tool-sheet"),content=$("#tool-content");
@@ -320,32 +302,22 @@ function openTool(kind){
   openPanel("#tool-sheet",kind==="bag"?"#bag-button":"#diary-button");
 }
 $("#new-story").addEventListener("click",()=>{
-  writeSave("exterior",{chapter:0,chapterIntroSeen:false,openingSeen:false,dialogueProgress:null,decorationQuest:null,answeredDecorationChoices:[]});
+  writeSave("exterior",{chapter:0,chapterIntroSeen:false,openingSeen:false,dialogueProgress:null,decorationQuest:null,answeredDecorationChoices:[],outsideDialogue:null,arrivalSeen:false,doorInvited:false});
   runIntro();
 });
 $("#continue-story").addEventListener("click",()=>{
   const save=readSave();
   if(save) startStory(save.scene||"exterior");
 });
-$("#door-hotspot").addEventListener("click",()=>{
-  closePanels(false);
-  showScene("door-closeup");
-  writeSave("door-closeup");
-  $("#door-closeup-hotspot").focus({preventScroll:true});
-});
-$("#door-closeup-hotspot").addEventListener("click",()=>{
-  openPanel("#door-choice","#door-closeup-hotspot","#enter-house");
-});
+$("#door-hotspot").addEventListener("click",beginDoor);
+$("#door-closeup-hotspot").addEventListener("click",beginDoor);
 $("#door-closeup-back").addEventListener("click",()=>{
   closePanels(false);
   showScene("exterior");
   writeSave("exterior");
   $("#door-hotspot").focus({preventScroll:true});
 });
-$("#keep-looking").addEventListener("click",()=>{
-  closePanels();
-});
-$("#enter-house").addEventListener("click",enterHouse);
+
 $("#leave-house").addEventListener("click",()=>{
   showScene("exterior");
   writeSave("exterior");

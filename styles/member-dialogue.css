@@ -93,3 +93,7 @@
 @keyframes portrait-arrive{from{opacity:0;translate:-12px 0}to{opacity:1;translate:0 0}}
 @keyframes choice-arrive{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 @media(prefers-reduced-motion:reduce){:root:not([data-game-motion="full"]) .member-dialogue-ui:not([hidden]) .dialogue-portrait,:root:not([data-game-motion="full"]) .dialogue-portrait .character-crop,:root:not([data-game-motion="full"]) .room-character .character-crop,:root:not([data-game-motion="full"]) .dialogue-choices button,:root:not([data-game-motion="full"]) .interruption:not([hidden]){animation:none;transition:none}:root:not([data-game-motion="full"]) .dialogue-choices button:hover{translate:none}}
+.member-dialogue-ui[data-speaker="unknown"],.member-dialogue-ui[data-speaker="stage"]{--member-accent:#8e879a;--member-light:#e5dfed}
+.member-dialogue-ui[data-speaker="stage"] .subtitle-name,.member-dialogue-ui[data-speaker="stage"] .subtitle-divider{display:none}
+.member-dialogue-ui[data-speaker="stage"] .subtitle-bar{grid-template-columns:1fr 20px}
+.member-dialogue-ui[data-speaker="stage"] .subtitle-text{font-style:italic;font-weight:500}

@@ -10,13 +10,13 @@
   <link rel="preload" as="image" href="assets/home/home-bg.png?v=85" />
   <link rel="preload" as="image" href="assets/story/chapter1/living-room.webp?v=90" />
   <link rel="preload" as="image" href="assets/story/chapter1/exterior/sky-v129.webp" />
-  <link rel="stylesheet" href="styles/rebuild.css?v=135" />
-  <link rel="stylesheet" href="styles/member-dialogue.css?v=135" />
+  <link rel="stylesheet" href="styles/rebuild.css?v=136" />
+  <link rel="stylesheet" href="styles/member-dialogue.css?v=136" />
   <link rel="stylesheet" href="styles/game-interaction.css?v=121" />
   <script src="game-interaction.js?v=121" defer></script>
-  <script src="member-dialogue.js?v=135" defer></script>
-  <script src="atmosphere.js?v=135" defer></script>
-  <script src="rebuild.js?v=135" defer></script>
+  <script src="member-dialogue.js?v=136" defer></script>
+  <script src="atmosphere.js?v=136" defer></script>
+  <script src="rebuild.js?v=136" defer></script>
 </head>
 <body>
   <main class="rebuild-root">
@@ -98,6 +98,9 @@
             <div class="scene-snow" data-snowfall="exterior" aria-hidden="true"></div>
             <img class="exterior-layer" data-exterior-layer="foreground-bushes" src="assets/story/chapter1/exterior/foreground-bushes-v130.webp" width="2048" height="1339" alt="" draggable="false" />
           </div>
+          <button type="button" class="hotspot exterior-inspect inspect-birdhouse" data-outside-object="birdhouse" aria-label="새집 살펴보기"></button>
+          <button type="button" class="hotspot exterior-inspect inspect-pot" data-outside-object="pot" aria-label="화분 살펴보기"></button>
+          <button type="button" class="hotspot exterior-inspect inspect-garden" data-outside-object="garden" aria-label="텃밭 살펴보기"></button>
           <button type="button" class="hotspot hotspot-door" id="door-hotspot" aria-label="현관문 살펴보기"></button>
           </div>
         </section>
@@ -105,19 +108,14 @@
         <section class="scene door-closeup-scene" data-scene="door-closeup" hidden aria-label="픽셀리 집 현관문">
           <div class="door-closeup-stage">
             <img class="door-closeup-art" src="assets/story/chapter1/door-closeup-v108.png" width="1672" height="941" alt="꽃과 화분이 놓인 픽셀리 집 현관문" draggable="false" />
+            <div class="door-opening" aria-hidden="true"><div class="door-opening-leaf"><img src="assets/story/chapter1/door-closeup-v108.png" alt="" draggable="false" /></div></div>
             <div class="scene-snow" data-snowfall="closeup" aria-hidden="true"></div>
             <button type="button" class="hotspot hotspot-door-closeup" id="door-closeup-hotspot" aria-label="현관문 두드리기"></button>
           </div>
           <button type="button" class="scene-back-arrow door-closeup-back" id="door-closeup-back" aria-label="집 앞으로 돌아가기">
             <span>‹</span><small>집 앞</small>
           </button>
-          <section class="choice-sheet" id="door-choice" role="dialog" aria-modal="true" aria-labelledby="door-choice-title" hidden>
-            <p id="door-choice-title">집 안으로 들어갈까?</p>
-            <div>
-              <button type="button" id="enter-house">들어간다</button>
-              <button type="button" id="keep-looking">조금 더 둘러본다</button>
-            </div>
-          </section>
+
         </section>
 
         <section class="scene living-room-scene" data-scene="living-room" hidden aria-label="픽셀리 집 거실">
@@ -161,11 +159,7 @@
           </div>
         </section>
 
-        <section class="intro-monologue" id="intro-monologue" hidden aria-live="polite" aria-label="꿈뜰이 독백">
-          <div class="intro-monologue-box">
-            <p id="intro-monologue-text"></p>
-          </div>
-        </section>
+
 <div class="house-entry-transition" id="house-entry-transition" hidden aria-hidden="true">
           <span class="entry-vignette"></span>
         </div>
@@ -202,6 +196,7 @@
           </div>
         </section>
 
+        <p class="active-quest" id="active-quest" aria-live="polite"></p>
         <div class="panel-backdrop" id="panel-backdrop" hidden aria-hidden="true"></div>
         <section class="menu-sheet" id="story-menu" role="dialog" aria-modal="true" aria-labelledby="story-menu-title" tabindex="-1" hidden>
           <header>
