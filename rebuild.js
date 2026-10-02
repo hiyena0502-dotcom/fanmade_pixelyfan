@@ -28,21 +28,6 @@ function buildHomeSnow(){
 }
 buildHomeSnow();
 
-// Move the original cloud canvases completely across the scene, then re-enter.
-const cloudBounds=[[46,399],[1238,1653],[1323,1610],[95,633],[1508,2008],[518,1066]];
-document.querySelectorAll(".exterior-cloud").forEach((cloud,index)=>{
-  const [left,right]=cloudBounds[index];
-  const randomize=()=>{
-    cloud.style.setProperty("--cloud-start",(-right/2048*100-4)+"%");
-    cloud.style.setProperty("--cloud-end",(104-left/2048*100)+"%");
-    cloud.style.setProperty("--cloud-duration",(130+Math.random()*80)+"s");
-    cloud.style.setProperty("--cloud-y",((Math.random()-.5)*3)+"%");
-  };
-  randomize();
-  cloud.style.setProperty("--cloud-delay",(-Math.random()*130)+"s");
-  cloud.addEventListener("animationiteration",()=>cloud.style.setProperty("--cloud-y",((Math.random()-.5)*3)+"%"));
-});
-
 document.querySelectorAll("img").forEach(img=>{img.draggable=false});
 document.addEventListener("dragstart",event=>{
   if(event.target instanceof HTMLImageElement) event.preventDefault();

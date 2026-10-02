@@ -10,12 +10,13 @@
   <link rel="preload" as="image" href="assets/home/home-bg.png?v=85" />
   <link rel="preload" as="image" href="assets/story/chapter1/living-room.webp?v=90" />
   <link rel="preload" as="image" href="assets/story/chapter1/exterior/sky-v129.webp" />
-  <link rel="stylesheet" href="styles/rebuild.css?v=133" />
-  <link rel="stylesheet" href="styles/member-dialogue.css?v=133" />
+  <link rel="stylesheet" href="styles/rebuild.css?v=134" />
+  <link rel="stylesheet" href="styles/member-dialogue.css?v=134" />
   <link rel="stylesheet" href="styles/game-interaction.css?v=121" />
   <script src="game-interaction.js?v=121" defer></script>
-  <script src="member-dialogue.js?v=133" defer></script>
-  <script src="rebuild.js?v=133" defer></script>
+  <script src="member-dialogue.js?v=134" defer></script>
+  <script src="atmosphere.js?v=134" defer></script>
+  <script src="rebuild.js?v=134" defer></script>
 </head>
 <body>
   <main class="rebuild-root">
@@ -94,6 +95,7 @@
             <img class="exterior-layer" data-exterior-layer="ground" src="assets/story/chapter1/exterior/ground-v129.webp" width="2048" height="1339" alt="" draggable="false" />
             <img class="exterior-layer" data-exterior-layer="bushes" src="assets/story/chapter1/exterior/bushes-v129.webp" width="2048" height="1339" alt="" draggable="false" />
             <img class="exterior-layer" data-exterior-layer="objects" src="assets/story/chapter1/exterior/objects-v129.webp" width="2048" height="1339" alt="" draggable="false" />
+            <div class="scene-snow" data-snowfall="exterior" aria-hidden="true"></div>
             <img class="exterior-layer" data-exterior-layer="foreground-bushes" src="assets/story/chapter1/exterior/foreground-bushes-v130.webp" width="2048" height="1339" alt="" draggable="false" />
           </div>
           <button type="button" class="hotspot hotspot-door" id="door-hotspot" aria-label="현관문 살펴보기"></button>
@@ -103,6 +105,7 @@
         <section class="scene door-closeup-scene" data-scene="door-closeup" hidden aria-label="픽셀리 집 현관문">
           <div class="door-closeup-stage">
             <img class="door-closeup-art" src="assets/story/chapter1/door-closeup-v108.png" width="1672" height="941" alt="꽃과 화분이 놓인 픽셀리 집 현관문" draggable="false" />
+            <div class="scene-snow" data-snowfall="closeup" aria-hidden="true"></div>
             <button type="button" class="hotspot hotspot-door-closeup" id="door-closeup-hotspot" aria-label="현관문 두드리기"></button>
           </div>
           <button type="button" class="scene-back-arrow door-closeup-back" id="door-closeup-back" aria-label="집 앞으로 돌아가기">
@@ -120,6 +123,7 @@
         <section class="scene living-room-scene" data-scene="living-room" hidden aria-label="픽셀리 집 거실">
           <div class="living-room-stage">
           <img class="scene-art living-room-art" src="assets/story/chapter1/living-room.webp?v=90" alt="따뜻한 겨울 아침의 픽셀리 집 거실" draggable="false" />
+            <div class="scene-snow window-snow" data-snowfall="window" aria-hidden="true"></div>
             <button type="button" class="room-character" id="talk-gongryong" aria-label="공룡에게 말 걸기">
               <span class="character-crop"><img src="assets/characters/gongryong-placeholder.png" data-member-image="gongryong" alt="공룡" draggable="false" /></span>
               <span class="character-label" aria-hidden="true">공룡</span>

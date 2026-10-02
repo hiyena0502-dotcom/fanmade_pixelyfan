@@ -174,7 +174,7 @@ button{color:inherit}
 .exterior-cloud{animation:exterior-cloud-flow var(--cloud-duration,160s) linear infinite;animation-delay:var(--cloud-delay,0s)}
 .exterior-scene[hidden] .exterior-cloud{animation-play-state:paused}
 [data-exterior-layer="foreground-bushes"]{transform:translateY(-9%) scale(1.18)}
-@keyframes exterior-cloud-flow{from{transform:translate(var(--cloud-start,-110%),var(--cloud-y,0%))}to{transform:translate(var(--cloud-end,110%),var(--cloud-y,0%))}}
+@keyframes exterior-cloud-flow{from{transform:translate(var(--cloud-start,130%),var(--cloud-y,0%))}to{transform:translate(var(--cloud-end,-170%),var(--cloud-y,0%))}}
 @media(prefers-reduced-motion:reduce){.exterior-cloud{animation:none;transform:none}}
 .exterior-stage>.scene-art,.door-closeup-art{display:block;width:100%;height:100%;object-fit:cover}
 .living-room-art{position:absolute;inset:0;transform:none;filter:none;animation:none}
@@ -364,3 +364,17 @@ button{color:inherit}
   .chapter-card.is-active .chapter-glint{display:none}
   .chapter-card.is-leaving{transition:none;transform:none}
 }
+
+/* Snow reaches the ground at 78%, then settles and dissolves before recycling. */
+.scene-snow{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.scene-snow i{position:absolute;left:var(--flake-x);top:-8px;width:var(--flake-size);height:var(--flake-ground);pointer-events:none}
+.scene-snow b{position:absolute;inset:0;animation:scene-snowfall var(--flake-duration) linear var(--flake-delay) infinite;opacity:0}
+.scene-snow b::before{content:"";position:absolute;left:0;top:0;width:100%;height:var(--flake-size);background:#fff;border-radius:50%;opacity:var(--flake-opacity);box-shadow:0 0 3px #ffffff60}
+.scene[hidden] .scene-snow b{animation-play-state:paused}
+.window-snow{inset:44% 35% 32% 32%;opacity:.65;clip-path:polygon(0 0,30% 0,30% 43%,0 43%,0 49%,30% 49%,30% 100%,34% 100%,34% 49%,65% 49%,65% 100%,69% 100%,69% 49%,100% 49%,100% 43%,69% 43%,69% 0,65% 0,65% 43%,34% 43%,34% 0)}
+@keyframes scene-snowfall{0%{transform:translate3d(0,0,0);opacity:0}8%{opacity:1}78%{transform:translate3d(var(--flake-drift),100%,0);opacity:1}100%{transform:translate3d(var(--flake-drift),100%,0);opacity:0}}
+.choice-sheet:not([hidden]),.menu-sheet:not([hidden]),.tool-sheet:not([hidden]){animation:panel-arrive .25s ease-out both}
+@keyframes panel-arrive{from{opacity:0;translate:0 10px}to{opacity:1;translate:0 0}}
+.scene-back-arrow,.story-tools button{transition:translate .18s ease,box-shadow .18s ease}
+.scene-back-arrow:hover,.story-tools button:hover{translate:0 -3px}
+@media(prefers-reduced-motion:reduce){.scene-snow{display:none}.choice-sheet,.menu-sheet,.tool-sheet{animation:none!important}.scene-back-arrow,.story-tools button{transition:none;translate:none}}
