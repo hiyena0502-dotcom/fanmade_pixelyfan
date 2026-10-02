@@ -173,7 +173,7 @@ button{color:inherit}
 .exterior-layer{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:fill;pointer-events:none}
 .exterior-cloud{animation:exterior-cloud-flow var(--cloud-duration,160s) linear infinite;animation-delay:var(--cloud-delay,0s)}
 .exterior-scene[hidden] .exterior-cloud{animation-play-state:paused}
-[data-exterior-layer="foreground-bushes"]{transform:translateY(-9%)}
+[data-exterior-layer="foreground-bushes"]{transform:translateY(-9%) scale(1.18)}
 @keyframes exterior-cloud-flow{from{transform:translate(var(--cloud-start,-110%),var(--cloud-y,0%))}to{transform:translate(var(--cloud-end,110%),var(--cloud-y,0%))}}
 @media(prefers-reduced-motion:reduce){.exterior-cloud{animation:none;transform:none}}
 .exterior-stage>.scene-art,.door-closeup-art{display:block;width:100%;height:100%;object-fit:cover}
