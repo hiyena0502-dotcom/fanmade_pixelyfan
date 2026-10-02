@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#375439" />
+  <title>공룡 대화창 시안 · 꿈뜰이의 생일 준비</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles/dialogue-preview.css?v=122" />
+  <link rel="stylesheet" href="styles/game-interaction.css?v=121" />
+  <script src="game-interaction.js?v=121" defer></script>
+  <script src="dialogue-preview.js?v=122" defer></script>
+</head>
+<body>
+  <main class="rebuild-root dialogue-preview" data-member="gongryong">
+    <img class="room-art" src="assets/story/chapter1/living-room.webp?v=90" alt="픽셀리 집 거실" draggable="false" />
+    <header class="preview-header">
+      <a href="./" class="preview-back"><span aria-hidden="true">←</span> 게임으로 돌아가기</a>
+      <span class="preview-label">대화창 시안 <i aria-hidden="true"></i> 공룡</span>
+    </header>
+    <div class="portrait-stage">
+      <div class="portrait-frame">
+        <img id="member-portrait" src="assets/characters/gongryong-placeholder.png" alt="공룡의 임시 캐릭터 이미지" draggable="false" />
+      </div>
+    </div>
+    <section class="member-dialogue" aria-labelledby="speaker-name">
+      <div class="dialogue-edge" aria-hidden="true"></div>
+      <div class="speaker-tab">
+        <svg class="speaker-mark" viewBox="0 0 32 28" aria-hidden="true" fill="currentColor">
+          <ellipse cx="7" cy="9" rx="3.5" ry="7" transform="rotate(-25 7 9)" />
+          <ellipse cx="16" cy="7" rx="3.5" ry="7" />
+          <ellipse cx="25" cy="9" rx="3.5" ry="7" transform="rotate(25 25 9)" />
+          <path d="M7 23c0-5 4-8 9-8s9 3 9 8c0 4-6 4-9 2-3 2-9 2-9-2Z" />
+        </svg>
+        <h1 id="speaker-name">공룡</h1>
+        <span class="speaker-dot" aria-hidden="true"></span>
+      </div>
+      <div class="dialogue-copy">
+        <p id="dialogue-line">잘 왔어! 안 그래도 지금 사람 하나 필요했는데…</p>
+      </div>
+      <div class="dialogue-footer" aria-hidden="true">
+        <span class="dialogue-flourish"><i></i><i></i><i></i></span>
+        <span class="dialogue-cue">⌄</span>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
