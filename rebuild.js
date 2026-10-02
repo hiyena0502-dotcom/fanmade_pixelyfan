@@ -255,11 +255,11 @@ const outsideScripts={
   ],choices:[{label:"들어간다"},{label:"그래도 조금 더 둘러본다"}]},
   invited:{lines:[{member:"dreamer",text:"……들어가도 되는 것 같네."}],choices:[{label:"들어간다"},{label:"그래도 조금 더 둘러본다"}]}
 };
-function finishOutside(){
+function finishOutside(scene="exterior"){
   window.PixelyDialogue.close();setBusy(false);
   $(".story-frame").dataset.doorEffect="";
-  showScene("exterior");writeSave("exterior",{outsideDialogue:null,arrivalSeen:true});
-  $("#door-hotspot").focus({preventScroll:true});
+  showScene(scene);writeSave(scene,{outsideDialogue:null,arrivalSeen:true});
+  $(scene==="door-closeup"?"#door-closeup-hotspot":"#door-hotspot").focus({preventScroll:true});
 }
 function playOutside(kind,saved=null){
   const script=outsideScripts[kind];if(!script){finishOutside();return}
@@ -273,7 +273,7 @@ function playOutside(kind,saved=null){
     },
     complete:()=>{finishOutside();if(kind==="arrival")toast("집에 들어가자")},
     choose:index=>{
-      if(index===1){if(kind!=="door")writeSave("door-closeup",{doorInvited:true});finishOutside();return}
+      if(index===1){if(kind!=="door")writeSave("door-closeup",{doorInvited:true});finishOutside("door-closeup");return}
       if(kind==="door"){writeSave("door-closeup",{doorInvited:false});playOutside("knock");return}
       writeSave("door-closeup",{outsideDialogue:null,doorInvited:true,arrivalSeen:true});
       setBusy(false);enterHouse();

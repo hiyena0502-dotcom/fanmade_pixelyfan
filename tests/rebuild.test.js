@@ -73,7 +73,7 @@ function boot(saved,{failStorage=false}={}){
     escape(){documentListeners.get('keydown').forEach(fn=>fn({key:'Escape'}))}};
 }
 
-test('arrival uses Dreamer subtitles, door cancellation returns outside, and invitation survives exploration',()=>{
+test('arrival uses Dreamer subtitles, door cancellation stays at the door, and invitation survives exploration',()=>{
   const app=boot();app.click('#new-story');
   assert.equal(app.node('#intro-monologue-text').textContent,'오늘은 12월 28일.');
   assert.equal(app.node('#story-dialogue-ui').hidden,true);
@@ -88,12 +88,14 @@ test('arrival uses Dreamer subtitles, door cancellation returns outside, and inv
   app.click('#door-hotspot');
   assert.equal(app.node('#dialogue-text').textContent,'바로 들어가도 되려나?');
   app.click('#dialogue-next');app.node('#dialogue-choices').children[1].click();
-  assert.equal(app.scenes[0].hidden,false);
+  assert.equal(app.scenes[1].hidden,false);
+  assert.equal(app.save().scene,"door-closeup");
   assert.equal(app.node('#story-dialogue-ui').hidden,true);
   app.prepareEntry();app.node('#dialogue-choices').children[1].click();
   assert.equal(app.save().doorInvited,true);
-  assert.equal(app.scenes[0].hidden,false);
-  const resumed=boot(app.save());resumed.click('#continue-story');resumed.click('#door-hotspot');
+  assert.equal(app.scenes[1].hidden,false);
+  assert.equal(app.save().scene,"door-closeup");
+  const resumed=boot(app.save());resumed.click('#continue-story');resumed.click('#door-closeup-hotspot');
   assert.equal(resumed.node('#dialogue-text').textContent,'……들어가도 되는 것 같네.');
   resumed.click('#dialogue-next');
   assert.equal(resumed.node('#dialogue-choices').children[0].textContent,'들어간다');
@@ -161,8 +163,8 @@ test('outside clicks dismiss only the active panel and restore its opener',()=>{
   }
   app.click('#leave-house');app.click('#door-hotspot');app.click('#dialogue-next');
   app.node('#dialogue-choices').children[1].click();
-  assert.equal(app.scenes[0].hidden,false);
-  assert.equal(app.activeElement(),app.node('#door-hotspot'));
+  assert.equal(app.scenes[1].hidden,false);
+  assert.equal(app.activeElement(),app.node('#door-closeup-hotspot'));
 });
 
 test('panels are mutually exclusive and keyboard users can close a panel without a close button',()=>{
