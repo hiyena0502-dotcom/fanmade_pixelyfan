@@ -341,3 +341,23 @@ test('room placement and conversation portrait are separate, and only Deokgae in
   assert.match(html,/id="talk-gongryong"/);
   assert.match(html,/id="dialogue-portrait-image"/);
 });
+
+test('game animation defaults on and the explicit toggle remains usable without storage',()=>{
+  const app=boot(undefined,{failStorage:true});
+  assert.equal(app.node('html').getAttribute('data-game-motion'),'full');
+  assert.equal(app.node('#toggle-motion').getAttribute('aria-pressed'),'true');
+  app.click('#toggle-motion');
+  assert.equal(app.node('html').getAttribute('data-game-motion'),'reduced');
+  app.click('#toggle-motion');
+  assert.equal(app.node('html').getAttribute('data-game-motion'),'full');
+});
+test('chapter replay preserves the quest and saved dialogue history',()=>{
+  const app=boot({scene:'living-room',chapterIntroSeen:true,openingSeen:true,decorationQuest:'accepted',answeredDecorationChoices:[2]});
+  app.click('#continue-story');
+  const before=app.save();
+  app.click('#replay-chapter');
+  assert.equal(app.node('#chapter-card').hidden,false);
+  app.flush();
+  assert.equal(app.node('#chapter-card').hidden,true);
+  assert.deepEqual(app.save(),before);
+});

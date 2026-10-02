@@ -10,6 +10,28 @@ let sessionSave;
 let panelOpener=null;
 const panelSelectors=["#tool-sheet","#story-menu","#door-choice"];
 
+// Game motion is explicit: the requested effects must not silently disappear
+// when Windows/Chrome reports reduced motion. Players can still turn it off.
+const MOTION_KEY="pixely-game-motion";
+function applyMotion(enabled){
+  $("html").setAttribute("data-game-motion",enabled?"full":"reduced");
+  $("#toggle-motion").textContent=enabled?"애니메이션: 켜짐":"애니메이션: 꺼짐";
+  $("#toggle-motion").setAttribute("aria-pressed",String(enabled));
+}
+let motionEnabled=true;
+try{motionEnabled=localStorage.getItem(MOTION_KEY)!=="reduced"}catch{}
+applyMotion(motionEnabled);
+$("#toggle-motion").addEventListener("click",()=>{
+  motionEnabled=!motionEnabled;applyMotion(motionEnabled);
+  try{localStorage.setItem(MOTION_KEY,motionEnabled?"full":"reduced")}catch{}
+});
+$("#replay-chapter").addEventListener("click",()=>{
+  if(busy||scenes.find(scene=>!scene.hidden)?.dataset.scene!=="living-room") return;
+  closePanels(false);setBusy(true);
+  playChapterCard({number:1,title:"생일 준비"},()=>{setBusy(false);$("#talk-gongryong").focus({preventScroll:true})});
+});
+
+
 function buildHomeSnow(){
   const layer=$("#home-snow");
   if(!layer || layer.childElementCount) return;
@@ -329,6 +351,7 @@ $("#leave-house").addEventListener("click",()=>{
   writeSave("exterior");
 });
 $("#story-menu-button").addEventListener("click",()=>{
+  $("#replay-chapter").disabled=scenes.find(scene=>!scene.hidden)?.dataset.scene!=="living-room";
   openPanel("#story-menu","#story-menu-button","#save-progress");
 });
 $("#return-home").addEventListener("click",()=>{closePanels(false);showScreen("home")});

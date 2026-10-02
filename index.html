@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" data-game-motion="full">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,13 +10,13 @@
   <link rel="preload" as="image" href="assets/home/home-bg.png?v=85" />
   <link rel="preload" as="image" href="assets/story/chapter1/living-room.webp?v=90" />
   <link rel="preload" as="image" href="assets/story/chapter1/exterior/sky-v129.webp" />
-  <link rel="stylesheet" href="styles/rebuild.css?v=134" />
-  <link rel="stylesheet" href="styles/member-dialogue.css?v=134" />
+  <link rel="stylesheet" href="styles/rebuild.css?v=135" />
+  <link rel="stylesheet" href="styles/member-dialogue.css?v=135" />
   <link rel="stylesheet" href="styles/game-interaction.css?v=121" />
   <script src="game-interaction.js?v=121" defer></script>
-  <script src="member-dialogue.js?v=134" defer></script>
-  <script src="atmosphere.js?v=134" defer></script>
-  <script src="rebuild.js?v=134" defer></script>
+  <script src="member-dialogue.js?v=135" defer></script>
+  <script src="atmosphere.js?v=135" defer></script>
+  <script src="rebuild.js?v=135" defer></script>
 </head>
 <body>
   <main class="rebuild-root">
@@ -208,6 +208,8 @@
             <strong id="story-menu-title">메뉴</strong>
           </header>
           <button type="button" id="save-progress">현재 위치 저장</button>
+          <button type="button" id="toggle-motion" aria-pressed="true">애니메이션: 켜짐</button>
+          <button type="button" id="replay-chapter">챕터 연출 다시 보기</button>
           <button type="button" id="return-home">메인 화면으로</button>
           <p class="panel-hint">창 밖을 누르면 닫혀요</p>
         </section>

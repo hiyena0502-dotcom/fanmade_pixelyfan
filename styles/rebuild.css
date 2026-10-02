@@ -175,7 +175,7 @@ button{color:inherit}
 .exterior-scene[hidden] .exterior-cloud{animation-play-state:paused}
 [data-exterior-layer="foreground-bushes"]{transform:translateY(-9%) scale(1.18)}
 @keyframes exterior-cloud-flow{from{transform:translate(var(--cloud-start,130%),var(--cloud-y,0%))}to{transform:translate(var(--cloud-end,-170%),var(--cloud-y,0%))}}
-@media(prefers-reduced-motion:reduce){.exterior-cloud{animation:none;transform:none}}
+@media(prefers-reduced-motion:reduce){:root:not([data-game-motion="full"]) .exterior-cloud{animation:none;transform:none}}
 .exterior-stage>.scene-art,.door-closeup-art{display:block;width:100%;height:100%;object-fit:cover}
 .living-room-art{position:absolute;inset:0;transform:none;filter:none;animation:none}
 .hotspot{position:absolute;z-index:8;border:0;padding:0;background:transparent;cursor:pointer}
@@ -357,12 +357,7 @@ button{color:inherit}
   .chapter-title{font-size:25px}
   .chapter-flourish{height:24px;margin-top:6px}
 }
-@media(prefers-reduced-motion:reduce){
-  .home-snow i{animation:none;display:none}
-  .chapter-card,.house-entry-transition,.intro-monologue,.toast,.object-tool{transition:none}
-  .chapter-card.is-active .chapter-emblem>* , .chapter-card.is-active .chapter-crest>*{animation:none;opacity:1;transform:none}
-  .chapter-card.is-active .chapter-glint{display:none}
-  .chapter-card.is-leaving{transition:none;transform:none}
+@media(prefers-reduced-motion:reduce){:root:not([data-game-motion="full"]) .home-snow i{animation:none;display:none}:root:not([data-game-motion="full"]) .chapter-card,:root:not([data-game-motion="full"]) .house-entry-transition,:root:not([data-game-motion="full"]) .intro-monologue,:root:not([data-game-motion="full"]) .toast,:root:not([data-game-motion="full"]) .object-tool{transition:none}:root:not([data-game-motion="full"]) .chapter-card.is-active .chapter-emblem>*,:root:not([data-game-motion="full"]) .chapter-card.is-active .chapter-crest>*{animation:none;opacity:1;transform:none}:root:not([data-game-motion="full"]) .chapter-card.is-active .chapter-glint{display:none}:root:not([data-game-motion="full"]) .chapter-card.is-leaving{transition:none;transform:none}
 }
 
 /* Snow reaches the ground at 78%, then settles and dissolves before recycling. */
@@ -377,4 +372,9 @@ button{color:inherit}
 @keyframes panel-arrive{from{opacity:0;translate:0 10px}to{opacity:1;translate:0 0}}
 .scene-back-arrow,.story-tools button{transition:translate .18s ease,box-shadow .18s ease}
 .scene-back-arrow:hover,.story-tools button:hover{translate:0 -3px}
-@media(prefers-reduced-motion:reduce){.scene-snow{display:none}.choice-sheet,.menu-sheet,.tool-sheet{animation:none!important}.scene-back-arrow,.story-tools button{transition:none;translate:none}}
+@media(prefers-reduced-motion:reduce){:root:not([data-game-motion="full"]) .scene-snow{display:none}:root:not([data-game-motion="full"]) .choice-sheet,:root:not([data-game-motion="full"]) .menu-sheet,:root:not([data-game-motion="full"]) .tool-sheet{animation:none!important}:root:not([data-game-motion="full"]) .scene-back-arrow,:root:not([data-game-motion="full"]) .story-tools button{transition:none;translate:none}}
+
+/* Explicit in-game off switch, independent of the operating-system setting. */
+:root[data-game-motion="reduced"] *, :root[data-game-motion="reduced"] *::before{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+:root[data-game-motion="reduced"] .scene-snow,:root[data-game-motion="reduced"] .home-snow{display:none}
+.menu-sheet button:disabled{opacity:.45;cursor:default}
