@@ -59,7 +59,7 @@ function boot(saved,{failStorage=false}={}){
     }
   }
   return {node,scenes,flush,click:selector=>node(selector).click(),save:()=>JSON.parse(storage.get(key)||'null'),
-    start(){node('#new-story').click();node('#dialogue-next').click();node('#dialogue-next').click();flush()},
+    start(){node('#new-story').click();for(let n=0;n<6;n++)node('#intro-monologue').click();flush();node('#dialogue-next').click();node('#dialogue-next').click();flush()},
     prepareEntry(){
       node('#door-hotspot').click();node('#dialogue-next').click();
       node('#dialogue-choices').children[0].click();flush();
@@ -75,6 +75,10 @@ function boot(saved,{failStorage=false}={}){
 
 test('arrival uses Dreamer subtitles, door cancellation returns outside, and invitation survives exploration',()=>{
   const app=boot();app.click('#new-story');
+  assert.equal(app.node('#intro-monologue-text').textContent,'오늘은 12월 28일.');
+  assert.equal(app.node('#story-dialogue-ui').hidden,true);
+  for(let n=0;n<6;n++)app.click('#intro-monologue');app.flush();
+  assert.equal(app.node('#intro-monologue').hidden,true);
   assert.equal(app.node('#dialogue-text').textContent,'여기구나.');
   assert.equal(app.node('#dialogue-portrait').hidden,true);
   app.click('#dialogue-next');
@@ -328,7 +332,7 @@ test('invalid dialogue progress restarts safely, and a new story clears the prev
   assert.equal(app.save().dialogueProgress,null);
   assert.equal(app.save().decorationQuest,null);
   assert.equal(app.save().openingSeen,false);
-  assert.equal(app.node('#dialogue-text').textContent,'여기구나.');
+  assert.equal(app.node('#intro-monologue-text').textContent,'오늘은 12월 28일.');
 });
 
 

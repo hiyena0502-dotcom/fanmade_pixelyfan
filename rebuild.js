@@ -55,6 +55,16 @@ document.addEventListener("dragstart",event=>{
   if(event.target instanceof HTMLImageElement) event.preventDefault();
 });
 
+const INTRO_LINES=[
+  "오늘은 12월 28일.",
+  "잠뜰님의 생일이다.",
+  "그래서 아침부터 여기까지 왔다.",
+  "다들 준비하고 있다고 했으니까…",
+  "나도 조금이라도 도울 수 있으면 좋겠는데...",
+  "…뭐, 오늘 하루는 별일 없겠지?"
+];
+
+
 function toast(message){
   const node=$("#toast");
   node.textContent=message;
@@ -156,6 +166,70 @@ function startStory(scene="exterior"){
   const pending=readSave()?.outsideDialogue;
   if(scene!=="living-room"&&pending){playOutside(pending.kind,pending.state);return}
   if(scene==="living-room"&&(readSave()?.dialogueProgress||!readSave()?.openingSeen)) beginGongryongDialogue();
+}
+function runPrologue(){
+  if(!INTRO_LINES.length){
+    startStory("exterior");
+    return;
+  }
+  startStory("exterior");
+  const frame=$(".story-frame");
+  const overlay=$("#intro-monologue");
+  const text=$("#intro-monologue-text");
+  let index=0;
+  let finished=false;
+  setBusy(true);
+
+  frame.classList.add("intro-running");
+  overlay.hidden=false;
+
+  const render=()=>{
+    text.textContent=INTRO_LINES[index];
+    text.classList.add("is-visible");
+  };
+
+  const cleanup=()=>{
+    overlay.removeEventListener("click",advance);
+    document.removeEventListener("keydown",keyAdvance);
+  };
+
+  const finish=()=>{
+    if(finished) return;
+    finished=true;
+    cleanup();
+    introCleanup=null;
+    text.classList.remove("is-visible");
+    frame.classList.add("intro-reveal");
+
+    window.setTimeout(()=>{
+      overlay.hidden=true;
+      frame.classList.remove("intro-running","intro-reveal");
+      runIntro();
+    },950);
+  };
+
+  const advance=()=>{
+    if(finished) return;
+    if(index>=INTRO_LINES.length-1){
+      finish();
+      return;
+    }
+    index++;
+    render();
+  };
+
+  const keyAdvance=event=>{
+    if(event.repeat) return;
+    if(event.code==="Space"||event.code==="Enter"){
+      event.preventDefault();
+      advance();
+    }
+  };
+
+  render();
+  overlay.addEventListener("click",advance);
+  document.addEventListener("keydown",keyAdvance);
+  introCleanup=cleanup;
 }
 function runIntro(saved=null){
   startStory("exterior");
@@ -303,7 +377,7 @@ function openTool(kind){
 }
 $("#new-story").addEventListener("click",()=>{
   writeSave("exterior",{chapter:0,chapterIntroSeen:false,openingSeen:false,dialogueProgress:null,decorationQuest:null,answeredDecorationChoices:[],outsideDialogue:null,arrivalSeen:false,doorInvited:false});
-  runIntro();
+  runPrologue();
 });
 $("#continue-story").addEventListener("click",()=>{
   const save=readSave();
