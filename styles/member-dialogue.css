@@ -8,6 +8,7 @@
 .room-character:focus-visible{outline:2px dashed #fafff3;outline-offset:6px;border-radius:16px}
 .member-dialogue-ui{position:absolute;inset:0;z-index:65;pointer-events:none;--member-accent:#5e9a50;--member-light:#bfdfb3;--member-outline:#25304d}
 .member-dialogue-ui[data-speaker="rader"]{--member-accent:#bd636d;--member-light:#f0c1c5}
+.member-dialogue-ui[data-speaker="dreamer"]{--member-accent:#818ec0;--member-light:#dce2f7}
 .dialogue-portrait{position:absolute;left:10%;bottom:108px;height:min(74dvh,790px);aspect-ratio:428/1656;pointer-events:none}
 .dialogue-bottom{position:absolute;left:50%;bottom:108px;transform:translateX(-50%);width:min(1040px,86vw);display:flex;flex-direction:column;gap:20px;align-items:center}
 .subtitle-bar{position:relative;display:grid;grid-template-columns:auto 3px 1fr 20px;align-items:center;gap:20px;width:100%;min-height:166px;padding:28px 24px;background:#f7f8fc;border:4px solid var(--member-accent);outline:3px solid var(--member-outline);border-radius:23px;color:#141c28;box-shadow:0 6px 0 #25304d29;cursor:pointer;pointer-events:auto;text-align:left}
@@ -18,6 +19,12 @@
 .subtitle-cue{font-size:21px;color:var(--member-outline);align-self:end;line-height:1.4}
 .subtitle-bar:disabled .subtitle-cue{visibility:hidden}
 .member-motif{position:absolute;width:69px;height:53px;left:14px;top:-46px;z-index:-1}
+.member-dialogue-ui[data-speaker="dreamer"] .subtitle-bar{grid-template-columns:20px 1fr 3px auto}
+.member-dialogue-ui[data-speaker="dreamer"] .subtitle-name{grid-column:4;grid-row:1}
+.member-dialogue-ui[data-speaker="dreamer"] .subtitle-divider{grid-column:3;grid-row:1}
+.member-dialogue-ui[data-speaker="dreamer"] .subtitle-text{grid-column:2;grid-row:1}
+.member-dialogue-ui[data-speaker="dreamer"] .subtitle-cue{grid-column:1;grid-row:1}
+.member-dialogue-ui[data-speaker="dreamer"] .member-motif{left:auto;right:14px}
 .dialogue-choices{display:grid;gap:10px;width:min(520px,100%);pointer-events:auto}
 .dialogue-choices button{padding:14px 24px;border:2px solid var(--member-outline);border-radius:14px;background:#f7f8fc;color:#25304d;font-family:inherit;font-size:17px;font-weight:650;line-height:1.5;box-shadow:0 4px 0 #25304d20;cursor:pointer;word-break:keep-all}
 .dialogue-choices button:hover{background:#e9f3e4;border-color:var(--member-accent)}
@@ -40,6 +47,8 @@
   .subtitle-text{font-size:17px;line-height:1.65;text-align:left}
   .subtitle-cue{font-size:16px}
   .member-motif{width:51px;height:40px;top:-33px;left:9px}
+  .member-dialogue-ui[data-speaker="dreamer"] .subtitle-bar{grid-template-columns:10px 1fr 3px auto}
+  .member-dialogue-ui[data-speaker="dreamer"] .member-motif{right:9px}
   .dialogue-choices{gap:8px}
   .dialogue-choices button{padding:12px 15px;font-size:15px}
   .interruption{left:auto;right:6%;top:14%;width:58vw}

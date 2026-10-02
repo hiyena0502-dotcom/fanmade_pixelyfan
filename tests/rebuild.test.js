@@ -91,7 +91,7 @@ test('chapter leads into the full opening, then a chosen reply starts the record
   assert.equal(app.save().chapterIntroSeen,true);
   assert.equal(app.node('#dialogue-text').textContent,'어, 왔네?');
   assert.notEqual(app.save().decorationQuest,'accepted');
-  for(let i=0;i<17;i++) app.click('#dialogue-next');
+  for(let i=0;i<18;i++) app.click('#dialogue-next');
   assert.equal(app.node('#dialogue-choices').hidden,false);
   assert.equal(app.node('#dialogue-choices').children.length,3);
   app.node('#dialogue-choices').children[2].click();
@@ -111,7 +111,7 @@ test('chapter leads into the full opening, then a chosen reply starts the record
   assert.equal(app.node('#story-dialogue-ui').hidden,true);
   assert.equal(app.scenes[2].inert,false);
   app.click('#talk-gongryong');
-  assert.equal(app.node('#dialogue-text').textContent,'어차피 집 좀 둘러볼 거지?');
+  assert.equal(app.node('#dialogue-text').textContent,'왜, 벌써 찾았어?');
 });
 
 test('invalid saves and unavailable storage cannot prevent starting a playable story',()=>{
@@ -183,7 +183,7 @@ test('entry waits for image decoding, prevents duplicate entry, and recovers whe
 
 test('interruptions preserve the main subtitle and resume at the exact line',()=>{
   const app=boot({scene:'living-room',chapterIntroSeen:true});app.click('#continue-story');
-  for(let i=0;i<7;i++) app.click('#dialogue-next');
+  for(let i=0;i<8;i++) app.click('#dialogue-next');
   assert.equal(app.node('#dialogue-interruption').hidden,false);
   assert.equal(app.node('#dialogue-interruption').dataset.member,'deokgae');
   assert.equal(app.node('#interruption-text').textContent,'야, 정형준!');
@@ -193,6 +193,47 @@ test('interruptions preserve the main subtitle and resume at the exact line',()=
   resumed.click('#interruption-next');
   assert.equal(resumed.node('#dialogue-interruption').hidden,true);
   assert.equal(resumed.node('#dialogue-text').textContent,'왜!');
+});
+
+test('Dreamer speaks between Gongryong lines and old saves retain their original line',()=>{
+  const app=boot({scene:'living-room',chapterIntroSeen:true});app.click('#continue-story');
+  for(let i=0;i<5;i++) app.click('#dialogue-next');
+  assert.equal(app.node('#dialogue-text').textContent,'아니, 요정들한테 생일 장식 몇 개 맡겨놨거든? 근데 아직 하나도 안 왔어!!');
+  app.click('#dialogue-next');
+  assert.equal(app.node('#dialogue-speaker').textContent,'꿈뜰이');
+  assert.equal(app.node('#story-dialogue-ui').dataset.speaker,'dreamer');
+  assert.equal(app.node('#dialogue-text').textContent,'요정분들도 아직 안 오신 거예요?');
+  const resumed=boot(app.save());resumed.click('#continue-story');
+  assert.equal(resumed.node('#dialogue-speaker').textContent,'꿈뜰이');
+  resumed.click('#dialogue-next');
+  assert.equal(resumed.node('#dialogue-text').textContent,'요정들은 뭐… 알아서 오겠지.');
+  const old=boot({scene:'living-room',chapterIntroSeen:true,dialogueProgress:{phase:'opening',index:7,choice:null}});
+  old.click('#continue-story');
+  assert.equal(old.node('#interruption-text').textContent,'야, 정형준!');
+  const migrated=boot(old.save());migrated.click('#continue-story');
+  assert.equal(migrated.node('#interruption-text').textContent,'야, 정형준!');
+});
+
+test('talking again shows all three follow-up lines, resumes, and then offers choices',()=>{
+  const app=boot({scene:'living-room',chapterIntroSeen:true,openingSeen:true,decorationQuest:'accepted'});
+  app.click('#continue-story');app.click('#talk-gongryong');
+  assert.equal(app.node('#dialogue-text').textContent,'왜, 벌써 찾았어?');
+  assert.equal(app.node('#dialogue-choices').hidden,true);
+  app.click('#dialogue-next');
+  const resumed=boot(app.save());resumed.click('#continue-story');
+  assert.equal(resumed.node('#dialogue-text').textContent,'아니면 어디 있는지 물어보려고?');
+  resumed.click('#dialogue-next');
+  assert.equal(resumed.node('#dialogue-text').textContent,'나도 몰라~ 그러니까 부탁한 거지.');
+  assert.equal(resumed.node('#dialogue-choices').hidden,true);
+  resumed.click('#dialogue-next');
+  const picking=boot(resumed.save());picking.click('#continue-story');
+  assert.equal(picking.node('#dialogue-text').textContent,'나도 몰라~ 그러니까 부탁한 거지.');
+  assert.equal(picking.node('#dialogue-choices').children.length,3);
+  picking.node('#dialogue-choices').children[1].click();
+  picking.click('#dialogue-next');picking.click('#dialogue-next');
+  assert.equal(picking.node('#story-dialogue-ui').hidden,true);
+  assert.equal(picking.scenes[2].inert,false);
+  assert.equal(picking.save().decorationQuest,'accepted');
 });
 
 test('each choice response resumes and completes once without revealing fairy locations',()=>{
@@ -276,7 +317,7 @@ test('room placement and conversation portrait are separate, and only Deokgae in
   assert.equal(app.node('#dialogue-portrait').hidden,true);
   app.click('#dialogue-next');
   assert.equal(app.node('#dialogue-portrait').hidden,false);
-  for(let i=0;i<4;i++) app.click('#dialogue-next');
+  for(let i=0;i<5;i++) app.click('#dialogue-next');
   assert.equal(app.node('#dialogue-interruption').dataset.member,'deokgae');
   assert.equal(app.node('#dialogue-interruption').hidden,false);
   assert.equal(app.node('#dialogue-portrait').hidden,false);

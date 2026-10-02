@@ -3,6 +3,7 @@ const $=q=>document.querySelector(q);
 const gongryong=text=>({member:"gongryong",text});
 const rader=text=>({member:"rader",text});
 const deokgae=text=>({member:"deokgae",text});
+const dreamer=text=>({member:"dreamer",text});
 // User-approved dialogue. Directions are expressed through the presentation.
 const opening=[
   gongryong("어, 왔네?"),
@@ -11,6 +12,7 @@ const opening=[
   gongryong("쓸 수 있는 사람이 필요하다고."),
   rader("와."),
   gongryong("아니, 요정들한테 생일 장식 몇 개 맡겨놨거든? 근데 아직 하나도 안 왔어!!"),
+  dreamer("요정분들도 아직 안 오신 거예요?"),
   gongryong("요정들은 뭐… 알아서 오겠지."),
   deokgae("야, 정형준!"),
   gongryong("왜!"),
@@ -22,6 +24,11 @@ const opening=[
   gongryong("어차피 집 좀 둘러볼 거지?"),
   gongryong("돌아다니다가 요정들 보이면 장식만 좀 받아와 줄 수 있어?"),
   gongryong("이미 다 준비는 해놨다는데, 왜 아무도 안 갖다주는지는 나도 몰라.")
+];
+const repeatOpening=[
+  gongryong("왜, 벌써 찾았어?"),
+  gongryong("아니면 어디 있는지 물어보려고?"),
+  gongryong("나도 몰라~ 그러니까 부탁한 거지.")
 ];
 const choices=[
   {label:"어떤 장식인데요?",lines:[
@@ -40,27 +47,32 @@ const choices=[
 const members={
   gongryong:{name:"공룡",portrait:"assets/characters/gongryong-placeholder.png"},
   rader:{name:"라더",portrait:null},
-  deokgae:{name:"덕개",portrait:null}
+  deokgae:{name:"덕개",portrait:null},
+  dreamer:{name:"꿈뜰이",portrait:null}
 };
 const ui=$("#story-dialogue-ui");
 let state=null,onProgress=()=>{},onComplete=()=>{};
 function normalize(saved){
-  if(!saved||!["opening","choices","reply"].includes(saved.phase)) return {phase:"opening",index:0,choice:null};
-  if(saved.phase==="choices") return {phase:"choices",index:0,choice:null};
+  if(!saved||!["opening","repeat","choices","reply"].includes(saved.phase)) return {phase:"opening",index:0,choice:null};
+  if(saved.phase==="choices") return {phase:"choices",index:0,choice:null,repeat:Boolean(saved.repeat)};
   const choice=Number.isInteger(saved.choice)&&choices[saved.choice]?saved.choice:null;
-  const lines=saved.phase==="opening"?opening:choices[choice]?.lines;
-  if(!lines||!Number.isInteger(saved.index)||saved.index<0||saved.index>=lines.length) return {phase:"opening",index:0,choice:null};
-  return {phase:saved.phase,index:saved.index,choice};
+  const lines=saved.phase==="opening"?opening:saved.phase==="repeat"?repeatOpening:choices[choice]?.lines;
+  // Keep pre-insertion saves on the same line, including kitchen interruptions.
+  let index=saved.index;
+  if(saved.phase==="opening"&&saved.revision!==2&&index>=6&&index<17) index++;
+  if(!lines||!Number.isInteger(index)||index<0||index>=lines.length) return {phase:"opening",index:0,choice:null};
+  return {phase:saved.phase,index,choice};
 }
-function snapshot(){return {...state}}
+function snapshot(){return {...state,revision:2}}
 function lastMain(){
   if(state.phase==="opening") return opening.slice(0,state.index+1).filter(l=>l.member!=="deokgae").at(-1);
+  if(state.phase==="repeat") return repeatOpening[state.index];
   if(state.phase==="reply") return choices[state.choice].lines.slice(0,state.index+1).filter(l=>l.member!=="deokgae").at(-1)||opening.at(-1);
-  return opening.at(-1);
+  return state.repeat?repeatOpening.at(-1):opening.at(-1);
 }
 function render(){
   const picking=state.phase==="choices";
-  const line=picking?null:(state.phase==="opening"?opening:choices[state.choice].lines)[state.index];
+  const line=picking?null:(state.phase==="opening"?opening:state.phase==="repeat"?repeatOpening:choices[state.choice].lines)[state.index];
   const interruption=!picking&&line.member==="deokgae";
   const mainLine=lastMain(),member=members[mainLine.member];
   ui.dataset.speaker=mainLine.member;
@@ -99,15 +111,15 @@ function render(){
 }
 function advance(){
   if(!state||state.phase==="choices") return;
-  const lines=state.phase==="opening"?opening:choices[state.choice].lines;
+  const lines=state.phase==="opening"?opening:state.phase==="repeat"?repeatOpening:choices[state.choice].lines;
   if(state.index+1<lines.length) state.index++;
-  else if(state.phase==="opening") state={phase:"choices",index:0,choice:null};
+  else if(state.phase==="opening"||state.phase==="repeat") state={phase:"choices",index:0,choice:null,repeat:state.phase==="repeat"};
   else {close();onComplete();return}
   onProgress(snapshot());render();
 }
 function close(){ui.hidden=true;$("#dialogue-portrait").hidden=true;state=null;$("#dialogue-interruption").hidden=true;$("#dialogue-choices").hidden=true}
 function open({saved=null,repeat=false,progress=()=>{},complete=()=>{}}={}){
-  state=normalize(saved||(repeat?{phase:"opening",index:14}:null));
+  state=normalize(saved||(repeat?{phase:"repeat",index:0}:null));
   onProgress=progress;onComplete=complete;
   ui.hidden=false;onProgress(snapshot());render();
   if(state.phase!=="choices") $("#dialogue-next").focus({preventScroll:true});

@@ -310,8 +310,6 @@ button{color:inherit}
 .chapter-card.is-active .chapter-glint{animation:chapter-glint 1.2s .95s ease both}
 .chapter-card.is-leaving{opacity:0;transform:translateY(-6px) scale(1.025);transition:opacity 1.6s ease-in-out,transform 1.6s ease-out}
 .story-frame.chapter-playing .minimal-hud,.story-frame.chapter-playing .scene-back-arrow{visibility:visible}
-/* Leave the table-side character clear of the chapter panel on wide screens. */
-@media(min-width:800px){.story-frame[data-scene="living-room"] .chapter-emblem{left:10vw}}
 @keyframes chapter-impact{from{opacity:1;transform:scale(1.35) translateY(8px)}70%{opacity:1;transform:scale(.995)}to{opacity:1;transform:scale(1)}}
 @keyframes chapter-caption{from{opacity:1;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 @keyframes chapter-ornament{from{opacity:.95;transform:scale(.78) rotate(-8deg)}to{opacity:.95;transform:scale(1) rotate(0)}}
