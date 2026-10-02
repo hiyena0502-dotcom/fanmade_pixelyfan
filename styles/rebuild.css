@@ -168,18 +168,18 @@ button{color:inherit}
   width:max(100%,calc(100dvh * 16 / 9));aspect-ratio:16 / 9;
 }
 .door-closeup-stage{width:max(100%,calc(100dvh * 1672 / 941));aspect-ratio:1672 / 941}
-.exterior-stage{width:max(100%,calc(100dvh * 2048 / 1339));aspect-ratio:2048 / 1339;background:#8ed9f9;isolation:isolate}
+.exterior-stage{width:min(100%,calc(100dvh * 2047 / 1200));aspect-ratio:2047 / 1200;background:#8ed9f9;isolation:isolate}
 .exterior-layers{position:absolute;inset:0;pointer-events:none}
 .exterior-layer{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:fill;pointer-events:none}
-.exterior-cloud{animation:exterior-cloud-flow var(--cloud-duration,160s) linear infinite;animation-delay:var(--cloud-delay,0s)}
+.exterior-cloud{height:calc(100% * 1339 * 2047 / 2048 / 1200);animation:exterior-cloud-flow var(--cloud-duration,160s) linear infinite;animation-delay:var(--cloud-delay,0s)}
 .exterior-scene[hidden] .exterior-cloud{animation-play-state:paused}
-[data-exterior-layer="foreground-bushes"]{transform:translateY(-9%) scale(1.18)}
+[data-exterior-layer="foreground-bushes"]{transform:none}
 @keyframes exterior-cloud-flow{from{transform:translate(var(--cloud-start,130%),var(--cloud-y,0%))}to{transform:translate(var(--cloud-end,-170%),var(--cloud-y,0%))}}
-@media(prefers-reduced-motion:reduce){:root:not([data-game-motion="full"]) .exterior-cloud{animation:none;transform:none}}
+@media(prefers-reduced-motion:reduce){:root:not([data-game-motion="full"]) .exterior-cloud{height:calc(100% * 1339 * 2047 / 2048 / 1200);animation:none;transform:none}}
 .exterior-stage>.scene-art,.door-closeup-art{display:block;width:100%;height:100%;object-fit:cover}
 .living-room-art{position:absolute;inset:0;transform:none;filter:none;animation:none}
 .hotspot{position:absolute;z-index:8;border:0;padding:0;background:transparent;cursor:pointer}
-.hotspot-door{left:46.6%;top:58.2%;width:5.4%;height:14.2%}
+.hotspot-door{left:47%;top:57.5%;width:5%;height:12.5%}
 .hotspot-door-closeup{left:38%;top:20.2%;width:23.2%;height:61.8%}
 .hotspot:focus-visible{outline:2px solid var(--ui-accent);outline-offset:4px;border-radius:8px}
 .game-frame-ui{display:none}
@@ -381,9 +381,9 @@ button{color:inherit}
 .active-quest{position:absolute;left:24px;bottom:26px;z-index:12;max-width:calc(100% - 250px);margin:0;padding:10px 16px;background:#ffffffe0;border-radius:12px;color:#524956;font-size:13px;pointer-events:none}
 .active-quest:empty,.is-busy .active-quest{display:none}
 .story-frame[data-scene="living-room"] .active-quest{bottom:78px}
-.inspect-birdhouse{left:70%;top:54%;width:5%;height:20%}
-.inspect-pot{left:42%;top:67%;width:5%;height:6%}
-.inspect-garden{left:64%;top:78%;width:28%;height:9%}
+.inspect-birdhouse{left:67%;top:55%;width:5.5%;height:17%}
+.inspect-pot{left:44.5%;top:67%;width:4%;height:5.5%}
+.inspect-garden{left:62%;top:74%;width:25%;height:10%}
 .exterior-inspect:hover{filter:none;box-shadow:0 0 14px #fff5;border-radius:16px}
 .story-frame[data-door-effect="knock"] .door-closeup-art{animation:door-knock .5s ease-in-out}
 .story-frame[data-door-effect="crash"] .door-closeup-art{animation:door-knock .3s ease-in-out}
@@ -396,3 +396,5 @@ button{color:inherit}
 .door-opening-leaf{position:absolute;inset:0;overflow:hidden;border-radius:inherit;transform-origin:right center;animation:door-leaf-open .65s ease-in-out both}
 .door-opening-leaf img{position:absolute;width:434.8%;height:163.9%;max-width:none;left:-166.1%;top:-33.3%}
 @keyframes door-leaf-open{to{transform:rotateY(-85deg)}}
+
+.exterior-scene{background:#181e29}
