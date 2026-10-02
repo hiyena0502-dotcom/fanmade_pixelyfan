@@ -78,7 +78,10 @@ function render(){
   ui.dataset.speaker=mainLine.member;
   $("#dialogue-text").textContent=mainLine.text;
   $("#dialogue-speaker").textContent=member.name;
-  document.querySelectorAll("[data-motif]").forEach(motif=>{motif.hidden=motif.dataset.motif!==mainLine.member});
+  document.querySelectorAll("[data-motif]").forEach(motif=>{
+    if(motif.dataset.motif===mainLine.member) motif.removeAttribute("hidden");
+    else motif.setAttribute("hidden","");
+  });
   const portrait=$("#dialogue-portrait"),image=$("#dialogue-portrait-image");
   portrait.hidden=!member.portrait;
   if(member.portrait){

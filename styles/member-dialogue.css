@@ -19,6 +19,7 @@
 .subtitle-cue{font-size:21px;color:var(--member-outline);align-self:end;line-height:1.4}
 .subtitle-bar:disabled .subtitle-cue{visibility:hidden}
 .member-motif{position:absolute;width:69px;height:53px;left:14px;top:-46px;z-index:-1}
+[data-motif][hidden]{display:none}
 .member-dialogue-ui[data-speaker="dreamer"] .subtitle-bar{grid-template-columns:20px 1fr 3px auto}
 .member-dialogue-ui[data-speaker="dreamer"] .subtitle-name{grid-column:4;grid-row:1}
 .member-dialogue-ui[data-speaker="dreamer"] .subtitle-divider{grid-column:3;grid-row:1}
