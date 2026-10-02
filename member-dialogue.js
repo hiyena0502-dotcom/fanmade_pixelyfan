@@ -29,7 +29,13 @@ const choices=[
   {label:"요정분들은 어디 계세요?",lines:[gongryong("그걸 알았으면 내가 갔다 왔지."),rader("진짜 당당하다.")]},
   {label:"결국 제가 찾으러 가는 거네요.",lines:[gongryong("그렇게 말하면 되게 시킨 것 같잖아!"),gongryong("…집 구경도 하고. 장식도 받고. 얼마나 좋아~")]}
 ];
-const names={gongryong:"공룡",rader:"라더",deokgae:"덕개"};
+// Room placement and conversation portraits are independent assets. Replace here only
+// to change the conversation image; the room image lives in index.html.
+const members={
+  gongryong:{name:"공룡",portrait:"assets/characters/gongryong-placeholder.png"},
+  rader:{name:"라더",portrait:null},
+  deokgae:{name:"덕개",portrait:null}
+};
 const ui=$("#story-dialogue-ui");
 let state=null,onProgress=()=>{},onComplete=()=>{};
 function normalize(saved){
@@ -42,22 +48,31 @@ function normalize(saved){
 }
 function snapshot(){return {...state}}
 function lastMain(){
-  if(state.phase==="opening") return opening.slice(0,state.index+1).filter(l=>l.member==="gongryong").at(-1);
-  if(state.phase==="reply") return choices[state.choice].lines.slice(0,state.index+1).filter(l=>l.member==="gongryong").at(-1)||opening.at(-1);
+  if(state.phase==="opening") return opening.slice(0,state.index+1).filter(l=>l.member!=="deokgae").at(-1);
+  if(state.phase==="reply") return choices[state.choice].lines.slice(0,state.index+1).filter(l=>l.member!=="deokgae").at(-1)||opening.at(-1);
   return opening.at(-1);
 }
 function render(){
   const picking=state.phase==="choices";
   const line=picking?null:(state.phase==="opening"?opening:choices[state.choice].lines)[state.index];
-  const interruption=!picking&&line.member!=="gongryong";
-  $("#dialogue-text").textContent=lastMain().text;
-  $("#dialogue-speaker").textContent=names.gongryong;
+  const interruption=!picking&&line.member==="deokgae";
+  const mainLine=lastMain(),member=members[mainLine.member];
+  ui.dataset.speaker=mainLine.member;
+  $("#dialogue-text").textContent=mainLine.text;
+  $("#dialogue-speaker").textContent=member.name;
+  document.querySelectorAll("[data-motif]").forEach(motif=>{motif.hidden=motif.dataset.motif!==mainLine.member});
+  const portrait=$("#dialogue-portrait"),image=$("#dialogue-portrait-image");
+  portrait.hidden=!member.portrait;
+  if(member.portrait){
+    if(image.getAttribute("src")!==member.portrait) image.src=member.portrait;
+    image.alt="대화 중인 "+member.name;
+  }
   $("#dialogue-next").disabled=picking;
   $("#dialogue-next").setAttribute("aria-label",picking?"대답을 선택해 주세요":"다음 대사");
   $("#dialogue-interruption").hidden=!interruption;
   if(interruption){
     $("#dialogue-interruption").dataset.member=line.member;
-    $("#interruption-name").textContent=names[line.member];
+    $("#interruption-name").textContent=members[line.member].name;
     $("#interruption-place").textContent=line.member==="deokgae"?"주방 쪽에서":"";
     $("#interruption-text").textContent=line.text;
   }
@@ -84,7 +99,7 @@ function advance(){
   else {close();onComplete();return}
   onProgress(snapshot());render();
 }
-function close(){ui.hidden=true;state=null;$("#dialogue-interruption").hidden=true;$("#dialogue-choices").hidden=true}
+function close(){ui.hidden=true;$("#dialogue-portrait").hidden=true;state=null;$("#dialogue-interruption").hidden=true;$("#dialogue-choices").hidden=true}
 function open({saved=null,repeat=false,progress=()=>{},complete=()=>{}}={}){
   state=normalize(saved||(repeat?{phase:"opening",index:14}:null));
   onProgress=progress;onComplete=complete;

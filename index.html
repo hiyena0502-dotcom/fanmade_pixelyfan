@@ -10,12 +10,12 @@
   <link rel="preload" as="image" href="assets/home/home-bg.png?v=85" />
   <link rel="preload" as="image" href="assets/story/chapter1/living-room.webp?v=90" />
   <link rel="preload" as="image" href="assets/story/chapter1/house-wide-v108.png" />
-  <link rel="stylesheet" href="styles/rebuild.css?v=123" />
-  <link rel="stylesheet" href="styles/member-dialogue.css?v=124" />
+  <link rel="stylesheet" href="styles/rebuild.css?v=125" />
+  <link rel="stylesheet" href="styles/member-dialogue.css?v=125" />
   <link rel="stylesheet" href="styles/game-interaction.css?v=121" />
   <script src="game-interaction.js?v=121" defer></script>
-  <script src="member-dialogue.js?v=123" defer></script>
-  <script src="rebuild.js?v=123" defer></script>
+  <script src="member-dialogue.js?v=125" defer></script>
+  <script src="rebuild.js?v=125" defer></script>
 </head>
 <body>
   <main class="rebuild-root">
@@ -116,6 +116,9 @@
         </section>
 
         <section class="member-dialogue-ui" id="story-dialogue-ui" data-speaker="gongryong" hidden aria-label="공룡과 대화">
+          <div class="dialogue-portrait" id="dialogue-portrait" hidden>
+            <span class="character-crop"><img id="dialogue-portrait-image" src="assets/characters/gongryong-placeholder.png" data-member-image="gongryong" alt="대화 중인 공룡" draggable="false" /></span>
+          </div>
           <aside class="interruption" id="dialogue-interruption" data-member="deokgae" hidden aria-live="polite" aria-atomic="true">
             <button type="button" id="interruption-next" aria-label="다음 대사">
               <span class="interruption-name" id="interruption-name"></span>
@@ -127,9 +130,14 @@
             <div class="dialogue-choices" id="dialogue-choices" role="group" aria-label="대답 선택" hidden></div>
             <button type="button" class="subtitle-bar" id="dialogue-next" aria-label="다음 대사">
               <svg class="member-motif" viewBox="0 0 76 58" fill="none" aria-hidden="true">
+                <g data-motif="gongryong">
                 <path d="m13 34 4-15 12 6 9-19 10 18 13-4 4 17" fill="#d7df78" stroke="#25304d" stroke-width="4" stroke-linejoin="round"/>
                 <path d="M9 56c-1-18 11-31 28-31 18 0 30 12 31 31" fill="#8fbe69" stroke="#25304d" stroke-width="4"/>
                 <path d="M23 43h6m19 0h6" stroke="#25304d" stroke-width="4" stroke-linecap="round"/>
+                </g>
+                <g data-motif="rader" hidden>
+                  <path d="M8 54c8-8 15-9 23-9 1-13 7-24 18-35-1 17 4 25 11 34l9 10" fill="#e99b9d" stroke="#25304d" stroke-width="4" stroke-linejoin="round" />
+                </g>
               </svg>
               <span class="subtitle-name" id="dialogue-speaker">공룡</span>
               <span class="subtitle-divider" aria-hidden="true"></span>

@@ -20,7 +20,7 @@ function boot(saved,{failStorage=false}={}){
         classList:{add(...values){values.forEach(v=>classes.add(v))},remove(...values){values.forEach(v=>classes.delete(v))},toggle(v,on){on?classes.add(v):classes.delete(v)},contains(v){return classes.has(v)}},
         addEventListener(name,fn){this.listeners[name]=fn},removeEventListener(name){delete this.listeners[name]},
         appendChild(child){this.children.push(child);this.childElementCount++},replaceChildren(){this.children=[]},
-        setAttribute(name,value){this[name]=value},focus(){document.activeElement=this},click(){this.listeners.click?.({})},
+        getAttribute(name){return this[name]??null},setAttribute(name,value){this[name]=value},focus(){document.activeElement=this},click(){this.listeners.click?.({})},
         querySelector(sel){return sel==='button'?this.children[0]:node(sel)},
         querySelectorAll(){
           if(selector==='#dialogue-choices') return this.children;
@@ -203,8 +203,10 @@ test('each choice response resumes and completes once without revealing fairy lo
     assert.equal(resumed.save().dialogueProgress.choice,choice);
     resumed.key({code:'Space',key:' ',preventDefault(){}});
     if(choice===1){
-      assert.equal(resumed.node('#interruption-text').textContent,'진짜 당당하다.');
-      assert.equal(resumed.node('#dialogue-interruption').dataset.member,'rader');
+      assert.equal(resumed.node('#dialogue-text').textContent,'진짜 당당하다.');
+      assert.equal(resumed.node('#dialogue-speaker').textContent,'라더');
+      assert.equal(resumed.node('#story-dialogue-ui').dataset.speaker,'rader');
+      assert.equal(resumed.node('#dialogue-interruption').hidden,true);
     }
     resumed.click('#dialogue-next');
     assert.equal(resumed.save().decorationQuest,'accepted');
@@ -225,4 +227,26 @@ test('invalid dialogue progress restarts safely, and a new story clears the prev
   assert.equal(app.save().decorationQuest,null);
   assert.equal(app.save().openingSeen,false);
   assert.equal(app.node('#story-dialogue-ui').hidden,true);
+});
+
+
+test('room placement and conversation portrait are separate, and only Deokgae interrupts',()=>{
+  const app=boot({scene:'living-room',chapterIntroSeen:true});app.click('#continue-story');
+  assert.equal(app.node('#dialogue-portrait').hidden,false);
+  assert.equal(app.node('#dialogue-portrait-image').src,'assets/characters/gongryong-placeholder.png');
+  app.click('#dialogue-next');app.click('#dialogue-next');
+  assert.equal(app.node('#dialogue-speaker').textContent,'라더');
+  assert.equal(app.node('#dialogue-text').textContent,'사람은 많은데?');
+  assert.equal(app.node('#story-dialogue-ui').dataset.speaker,'rader');
+  assert.equal(app.node('#dialogue-interruption').hidden,true);
+  assert.equal(app.node('#dialogue-portrait').hidden,true);
+  app.click('#dialogue-next');
+  assert.equal(app.node('#dialogue-portrait').hidden,false);
+  for(let i=0;i<4;i++) app.click('#dialogue-next');
+  assert.equal(app.node('#dialogue-interruption').dataset.member,'deokgae');
+  assert.equal(app.node('#dialogue-interruption').hidden,false);
+  assert.equal(app.node('#dialogue-portrait').hidden,false);
+  const html=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');
+  assert.match(html,/id="talk-gongryong"/);
+  assert.match(html,/id="dialogue-portrait-image"/);
 });
