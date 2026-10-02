@@ -168,10 +168,13 @@ button{color:inherit}
   width:max(100%,calc(100dvh * 16 / 9));aspect-ratio:16 / 9;
 }
 .door-closeup-stage{width:max(100%,calc(100dvh * 1672 / 941));aspect-ratio:1672 / 941}
+.exterior-stage{width:max(100%,calc(100dvh * 2048 / 1339));aspect-ratio:2048 / 1339;background:#8ed9f9;isolation:isolate}
+.exterior-layers{position:absolute;inset:0;pointer-events:none}
+.exterior-layer{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:fill;pointer-events:none}
 .exterior-stage>.scene-art,.door-closeup-art{display:block;width:100%;height:100%;object-fit:cover}
 .living-room-art{position:absolute;inset:0;transform:none;filter:none;animation:none}
 .hotspot{position:absolute;z-index:8;border:0;padding:0;background:transparent;cursor:pointer}
-.hotspot-door{left:46.8%;top:56.2%;width:5.8%;height:16.6%}
+.hotspot-door{left:46.6%;top:58.2%;width:5.4%;height:14.2%}
 .hotspot-door-closeup{left:38%;top:20.2%;width:23.2%;height:61.8%}
 .hotspot:focus-visible{outline:2px solid var(--ui-accent);outline-offset:4px;border-radius:8px}
 .game-frame-ui{display:none}
