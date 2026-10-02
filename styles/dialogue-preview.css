@@ -1,0 +1,8 @@
+html,body{margin:0;width:100%;height:100%;font-family:"Pretendard","Noto Sans KR",system-ui,sans-serif;background:#292321}
+.preview-header{position:absolute;inset:22px 28px auto;display:flex;align-items:center;justify-content:space-between;gap:16px;z-index:70;pointer-events:none}
+.preview-back,.preview-label{padding:12px 17px;border:1px solid #fff8e640;border-radius:12px;background:#231c22bd;color:#fff6e6;font-size:12px;text-decoration:none;line-height:1.5}
+.preview-back{pointer-events:auto}
+.preview-back:hover{background:#231c22e6}
+.preview-back:focus-visible{outline:3px solid #c1dc96;outline-offset:4px}
+.preview-label{font-size:11px;letter-spacing:.04em}
+@media(max-width:600px){.preview-header{inset:14px 14px auto;gap:8px}.preview-back,.preview-label{padding:9px 11px;font-size:10px}}

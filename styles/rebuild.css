@@ -1,0 +1,417 @@
+:root{
+  color-scheme:dark;
+  --ink:#f3ead7;
+  --ink-dark:#1e2335;
+  --muted:#9ba8c5;
+  --gold:#e2bf72;
+  --gold-soft:#f2dcaa;
+  --navy:#111a31;
+  --navy-2:#1b2948;
+  --plum:#332642;
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;font-family:"Pretendard","Noto Sans KR",system-ui,sans-serif;background:#0d1427;color:var(--ink)}
+button,a{font:inherit}
+button{color:inherit}
+[hidden]{display:none!important}
+.rebuild-root,.screen{width:100%;min-height:100vh}
+.screen{position:relative;overflow:hidden}
+
+/* HOME — supplied winter illustration as the full-screen title artwork. */
+.home-screen{
+  min-height:100vh;
+  background:#c9ddf6;
+}
+.home-illustration-slot{
+  position:absolute;
+  inset:0;
+  background-image:url("../assets/home/home-bg.png?v=85");
+  background-size:cover;
+  background-position:center center;
+  background-repeat:no-repeat;
+  transform:none;
+}
+.home-illustration-slot::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,transparent 0 49%,rgba(255,247,236,.04) 60%,rgba(70,100,154,.10) 100%),
+    linear-gradient(180deg,rgba(255,255,255,.02),transparent 66%,rgba(61,86,130,.06));
+}
+/* The title's transparent canvas is framed separately from the visible artwork. */
+.home-copy{
+  position:absolute;z-index:2;inset:0 3.5vw 0 auto;
+  width:min(860px,52vw);height:100dvh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:clamp(18px,2.8dvh,30px);text-align:center;pointer-events:none;
+}
+.home-title{
+  position:relative;flex:none;display:block;
+  width:min(620px,100%,calc(46dvh * 1469 / 838));
+  aspect-ratio:1469 / 838;margin:0;overflow:hidden;
+}
+.home-title img{
+  position:absolute;display:block;
+  /* 16 source pixels around the alpha bounds keep the artwork edges clear. */
+  left:-20.6263%;top:-41.2888%;width:139.4146%;height:auto;
+  max-width:none;max-height:none;object-fit:contain;filter:none;
+}
+.home-menu{
+  pointer-events:auto;display:grid;gap:12px;
+  width:min(390px,100%);margin:0;
+}
+.title-menu-item{
+  position:relative;
+  display:grid;
+  grid-template-columns:24px 1fr auto;
+  align-items:center;
+  gap:9px;
+  min-height:56px;
+  padding:9px 18px 9px 15px;
+  border:1px solid rgba(255,255,255,.67);
+  border-radius:999px;
+  background:linear-gradient(90deg,rgba(255,250,240,.78),rgba(245,250,255,.65));
+  box-shadow:0 5px 14px rgba(61,81,122,.12),inset 0 1px 0 rgba(255,255,255,.9);
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+  text-decoration:none;
+  color:#465a82;
+  text-align:left;
+  cursor:pointer;
+  text-shadow:0 1px 0 rgba(255,255,255,.78);
+  transition:transform .16s ease,background .16s ease,box-shadow .16s ease,color .16s ease,opacity .16s ease;
+}
+.title-menu-item .menu-mark{
+  color:#ee909d;
+  font-size:14px;
+  opacity:.7;
+  transition:transform .16s ease,opacity .16s ease;
+}
+.title-menu-item strong{
+  font-size:18px;
+  font-weight:780;
+  letter-spacing:-.025em;
+}
+.title-menu-item small{
+  font-size:8px;
+  letter-spacing:.15em;
+  color:#8695b2;
+}
+.title-menu-item:disabled{
+  opacity:.43;
+  cursor:not-allowed;
+}
+@media(hover:hover){
+  .title-menu-item:not(:disabled):hover{
+    transform:translateY(-2px) scale(1.015);
+    color:#304c7d;
+    background:linear-gradient(90deg,rgba(255,247,239,.93),rgba(239,248,255,.86));
+    box-shadow:0 8px 19px rgba(60,81,124,.17),inset 0 1px 0 rgba(255,255,255,.95);
+  }
+  .title-menu-item:not(:disabled):hover .menu-mark{
+    opacity:1;
+    transform:rotate(16deg) scale(1.08);
+  }
+}
+@media(max-width:980px){
+  .home-illustration-slot{background-position:36% center}
+  .home-illustration-slot::after{
+    background:linear-gradient(180deg,transparent 0 38%,rgba(239,247,255,.48) 66%,rgba(230,240,253,.88) 100%);
+  }
+  .home-copy{
+    inset:0;width:100%;height:100dvh;
+    padding:24px 20px max(28px,7dvh);justify-content:flex-end;gap:20px;
+  }
+  .home-title{width:min(560px,100%,calc(40dvh * 1469 / 838))}
+  .title-menu-item{min-height:45px}
+}
+@media(max-width:560px){
+  .home-illustration-slot{background-position:31% center}
+  .home-copy{padding:20px 20px max(24px,5dvh);gap:18px}
+  .home-menu{gap:10px}
+  .title-menu-item strong{font-size:16px}
+  .title-menu-item small{display:none}
+}
+
+/* Home composition is unchanged; snowfall uses fewer, unpromoted layers. */
+.home-illustration-slot{background-position:center!important}
+.home-snow{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none}
+.home-snow i{
+  position:absolute;left:var(--snow-x);top:-24px;width:var(--snow-size);height:var(--snow-size);
+  border-radius:50%;background:#fff;opacity:var(--snow-opacity);
+  animation:snowfall var(--snow-duration) linear var(--snow-delay) infinite;
+}
+.home-screen[hidden] .home-snow i{animation-play-state:paused}
+@keyframes snowfall{to{transform:translate3d(var(--snow-drift),105dvh,0)}}
+@media(max-height:600px) and (min-width:561px){
+  .home-copy{inset:0 3.5vw 0 auto;width:52vw;height:100dvh;padding:12px 0;justify-content:center;gap:14px}
+  .home-title{width:min(620px,100%,calc(42dvh * 1469 / 838))}
+  .home-menu{width:min(350px,100%);gap:8px}
+  .home-menu .title-menu-item{min-height:42px;padding:7px 14px}
+}
+
+/* A restrained warm palette over full-bleed artwork. */
+.story-screen{
+  --ui-ink:#49424d;--ui-muted:#8a828b;--ui-paper:#fffaf6;--ui-accent:#a88b6d;
+  --ui-line:#73667726;--ui-shadow:0 8px 26px #4a3e4918;
+  padding:0;background:#211e26;color:var(--ui-ink);
+}
+.rebuild-root img{-webkit-user-drag:none;user-select:none}
+.story-frame{position:relative;width:100%;height:100dvh;overflow:hidden;background:#211e26}
+.scene{position:absolute;inset:0;overflow:hidden}
+.scene-art{display:block;width:100%;height:100%;object-fit:cover;object-position:center}
+.exterior-scene,.door-closeup-scene{background:#c6e5f5}
+.scene-art-stage,.door-closeup-stage{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:max(100%,calc(100dvh * 16 / 9));aspect-ratio:16 / 9;
+}
+.door-closeup-stage{width:max(100%,calc(100dvh * 1671 / 941));aspect-ratio:1671 / 941}
+.exterior-stage{width:max(100%,calc(100dvh * 2047 / 1200));aspect-ratio:2047 / 1200;background:#8ed9f9;isolation:isolate}
+.exterior-layers{position:absolute;inset:0;pointer-events:none}
+.exterior-layer{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:fill;pointer-events:none}
+.exterior-cloud{height:calc(100% * 1339 * 2047 / 2048 / 1200);animation:exterior-cloud-flow var(--cloud-duration,160s) linear infinite;animation-delay:var(--cloud-delay,0s)}
+.exterior-scene[hidden] .exterior-cloud{animation-play-state:paused}
+[data-exterior-layer="foreground-bushes"]{transform:scaleY(1.65);transform-origin:center bottom}
+@keyframes exterior-cloud-flow{from{transform:translate(var(--cloud-start,130%),var(--cloud-y,0%))}to{transform:translate(var(--cloud-end,-170%),var(--cloud-y,0%))}}
+@media(prefers-reduced-motion:reduce){:root:not([data-game-motion="full"]) .exterior-cloud{height:calc(100% * 1339 * 2047 / 2048 / 1200);animation:none;transform:none}}
+.exterior-stage>.scene-art,.door-closeup-art{display:block;width:100%;height:100%;object-fit:cover}
+.living-room-art{position:absolute;inset:0;transform:none;filter:none;animation:none}
+.hotspot{position:absolute;z-index:8;border:0;padding:0;background:transparent;cursor:pointer}
+.hotspot-door{left:47%;top:57.5%;width:5%;height:12.5%}
+.hotspot-door-closeup{left:39%;top:20.2%;width:21.6%;height:60.3%}
+.hotspot:focus-visible{outline:2px solid var(--ui-accent);outline-offset:4px;border-radius:8px}
+.game-frame-ui{display:none}
+
+/* Date, empty inventory presentation, and the bottom tool dock. */
+.minimal-hud{position:absolute;inset:0;z-index:30;pointer-events:none}
+.hud-date{
+  position:absolute;left:24px;top:24px;display:flex;align-items:center;gap:16px;
+  padding:15px 20px;min-height:66px;max-width:calc(100% - 100px);
+  border:1px solid #fffaf4;border-radius:15px;
+  background:#fffaf6ed;box-shadow:var(--ui-shadow);color:var(--ui-ink);
+}
+.hud-date-stamp{padding-right:16px;border-right:1px solid var(--ui-line);font-size:16px;font-weight:650;letter-spacing:.04em;white-space:nowrap}
+.hud-place-copy{display:grid;gap:4px}
+.hud-place-copy small{font-size:8px;letter-spacing:.18em;color:var(--ui-muted)}
+.hud-place-copy strong{font-size:14px;font-weight:650;letter-spacing:-.03em}
+.inventory-rack{
+  position:absolute;right:24px;top:50%;transform:translateY(-50%);
+  display:grid;grid-template-columns:48px;gap:8px;padding:15px 10px 11px;
+  border:1px solid #fffcf4;border-radius:16px;background:#fffaf6eb;box-shadow:var(--ui-shadow);
+}
+.inventory-rack>span{font-size:9px;text-align:center;color:var(--ui-muted);letter-spacing:.09em;margin-bottom:3px}
+.inventory-rack i{display:block;width:48px;height:48px;border:1px solid var(--ui-line);border-radius:10px;background:#a69cad12}
+.hud-tools{position:absolute;right:24px;bottom:24px;display:flex;gap:8px;pointer-events:auto}
+.object-tool{
+  display:grid;place-items:center;grid-template-rows:1fr auto;gap:7px;
+  width:60px;height:62px;padding:10px 7px 8px;border:1px solid #fffaf3;border-radius:14px;
+  background:#fffaf6ed;box-shadow:var(--ui-shadow);color:var(--ui-ink);cursor:pointer;
+  transition:transform .15s ease,background-color .15s ease;
+}
+.object-tool small{font-size:10px;letter-spacing:.02em;color:var(--ui-ink)}
+.object-tool:disabled{opacity:.5;cursor:default}
+.tool-icon{position:relative;display:block;margin:0;color:var(--ui-ink)}
+.tool-icon--bag{width:21px;height:16px;margin-top:5px;border:1.6px solid currentColor;border-radius:4px 4px 5px 5px}
+.tool-icon--bag::before{content:"";position:absolute;left:5px;right:5px;top:-7px;height:7px;border:1.6px solid currentColor;border-bottom:0;border-radius:6px 6px 0 0}
+.tool-icon--bag::after{content:"";position:absolute;left:5px;right:5px;top:5px;height:1px;background:currentColor;opacity:.6}
+.tool-icon--diary{width:18px;height:22px;border:1.6px solid currentColor;border-radius:2px 4px 4px 2px}
+.tool-icon--diary::before{content:"";position:absolute;left:6px;right:3px;top:6px;height:1px;background:currentColor;box-shadow:0 4px 0 currentColor,0 8px 0 currentColor;opacity:.65}
+.tool-icon--diary::after{content:"";position:absolute;left:3px;top:0;bottom:0;width:1px;background:currentColor;opacity:.5}
+.tool-icon--menu{width:20px;height:15px;border-top:1.6px solid currentColor;border-bottom:1.6px solid currentColor}
+.tool-icon--menu::before{content:"";position:absolute;left:0;right:0;top:5px;height:1.6px;background:currentColor}
+.scene-back-arrow{
+  position:absolute;z-index:25;left:24px;bottom:24px;display:flex;align-items:center;justify-content:center;gap:8px;
+  width:88px;height:48px;padding:8px;border:1px solid #fffaf4;border-radius:24px;
+  color:var(--ui-ink);background:#fffaf6ed;box-shadow:var(--ui-shadow);cursor:pointer;
+}
+.scene-back-arrow span{font-family:Georgia,serif;font-size:26px;line-height:1}
+.scene-back-arrow small{font-size:11px;letter-spacing:.02em}
+.story-frame.is-busy .minimal-hud,.story-frame.is-busy .scene-back-arrow{pointer-events:none}
+
+/* A single backdrop consumes dismissal clicks before they reach the scene. */
+.panel-backdrop{position:absolute;inset:0;z-index:90;background:#211b260d;cursor:default}
+.choice-sheet,.menu-sheet,.tool-sheet{
+  position:absolute;z-index:100;border:1px solid #fffdf7;border-radius:20px;
+  background:var(--ui-paper);box-shadow:0 16px 48px #4b354829;color:var(--ui-ink);
+}
+.choice-sheet{left:50%;bottom:108px;transform:translateX(-50%);width:min(440px,calc(100% - 32px));padding:26px}
+.choice-sheet p{margin:0 0 21px;text-align:center;font-size:17px;font-weight:650;letter-spacing:-.03em}
+.choice-sheet>div{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.choice-sheet button,.menu-sheet>button{
+  min-height:46px;padding:11px 15px;border:1px solid var(--ui-line);border-radius:11px;
+  background:#f1eceb;color:var(--ui-ink);font-size:13px;cursor:pointer;
+  transition:background-color .15s ease;
+}
+.choice-sheet #enter-house{background:#625669;color:#fffcf3;border-color:#625669}
+.menu-sheet{right:24px;bottom:104px;width:min(300px,calc(100% - 48px));padding:24px}
+.menu-sheet header{margin-bottom:18px}
+.menu-sheet header strong{font-size:18px;font-weight:650;letter-spacing:-.04em}
+.menu-sheet>button{display:block;width:100%;margin-top:9px;text-align:left}
+.tool-sheet{left:50%;top:50%;transform:translate(-50%,-50%);width:min(520px,calc(100% - 40px));max-height:75dvh;overflow:auto;padding:32px}
+.tool-sheet header{border-bottom:1px solid var(--ui-line);padding-bottom:18px;margin-bottom:26px}
+.tool-sheet h2{font-size:22px;letter-spacing:-.04em;font-weight:650;margin:0}
+.tool-sheet #tool-content{min-height:110px}
+.tool-sheet #tool-content p{font-size:15px;line-height:1.8;color:var(--ui-muted);margin:0}
+.panel-hint,.tool-sheet .panel-hint{margin:22px 0 0;font-size:10px;color:#9c909c;letter-spacing:.02em;text-align:center}
+.menu-sheet:focus,.tool-sheet:focus{outline:none}
+.object-tool:focus-visible,.scene-back-arrow:focus-visible,.choice-sheet button:focus-visible,.menu-sheet>button:focus-visible{outline:2px solid var(--ui-accent);outline-offset:4px}
+@media(hover:hover){
+  .object-tool:not(:disabled):hover{transform:translateY(-2px);background:#fffefa}
+  .choice-sheet button:hover,.menu-sheet>button:hover{background:#e9e1e4}
+  .choice-sheet #enter-house:hover{background:#766781}
+}
+
+/* Intro and entry use opacity layers; scene bitmaps are never filtered. */
+.intro-monologue{position:absolute;inset:0;z-index:120;display:grid;place-items:center;background:#1c1b21;opacity:1;transition:opacity .65s ease}
+.intro-monologue-box{max-width:640px;padding:30px;text-align:center}
+.intro-monologue p{font-size:clamp(18px,2vw,24px);line-height:1.9;letter-spacing:-.04em;color:#ede7df;opacity:0;transition:opacity .2s ease}
+.intro-monologue p.is-visible{opacity:1}
+.intro-monologue::after{content:"클릭하여 계속";position:absolute;bottom:9%;font-size:10px;letter-spacing:.08em;color:#9c969f}
+.story-frame.intro-reveal .intro-monologue{opacity:0;pointer-events:none}
+.house-entry-transition{position:absolute;inset:0;z-index:115;background:transparent;opacity:0;transition:opacity .16s ease;pointer-events:none}
+.house-entry-transition.is-active{opacity:1}
+.entry-vignette{display:none}
+
+/* Shared chapter reveal: vector ornament, typography and compositor-only motion. */
+.chapter-card{
+  --chapter-gold:#ffe1a1;--chapter-light:#fff6df;
+  position:absolute;inset:0;z-index:120;display:grid;place-items:center;
+  overflow:hidden;background:transparent;color:var(--chapter-light);opacity:0;
+  transition:opacity 1.4s ease-in-out;
+  pointer-events:none;
+}
+.chapter-card.is-active{opacity:1}
+.chapter-emblem{
+  width:min(600px,88vw);display:flex;flex-direction:column;align-items:center;position:relative;
+  padding:28px 20px 24px;border:1px solid #ffe1a155;border-radius:22px;
+  background:linear-gradient(145deg,#201923e0,#100c15cc);
+  box-shadow:0 18px 60px #10081359,inset 0 1px 0 #fff2ce12;
+}
+.chapter-kicker{display:flex;align-items:center;gap:18px;color:var(--chapter-gold);font:500 11px/1.5 Georgia,serif;letter-spacing:.42em;padding-left:.42em;opacity:1;text-shadow:0 2px 6px #211710}
+.chapter-kicker span{display:block;width:40px;height:1px;background:linear-gradient(90deg,transparent,var(--chapter-gold))}
+.chapter-kicker span:last-child{transform:rotate(180deg)}
+.chapter-crest{position:relative;width:min(460px,76vw,58dvh);aspect-ratio:460/280;display:grid;place-items:center;margin:12px 0 22px}
+.chapter-halo{position:absolute;inset:-16%;background:radial-gradient(ellipse,#ffe2a426 0%,#edb95812 32%,transparent 65%);opacity:.8;border-radius:50%}
+.chapter-ornament{position:absolute;inset:0;width:100%;height:100%;color:var(--chapter-gold);opacity:.95}
+.chapter-orbits{stroke-width:1.4}
+.chapter-laurels{stroke-width:1.8}
+.chapter-number{
+  position:relative;font-family:Georgia,"Times New Roman",serif;font-size:clamp(70px,15dvh,150px);
+  font-weight:400;line-height:1;letter-spacing:-.04em;padding-right:.04em;opacity:1;
+  color:var(--chapter-light);text-shadow:0 2px 1px #6d431d,0 4px 14px #241708a6,0 0 30px #f4ce8d55;
+}
+.chapter-title{
+  max-width:100%;margin:0;text-align:center;text-wrap:balance;font-family:"Noto Serif KR",Georgia,serif;
+  font-size:clamp(28px,4vw,48px);font-weight:600;line-height:1.5;letter-spacing:.16em;padding-left:.16em;
+  color:#fff5de;text-shadow:0 2px 3px #302015,0 5px 16px #261d14c2;opacity:1;
+}
+.chapter-flourish{width:min(460px,76vw);height:36px;margin-top:16px;color:var(--chapter-gold);opacity:.95}
+.chapter-glint{position:absolute;top:16%;right:28%;width:10px;height:10px;background:#fff7d9;clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%);opacity:0}
+.chapter-card.is-active .chapter-kicker{animation:chapter-caption .8s .05s ease both}
+.chapter-card.is-active .chapter-halo{animation:chapter-halo 2.5s .05s ease both}
+.chapter-card.is-active .chapter-ornament{animation:chapter-ornament 1.5s .12s cubic-bezier(.16,.8,.25,1) both}
+.chapter-card.is-active .chapter-number{animation:chapter-impact 1.35s .22s cubic-bezier(.12,.72,.22,1) both}
+.chapter-card.is-active .chapter-title{animation:chapter-caption 1.2s .55s cubic-bezier(.16,.8,.25,1) both}
+.chapter-card.is-active .chapter-flourish{animation:chapter-flourish 1.3s .7s cubic-bezier(.16,.8,.25,1) both}
+.chapter-card.is-active .chapter-glint{animation:chapter-glint 1.2s .95s ease both}
+.chapter-card.is-leaving{opacity:0;transform:translateY(-6px) scale(1.025);transition:opacity 1.6s ease-in-out,transform 1.6s ease-out}
+.story-frame.chapter-playing .minimal-hud,.story-frame.chapter-playing .scene-back-arrow{visibility:visible}
+@keyframes chapter-impact{from{opacity:1;transform:scale(1.35) translateY(8px)}70%{opacity:1;transform:scale(.995)}to{opacity:1;transform:scale(1)}}
+@keyframes chapter-caption{from{opacity:1;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes chapter-ornament{from{opacity:.95;transform:scale(.78) rotate(-8deg)}to{opacity:.95;transform:scale(1) rotate(0)}}
+@keyframes chapter-flourish{from{opacity:.9;transform:scaleX(.4)}to{opacity:.9;transform:scaleX(1)}}
+@keyframes chapter-halo{0%{opacity:0;transform:scale(.65)}55%{opacity:1;transform:scale(1.05)}100%{opacity:.8;transform:scale(1)}}
+@keyframes chapter-glint{0%,100%{opacity:0;transform:scale(.2) rotate(0)}40%{opacity:1;transform:scale(1.8) rotate(80deg)}70%{opacity:.6;transform:scale(1) rotate(120deg)}}
+.toast{position:fixed;z-index:150;left:50%;bottom:24px;transform:translate(-50%,12px);opacity:0;pointer-events:none;max-width:calc(100% - 32px);padding:12px 20px;border-radius:14px;background:#524956;color:#fff9e9;font-size:13px;line-height:1.5;transition:opacity .18s ease,transform .18s ease}
+.toast.is-visible{opacity:1;transform:translate(-50%,0)}
+
+@media(max-width:560px){
+  .hud-date{left:12px;top:14px;padding:12px 15px;gap:12px;min-height:60px}
+  .hud-date-stamp{font-size:14px;padding-right:12px}
+  .hud-place-copy small{display:none}
+  .hud-place-copy strong{font-size:13px}
+  .inventory-rack{right:12px;grid-template-columns:40px;padding:12px 8px 9px;gap:6px;border-radius:14px}
+  .inventory-rack i{width:40px;height:40px;border-radius:8px}
+  .hud-tools{right:12px;bottom:16px;gap:6px}
+  .object-tool{width:50px;height:56px;padding:9px 5px 7px;border-radius:12px}
+  .scene-back-arrow{left:12px;bottom:16px;width:78px;height:46px}
+  .choice-sheet{bottom:94px;padding:23px 20px}
+  .choice-sheet p{font-size:16px}
+  .choice-sheet>div{grid-template-columns:1fr}
+  .menu-sheet{right:12px;bottom:92px;width:min(300px,calc(100% - 24px))}
+  .tool-sheet{padding:26px;max-height:70dvh}
+  .chapter-kicker{font-size:9px;gap:12px}
+  .chapter-emblem{width:90vw;padding:24px 12px 20px;border-radius:18px}
+  .chapter-crest{margin-bottom:16px}
+  .chapter-title{font-size:28px}
+  .chapter-flourish{margin-top:10px}
+}
+@media(max-height:500px){
+  .inventory-rack{top:44%;grid-template-columns:32px;gap:5px;padding:9px 8px}
+  .inventory-rack i{width:32px;height:32px}
+  .chapter-crest{width:min(330px,64dvh);margin:6px 0 10px}
+  .chapter-emblem{padding-top:16px;padding-bottom:12px}
+  .chapter-number{font-size:clamp(58px,18dvh,90px)}
+  .chapter-title{font-size:25px}
+  .chapter-flourish{height:24px;margin-top:6px}
+}
+@media(prefers-reduced-motion:reduce){:root:not([data-game-motion="full"]) .home-snow i{animation:none;display:none}:root:not([data-game-motion="full"]) .chapter-card,:root:not([data-game-motion="full"]) .house-entry-transition,:root:not([data-game-motion="full"]) .intro-monologue,:root:not([data-game-motion="full"]) .toast,:root:not([data-game-motion="full"]) .object-tool{transition:none}:root:not([data-game-motion="full"]) .chapter-card.is-active .chapter-emblem>*,:root:not([data-game-motion="full"]) .chapter-card.is-active .chapter-crest>*{animation:none;opacity:1;transform:none}:root:not([data-game-motion="full"]) .chapter-card.is-active .chapter-glint{display:none}:root:not([data-game-motion="full"]) .chapter-card.is-leaving{transition:none;transform:none}
+}
+
+/* Snow reaches the ground at 78%, then settles and dissolves before recycling. */
+.scene-snow{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.scene-snow i{position:absolute;left:var(--flake-x);top:-8px;width:var(--flake-size);height:var(--flake-ground);pointer-events:none}
+.scene-snow b{position:absolute;inset:0;animation:scene-snowfall var(--flake-duration) linear var(--flake-delay) infinite;opacity:0}
+.scene-snow b::before{content:"";position:absolute;left:0;top:0;width:100%;height:var(--flake-size);background:#fff;border-radius:50%;opacity:var(--flake-opacity);box-shadow:0 0 3px #ffffff60}
+.scene[hidden] .scene-snow b{animation-play-state:paused}
+.window-snow{inset:44% 35% 32% 32%;opacity:.65;clip-path:polygon(0 0,30% 0,30% 43%,0 43%,0 49%,30% 49%,30% 100%,34% 100%,34% 49%,65% 49%,65% 100%,69% 100%,69% 49%,100% 49%,100% 43%,69% 43%,69% 0,65% 0,65% 43%,34% 43%,34% 0)}
+@keyframes scene-snowfall{0%{transform:translate3d(0,0,0);opacity:0}8%{opacity:1}78%{transform:translate3d(var(--flake-drift),100%,0);opacity:1}100%{transform:translate3d(var(--flake-drift),100%,0);opacity:0}}
+.choice-sheet:not([hidden]),.menu-sheet:not([hidden]),.tool-sheet:not([hidden]){animation:panel-arrive .25s ease-out both}
+@keyframes panel-arrive{from{opacity:0;translate:0 10px}to{opacity:1;translate:0 0}}
+.scene-back-arrow,.story-tools button{transition:translate .18s ease,box-shadow .18s ease}
+.scene-back-arrow:hover,.story-tools button:hover{translate:0 -3px}
+@media(prefers-reduced-motion:reduce){:root:not([data-game-motion="full"]) .scene-snow{display:none}:root:not([data-game-motion="full"]) .choice-sheet,:root:not([data-game-motion="full"]) .menu-sheet,:root:not([data-game-motion="full"]) .tool-sheet{animation:none!important}:root:not([data-game-motion="full"]) .scene-back-arrow,:root:not([data-game-motion="full"]) .story-tools button{transition:none;translate:none}}
+
+/* Explicit in-game off switch, independent of the operating-system setting. */
+:root[data-game-motion="reduced"] *, :root[data-game-motion="reduced"] *::before{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+:root[data-game-motion="reduced"] .scene-snow,:root[data-game-motion="reduced"] .home-snow{display:none}
+.menu-sheet button:disabled{opacity:.45;cursor:default}
+.active-quest{position:absolute;left:24px;top:108px;bottom:auto;z-index:12;max-width:min(340px,calc(100% - 48px));margin:0;padding:10px 16px;background:#ffffffe0;border-radius:12px;color:#524956;font-size:13px;pointer-events:none}
+.active-quest:empty,.is-busy .active-quest{display:none}
+.exterior-stage>.exterior-inspect{display:none;pointer-events:none}
+.inspect-birdhouse{left:67%;top:55%;width:5.5%;height:17%}
+.inspect-pot{left:44.5%;top:67%;width:4%;height:5.5%}
+.inspect-garden{left:62%;top:74%;width:25%;height:10%}
+.exterior-inspect:hover{filter:none;box-shadow:0 0 14px #fff5;border-radius:16px}
+.story-frame[data-door-effect="knock"] .door-closeup-art{animation:door-knock .5s ease-in-out}
+.story-frame[data-door-effect="crash"] .door-closeup-art{animation:door-knock .3s ease-in-out}
+.house-entering .door-closeup-art{animation:door-enter .7s .2s ease-in both}
+@keyframes door-knock{0%,100%{translate:0 0}25%,75%{translate:2px 0}50%{translate:-2px 0}}
+@keyframes door-enter{to{transform:scale(1.08);opacity:0}}
+
+.door-opening{display:none;position:absolute;left:39%;top:20.2%;width:21.6%;height:60.3%;border-radius:50% 50% 0 0 / 33% 33% 0 0;background:linear-gradient(100deg,#201612,#62432a);overflow:hidden;pointer-events:none;perspective:800px}
+.house-entering .door-opening{display:block}
+.door-opening-leaf{position:absolute;inset:0;overflow:hidden;border-radius:inherit;transform-origin:right center;animation:door-leaf-open .65s ease-in-out both}
+.door-opening-leaf>img{position:absolute;width:462.963%;height:165.837%;max-width:none;left:-180.556%;top:-33.499%}
+@keyframes door-leaf-open{to{transform:rotateY(-85deg)}}
+
+.exterior-scene{background:#181e29}
+
+.door-sign{position:absolute;left:40%;top:27.85%;width:20%;pointer-events:none}
+.door-sign img{display:block;width:100%;height:auto;transform-origin:50% 9.5%;animation:door-sign-sway 5s ease-in-out infinite;filter:drop-shadow(0 3px 2px #65432530)}
+.door-closeup-scene[hidden] .door-sign img{animation-play-state:paused}
+.story-frame[data-door-effect="crash"] .door-sign img{animation:door-sign-crash 1.4s ease-out both}
+.house-entering .door-closeup-stage>.door-sign{visibility:hidden}
+.door-opening-leaf .door-sign{left:4.63%;top:12.687%;width:92.593%}
+@keyframes door-sign-sway{0%,100%{transform:rotate(-1.5deg)}50%{transform:rotate(1.5deg)}}
+@keyframes door-sign-crash{0%,100%{transform:rotate(0deg)}12%{transform:rotate(-14deg)}28%{transform:rotate(12deg)}44%{transform:rotate(-8deg)}60%{transform:rotate(5deg)}76%{transform:rotate(-3deg)}90%{transform:rotate(1deg)}}
+
+.exterior-decoration{position:absolute;inset:0;pointer-events:none}
+.exterior-decoration img{display:block;width:100%;height:100%;object-fit:fill}
+.exterior-sign img{transform-origin:49.45% 59.5%;animation:exterior-sign-sway 5.5s ease-in-out infinite}
+.birdhouse-character img{transform-origin:69.25% 55.5%;animation:birdhouse-character-bob 3.6s ease-in-out infinite}
+.exterior-scene[hidden] .exterior-decoration img{animation-play-state:paused}
+@keyframes exterior-sign-sway{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+@keyframes birdhouse-character-bob{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-3px) rotate(1.5deg)}}
