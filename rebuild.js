@@ -28,6 +28,21 @@ function buildHomeSnow(){
 }
 buildHomeSnow();
 
+// Move the original cloud canvases completely across the scene, then re-enter.
+const cloudBounds=[[46,399],[1238,1653],[1323,1610],[95,633],[1508,2008],[518,1066]];
+document.querySelectorAll(".exterior-cloud").forEach((cloud,index)=>{
+  const [left,right]=cloudBounds[index];
+  const randomize=()=>{
+    cloud.style.setProperty("--cloud-start",(-right/2048*100-4)+"%");
+    cloud.style.setProperty("--cloud-end",(104-left/2048*100)+"%");
+    cloud.style.setProperty("--cloud-duration",(130+Math.random()*80)+"s");
+    cloud.style.setProperty("--cloud-y",((Math.random()-.5)*3)+"%");
+  };
+  randomize();
+  cloud.style.setProperty("--cloud-delay",(-Math.random()*130)+"s");
+  cloud.addEventListener("animationiteration",()=>cloud.style.setProperty("--cloud-y",((Math.random()-.5)*3)+"%"));
+});
+
 document.querySelectorAll("img").forEach(img=>{img.draggable=false});
 document.addEventListener("dragstart",event=>{
   if(event.target instanceof HTMLImageElement) event.preventDefault();
@@ -272,10 +287,13 @@ function beginGongryongDialogue(){
   window.PixelyDialogue.open({
     saved:save?.dialogueProgress,
     repeat:Boolean(save?.openingSeen),
+    answeredChoices:save?.answeredDecorationChoices,
     progress:dialogueProgress=>writeSave("living-room",{dialogueProgress}),
-    complete:()=>{
+    complete:({choice})=>{
       const newlyAccepted=readSave()?.decorationQuest!=="accepted";
-      writeSave("living-room",{openingSeen:true,dialogueProgress:null,decorationQuest:"accepted"});
+      const previous=readSave()?.answeredDecorationChoices;
+      const answeredDecorationChoices=[...new Set([...(Array.isArray(previous)?previous:[]),choice])].filter(value=>Number.isInteger(value)&&value>=0&&value<3);
+      writeSave("living-room",{openingSeen:true,dialogueProgress:null,decorationQuest:"accepted",answeredDecorationChoices});
       setBusy(false);
       $("#talk-gongryong").focus({preventScroll:true});
       if(newlyAccepted) toast("공룡에게 부탁받은 생일 장식 찾기");
@@ -295,7 +313,7 @@ function openTool(kind){
   openPanel("#tool-sheet",kind==="bag"?"#bag-button":"#diary-button");
 }
 $("#new-story").addEventListener("click",()=>{
-  writeSave("exterior",{chapter:0,chapterIntroSeen:false,openingSeen:false,dialogueProgress:null,decorationQuest:null});
+  writeSave("exterior",{chapter:0,chapterIntroSeen:false,openingSeen:false,dialogueProgress:null,decorationQuest:null,answeredDecorationChoices:[]});
   runIntro();
 });
 $("#continue-story").addEventListener("click",()=>{

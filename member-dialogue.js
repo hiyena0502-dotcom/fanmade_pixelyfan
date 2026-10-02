@@ -52,6 +52,7 @@ const members={
 };
 const ui=$("#story-dialogue-ui");
 let state=null,onProgress=()=>{},onComplete=()=>{};
+let readChoices=new Set();
 function normalize(saved){
   if(!saved||!["opening","repeat","choices","reply"].includes(saved.phase)) return {phase:"opening",index:0,choice:null};
   if(saved.phase==="choices") return {phase:"choices",index:0,choice:null,repeat:Boolean(saved.repeat)};
@@ -103,6 +104,8 @@ function render(){
     choices.forEach((choice,index)=>{
       const button=document.createElement("button");
       button.type="button";button.textContent=choice.label;
+      button.classList.toggle("is-read",readChoices.has(index));
+      if(readChoices.has(index)) button.setAttribute("aria-label",choice.label+" (이미 읽은 대화)");
       button.addEventListener("click",()=>{
         state={phase:"reply",index:0,choice:index};
         onProgress(snapshot());render();$("#dialogue-next").focus({preventScroll:true});
@@ -117,11 +120,12 @@ function advance(){
   const lines=state.phase==="opening"?opening:state.phase==="repeat"?repeatOpening:choices[state.choice].lines;
   if(state.index+1<lines.length) state.index++;
   else if(state.phase==="opening"||state.phase==="repeat") state={phase:"choices",index:0,choice:null,repeat:state.phase==="repeat"};
-  else {close();onComplete();return}
+  else {const choice=state.choice;close();onComplete({choice});return}
   onProgress(snapshot());render();
 }
 function close(){ui.hidden=true;$("#dialogue-portrait").hidden=true;state=null;$("#dialogue-interruption").hidden=true;$("#dialogue-choices").hidden=true}
-function open({saved=null,repeat=false,progress=()=>{},complete=()=>{}}={}){
+function open({saved=null,repeat=false,answeredChoices=[],progress=()=>{},complete=()=>{}}={}){
+  readChoices=new Set((Array.isArray(answeredChoices)?answeredChoices:[]).filter(choice=>Number.isInteger(choice)&&choices[choice]));
   state=normalize(saved||(repeat?{phase:"repeat",index:0}:null));
   onProgress=progress;onComplete=complete;
   ui.hidden=false;onProgress(snapshot());render();

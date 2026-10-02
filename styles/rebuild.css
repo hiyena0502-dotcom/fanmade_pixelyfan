@@ -171,15 +171,10 @@ button{color:inherit}
 .exterior-stage{width:max(100%,calc(100dvh * 2048 / 1339));aspect-ratio:2048 / 1339;background:#8ed9f9;isolation:isolate}
 .exterior-layers{position:absolute;inset:0;pointer-events:none}
 .exterior-layer{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:fill;pointer-events:none}
-.exterior-cloud{animation:exterior-cloud-drift var(--cloud-duration,70s) ease-in-out infinite alternate;animation-delay:var(--cloud-delay,0s)}
-.exterior-cloud--1{--cloud-duration:64s;--cloud-drift:2.4%;--cloud-delay:-12s}
-.exterior-cloud--2{--cloud-duration:82s;--cloud-drift:-3%;--cloud-delay:-28s}
-.exterior-cloud--3{--cloud-duration:72s;--cloud-drift:2%;--cloud-delay:-19s}
-.exterior-cloud--4{--cloud-duration:90s;--cloud-drift:3.2%;--cloud-delay:-34s}
-.exterior-cloud--5{--cloud-duration:78s;--cloud-drift:-2.6%;--cloud-delay:-16s}
-.exterior-cloud--6{--cloud-duration:86s;--cloud-drift:2.8%;--cloud-delay:-41s}
+.exterior-cloud{animation:exterior-cloud-flow var(--cloud-duration,160s) linear infinite;animation-delay:var(--cloud-delay,0s)}
 .exterior-scene[hidden] .exterior-cloud{animation-play-state:paused}
-@keyframes exterior-cloud-drift{from{transform:translateX(0)}to{transform:translateX(var(--cloud-drift,2.5%))}}
+[data-exterior-layer="foreground-bushes"]{transform:translateY(-9%)}
+@keyframes exterior-cloud-flow{from{transform:translate(var(--cloud-start,-110%),var(--cloud-y,0%))}to{transform:translate(var(--cloud-end,110%),var(--cloud-y,0%))}}
 @media(prefers-reduced-motion:reduce){.exterior-cloud{animation:none;transform:none}}
 .exterior-stage>.scene-art,.door-closeup-art{display:block;width:100%;height:100%;object-fit:cover}
 .living-room-art{position:absolute;inset:0;transform:none;filter:none;animation:none}

@@ -294,6 +294,22 @@ test('decoration details keep the supplied six lines and resume at Rader before 
   assert.equal(resumed.node('#story-dialogue-ui').hidden,true);
 });
 
+test('finished choices stay marked across reloads, remain clickable, and reset with a new story',()=>{
+  const app=boot({scene:'living-room',chapterIntroSeen:true,dialogueProgress:{phase:'choices',index:0,choice:null}});
+  app.click('#continue-story');app.node('#dialogue-choices').children[1].click();
+  assert.equal(app.save().answeredDecorationChoices,undefined);
+  app.click('#dialogue-next');app.click('#dialogue-next');
+  assert.deepEqual(app.save().answeredDecorationChoices,[1]);
+  const resumed=boot(app.save());resumed.click('#continue-story');resumed.click('#talk-gongryong');
+  for(let i=0;i<3;i++) resumed.click('#dialogue-next');
+  assert.equal(resumed.node('#dialogue-choices').children[1].classList.contains('is-read'),true);
+  assert.equal(resumed.node('#dialogue-choices').children[0].classList.contains('is-read'),false);
+  resumed.node('#dialogue-choices').children[1].click();
+  assert.equal(resumed.node('#dialogue-text').textContent,'그걸 알았으면 내가 갔다 왔지.');
+  resumed.click('#new-story');
+  assert.deepEqual(resumed.save().answeredDecorationChoices,[]);
+});
+
 test('invalid dialogue progress restarts safely, and a new story clears the previous quest and branch',()=>{
   const app=boot({scene:'living-room',chapterIntroSeen:true,openingSeen:true,decorationQuest:'accepted',dialogueProgress:{phase:'reply',choice:99,index:400}});
   app.click('#continue-story');assert.equal(app.node('#dialogue-text').textContent,'어, 왔네?');
