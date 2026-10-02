@@ -1,6 +1,6 @@
 /* Portraits share the background's cover coordinate system. */
 .living-room-stage{position:absolute;left:50%;top:50%;width:max(100%,calc(100dvh * 1672 / 941));height:max(100%,calc(100vw * 941 / 1672));transform:translate(-50%,-50%)}
-.room-character{position:absolute;left:31%;bottom:6.5%;height:54%;width:auto;aspect-ratio:428/1656;padding:0;border:0;background:transparent;cursor:pointer;z-index:9;color:#25304d}
+.room-character{position:absolute;left:31%;bottom:7.2%;height:54%;width:auto;aspect-ratio:428/1656;padding:0;border:0;background:transparent;cursor:pointer;z-index:9;color:#25304d}
 .character-crop{position:relative;display:block;height:100%;aspect-ratio:428/1656;overflow:hidden}
 .character-crop img{position:absolute;left:var(--portrait-left,-145.327%);top:var(--portrait-top,-13.768%);width:var(--portrait-width,386.916%);height:var(--portrait-height,123.671%);max-width:none;object-fit:fill;display:block}
 .character-label{position:absolute;left:50%;top:-36px;transform:translateX(-50%);padding:5px 14px;background:#f9faf7;color:#25304d;border:2px solid #57864c;border-radius:12px;white-space:nowrap;font-size:13px;font-weight:750;opacity:0;pointer-events:none}
@@ -20,7 +20,7 @@
 .dialogue-choices button{padding:14px 24px;border:2px solid var(--member-outline);border-radius:14px;background:#f7f8fc;color:#25304d;font-family:inherit;font-size:17px;font-weight:650;line-height:1.5;box-shadow:0 4px 0 #25304d20;cursor:pointer;word-break:keep-all}
 .dialogue-choices button:hover{background:#e9f3e4;border-color:var(--member-accent)}
 .subtitle-bar:focus-visible,.dialogue-choices button:focus-visible,.interruption button:focus-visible{outline:3px solid #fff;box-shadow:0 0 0 6px var(--member-outline)}
-.interruption{position:absolute;left:7%;top:31%;width:min(370px,33vw);pointer-events:auto;--bubble-accent:#ecb464;--bubble-ink:#f2a956}
+.interruption{position:absolute;left:7%;top:18%;width:min(370px,33vw);pointer-events:auto;--bubble-accent:#ecb464;--bubble-ink:#f2a956}
 .interruption[data-member="rader"]{left:auto;right:11%;top:35%;--bubble-accent:#cb7373;--bubble-ink:#ee8383}
 .interruption button{position:relative;display:block;width:100%;padding:17px 24px 23px;border:4px solid #25304d;outline:2px solid #fff7ee;border-radius:8px;background:#f7f8fc;box-shadow:0 8px 16px #211c2926;color:#25304d;cursor:pointer;text-align:left}
 .interruption button::after{content:"";position:absolute;left:25px;bottom:-17px;width:22px;height:22px;background:#f7f8fc;border-left:4px solid #25304d;border-bottom:4px solid #25304d;transform:skewY(-25deg);border-bottom-left-radius:10px}
@@ -39,7 +39,7 @@
   .member-motif{width:51px;height:40px;top:-33px;left:9px}
   .dialogue-choices{gap:8px}
   .dialogue-choices button{padding:12px 15px;font-size:15px}
-  .interruption{left:6%;top:24%;width:58vw}
+  .interruption{left:6%;top:14%;width:58vw}
   .interruption[data-member="rader"]{right:6%;top:23%;width:58vw}
   .interruption button{padding:13px 17px 18px;border-width:3px}
   .interruption strong{font-size:23px}
@@ -53,7 +53,7 @@
   .member-motif{height:36px;width:48px;top:-31px}
   .dialogue-choices{width:min(650px,100%);grid-template-columns:repeat(3,1fr);gap:8px}
   .dialogue-choices button{font-size:13px;padding:9px 10px}
-  .interruption,.interruption[data-member="rader"]{top:14%;width:32vw}
+  .interruption,.interruption[data-member="rader"]{top:12%;width:32vw}
   .interruption button{padding:10px 14px 15px}
   .interruption strong{font-size:21px;margin-top:8px}
 }
