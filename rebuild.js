@@ -133,12 +133,14 @@ $("#panel-backdrop").addEventListener("click",()=>closePanels());
 function startStory(scene="exterior"){
   introCleanup?.();
   introCleanup=null;
+  window.PixelyDialogue.close();
   setBusy(false);
   scene=normalizeStoryScene(scene);
   showScreen("story");
   showScene(scene);
   closePanels(false);
   $("#intro-monologue").hidden=true;
+  if(scene==="living-room"&&(readSave()?.dialogueProgress||!readSave()?.openingSeen)) beginGongryongDialogue();
 }
 function runIntro(){
   if(!INTRO_LINES.length){
@@ -254,12 +256,33 @@ async function enterHouse(){
     const finish=()=>{
       writeSave("living-room",{chapter:1,chapterIntroSeen:true});
       setBusy(false);
-      $("#leave-house").focus({preventScroll:true});
+      if(readSave()?.dialogueProgress||!readSave()?.openingSeen) beginGongryongDialogue();
+      else $("#talk-gongryong").focus({preventScroll:true});
     };
     if(readSave()?.chapterIntroSeen){finish();return}
     playChapterCard({number:1,title:"생일 준비"},finish);
   },340);
 }
+
+function beginGongryongDialogue(){
+  if(busy) return;
+  closePanels(false);
+  setBusy(true);
+  const save=readSave();
+  window.PixelyDialogue.open({
+    saved:save?.dialogueProgress,
+    repeat:Boolean(save?.openingSeen),
+    progress:dialogueProgress=>writeSave("living-room",{dialogueProgress}),
+    complete:()=>{
+      const newlyAccepted=readSave()?.decorationQuest!=="accepted";
+      writeSave("living-room",{openingSeen:true,dialogueProgress:null,decorationQuest:"accepted"});
+      setBusy(false);
+      $("#talk-gongryong").focus({preventScroll:true});
+      if(newlyAccepted) toast("공룡에게 부탁받은 생일 장식 찾기");
+    }
+  });
+}
+$("#talk-gongryong").addEventListener("click",beginGongryongDialogue);
 
 function openTool(kind){
   const sheet=$("#tool-sheet"),content=$("#tool-content");
@@ -267,12 +290,12 @@ function openTool(kind){
   $("#tool-title").textContent=kind==="bag"?"꿈뜰이의 가방":"꿈뜰이의 기록장";
   content.replaceChildren();
   const paragraph=document.createElement("p");
-  paragraph.textContent=kind==="bag"?"가방이 비어 있다.":"아직 적힌 내용이 없다.";
+  paragraph.textContent=kind==="bag"?"가방이 비어 있다.":readSave()?.decorationQuest==="accepted"?"공룡에게 부탁받은 생일 장식 찾기":"아직 적힌 내용이 없다.";
   content.appendChild(paragraph);
   openPanel("#tool-sheet",kind==="bag"?"#bag-button":"#diary-button");
 }
 $("#new-story").addEventListener("click",()=>{
-  writeSave("exterior",{chapter:0,chapterIntroSeen:false,openingSeen:false,decorationQuest:null});
+  writeSave("exterior",{chapter:0,chapterIntroSeen:false,openingSeen:false,dialogueProgress:null,decorationQuest:null});
   runIntro();
 });
 $("#continue-story").addEventListener("click",()=>{

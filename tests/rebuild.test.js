@@ -4,6 +4,7 @@ const fs=require('node:fs');
 const vm=require('node:vm');
 const path=require('node:path');
 const source=fs.readFileSync(path.join(__dirname,'../rebuild.js'),'utf8');
+const dialogueSource=fs.readFileSync(path.join(__dirname,'../member-dialogue.js'),'utf8');
 const key='pixely-rebuild-save-v1';
 
 function boot(saved,{failStorage=false}={}){
@@ -20,7 +21,9 @@ function boot(saved,{failStorage=false}={}){
         addEventListener(name,fn){this.listeners[name]=fn},removeEventListener(name){delete this.listeners[name]},
         appendChild(child){this.children.push(child);this.childElementCount++},replaceChildren(){this.children=[]},
         setAttribute(name,value){this[name]=value},focus(){document.activeElement=this},click(){this.listeners.click?.({})},
+        querySelector(sel){return sel==='button'?this.children[0]:node(sel)},
         querySelectorAll(){
+          if(selector==='#dialogue-choices') return this.children;
           const selectors=selector==='#story-menu'?['#save-progress','#return-home']:selector==='#door-choice'?['#enter-house','#keep-looking']:[];
           return selectors.map(node);
         }};
@@ -42,9 +45,11 @@ function boot(saved,{failStorage=false}={}){
     removeEventListener(name,fn){documentListeners.get(name)?.delete(fn)}
   };
   const setTimeout=(fn,delay=0)=>{const id=++nextTimer;timers.set(id,{fn,time:now+delay});return id};
-  vm.runInNewContext(source,{document,HTMLImageElement:class{},localStorage:{
+  const context={document,HTMLImageElement:class{},localStorage:{
     getItem:k=>storage.get(k),setItem:(k,v)=>{if(failStorage) throw Error('unavailable');storage.set(k,v)}
-  },window:{setTimeout},setTimeout,clearTimeout:id=>timers.delete(id),requestAnimationFrame:fn=>fn(),Date,Math});
+  },window:{setTimeout},setTimeout,clearTimeout:id=>timers.delete(id),requestAnimationFrame:fn=>fn(),Date,Math};
+  vm.runInNewContext(dialogueSource,context);
+  vm.runInNewContext(source,context);
   function flush(){
     let count=0;
     while(timers.size){
@@ -78,20 +83,35 @@ test('house exploration, two door clicks, cancellation, and resume retain the co
   assert.equal(resumed.save().scene,'exterior');
 });
 
-test('entry finishes the chapter without adding dialogue or a quest',()=>{
+test('chapter leads into the full opening, then a chosen reply starts the recorded quest',()=>{
   const app=boot();app.start();app.click('#door-hotspot');app.click('#door-closeup-hotspot');app.click('#enter-house');app.flush();
   assert.equal(app.scenes[2].hidden,false);
-  assert.equal(app.scenes[2].inert,false);
+  assert.equal(app.scenes[2].inert,true);
   assert.equal(app.node('#chapter-card').hidden,true);
   assert.equal(app.save().chapterIntroSeen,true);
+  assert.equal(app.node('#dialogue-text').textContent,'어, 왔네?');
   assert.notEqual(app.save().decorationQuest,'accepted');
-  app.click('#diary-button');assert.equal(app.node('#tool-content').children[0].textContent,'아직 적힌 내용이 없다.');
+  for(let i=0;i<17;i++) app.click('#dialogue-next');
+  assert.equal(app.node('#dialogue-choices').hidden,false);
+  assert.equal(app.node('#dialogue-choices').children.length,3);
+  app.node('#dialogue-choices').children[2].click();
+  assert.equal(app.node('#dialogue-text').textContent,'그렇게 말하면 되게 시킨 것 같잖아!');
+  app.click('#dialogue-next');
+  assert.equal(app.node('#dialogue-text').textContent,'…집 구경도 하고. 장식도 받고. 얼마나 좋아~');
+  assert.notEqual(app.save().decorationQuest,'accepted');
+  app.click('#dialogue-next');
+  assert.equal(app.node('#story-dialogue-ui').hidden,true);
+  assert.equal(app.scenes[2].inert,false);
+  assert.equal(app.save().openingSeen,true);
+  assert.equal(app.save().decorationQuest,'accepted');
+  assert.equal(app.save().dialogueProgress,null);
+  app.click('#diary-button');assert.equal(app.node('#tool-content').children[0].textContent,'공룡에게 부탁받은 생일 장식 찾기');
   app.escape();assert.equal(app.node('#tool-sheet').hidden,true);
   app.click('#leave-house');app.click('#door-hotspot');app.click('#door-closeup-hotspot');app.click('#enter-house');app.flush();
-  assert.equal(app.node('#chapter-card').hidden,true);
+  assert.equal(app.node('#story-dialogue-ui').hidden,true);
   assert.equal(app.scenes[2].inert,false);
-  const html=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');
-  assert.doesNotMatch(html,/data-inspect=|id="talk-gongryong"|id="story-dialogue-ui"/);
+  app.click('#talk-gongryong');
+  assert.equal(app.node('#dialogue-text').textContent,'어차피 집 좀 둘러볼 거지?');
 });
 
 test('invalid saves and unavailable storage cannot prevent starting a playable story',()=>{
@@ -106,7 +126,7 @@ test('invalid saves and unavailable storage cannot prevent starting a playable s
 
 
 test('outside clicks dismiss only the active panel and restore its opener',()=>{
-  const app=boot({scene:'living-room',chapterIntroSeen:true});app.click('#continue-story');
+  const app=boot({scene:'living-room',chapterIntroSeen:true,openingSeen:true});app.click('#continue-story');
   app.click('#story-menu-button');
   assert.equal(app.node('#story-menu').hidden,false);
   assert.equal(app.node('#panel-backdrop').hidden,false);
@@ -131,7 +151,7 @@ test('outside clicks dismiss only the active panel and restore its opener',()=>{
 });
 
 test('panels are mutually exclusive and keyboard users can close a panel without a close button',()=>{
-  const app=boot({scene:'living-room',chapterIntroSeen:true});app.click('#continue-story');
+  const app=boot({scene:'living-room',chapterIntroSeen:true,openingSeen:true});app.click('#continue-story');
   app.click('#story-menu-button');app.click('#diary-button');
   assert.equal(app.node('#story-menu').hidden,true);
   assert.equal(app.node('#tool-sheet').hidden,false);
@@ -155,6 +175,54 @@ test('entry waits for image decoding, prevents duplicate entry, and recovers whe
   await new Promise(setImmediate);
   app.flush();
   assert.equal(app.scenes[2].hidden,false);
-  assert.equal(app.scenes[2].inert,false);
+  assert.equal(app.scenes[2].inert,true);
   assert.equal(app.save().chapterIntroSeen,true);
+  assert.equal(app.node('#dialogue-text').textContent,'어, 왔네?');
+});
+
+
+test('interruptions preserve the main subtitle and resume at the exact line',()=>{
+  const app=boot({scene:'living-room',chapterIntroSeen:true});app.click('#continue-story');
+  for(let i=0;i<7;i++) app.click('#dialogue-next');
+  assert.equal(app.node('#dialogue-interruption').hidden,false);
+  assert.equal(app.node('#dialogue-interruption').dataset.member,'deokgae');
+  assert.equal(app.node('#interruption-text').textContent,'야, 정형준!');
+  assert.equal(app.node('#dialogue-text').textContent,'요정들은 뭐… 알아서 오겠지.');
+  const resumed=boot(app.save());resumed.click('#continue-story');
+  assert.equal(resumed.node('#interruption-text').textContent,'야, 정형준!');
+  resumed.click('#interruption-next');
+  assert.equal(resumed.node('#dialogue-interruption').hidden,true);
+  assert.equal(resumed.node('#dialogue-text').textContent,'왜!');
+});
+
+test('each choice response resumes and completes once without revealing fairy locations',()=>{
+  for(let choice=0;choice<3;choice++){
+    const app=boot({scene:'living-room',chapterIntroSeen:true,dialogueProgress:{phase:'choices',index:0,choice:null}});
+    app.click('#continue-story');app.node('#dialogue-choices').children[choice].click();
+    const resumed=boot(app.save());resumed.click('#continue-story');
+    assert.equal(resumed.save().dialogueProgress.choice,choice);
+    resumed.key({code:'Space',key:' ',preventDefault(){}});
+    if(choice===1){
+      assert.equal(resumed.node('#interruption-text').textContent,'진짜 당당하다.');
+      assert.equal(resumed.node('#dialogue-interruption').dataset.member,'rader');
+    }
+    resumed.click('#dialogue-next');
+    assert.equal(resumed.save().decorationQuest,'accepted');
+    assert.equal(resumed.save().dialogueProgress,null);
+    assert.equal(resumed.node('#story-dialogue-ui').hidden,true);
+    resumed.click('#dialogue-next');
+    assert.equal(resumed.save().dialogueProgress,null);
+    const final=boot(resumed.save());final.click('#continue-story');
+    assert.equal(final.node('#story-dialogue-ui').hidden,true);
+  }
+});
+
+test('invalid dialogue progress restarts safely, and a new story clears the previous quest and branch',()=>{
+  const app=boot({scene:'living-room',chapterIntroSeen:true,openingSeen:true,decorationQuest:'accepted',dialogueProgress:{phase:'reply',choice:99,index:400}});
+  app.click('#continue-story');assert.equal(app.node('#dialogue-text').textContent,'어, 왔네?');
+  app.click('#new-story');
+  assert.equal(app.save().dialogueProgress,null);
+  assert.equal(app.save().decorationQuest,null);
+  assert.equal(app.save().openingSeen,false);
+  assert.equal(app.node('#story-dialogue-ui').hidden,true);
 });

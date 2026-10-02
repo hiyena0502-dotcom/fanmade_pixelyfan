@@ -10,10 +10,12 @@
   <link rel="preload" as="image" href="assets/home/home-bg.png?v=85" />
   <link rel="preload" as="image" href="assets/story/chapter1/living-room.webp?v=90" />
   <link rel="preload" as="image" href="assets/story/chapter1/house-wide-v108.png" />
-  <link rel="stylesheet" href="styles/rebuild.css?v=120" />
+  <link rel="stylesheet" href="styles/rebuild.css?v=123" />
+  <link rel="stylesheet" href="styles/member-dialogue.css?v=123" />
   <link rel="stylesheet" href="styles/game-interaction.css?v=121" />
   <script src="game-interaction.js?v=121" defer></script>
-  <script src="rebuild.js?v=116" defer></script>
+  <script src="member-dialogue.js?v=123" defer></script>
+  <script src="rebuild.js?v=123" defer></script>
 </head>
 <body>
   <main class="rebuild-root">
@@ -101,10 +103,40 @@
         </section>
 
         <section class="scene living-room-scene" data-scene="living-room" hidden aria-label="픽셀리 집 거실">
+          <div class="living-room-stage">
           <img class="scene-art living-room-art" src="assets/story/chapter1/living-room.webp?v=90" alt="따뜻한 겨울 아침의 픽셀리 집 거실" draggable="false" />
+            <button type="button" class="room-character" id="talk-gongryong" aria-label="공룡에게 말 걸기">
+              <span class="character-crop"><img src="assets/characters/gongryong-placeholder.png" data-member-image="gongryong" alt="공룡" draggable="false" /></span>
+              <span class="character-label" aria-hidden="true">공룡</span>
+            </button>
+          </div>
           <button type="button" class="scene-back-arrow" id="leave-house" aria-label="집 밖으로 나가기">
             <span>⌄</span><small>밖으로</small>
           </button>
+        </section>
+
+        <section class="member-dialogue-ui" id="story-dialogue-ui" data-speaker="gongryong" hidden aria-label="공룡과 대화">
+          <aside class="interruption" id="dialogue-interruption" data-member="deokgae" hidden aria-live="polite" aria-atomic="true">
+            <button type="button" id="interruption-next" aria-label="다음 대사">
+              <span class="interruption-name" id="interruption-name"></span>
+              <span class="interruption-place" id="interruption-place"></span>
+              <strong id="interruption-text"></strong>
+            </button>
+          </aside>
+          <div class="dialogue-bottom">
+            <div class="dialogue-choices" id="dialogue-choices" role="group" aria-label="대답 선택" hidden></div>
+            <button type="button" class="subtitle-bar" id="dialogue-next" aria-label="다음 대사">
+              <svg class="member-motif" viewBox="0 0 76 58" fill="none" aria-hidden="true">
+                <path d="m13 34 4-15 12 6 9-19 10 18 13-4 4 17" fill="#d7df78" stroke="#25304d" stroke-width="4" stroke-linejoin="round"/>
+                <path d="M9 56c-1-18 11-31 28-31 18 0 30 12 31 31" fill="#8fbe69" stroke="#25304d" stroke-width="4"/>
+                <path d="M23 43h6m19 0h6" stroke="#25304d" stroke-width="4" stroke-linecap="round"/>
+              </svg>
+              <span class="subtitle-name" id="dialogue-speaker">공룡</span>
+              <span class="subtitle-divider" aria-hidden="true"></span>
+              <span class="subtitle-text" id="dialogue-text" aria-live="polite" aria-atomic="true"></span>
+              <span class="subtitle-cue" aria-hidden="true">▾</span>
+            </button>
+          </div>
         </section>
 
         <section class="intro-monologue" id="intro-monologue" hidden aria-live="polite" aria-label="꿈뜰이 독백">
