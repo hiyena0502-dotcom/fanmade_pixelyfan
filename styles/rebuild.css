@@ -394,7 +394,16 @@ button{color:inherit}
 .door-opening{display:none;position:absolute;left:39%;top:20.2%;width:21.6%;height:60.3%;border-radius:50% 50% 0 0 / 33% 33% 0 0;background:linear-gradient(100deg,#201612,#62432a);overflow:hidden;pointer-events:none;perspective:800px}
 .house-entering .door-opening{display:block}
 .door-opening-leaf{position:absolute;inset:0;overflow:hidden;border-radius:inherit;transform-origin:right center;animation:door-leaf-open .65s ease-in-out both}
-.door-opening-leaf img{position:absolute;width:462.963%;height:165.837%;max-width:none;left:-180.556%;top:-33.499%}
+.door-opening-leaf>img{position:absolute;width:462.963%;height:165.837%;max-width:none;left:-180.556%;top:-33.499%}
 @keyframes door-leaf-open{to{transform:rotateY(-85deg)}}
 
 .exterior-scene{background:#181e29}
+
+.door-sign{position:absolute;left:40%;top:27.85%;width:20%;pointer-events:none}
+.door-sign img{display:block;width:100%;height:auto;transform-origin:50% 9.5%;animation:door-sign-sway 5s ease-in-out infinite;filter:drop-shadow(0 3px 2px #65432530)}
+.door-closeup-scene[hidden] .door-sign img{animation-play-state:paused}
+.story-frame[data-door-effect="crash"] .door-sign img{animation:door-sign-crash 1.4s ease-out both}
+.house-entering .door-closeup-stage>.door-sign{visibility:hidden}
+.door-opening-leaf .door-sign{left:4.63%;top:12.687%;width:92.593%}
+@keyframes door-sign-sway{0%,100%{transform:rotate(-1.5deg)}50%{transform:rotate(1.5deg)}}
+@keyframes door-sign-crash{0%,100%{transform:rotate(0deg)}12%{transform:rotate(-14deg)}28%{transform:rotate(12deg)}44%{transform:rotate(-8deg)}60%{transform:rotate(5deg)}76%{transform:rotate(-3deg)}90%{transform:rotate(1deg)}}
