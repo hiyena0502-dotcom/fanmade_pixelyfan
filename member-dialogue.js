@@ -24,8 +24,14 @@ const opening=[
   gongryong("이미 다 준비는 해놨다는데, 왜 아무도 안 갖다주는지는 나도 몰라.")
 ];
 const choices=[
-  // No separate answer was supplied for this choice: reuse the approved explanation.
-  {label:"어떤 장식인데요?",lines:[opening[5],opening[16]]},
+  {label:"어떤 장식인데요?",lines:[
+    gongryong("문구랑 스티커랑 뭐 이것저것 있어. 보면 알아~"),
+    gongryong("아, 또니도 한번 찾아봐. 걔한테 하나 있을걸?"),
+    gongryong("근데 걔 발견하면 티티부터 불러ㅋㅋ 또 어디 숨어서 쉬고 있을걸?"),
+    rader("왜 장식 찾으러 갔다가 또니까지 잡아와."),
+    gongryong("잡아오랬냐? 위치만 불라고 했지."),
+    gongryong("이것도 엄밀히 따지면 사장님한테 아부하는 일의 연장선이라고~")
+  ]},
   {label:"요정분들은 어디 계세요?",lines:[gongryong("그걸 알았으면 내가 갔다 왔지."),rader("진짜 당당하다.")]},
   {label:"결국 제가 찾으러 가는 거네요.",lines:[gongryong("그렇게 말하면 되게 시킨 것 같잖아!"),gongryong("…집 구경도 하고. 장식도 받고. 얼마나 좋아~")]}
 ];

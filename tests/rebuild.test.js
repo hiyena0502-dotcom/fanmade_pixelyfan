@@ -208,6 +208,11 @@ test('each choice response resumes and completes once without revealing fairy lo
       assert.equal(resumed.node('#story-dialogue-ui').dataset.speaker,'rader');
       assert.equal(resumed.node('#dialogue-interruption').hidden,true);
     }
+    if(choice===0){
+      for(let i=1;i<5;i++) resumed.click('#dialogue-next');
+      assert.notEqual(resumed.save().decorationQuest,'accepted');
+      assert.equal(resumed.node('#dialogue-text').textContent,'이것도 엄밀히 따지면 사장님한테 아부하는 일의 연장선이라고~');
+    }
     resumed.click('#dialogue-next');
     assert.equal(resumed.save().decorationQuest,'accepted');
     assert.equal(resumed.save().dialogueProgress,null);
@@ -217,6 +222,35 @@ test('each choice response resumes and completes once without revealing fairy lo
     const final=boot(resumed.save());final.click('#continue-story');
     assert.equal(final.node('#story-dialogue-ui').hidden,true);
   }
+});
+
+test('decoration details keep the supplied six lines and resume at Rader before accepting the quest',()=>{
+  const app=boot({scene:'living-room',chapterIntroSeen:true,dialogueProgress:{phase:'choices',index:0,choice:null}});
+  app.click('#continue-story');app.node('#dialogue-choices').children[0].click();
+  const expected=[
+    '문구랑 스티커랑 뭐 이것저것 있어. 보면 알아~',
+    '아, 또니도 한번 찾아봐. 걔한테 하나 있을걸?',
+    '근데 걔 발견하면 티티부터 불러ㅋㅋ 또 어디 숨어서 쉬고 있을걸?',
+    '왜 장식 찾으러 갔다가 또니까지 잡아와.',
+    '잡아오랬냐? 위치만 불라고 했지.',
+    '이것도 엄밀히 따지면 사장님한테 아부하는 일의 연장선이라고~'
+  ];
+  for(let i=0;i<3;i++){
+    assert.equal(app.node('#dialogue-text').textContent,expected[i]);
+    assert.notEqual(app.save().decorationQuest,'accepted');
+    app.click('#dialogue-next');
+  }
+  const resumed=boot(app.save());resumed.click('#continue-story');
+  assert.equal(resumed.node('#dialogue-speaker').textContent,'라더');
+  assert.equal(resumed.node('#story-dialogue-ui').dataset.speaker,'rader');
+  assert.equal(resumed.node('#dialogue-interruption').hidden,true);
+  for(let i=3;i<6;i++){
+    assert.equal(resumed.node('#dialogue-text').textContent,expected[i]);
+    assert.notEqual(resumed.save().decorationQuest,'accepted');
+    resumed.click('#dialogue-next');
+  }
+  assert.equal(resumed.save().decorationQuest,'accepted');
+  assert.equal(resumed.node('#story-dialogue-ui').hidden,true);
 });
 
 test('invalid dialogue progress restarts safely, and a new story clears the previous quest and branch',()=>{
