@@ -444,6 +444,35 @@ button{color:inherit}
 
 /* Returning out of a scene always uses the same downward exit. */
 .scene-back-arrow.scene-exit{left:50%;right:auto;transform:translateX(-50%)}
+.scene-back-arrow.room-link{bottom:auto;width:56px;height:56px}
+.scene-back-arrow.room-link--stairs{left:58%;top:18%;transform:translateX(-50%)}
+.scene-back-arrow.room-link--bathroom{left:auto;right:24px;top:36%}
+.scene-back-arrow.room-link--storage{left:auto;right:24px;top:59%}
+.shape-room-art{position:absolute;inset:0;overflow:hidden;background:#f1e3cb}
+.shape-room-art>div{position:absolute;box-sizing:border-box}
+.shape-floor{inset:68% 0 0;background:#cdb494;border-top:8px solid #b39878}
+.stairs-window{left:18%;top:18%;width:18%;height:30%;border:12px solid #bca488;background:#d4e5e6;border-radius:70px 70px 4px 4px;box-shadow:inset 0 0 0 5px #f9f1e4}
+.shape-staircase{left:45%;bottom:27%;width:35%;height:55%;display:flex;align-items:flex-end;filter:drop-shadow(12px 12px 0 #bda78a)}
+.shape-staircase i{flex:1;background:#c3a07c;border:3px solid #9c7c5b;border-top:10px solid #e1c3a0}
+.shape-staircase i:nth-child(1){height:17%}.shape-staircase i:nth-child(2){height:33%}.shape-staircase i:nth-child(3){height:50%}.shape-staircase i:nth-child(4){height:67%}.shape-staircase i:nth-child(5){height:83%}.shape-staircase i:nth-child(6){height:100%}
+.stairs-rail{left:45%;top:22%;width:40%;height:10px;background:#8f7258;border-radius:8px;transform:rotate(-43deg);transform-origin:right center}
+.bathroom-scene .shape-room-art{background-color:#e5eeee;background-image:linear-gradient(#c9d9d9 2px,transparent 2px),linear-gradient(90deg,#c9d9d9 2px,transparent 2px);background-size:90px 90px}
+.bathroom-scene .shape-floor{background:#b8cbcb;border-color:#9eabab}
+.bath-mirror{left:15%;top:17%;width:20%;height:25%;background:#c8dddd;border:9px solid #9cb8b6;border-radius:50%}
+.bath-sink{left:13%;top:46%;width:24%;height:23%;background:#f7f5ed;border:6px solid #c2cecb;border-radius:12px 12px 24px 24px}
+.bath-sink:before{content:"";position:absolute;left:15%;right:15%;top:12%;height:25%;border:5px solid #d7dfdc;border-radius:50%;background:#c6d6d5}
+.bath-sink i{position:absolute;left:48%;top:-25%;height:30%;width:8%;border:5px solid #91a7a5;border-bottom:0;border-radius:12px 12px 0 0}
+.bath-tub{left:46%;top:48%;width:37%;height:25%;background:#f8f6ee;border:10px solid #d4dfdb;border-radius:30px 30px 70px 70px;box-shadow:inset 0 14px 0 #b3ced0,0 10px 0 #99adab}
+.bath-toilet{left:77%;top:28%;width:12%;height:14%;background:#f8f6ee;border:5px solid #c4d0cb;border-radius:12px}
+.bath-toilet i{position:absolute;top:60%;left:-15%;width:130%;height:140%;border:10px solid #f8f6ee;border-radius:50%;background:#b9cdca;box-shadow:0 8px 0 #acbdb7;box-sizing:border-box}
+.storage-scene .shape-room-art{background:#e5dccb}.storage-scene .shape-floor{background:#b6a68c;border-color:#9e8b73}
+.storage-shelf{left:18%;top:21%;width:45%;height:48%;border-left:12px solid #927a5b;border-right:12px solid #927a5b;display:flex;flex-direction:column;justify-content:space-between}
+.storage-shelf i{height:12px;background:#a58a67;box-shadow:0 7px 0 #c2ab89}
+.storage-box{background:#cba475;border:5px solid #aa875b;border-radius:3px}
+.storage-box:after{content:"";position:absolute;top:0;bottom:0;left:42%;width:16%;background:#e0c8a1}
+.storage-box--a{left:23%;top:25%;width:14%;height:16%}.storage-box--b{left:42%;top:26%;width:16%;height:15%}
+.storage-box--c{left:24%;top:49%;width:22%;height:18%}.storage-box--d{left:69%;top:53%;width:17%;height:21%}
+@media(max-width:600px){.scene-back-arrow.room-link{width:48px;height:48px}.scene-back-arrow.room-link--bathroom,.scene-back-arrow.room-link--storage{right:12px}.stairs-window{border-width:6px}.storage-shelf{border-width:7px}.bath-mirror{border-width:6px}}
 
 .quest-notice{position:absolute;z-index:80;left:50%;top:35%;transform:translate(-50%,-50%);width:min(330px,calc(100% - 48px));padding:20px 24px;border:1px solid #fff9f2;border-radius:16px;background:#fffaf6f5;color:#55464c;box-shadow:0 10px 32px #46323a24;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .22s ease,visibility .22s ease;text-align:center}
 .quest-notice.is-visible{opacity:1;visibility:visible}

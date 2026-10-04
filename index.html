@@ -10,13 +10,13 @@
   <link rel="preload" as="image" href="assets/home/home-bg.png?v=85" />
   <link rel="preload" as="image" href="assets/story/chapter1/living-room.webp?v=90" />
   <link rel="preload" as="image" href="assets/story/chapter1/exterior/sky-v138.webp" />
-  <link rel="stylesheet" href="styles/rebuild.css?v=156" />
-  <link rel="stylesheet" href="styles/member-dialogue.css?v=156" />
+  <link rel="stylesheet" href="styles/rebuild.css?v=157" />
+  <link rel="stylesheet" href="styles/member-dialogue.css?v=157" />
   <link rel="stylesheet" href="styles/game-interaction.css?v=121" />
   <script src="game-interaction.js?v=121" defer></script>
-  <script src="member-dialogue.js?v=156" defer></script>
-  <script src="atmosphere.js?v=156" defer></script>
-  <script src="rebuild.js?v=156" defer></script>
+  <script src="member-dialogue.js?v=157" defer></script>
+  <script src="atmosphere.js?v=157" defer></script>
+  <script src="rebuild.js?v=157" defer></script>
 </head>
 <body>
   <main class="rebuild-root">
@@ -133,6 +133,9 @@
           <button type="button" class="scene-back-arrow room-direction room-direction--left" id="go-kitchen" aria-label="주방으로 이동">
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 5 8 12l7 7" /></svg>
           </button>
+          <button type="button" class="scene-back-arrow room-link room-link--stairs" id="go-stairs" aria-label="계단으로 이동"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 15 7-7 7 7" /></svg></button>
+          <button type="button" class="scene-back-arrow room-link room-link--bathroom" id="go-bathroom" aria-label="화장실로 이동"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m9 5 7 7-7 7" /></svg></button>
+          <button type="button" class="scene-back-arrow room-link room-link--storage" id="go-storage" aria-label="창고로 이동"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m9 5 7 7-7 7" /></svg></button>
           <button type="button" class="scene-back-arrow scene-exit" id="leave-house" aria-label="집 밖으로 나가기">
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 8 7 7 7-7" /></svg>
           </button>
@@ -143,6 +146,26 @@
           <button type="button" class="scene-back-arrow room-direction room-direction--right" id="kitchen-to-living" aria-label="거실로 돌아가기">
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m9 5 7 7-7 7" /></svg>
           </button>
+        </section>
+
+        <section class="scene shape-room stairs-scene" data-scene="stairs" hidden aria-label="픽셀리 집 계단">
+          <div class="shape-room-art" role="img" aria-label="단순한 도형으로 만든 계단과 난간">
+            <div class="shape-floor"></div><div class="stairs-window"></div>
+            <div class="shape-staircase"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="stairs-rail"></div>
+          </div>
+          <button type="button" class="scene-back-arrow scene-exit" id="stairs-to-living" aria-label="거실로 돌아가기"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 8 7 7 7-7" /></svg></button>
+        </section>
+        <section class="scene shape-room bathroom-scene" data-scene="bathroom" hidden aria-label="픽셀리 집 화장실">
+          <div class="shape-room-art" role="img" aria-label="단순한 도형으로 만든 거울, 세면대, 욕조와 변기">
+            <div class="shape-floor"></div><div class="bath-mirror"></div><div class="bath-sink"><i></i></div><div class="bath-tub"></div><div class="bath-toilet"><i></i></div>
+          </div>
+          <button type="button" class="scene-back-arrow scene-exit" id="bathroom-to-living" aria-label="거실로 돌아가기"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 8 7 7 7-7" /></svg></button>
+        </section>
+        <section class="scene shape-room storage-scene" data-scene="storage" hidden aria-label="픽셀리 집 창고">
+          <div class="shape-room-art" role="img" aria-label="단순한 도형으로 만든 선반과 보관 상자">
+            <div class="shape-floor"></div><div class="storage-shelf"><i></i><i></i><i></i></div><div class="storage-box storage-box--a"></div><div class="storage-box storage-box--b"></div><div class="storage-box storage-box--c"></div><div class="storage-box storage-box--d"></div>
+          </div>
+          <button type="button" class="scene-back-arrow scene-exit" id="storage-to-living" aria-label="거실로 돌아가기"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 8 7 7 7-7" /></svg></button>
         </section>
 
         <section class="member-dialogue-ui" id="story-dialogue-ui" data-speaker="gongryong" hidden aria-label="공룡과 대화">

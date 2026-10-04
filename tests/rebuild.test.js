@@ -32,7 +32,7 @@ function boot(saved,{failStorage=false}={}){
     return nodes.get(selector);
   }
   const screens=['home','story'].map(name=>Object.assign(node('screen:'+name),{dataset:{screen:name},hidden:name!=='home'}));
-  const scenes=['exterior','door-closeup','living-room','kitchen'].map(name=>Object.assign(node('scene:'+name),{dataset:{scene:name},hidden:name!=='exterior'}));
+  const scenes=['exterior','door-closeup','living-room','kitchen','stairs','bathroom','storage'].map(name=>Object.assign(node('scene:'+name),{dataset:{scene:name},hidden:name!=='exterior'}));
   const inspections=['laundry','birdhouse','garden'].map(name=>Object.assign(node('inspect:'+name),{dataset:{inspect:name},parentElement:node('stage')}));
   const document={
     querySelector(selector){
@@ -61,13 +61,15 @@ function boot(saved,{failStorage=false}={}){
   return {node,scenes,flush,click:selector=>node(selector).click(),save:()=>JSON.parse(storage.get(key)||'null'),
     start(){node('#new-story').click();for(let n=0;n<6;n++)node('#intro-monologue').click();flush();node('#dialogue-next').click();node('#dialogue-next').click();flush()},
     prepareEntry(){
+      if(this.save()?.doorInvited||this.save()?.chapterIntroSeen||this.save()?.openingSeen){node('#door-hotspot').click();flush();return false}
       node('#door-hotspot').click();node('#dialogue-next').click();
       node('#dialogue-choices').children[0].click();flush();
       if(node('#dialogue-text').textContent==='잠깐만!'){
         node('#dialogue-next').click();flush();node('#dialogue-next').click();node('#dialogue-next').click();
       }
+      return true;
     },
-    enter(){this.prepareEntry();node('#dialogue-choices').children[0].click();flush()},
+    enter(){if(this.prepareEntry())node('#dialogue-choices').children[0].click();flush()},
     activeElement:()=>document.activeElement,
     key(event){documentListeners.get('keydown').forEach(fn=>fn(event))},
     escape(){documentListeners.get('keydown').forEach(fn=>fn({key:'Escape',preventDefault(){}}))}};
@@ -96,9 +98,30 @@ test('arrival uses Dreamer subtitles, door cancellation stays at the door, and i
   assert.equal(app.scenes[1].hidden,false);
   assert.equal(app.save().scene,"door-closeup");
   const resumed=boot(app.save());resumed.click('#continue-story');resumed.click('#door-closeup-hotspot');
-  assert.equal(resumed.node('#dialogue-text').textContent,'……들어가도 되는 것 같네.');
-  resumed.click('#dialogue-next');
-  assert.equal(resumed.node('#dialogue-choices').children[0].textContent,'들어간다');
+  assert.equal(resumed.node('#story-dialogue-ui').hidden,true);
+  assert.equal(resumed.node('.story-frame').classList.contains('is-busy'),true);
+  resumed.flush();assert.equal(resumed.scenes[2].hidden,false);
+});
+
+test('returning through either door skips the invitation, including older saves',()=>{
+  for(const scene of ['exterior','door-closeup']){
+    const app=boot({scene,chapterIntroSeen:true,openingSeen:true,decorationQuest:'accepted'});
+    app.click('#continue-story');app.click(scene==='exterior'?'#door-hotspot':'#door-closeup-hotspot');app.flush();
+    assert.equal(app.scenes[2].hidden,false);
+    assert.equal(app.node('#story-dialogue-ui').hidden,true);
+    assert.equal(app.save().outsideDialogue??null,null);
+    app.click('#leave-house');app.click('#door-hotspot');app.flush();
+    assert.equal(app.scenes[2].hidden,false);
+    assert.equal(app.node('#story-dialogue-ui').hidden,true);
+  }
+});
+
+test('a saved repeated invitation enters the house without replaying its dialogue',()=>{
+  const app=boot({scene:'door-closeup',chapterIntroSeen:true,openingSeen:true,doorInvited:true,outsideDialogue:{kind:'invited',state:{phase:'scene',index:0}}});
+  app.click('#continue-story');app.flush();
+  assert.equal(app.scenes[2].hidden,false);
+  assert.equal(app.node('#story-dialogue-ui').hidden,true);
+  assert.equal(app.save().outsideDialogue,null);
 });
 
 test('chapter leads into the full opening, then a chosen reply starts the recorded quest',()=>{
@@ -161,10 +184,9 @@ test('outside clicks dismiss only the active panel and restore its opener',()=>{
     assert.equal(app.node('#tool-sheet').hidden,true);
     assert.equal(app.activeElement(),app.node(opener));
   }
-  app.click('#leave-house');app.click('#door-hotspot');app.click('#dialogue-next');
-  app.node('#dialogue-choices').children[1].click();
-  assert.equal(app.scenes[1].hidden,false);
-  assert.equal(app.activeElement(),app.node('#door-closeup-hotspot'));
+  app.click('#leave-house');app.click('#door-hotspot');app.flush();
+  assert.equal(app.scenes[2].hidden,false);
+  assert.equal(app.activeElement(),app.node('#talk-gongryong'));
 });
 
 test('panels are mutually exclusive and keyboard users can close a panel without a close button',()=>{
@@ -414,7 +436,27 @@ test('knock pauses cannot be skipped by keyboard and reload resumes the outside 
   assert.equal(resumed.node('#story-dialogue-ui').hidden,true);
   assert.equal(resumed.activeElement(),resumed.node('#go-kitchen'));
 });
- test('room travel cannot interrupt the first Gongryong conversation',()=>{
+test('shape rooms support travel, tools, saves, reload, and return focus',()=>{
+  for(const [room,label,index] of [['stairs','계단',4],['bathroom','화장실',5],['storage','창고',6]]){
+    const app=boot({scene:'living-room',chapterIntroSeen:true,openingSeen:true,decorationQuest:'accepted'});
+    app.click('#continue-story');app.click('#go-'+room);
+    assert.equal(app.scenes[index].hidden,false);
+    assert.equal(app.save().scene,room);
+    assert.equal(app.node('#hud-place').textContent,'픽셀리 집 · '+label);
+    for(const tool of ['#bag-button','#diary-button','#quest-hint-button']){
+      app.click(tool);assert.equal(app.node('#tool-sheet').hidden,false);app.escape();
+    }
+    app.click('#story-menu-button');assert.equal(app.node('#story-menu').hidden,false);app.escape();
+    const resumed=boot(app.save());resumed.click('#continue-story');
+    assert.equal(resumed.scenes[index].hidden,false);
+    resumed.click('#'+room+'-to-living');
+    assert.equal(resumed.scenes[2].hidden,false);
+    assert.equal(resumed.activeElement(),resumed.node('#go-'+room));
+    assert.equal(resumed.save().decorationQuest,'accepted');
+  }
+});
+
+test('room travel cannot interrupt the first Gongryong conversation',()=>{
   const app=boot({scene:'living-room',chapterIntroSeen:true,openingSeen:false});
   app.click('#continue-story');app.click('#go-kitchen');
   assert.equal(app.scenes[2].hidden,false);

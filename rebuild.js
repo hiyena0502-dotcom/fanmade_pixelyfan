@@ -91,7 +91,7 @@ function writeSave(scene="exterior",patch={}){
   const data={
     ...previous,
     scene,
-    chapter:previous.chapterIntroSeen||["living-room","kitchen"].includes(scene)?1:0,
+    chapter:previous.chapterIntroSeen||["living-room","kitchen","stairs","bathroom","storage"].includes(scene)?1:0,
     ...patch,
     savedAt:Date.now()
   };
@@ -105,7 +105,7 @@ function writeSave(scene="exterior",patch={}){
 function renderContinue(){
   const save=readSave(),button=$("#continue-story"),copy=$("#continue-copy");
   button.disabled=!save;
-  const labels={"exterior":"12월 28일 · 집 앞","door-closeup":"12월 28일 · 문 앞","living-room":"CHAPTER I · 거실","kitchen":"CHAPTER I · 주방"};
+  const labels={"exterior":"12월 28일 · 집 앞","door-closeup":"12월 28일 · 문 앞","living-room":"CHAPTER I · 거실","kitchen":"CHAPTER I · 주방","stairs":"CHAPTER I · 계단","bathroom":"CHAPTER I · 화장실","storage":"CHAPTER I · 창고"};
   copy.textContent=save?labels[save.scene]:"NO SAVE DATA";
 }
 function showScreen(name){
@@ -122,13 +122,8 @@ function showScene(name){
     scene.hidden=!on;
     scene.classList.toggle("is-active",on);
   });
-  const placeLabel=name==="living-room"
-    ?"픽셀리 집 · 거실"
-    :name==="kitchen"
-      ?"픽셀리 집 · 주방"
-      :name==="door-closeup"
-      ?"픽셀리 집 · 문 앞"
-      :"픽셀리 집 앞";
+  const roomNames={"living-room":"거실",kitchen:"주방",stairs:"계단",bathroom:"화장실",storage:"창고","door-closeup":"문 앞"};
+  const placeLabel=roomNames[name]?"픽셀리 집 · "+roomNames[name]:"픽셀리 집 앞";
   $("#hud-place").textContent=placeLabel;
 
   $("#bag-button").disabled=false;
@@ -173,6 +168,9 @@ function startStory(scene="exterior"){
 
   updateJournalUI(readSave());
   const pending=readSave()?.outsideDialogue;
+  if(["exterior","door-closeup"].includes(scene)&&pending?.kind==="invited"){
+    writeSave(scene,{outsideDialogue:null,doorInvited:true});enterHouse();return;
+  }
   if(["exterior","door-closeup"].includes(scene)&&pending){playOutside(pending.kind,pending.state);return}
   if(scene==="living-room"&&(readSave()?.dialogueProgress||!readSave()?.openingSeen)) beginGongryongDialogue();
 }
@@ -261,8 +259,7 @@ const outsideScripts={
     {member:"stage",text:"……",delay:1000},
     {member:"unknown",text:"문 열려 있어! 들어와!"},
     {member:"dreamer",text:"……들어가도 되는 것 같네."}
-  ],choices:[{label:"들어간다"},{label:"그래도 조금 더 둘러본다"}]},
-  invited:{lines:[{member:"dreamer",text:"……들어가도 되는 것 같네."}],choices:[{label:"들어간다"},{label:"그래도 조금 더 둘러본다"}]}
+  ],choices:[{label:"들어간다"},{label:"그래도 조금 더 둘러본다"}]}
 };
 function finishOutside(scene="exterior"){
   window.PixelyDialogue.close();setBusy(false);
@@ -273,7 +270,7 @@ function finishOutside(scene="exterior"){
 function playOutside(kind,saved=null){
   const script=outsideScripts[kind];if(!script){finishOutside();return}
   closePanels(false);setBusy(true);
-  const scene=["door","knock","invited"].includes(kind)?"door-closeup":"exterior";
+  const scene=["door","knock"].includes(kind)?"door-closeup":"exterior";
   showScene(scene);
   window.PixelyDialogue.play({...script,saved,
     progress:state=>{
@@ -291,7 +288,9 @@ function playOutside(kind,saved=null){
 }
 function beginDoor(){
   if(busy)return;
-  playOutside(readSave()?.doorInvited?"invited":"door");
+  const save=readSave();
+  if(save?.doorInvited||save?.chapterIntroSeen||save?.openingSeen){enterHouse();return}
+  playOutside("door");
 }
 function playChapterCard({number,title},after){
   const card=$("#chapter-card");
@@ -434,6 +433,10 @@ function moveRoom(destination,focusTarget){
 }
 $("#go-kitchen").addEventListener("click",()=>moveRoom("kitchen","#kitchen-to-living"));
 $("#kitchen-to-living").addEventListener("click",()=>moveRoom("living-room","#go-kitchen"));
+for(const room of ["stairs","bathroom","storage"]){
+  $("#go-"+room).addEventListener("click",()=>moveRoom(room,"#"+room+"-to-living"));
+  $("#"+room+"-to-living").addEventListener("click",()=>moveRoom("living-room","#go-"+room));
+}
 
 $("#leave-house").addEventListener("click",()=>{
   showScene("exterior");
