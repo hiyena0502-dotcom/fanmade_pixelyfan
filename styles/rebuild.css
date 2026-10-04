@@ -377,8 +377,6 @@ button{color:inherit}
 :root[data-game-motion="reduced"] *, :root[data-game-motion="reduced"] *::before{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 :root[data-game-motion="reduced"] .scene-snow,:root[data-game-motion="reduced"] .home-snow{display:none}
 .menu-sheet button:disabled{opacity:.45;cursor:default}
-.active-quest{position:absolute;left:24px;top:108px;bottom:auto;z-index:12;max-width:min(340px,calc(100% - 48px));margin:0;padding:10px 16px;background:#ffffffe0;border-radius:12px;color:#524956;font-size:13px;pointer-events:none}
-.active-quest:empty,.is-busy .active-quest{display:none}
 .exterior-stage>.exterior-inspect{display:none;pointer-events:none}
 .inspect-birdhouse{left:67%;top:55%;width:5.5%;height:17%}
 .inspect-pot{left:44.5%;top:67%;width:4%;height:5.5%}
@@ -429,9 +427,6 @@ button{color:inherit}
 .story-frame.is-talking .hud-tools,.story-frame.is-talking .inventory-rack,.story-frame.is-talking .scene-back-arrow{opacity:0;visibility:hidden;pointer-events:none}
 .object-tool{position:relative}
 .notification-dot{position:absolute;right:7px;top:7px;width:7px;height:7px;border-radius:50%;background:#b37543;box-shadow:0 0 0 2px #fffaf6}
-.mission-widget{position:absolute;left:24px;top:108px;z-index:31;padding:9px 12px;border:1px solid #fffaf4;border-radius:12px;background:#fffaf6ed;box-shadow:var(--ui-shadow);max-width:calc(100% - 48px)}
-.mission-widget .active-quest{position:static;padding:0;background:none;max-width:none;font-size:13px;color:#524956}
-.mission-widget:has(.active-quest:empty),.is-busy .mission-widget{display:none}
 .hint-trigger{position:absolute;right:24px;top:24px;z-index:31;display:grid;place-items:center;width:32px;height:32px;padding:7px;border:1px solid #fffaf4;border-radius:50%;background:#fffaf6e8;box-shadow:var(--ui-shadow);color:#8e6748;cursor:pointer}
 .hint-trigger svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .story-frame.is-busy .hint-trigger{visibility:hidden;pointer-events:none}
@@ -443,18 +438,15 @@ button{color:inherit}
 #tool-content h3{font-size:19px;font-weight:650;margin:0 0 12px}
 .tool-sheet #tool-content p{font-size:15px;color:#65575c;line-height:1.8}
 .tool-sheet #tool-content .journal-kicker{font-size:12px;color:#938078;margin:0 0 12px}
-.dialogue-log-backdrop{position:absolute;inset:0;z-index:110;background:#211b2640}
-.dialogue-log{position:absolute;z-index:111;left:50%;top:50%;transform:translate(-50%,-50%);width:min(640px,calc(100% - 32px));max-height:80dvh;padding:26px;background:#fffaf6;border:1px solid #fffdf7;border-radius:18px;box-shadow:0 16px 48px #4b354829;color:#524956}
-.dialogue-log h2{margin:0 0 18px;font-size:20px;font-weight:650}
-#dialogue-log-content{max-height:calc(80dvh - 130px);overflow:auto;overscroll-behavior:contain}
-.log-entry{padding:13px 3px;border-bottom:1px solid #73667718}
-.log-entry strong{font-size:12px;color:#9a7658;font-weight:650}
-.log-entry p{font-size:15px;line-height:1.7;margin:6px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}
-.dialogue-log:focus{outline:none}
-@media(max-width:600px){.mission-widget{left:12px;top:88px;max-width:calc(100% - 24px)}.tool-sheet{padding:22px}.dialogue-log{padding:20px}}
-@media(max-height:500px){.mission-widget{top:96px}.dialogue-log{padding:18px;max-height:90dvh}#dialogue-log-content{max-height:calc(90dvh - 110px)}}
+@media(max-width:600px){.tool-sheet{padding:22px}}
+
 
 @media(max-width:600px){.hint-trigger{right:12px;top:14px}.tool-sheet--hint{right:12px;top:58px;width:min(280px,calc(100% - 24px))}}
 
 /* Returning out of a scene always uses the same downward exit. */
 .scene-back-arrow.scene-exit{left:50%;right:auto;transform:translateX(-50%)}
+
+.quest-notice{position:absolute;z-index:80;left:50%;top:35%;transform:translate(-50%,-50%);width:min(330px,calc(100% - 48px));padding:20px 24px;border:1px solid #fff9f2;border-radius:16px;background:#fffaf6f5;color:#55464c;box-shadow:0 10px 32px #46323a24;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .22s ease,visibility .22s ease;text-align:center}
+.quest-notice.is-visible{opacity:1;visibility:visible}
+.quest-notice span{display:block;margin-bottom:8px;font-size:11px;color:#9a8068;letter-spacing:.04em}
+.quest-notice strong{font-size:18px;font-weight:650;line-height:1.6}

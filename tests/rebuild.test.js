@@ -4,7 +4,6 @@ const fs=require('node:fs');
 const vm=require('node:vm');
 const path=require('node:path');
 const source=fs.readFileSync(path.join(__dirname,'../rebuild.js'),'utf8');
-const journalSource=fs.readFileSync(path.join(__dirname,'../journal.js'),'utf8');
 const dialogueSource=fs.readFileSync(path.join(__dirname,'../member-dialogue.js'),'utf8');
 const key='pixely-rebuild-save-v1';
 
@@ -49,7 +48,6 @@ function boot(saved,{failStorage=false}={}){
   const context={document,HTMLImageElement:class{},localStorage:{
     getItem:k=>storage.get(k),setItem:(k,v)=>{if(failStorage) throw Error('unavailable');storage.set(k,v)}
   },window:{setTimeout},setTimeout,clearTimeout:id=>timers.delete(id),requestAnimationFrame:fn=>fn(),Date,Math};
-  vm.runInNewContext(journalSource,context);
   vm.runInNewContext(dialogueSource,context);
   vm.runInNewContext(source,context);
   function flush(){
@@ -86,7 +84,7 @@ test('arrival uses Dreamer subtitles, door cancellation stays at the door, and i
   app.click('#dialogue-next');
   assert.equal(app.node('#dialogue-text').textContent,'생각보다 조용한데… 다들 벌써 준비하고 있으려나?');
   app.click('#dialogue-next');app.flush();
-  assert.equal(app.node('#active-quest').textContent,'집에 들어가자');
+  assert.equal(app.node('#quest-notice-title').textContent,'집에 들어가자');
   app.click('#door-hotspot');
   assert.equal(app.node('#dialogue-text').textContent,'바로 들어가도 되려나?');
   app.click('#dialogue-next');app.node('#dialogue-choices').children[1].click();
@@ -370,7 +368,7 @@ test('game animation defaults on and the explicit toggle remains usable without 
   app.click('#toggle-motion');
   assert.equal(app.node('html').getAttribute('data-game-motion'),'full');
 });
-test('chapter replay preserves the quest and saved dialogue history',()=>{
+test('chapter replay preserves the quest and saved dialogue progress',()=>{
   const app=boot({scene:'living-room',chapterIntroSeen:true,openingSeen:true,decorationQuest:'accepted',answeredDecorationChoices:[2]});
   app.click('#continue-story');
   const before=app.save();
@@ -446,43 +444,6 @@ test('the diary contains only the task, without memo tabs or hint wording',()=>{
   assert.doesNotMatch(html,/journal-notes|journal-tabs/);
 });
 
-test('dialogue history includes interruptions and choices, persists, and freezes progression while open',()=>{
-  const app=boot({scene:'living-room',chapterIntroSeen:true,dialogueProgress:{phase:'opening',index:8,revision:2}});
-  app.click('#continue-story');
-  assert.equal(app.node('#dialogue-next').disabled,true);
-  assert.equal(app.node('#dialogue-interruption').hidden,false);
-  assert.equal(app.save().dialogueLog.at(-1).member,'deokgae');
-  assert.equal(app.activeElement(),app.node('#interruption-next'));
-  app.click('#dialogue-history-button');
-  const before=app.save().dialogueProgress.index;
-  app.key({code:'Space',key:' ',preventDefault(){}});
-  assert.equal(app.save().dialogueProgress.index,before);
-  assert.equal(app.node('#story-dialogue-ui').inert,true);
-  app.escape();assert.equal(app.node('#dialogue-log').hidden,true);
-  assert.equal(app.node('#story-dialogue-ui').inert,false);
-  app.node('#interruption-next').focus();
-  app.key({code:'Space',key:' ',preventDefault(){}});
-  assert.equal(app.save().dialogueProgress.index,before+1);
-  for(let i=0;i<9;i++)app.click('#dialogue-next');
-  app.node('#dialogue-choices').children[2].click();
-  assert.ok(app.save().dialogueLog.some(e=>e.member==='dreamer'&&e.text==='결국 제가 찾으러 가는 거네요.'));
-  const resumed=boot(app.save());resumed.click('#continue-story');
-  assert.ok(resumed.save().dialogueLog.some(e=>e.member==='deokgae'&&e.text==='야, 정형준!'));
-  resumed.click('#new-story');
-  assert.deepEqual(resumed.save().dialogueLog,[]);
-});
-
-test('opening dialogue history pauses timed knocking and resumes the same sequence',()=>{
-  const app=boot({scene:'door-closeup',outsideDialogue:{kind:'knock',state:{phase:'scene',index:0}}});
-  app.click('#continue-story');
-  assert.equal(app.node('#dialogue-text').textContent,'똑똑—');
-  app.click('#dialogue-history-button');app.flush();
-  assert.equal(app.save().outsideDialogue.state.index,0);
-  assert.equal(app.node('#dialogue-text').textContent,'똑똑—');
-  app.click('#dialogue-log-backdrop');app.flush();
-  assert.equal(app.node('#dialogue-text').textContent,'잠깐만!');
-});
-
 test('all tools and the empty hint window work outside and at the door before a quest',()=>{
   for(const scene of ['exterior','door-closeup']){
     const app=boot({scene,arrivalSeen:true,openingSeen:false});app.click('#continue-story');
@@ -507,4 +468,18 @@ test('replaying a seen chapter outside preserves the scene and restores menu foc
   assert.equal(app.save().scene,'exterior');
   assert.equal(app.save().decorationQuest,'accepted');
   assert.equal(app.activeElement(),app.node('#story-menu-button'));
+});
+
+test('quests appear in the journal and announce once without a persistent tracker or history UI',()=>{
+  const app=boot({scene:'living-room',chapterIntroSeen:true,dialogueProgress:{phase:'reply',choice:2,index:1,revision:2}});
+  app.click('#continue-story');app.click('#dialogue-next');
+  assert.equal(app.node('#quest-notice-title').textContent,'생일 장식 찾기');
+  assert.equal(app.node('#quest-notice').classList.contains('is-visible'),true);
+  app.flush();assert.equal(app.node('#quest-notice').classList.contains('is-visible'),false);
+  app.click('#diary-button');assert.equal(app.node('#tool-content').children[0].textContent,'생일 장식 찾기');app.escape();
+  app.click('#talk-gongryong');for(let i=0;i<3;i++)app.click('#dialogue-next');
+  app.node('#dialogue-choices').children[2].click();app.click('#dialogue-next');app.click('#dialogue-next');
+  assert.equal(app.node('#quest-notice').classList.contains('is-visible'),false);
+  const html=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');
+  assert.doesNotMatch(html,/active-quest|mission-widget|dialogue-history-button|dialogue-log/);
 });

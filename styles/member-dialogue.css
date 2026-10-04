@@ -113,8 +113,6 @@
 .dialogue-choices button.is-read{background:#f1ece7f5;color:#60585f;border-color:#b8aaa2;box-shadow:0 3px 10px #342b3912}
 .dialogue-choices button.is-read:hover{background:#fffaf5;color:#49414b}
 .dialogue-choices button.is-read::after{content:"✓ 읽음";float:right;margin-left:12px;font-size:12px;color:#776a60;line-height:24px}
-.dialogue-history-button{position:absolute;right:0;bottom:-36px;padding:6px 12px;border:1px solid #fff9ef99;border-radius:10px;background:#fffaf5e8;color:#5d515c;font:inherit;font-size:12px;pointer-events:auto;cursor:pointer}
-.dialogue-history-button:focus-visible{outline:2px solid #625268;outline-offset:3px}
 .member-dialogue-ui[data-interruption="true"] .subtitle-cue{visibility:hidden}
 .interruption button{border-width:2px;outline:0;border-radius:14px;background:#fffaf5;box-shadow:0 6px 22px #342b3924}
 .interruption button::after{border-width:2px;background:#fffaf5}

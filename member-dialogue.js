@@ -53,9 +53,9 @@ const members={
   stage:{name:"",portrait:null}
 };
 const ui=$("#story-dialogue-ui");
-let state=null,onProgress=()=>{},onComplete=()=>{},onLine=()=>{},lastLoggedKey=null;
+let state=null,onProgress=()=>{},onComplete=()=>{};
 let readChoices=new Set();
-let sequence=null,sequenceTimer=0,sequencePaused=false,sequenceDeadline=0,remainingDelay=0;
+let sequence=null,sequenceTimer=0;
 function normalize(saved){
   if(!saved||!["opening","repeat","choices","reply"].includes(saved.phase)) return {phase:"opening",index:0,choice:null};
   if(saved.phase==="choices") return {phase:"choices",index:0,choice:null,repeat:Boolean(saved.repeat)};
@@ -80,8 +80,6 @@ function render(){
   const line=picking?null:sequence?lastMain():(state.phase==="opening"?opening:state.phase==="repeat"?repeatOpening:choices[state.choice].lines)[state.index];
   const interruption=!picking&&line.member==="deokgae";
   ui.dataset.interruption=interruption?"true":"false";
-  const loggedKey=state.phase+":"+state.choice+":"+state.index;
-  if(!picking&&loggedKey!==lastLoggedKey){lastLoggedKey=loggedKey;onLine(line)}
   const mainLine=lastMain(),member=members[mainLine.member];
   ui.dataset.speaker=mainLine.member;
   ui.setAttribute("aria-label",member.name?member.name+"의 대화":"상황 묘사");
@@ -118,7 +116,6 @@ function render(){
       if(!sequence&&readChoices.has(index)) button.setAttribute("aria-label",choice.label+" (이미 읽은 대화)");
       button.addEventListener("click",()=>{
         if(!state)return;
-        onLine({member:"dreamer",text:choice.label});
         if(sequence){const callback=sequence.choose;close();callback(index);return}
         state={phase:"reply",index:0,choice:index};
         onProgress(snapshot());render();
@@ -130,7 +127,7 @@ function render(){
   if(!picking&&!waiting) (interruption?$("#interruption-next"):$("#dialogue-next")).focus({preventScroll:true});
 }
 function advance(){
-  if(!state||sequencePaused||state.phase==="choices"||state.phase==="scene-choices") return;
+  if(!state||state.phase==="choices"||state.phase==="scene-choices") return;
   if(sequence){
     clearTimeout(sequenceTimer);
     if(state.index+1<sequence.lines.length) state.index++;
@@ -144,28 +141,26 @@ function advance(){
   else {const choice=state.choice;close();onComplete({choice});return}
   onProgress(snapshot());render();
 }
-function close(){clearTimeout(sequenceTimer);sequenceTimer=0;sequencePaused=false;remainingDelay=0;sequence=null;ui.hidden=true;$(".story-frame")?.classList.remove("is-talking");$("#dialogue-portrait").hidden=true;state=null;$("#dialogue-interruption").hidden=true;$("#dialogue-choices").hidden=true}
-function open({saved=null,repeat=false,answeredChoices=[],progress=()=>{},complete=()=>{},line=()=>{}}={}){
+function close(){clearTimeout(sequenceTimer);sequenceTimer=0;sequence=null;ui.hidden=true;$(".story-frame")?.classList.remove("is-talking");$("#dialogue-portrait").hidden=true;state=null;$("#dialogue-interruption").hidden=true;$("#dialogue-choices").hidden=true}
+function open({saved=null,repeat=false,answeredChoices=[],progress=()=>{},complete=()=>{}}={}){
   sequence=null;clearTimeout(sequenceTimer);
-  lastLoggedKey=null;
   readChoices=new Set((Array.isArray(answeredChoices)?answeredChoices:[]).filter(choice=>Number.isInteger(choice)&&choices[choice]));
   state=normalize(saved||(repeat?{phase:"repeat",index:0}:null));
-  onProgress=progress;onComplete=complete;onLine=line;
+  onProgress=progress;onComplete=complete;
   ui.hidden=false;onProgress(snapshot());render();
   if(state.phase!=="choices") (ui.dataset.interruption==="true"?$("#interruption-next"):$("#dialogue-next")).focus({preventScroll:true});
 }
 $("#dialogue-next").addEventListener("click",advance);
 $("#interruption-next").addEventListener("click",advance);
 document.addEventListener("keydown",event=>{
-  if(!state||event.repeat||($("#dialogue-log")&&!$("#dialogue-log").hidden)) return;
+  if(!state||event.repeat) return;
   const picking=state.phase==="choices"||state.phase==="scene-choices";
-  const history=$("#dialogue-history-button");
-  if((event.code==="Space"||event.code==="Enter")&&!picking&&document.activeElement!==history){
+  if((event.code==="Space"||event.code==="Enter")&&!picking){
     event.preventDefault();if(!$("#dialogue-next").disabled||!$("#dialogue-interruption").hidden)advance();
   }
   if(event.key==="Tab"){
     const advanceButton=$("#dialogue-interruption").hidden?$("#dialogue-next"):$("#interruption-next");
-    const buttons=[...(picking?[...$("#dialogue-choices").querySelectorAll("button")]:advanceButton.disabled?[]:[advanceButton]),...(history?[history]:[])];
+    const buttons=[...(picking?[...$("#dialogue-choices").querySelectorAll("button")]:advanceButton.disabled?[]:[advanceButton])];
     const first=buttons[0],last=buttons.at(-1);
     if(!buttons.includes(document.activeElement)){event.preventDefault();first?.focus()}
     else if(event.shiftKey&&document.activeElement===first){event.preventDefault();last?.focus()}
@@ -191,30 +186,15 @@ function fitPortrait(image){
 }
 document.querySelectorAll("[data-member-image]").forEach(image=>{image.addEventListener("load",()=>fitPortrait(image));if(image.complete)fitPortrait(image)});
 function scheduleSequence(){
-  if(sequence&&!sequencePaused&&state.phase==="scene"&&lastMain().delay){
-    remainingDelay=lastMain().delay;sequenceDeadline=Date.now()+remainingDelay;
-    sequenceTimer=setTimeout(()=>{sequenceTimer=0;advance()},remainingDelay);
-  }
+  if(sequence&&state.phase==="scene"&&lastMain().delay) sequenceTimer=setTimeout(advance,lastMain().delay);
 }
-function play({lines,choices:options=[],saved=null,progress=()=>{},complete=()=>{},choose=()=>{},line=()=>{}}){
-  close();lastLoggedKey=null;sequence={lines,choices:options,choose};onProgress=progress;onComplete=complete;onLine=line;
+function play({lines,choices:options=[],saved=null,progress=()=>{},complete=()=>{},choose=()=>{}}){
+  close();sequence={lines,choices:options,choose};onProgress=progress;onComplete=complete;
   const picking=saved?.phase==="scene-choices"&&options.length;
   const index=Number.isInteger(saved?.index)&&saved.index>=0&&saved.index<lines.length?saved.index:0;
   state={phase:picking?"scene-choices":"scene",index};
   ui.hidden=false;onProgress(snapshot());render();scheduleSequence();
   if(!picking) $("#dialogue-next").focus({preventScroll:true});
 }
-function pause(){
-  sequencePaused=true;
-  if(sequenceTimer){remainingDelay=Math.max(0,sequenceDeadline-Date.now());clearTimeout(sequenceTimer);sequenceTimer=0}
-}
-function resume(){
-  if(!sequencePaused)return;
-  sequencePaused=false;
-  if(sequence&&state?.phase==="scene"&&lastMain().delay){
-    sequenceDeadline=Date.now()+remainingDelay;
-    sequenceTimer=setTimeout(()=>{sequenceTimer=0;advance()},remainingDelay);
-  }
-}
-window.PixelyDialogue={open,play,close,pause,resume,isOpen:()=>Boolean(state)};
+window.PixelyDialogue={open,play,close,isOpen:()=>Boolean(state)};
 })();
