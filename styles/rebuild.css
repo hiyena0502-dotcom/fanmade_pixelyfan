@@ -168,7 +168,7 @@ button{color:inherit}
   width:max(100%,calc(100dvh * 16 / 9));aspect-ratio:16 / 9;
 }
 .door-closeup-stage{width:max(100%,calc(100dvh * 1671 / 941));aspect-ratio:1671 / 941}
-.exterior-stage{width:max(100%,calc(100dvh * 16 / 9));aspect-ratio:16 / 9;background:#8ed9f9;isolation:isolate}
+.exterior-stage{top:auto;bottom:0;transform:translateX(-50%);width:max(100%,calc(100dvh * 16 / 9));aspect-ratio:16 / 9;background:#8ed9f9;isolation:isolate}
 .exterior-layers{position:absolute;inset:0;pointer-events:none}
 .exterior-layer{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:fill;pointer-events:none}
 .exterior-cloud{height:calc(100% * 1339 / 1152);animation:exterior-cloud-flow var(--cloud-duration,160s) linear infinite;animation-delay:var(--cloud-delay,0s)}
