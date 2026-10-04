@@ -253,7 +253,6 @@ button{color:inherit}
 .tool-sheet h2{font-size:22px;letter-spacing:-.04em;font-weight:650;margin:0}
 .tool-sheet #tool-content{min-height:110px}
 .tool-sheet #tool-content p{font-size:15px;line-height:1.8;color:var(--ui-muted);margin:0}
-.panel-hint,.tool-sheet .panel-hint{margin:22px 0 0;font-size:10px;color:#9c909c;letter-spacing:.02em;text-align:center}
 .menu-sheet:focus,.tool-sheet:focus{outline:none}
 .object-tool:focus-visible,.scene-back-arrow:focus-visible,.choice-sheet button:focus-visible,.menu-sheet>button:focus-visible{outline:2px solid var(--ui-accent);outline-offset:4px}
 @media(hover:hover){
