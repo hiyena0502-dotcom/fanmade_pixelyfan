@@ -368,7 +368,8 @@ button{color:inherit}
 .choice-sheet:not([hidden]),.menu-sheet:not([hidden]),.tool-sheet:not([hidden]){animation:panel-arrive .25s ease-out both}
 @keyframes panel-arrive{from{opacity:0;translate:0 10px}to{opacity:1;translate:0 0}}
 .scene-back-arrow,.story-tools button{transition:translate .18s ease,box-shadow .18s ease}
-.scene-back-arrow:hover,.story-tools button:hover{translate:0 -3px}
+.scene-back-arrow:hover{box-shadow:0 8px 22px #342b3929}
+.story-tools button:hover{translate:0 -3px}
 @media(prefers-reduced-motion:reduce){:root:not([data-game-motion="full"]) .scene-snow{display:none}:root:not([data-game-motion="full"]) .choice-sheet,:root:not([data-game-motion="full"]) .menu-sheet,:root:not([data-game-motion="full"]) .tool-sheet{animation:none!important}:root:not([data-game-motion="full"]) .scene-back-arrow,:root:not([data-game-motion="full"]) .story-tools button{transition:none;translate:none}}
 
 /* Explicit in-game off switch, independent of the operating-system setting. */
@@ -415,10 +416,10 @@ button{color:inherit}
 @keyframes blue-worm-wiggle{0%,100%{transform:translateX(0)}50%{transform:translateX(1px)}}
 
 /* Room exits remain visible above the artwork and below dialogue. */
-.scene-back-arrow.room-direction{top:50%;bottom:auto;transform:translateY(-50%);width:60px;height:60px}
+.scene-back-arrow.room-direction{top:50%;bottom:auto;transform:translateY(-50%)}
+.scene-back-arrow.room-direction--left{left:24px;right:auto}
 .scene-back-arrow.room-direction--right{left:auto;right:24px}
-.scene-back-arrow.room-direction svg{width:32px;height:32px}
-@media(max-width:600px){.scene-back-arrow.room-direction{width:52px;height:52px}.scene-back-arrow.room-direction--right{right:12px}}
+@media(max-width:600px){.scene-back-arrow.room-direction--left{left:12px}.scene-back-arrow.room-direction--right{right:12px}}
 
 /* On short windows, leave the scene clear and use the functional bag button. */
 @media(max-height:560px){.inventory-rack{display:none}}
@@ -445,11 +446,7 @@ button{color:inherit}
 @media(max-width:600px){.hint-trigger{right:12px;top:14px}.tool-sheet--hint{right:12px;top:58px;width:min(280px,calc(100% - 24px))}}
 
 /* Returning out of a scene always uses the same downward exit. */
-.scene-back-arrow.scene-exit{left:50%;right:auto;transform:translateX(-50%)}
-.scene-back-arrow.room-link{bottom:auto;width:56px;height:56px}
-.scene-back-arrow.room-link--stairs{left:auto;right:24px;top:59%}
-.scene-back-arrow.room-link--bathroom{left:auto;right:24px;top:50%;transform:translateY(-50%)}
-.scene-back-arrow.room-link--storage{left:50%;top:18%;transform:translateX(-50%)}
+.scene-back-arrow.scene-exit{left:50%;right:auto;top:auto;transform:translateX(-50%)}
 .shape-room-art{position:absolute;inset:0;overflow:hidden;background:#f1e3cb}
 .shape-room-art>div{position:absolute;box-sizing:border-box}
 .shape-floor{inset:68% 0 0;background:#cdb494;border-top:8px solid #b39878}
@@ -474,7 +471,7 @@ button{color:inherit}
 .storage-box:after{content:"";position:absolute;top:0;bottom:0;left:42%;width:16%;background:#e0c8a1}
 .storage-box--a{left:23%;top:25%;width:14%;height:16%}.storage-box--b{left:42%;top:26%;width:16%;height:15%}
 .storage-box--c{left:24%;top:49%;width:22%;height:18%}.storage-box--d{left:69%;top:53%;width:17%;height:21%}
-@media(max-width:600px){.scene-back-arrow.room-link{width:48px;height:48px}.scene-back-arrow.room-link--bathroom,.scene-back-arrow.room-link--stairs{right:12px}.stairs-window{border-width:6px}.storage-shelf{border-width:7px}.bath-mirror{border-width:6px}}
+@media(max-width:600px){.stairs-window{border-width:6px}.storage-shelf{border-width:7px}.bath-mirror{border-width:6px}}
 
 .quest-notice{position:absolute;z-index:80;left:50%;top:50%;transform:translate(-50%,-50%);width:min(330px,calc(100% - 48px));padding:20px 24px;border:1px solid #fff9f2;border-radius:16px;background:#fffaf6f5;color:#55464c;box-shadow:0 10px 32px #46323a24;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .22s ease,visibility .22s ease;text-align:center}
 .quest-notice.is-visible{opacity:1;visibility:visible}

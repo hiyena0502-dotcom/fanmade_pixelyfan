@@ -46,8 +46,10 @@ const choices=[
 // to change the conversation image; the room image lives in index.html.
 const members={
   gongryong:{name:"공룡",portrait:"assets/characters/gongryong-placeholder.png"},
-  rader:{name:"라더",portrait:null},
-  deokgae:{name:"덕개",portrait:null},
+  rader:{name:"라더",portrait:"assets/characters/rader-v162.webp"},
+  deokgae:{name:"덕개",portrait:"assets/characters/deokgae-v162.webp"},
+  gakbyeol:{name:"각별",portrait:"assets/characters/gakbyeol-v162.webp"},
+  suhyeon:{name:"수현",portrait:"assets/characters/suhyeon-v162.webp"},
   dreamer:{name:"꿈뜰이",portrait:null},
   unknown:{name:"???",portrait:null},
   stage:{name:"",portrait:null}

@@ -391,13 +391,16 @@ test('room placement and conversation portrait are separate, and only Deokgae in
   assert.equal(app.node('#dialogue-text').textContent,'사람은 많은데?');
   assert.equal(app.node('#story-dialogue-ui').dataset.speaker,'rader');
   assert.equal(app.node('#dialogue-interruption').hidden,true);
-  assert.equal(app.node('#dialogue-portrait').hidden,true);
+  assert.equal(app.node('#dialogue-portrait').hidden,false);
+  assert.equal(app.node('#dialogue-portrait-image').src,'assets/characters/rader-v162.webp');
   app.click('#dialogue-next');
   assert.equal(app.node('#dialogue-portrait').hidden,false);
+  assert.equal(app.node('#dialogue-portrait-image').src,'assets/characters/gongryong-placeholder.png');
   for(let i=0;i<5;i++) app.click('#dialogue-next');
   assert.equal(app.node('#dialogue-interruption').dataset.member,'deokgae');
   assert.equal(app.node('#dialogue-interruption').hidden,false);
   assert.equal(app.node('#dialogue-portrait').hidden,false);
+  assert.equal(app.node('#dialogue-portrait-image').src,'assets/characters/gongryong-placeholder.png');
   const html=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');
   assert.match(html,/id="talk-gongryong"/);
   assert.match(html,/id="dialogue-portrait-image"/);
