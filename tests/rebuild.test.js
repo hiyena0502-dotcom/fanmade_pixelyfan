@@ -423,39 +423,27 @@ test('knock pauses cannot be skipped by keyboard and reload resumes the outside 
   assert.equal(app.save().scene,'living-room');
 });
 
-test('optional hints never expose an unplayed response and do not alter story progress',()=>{
-  const saved={scene:'living-room',chapterIntroSeen:true,openingSeen:true,decorationQuest:'accepted',answeredDecorationChoices:[2]};
+test('the small hint icon opens an empty window and never changes story progress',()=>{
+  const saved={scene:'living-room',chapterIntroSeen:true,openingSeen:true,decorationQuest:'accepted',answeredDecorationChoices:[0,2]};
   const app=boot(saved);app.click('#continue-story');app.click('#quest-hint-button');
-  assert.equal(app.node('#tool-content').children.length,2);
-  assert.equal(app.node('#tool-content').children[1].textContent,'힌트 보기');
-  app.node('#tool-content').children[1].click();
-  const text=app.node('#tool-content').children.map(e=>e.textContent).join(' ');
-  assert.match(text,/요정들 보이면 장식/);
-  assert.doesNotMatch(text,/또니도|티티부터|문구랑/);
+  assert.equal(app.node('#tool-content').children.length,0);
+  assert.equal(app.node('#tool-title').textContent,'힌트');
+  assert.equal(app.node('#tool-sheet').hidden,false);
   assert.equal(app.save().dialogueProgress,undefined);
-  assert.deepEqual(app.save().answeredDecorationChoices,[2]);
+  assert.deepEqual(app.save().answeredDecorationChoices,[0,2]);
+  app.escape();assert.equal(app.node('#tool-sheet').hidden,true);
+  assert.equal(app.activeElement(),app.node('#quest-hint-button'));
 });
 
-test('heard clues survive a partial reply while the diary contains only the task',()=>{
-  const app=boot({scene:'living-room',chapterIntroSeen:true,openingSeen:true,decorationQuest:'accepted',dialogueProgress:{phase:'reply',choice:0,index:0,revision:2}});
-  app.click('#continue-story');
-  assert.deepEqual(app.save().heardHints,['decorations']);
-  assert.equal(app.node('#diary-notification').hidden,false);
-  // Resume after the first line; future lines have not been revealed yet.
-  const resumed=boot(app.save());resumed.click('#continue-story');
-  assert.deepEqual(resumed.save().heardHints,['decorations']);
-  resumed.click('#dialogue-next');resumed.click('#dialogue-next');
-  assert.deepEqual(resumed.save().heardHints,['decorations','ttoni','tt']);
-  for(let i=0;i<4;i++)resumed.click('#dialogue-next');
-  resumed.click('#diary-button');
-  assert.equal(resumed.node('#diary-notification').hidden,true);
-  assert.equal(resumed.node('#tool-content').children.length,3);
-  const taskText=resumed.node('#tool-content').children.map(e=>e.textContent).join(' ');
+test('the diary contains only the task, without memo tabs or hint wording',()=>{
+  const app=boot({scene:'living-room',chapterIntroSeen:true,openingSeen:true,decorationQuest:'accepted',answeredDecorationChoices:[0]});
+  app.click('#continue-story');assert.equal(app.node('#diary-notification').hidden,false);
+  app.click('#diary-button');assert.equal(app.node('#diary-notification').hidden,true);
+  const taskText=app.node('#tool-content').children.map(e=>e.textContent).join(' ');
   assert.match(taskText,/생일 장식 찾기/);
   assert.doesNotMatch(taskText,/또니|티티|문구랑|다락|복도|필립|프리츠|0\/4/);
-  resumed.escape();resumed.click('#quest-hint-button');
-  for(let i=0;i<4;i++)resumed.node('#tool-content').children.at(-1).click();
-  assert.match(resumed.node('#tool-content').children.map(e=>e.textContent).join(' '),/티티부터/);
+  const html=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');
+  assert.doesNotMatch(html,/journal-notes|journal-tabs/);
 });
 
 test('dialogue history includes interruptions and choices, persists, and freezes progression while open',()=>{
@@ -481,7 +469,6 @@ test('dialogue history includes interruptions and choices, persists, and freezes
   const resumed=boot(app.save());resumed.click('#continue-story');
   assert.ok(resumed.save().dialogueLog.some(e=>e.member==='deokgae'&&e.text==='야, 정형준!'));
   resumed.click('#new-story');
-  assert.deepEqual(resumed.save().heardHints,[]);
   assert.deepEqual(resumed.save().dialogueLog,[]);
 });
 

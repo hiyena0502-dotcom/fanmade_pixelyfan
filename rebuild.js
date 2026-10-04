@@ -10,7 +10,6 @@ let sessionSave;
 let panelOpener=null;
 const panelSelectors=["#tool-sheet","#story-menu"];
 const journal=window.PixelyJournal;
-let hintIndex=0;
 
 // Game motion is explicit: the requested effects must not silently disappear
 // when Windows/Chrome reports reduced motion. Players can still turn it off.
@@ -404,21 +403,10 @@ function openTool(kind){
   }else{content.replaceChildren();content.appendChild(element("p","가방이 비어 있다."))}
   openPanel("#tool-sheet",kind==="bag"?"#bag-button":"#diary-button");
 }
-function renderHints(){
-  const content=$("#tool-content"),hints=journal.availableHints(readSave());content.replaceChildren();
-  content.appendChild(element("p","공룡에게 들은 이야기를 하나씩 떠올려 보자.","journal-kicker"));
-  hints.slice(0,hintIndex).forEach(hint=>content.appendChild(element("blockquote",hint.text,"journal-note")));
-  if(hintIndex<hints.length){
-    const button=element("button",hintIndex?"다음 힌트":"힌트 보기","hint-reveal");
-    button.addEventListener("click",()=>{hintIndex++;renderHints();$("#tool-sheet").focus({preventScroll:true})});content.appendChild(button);
-  }else{
-    content.appendChild(element("p",journal.notes(readSave()).length?"지금까지 들은 힌트는 여기까지야.":"더 궁금하면 공룡에게 ‘어떤 장식인데요?’를 물어보자."));
-  }
-}
 $("#quest-hint-button").addEventListener("click",()=>{
   if(busy||readSave()?.decorationQuest!=="accepted") return;
-  hintIndex=0;$("#tool-sheet").className="tool-sheet tool-sheet--hint";
-  $("#tool-title").textContent="힌트";renderHints();
+  $("#tool-sheet").className="tool-sheet tool-sheet--hint";
+  $("#tool-title").textContent="힌트";$("#tool-content").replaceChildren();
   openPanel("#tool-sheet","#quest-hint-button");
 });
 function closeDialogueLog(){
@@ -440,7 +428,7 @@ $("#dialogue-history-button").addEventListener("click",()=>{
 });
 $("#dialogue-log-backdrop").addEventListener("click",closeDialogueLog);
 $("#new-story").addEventListener("click",()=>{
-  writeSave("exterior",{chapter:0,chapterIntroSeen:false,openingSeen:false,dialogueProgress:null,decorationQuest:null,answeredDecorationChoices:[],dialogueLog:[],heardHints:[],journalSeenRevision:null,outsideDialogue:null,arrivalSeen:false,doorInvited:false});
+  writeSave("exterior",{chapter:0,chapterIntroSeen:false,openingSeen:false,dialogueProgress:null,decorationQuest:null,answeredDecorationChoices:[],dialogueLog:[],journalSeenRevision:null,outsideDialogue:null,arrivalSeen:false,doorInvited:false});
   runPrologue();
 });
 $("#continue-story").addEventListener("click",()=>{
