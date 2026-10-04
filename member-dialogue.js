@@ -87,10 +87,6 @@ function render(){
   ui.setAttribute("aria-label",member.name?member.name+"의 대화":"상황 묘사");
   $("#dialogue-text").textContent=mainLine.text;
   $("#dialogue-speaker").textContent=member.name;
-  document.querySelectorAll("[data-motif]").forEach(motif=>{
-    if(motif.dataset.motif===mainLine.member) motif.removeAttribute("hidden");
-    else motif.setAttribute("hidden","");
-  });
   const portrait=$("#dialogue-portrait"),image=$("#dialogue-portrait-image");
   portrait.hidden=!member.portrait;
   if(member.portrait){

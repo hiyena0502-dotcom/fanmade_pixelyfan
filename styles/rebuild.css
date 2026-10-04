@@ -473,6 +473,19 @@ button{color:inherit}
 .storage-box--c{left:24%;top:49%;width:22%;height:18%}.storage-box--d{left:69%;top:53%;width:17%;height:21%}
 @media(max-width:600px){.stairs-window{border-width:6px}.storage-shelf{border-width:7px}.bath-mirror{border-width:6px}}
 
+/* Upstairs follows the retained floor-plan order; doors are scenery for now. */
+.upper-hall-art{position:absolute;inset:0;background:#f0e5d5}
+.upper-hall-plan{position:absolute;left:12%;right:12%;top:20%;bottom:22%;border:5px solid #b6a38c;border-radius:12px;background:#e4d2b6;overflow:hidden}
+.upper-hall-walkway{position:absolute;left:0;right:0;top:36%;height:28%;background:repeating-linear-gradient(90deg,#c6ac86 0 70px,#bca17b 71px 73px);border-block:3px solid #9c8364}
+.upper-room-row{position:absolute;left:20%;right:5%;height:36%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.upper-room-row--top{top:0}.upper-room-row--bottom{bottom:0}
+.upper-room-row>div{display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:18px 12px;background:#faf3e6;border-inline:2px solid #c5b499}
+.upper-room-row span,.fairy-room-door span{color:#6b5846;font-size:clamp(14px,1.6vw,21px);font-weight:600}
+.upper-room-row i{display:block;width:42%;height:14px;background:#947a5b;border:2px solid #715b43;border-radius:3px}
+.fairy-room-door{position:absolute;left:3%;top:22%;width:12%;height:56%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#c0b5a5;border:3px solid #8d8072;border-radius:8px}
+.fairy-room-door i{display:block;width:70%;height:42%;border:3px solid #6e6964;border-radius:4px;background:repeating-linear-gradient(90deg,#827b72 0 4px,#e1d9cc 5px 14px)}
+@media(max-width:600px){.upper-hall-plan{left:8%;right:8%;top:24%;bottom:24%;border-width:3px}.upper-room-row{gap:5px}.upper-room-row>div{padding:16px 3px}.fairy-room-door{border-width:2px}.fairy-room-door span{font-size:12px}.upper-room-row i{width:62%}}
+
 .quest-notice{position:absolute;z-index:80;left:50%;top:50%;transform:translate(-50%,-50%);width:min(330px,calc(100% - 48px));padding:20px 24px;border:1px solid #fff9f2;border-radius:16px;background:#fffaf6f5;color:#55464c;box-shadow:0 10px 32px #46323a24;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .22s ease,visibility .22s ease;text-align:center}
 .quest-notice.is-visible{opacity:1;visibility:visible}
 .quest-notice span{display:block;margin-bottom:8px;font-size:11px;color:#9a8068;letter-spacing:.04em}

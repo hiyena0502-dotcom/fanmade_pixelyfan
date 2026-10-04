@@ -91,7 +91,7 @@ function writeSave(scene="exterior",patch={}){
   const data={
     ...previous,
     scene,
-    chapter:previous.chapterIntroSeen||["living-room","kitchen","stairs","bathroom","storage"].includes(scene)?1:0,
+    chapter:previous.chapterIntroSeen||["living-room","kitchen","stairs","bathroom","storage","upper-hall"].includes(scene)?1:0,
     ...patch,
     savedAt:Date.now()
   };
@@ -105,7 +105,7 @@ function writeSave(scene="exterior",patch={}){
 function renderContinue(){
   const save=readSave(),button=$("#continue-story"),copy=$("#continue-copy");
   button.disabled=!save;
-  const labels={"exterior":"12월 28일 · 집 앞","door-closeup":"12월 28일 · 문 앞","living-room":"CHAPTER I · 거실","kitchen":"CHAPTER I · 주방","stairs":"CHAPTER I · 계단","bathroom":"CHAPTER I · 화장실","storage":"CHAPTER I · 창고"};
+  const labels={"exterior":"12월 28일 · 집 앞","door-closeup":"12월 28일 · 문 앞","living-room":"CHAPTER I · 거실","kitchen":"CHAPTER I · 주방","stairs":"CHAPTER I · 계단","bathroom":"CHAPTER I · 화장실","storage":"CHAPTER I · 창고","upper-hall":"CHAPTER I · 2층 복도"};
   copy.textContent=save?labels[save.scene]:"NO SAVE DATA";
 }
 function showScreen(name){
@@ -122,7 +122,7 @@ function showScene(name){
     scene.hidden=!on;
     scene.classList.toggle("is-active",on);
   });
-  const roomNames={"living-room":"거실",kitchen:"주방",stairs:"계단",bathroom:"화장실",storage:"창고","door-closeup":"문 앞"};
+  const roomNames={"living-room":"거실",kitchen:"주방",stairs:"계단",bathroom:"화장실",storage:"창고","upper-hall":"2층 복도","door-closeup":"문 앞"};
   const placeLabel=roomNames[name]?"픽셀리 집 · "+roomNames[name]:"픽셀리 집 앞";
   $("#hud-place").textContent=placeLabel;
 
@@ -444,7 +444,7 @@ function moveRoom(destination,focusTarget){
 }
 $("#go-kitchen").addEventListener("click",()=>moveRoom("kitchen","#kitchen-to-living"));
 $("#kitchen-to-living").addEventListener("click",()=>moveRoom("living-room","#go-kitchen"));
-for(const [room,parent] of [["stairs","living"],["bathroom","stairs"],["storage","kitchen"]]){
+for(const [room,parent] of [["stairs","living"],["bathroom","stairs"],["storage","kitchen"],["upper-hall","stairs"]]){
   $("#go-"+room).addEventListener("click",()=>moveRoom(room,"#"+room+"-to-"+parent));
   $("#"+room+"-to-"+parent).addEventListener("click",()=>moveRoom(parent==="living"?"living-room":parent,"#go-"+room));
 }
