@@ -4,6 +4,7 @@ const fs=require('node:fs');
 const vm=require('node:vm');
 const path=require('node:path');
 const source=fs.readFileSync(path.join(__dirname,'../rebuild.js'),'utf8');
+const journalSource=fs.readFileSync(path.join(__dirname,'../journal.js'),'utf8');
 const dialogueSource=fs.readFileSync(path.join(__dirname,'../member-dialogue.js'),'utf8');
 const key='pixely-rebuild-save-v1';
 
@@ -48,6 +49,7 @@ function boot(saved,{failStorage=false}={}){
   const context={document,HTMLImageElement:class{},localStorage:{
     getItem:k=>storage.get(k),setItem:(k,v)=>{if(failStorage) throw Error('unavailable');storage.set(k,v)}
   },window:{setTimeout},setTimeout,clearTimeout:id=>timers.delete(id),requestAnimationFrame:fn=>fn(),Date,Math};
+  vm.runInNewContext(journalSource,context);
   vm.runInNewContext(dialogueSource,context);
   vm.runInNewContext(source,context);
   function flush(){
@@ -70,7 +72,7 @@ function boot(saved,{failStorage=false}={}){
     enter(){this.prepareEntry();node('#dialogue-choices').children[0].click();flush()},
     activeElement:()=>document.activeElement,
     key(event){documentListeners.get('keydown').forEach(fn=>fn(event))},
-    escape(){documentListeners.get('keydown').forEach(fn=>fn({key:'Escape'}))}};
+    escape(){documentListeners.get('keydown').forEach(fn=>fn({key:'Escape',preventDefault(){}}))}};
 }
 
 test('arrival uses Dreamer subtitles, door cancellation stays at the door, and invitation survives exploration',()=>{
@@ -123,7 +125,8 @@ test('chapter leads into the full opening, then a chosen reply starts the record
   assert.equal(app.save().openingSeen,true);
   assert.equal(app.save().decorationQuest,'accepted');
   assert.equal(app.save().dialogueProgress,null);
-  app.click('#diary-button');assert.equal(app.node('#tool-content').children[0].textContent,'공룡에게 부탁받은 생일 장식 찾기');
+  app.click('#diary-button');assert.equal(app.node('#tool-content').children[0].textContent,'생일 장식 찾기');
+  assert.equal(app.node('#journal-tabs').hidden,false);
   app.escape();assert.equal(app.node('#tool-sheet').hidden,true);
   app.click('#leave-house');app.enter();
   assert.equal(app.node('#story-dialogue-ui').hidden,true);
@@ -419,4 +422,74 @@ test('knock pauses cannot be skipped by keyboard and reload resumes the outside 
   app.click('#continue-story');app.click('#go-kitchen');
   assert.equal(app.scenes[2].hidden,false);
   assert.equal(app.save().scene,'living-room');
+});
+
+test('optional hints never expose an unplayed response and do not alter story progress',()=>{
+  const saved={scene:'living-room',chapterIntroSeen:true,openingSeen:true,decorationQuest:'accepted',answeredDecorationChoices:[2]};
+  const app=boot(saved);app.click('#continue-story');app.click('#quest-hint-button');
+  assert.equal(app.node('#tool-content').children.length,2);
+  assert.equal(app.node('#tool-content').children[1].textContent,'힌트 보기');
+  app.node('#tool-content').children[1].click();
+  const text=app.node('#tool-content').children.map(e=>e.textContent).join(' ');
+  assert.match(text,/요정들 보이면 장식/);
+  assert.doesNotMatch(text,/또니도|티티부터|문구랑/);
+  assert.equal(app.save().dialogueProgress,undefined);
+  assert.deepEqual(app.save().answeredDecorationChoices,[2]);
+});
+
+test('heard clues survive a partial reply and only become read when the memo is opened',()=>{
+  const app=boot({scene:'living-room',chapterIntroSeen:true,openingSeen:true,decorationQuest:'accepted',dialogueProgress:{phase:'reply',choice:0,index:0,revision:2}});
+  app.click('#continue-story');
+  assert.deepEqual(app.save().heardHints,['decorations']);
+  assert.equal(app.node('#diary-notification').hidden,false);
+  // Resume after the first line; future lines have not been revealed yet.
+  const resumed=boot(app.save());resumed.click('#continue-story');
+  assert.deepEqual(resumed.save().heardHints,['decorations']);
+  resumed.click('#dialogue-next');resumed.click('#dialogue-next');
+  assert.deepEqual(resumed.save().heardHints,['decorations','ttoni','tt']);
+  for(let i=0;i<4;i++)resumed.click('#dialogue-next');
+  resumed.click('#diary-button');
+  assert.equal(resumed.node('#diary-notification').hidden,false);
+  resumed.click('#journal-notes');
+  assert.equal(resumed.node('#tool-content').children.length,3);
+  assert.equal(resumed.node('#diary-notification').hidden,true);
+  assert.doesNotMatch(resumed.node('#tool-content').children.map(e=>e.textContent).join(' '),/다락|복도|필립|프리츠|0\/4/);
+});
+
+test('dialogue history includes interruptions and choices, persists, and freezes progression while open',()=>{
+  const app=boot({scene:'living-room',chapterIntroSeen:true,dialogueProgress:{phase:'opening',index:8,revision:2}});
+  app.click('#continue-story');
+  assert.equal(app.node('#dialogue-next').disabled,true);
+  assert.equal(app.node('#dialogue-interruption').hidden,false);
+  assert.equal(app.save().dialogueLog.at(-1).member,'deokgae');
+  assert.equal(app.activeElement(),app.node('#interruption-next'));
+  app.click('#dialogue-history-button');
+  const before=app.save().dialogueProgress.index;
+  app.key({code:'Space',key:' ',preventDefault(){}});
+  assert.equal(app.save().dialogueProgress.index,before);
+  assert.equal(app.node('#story-dialogue-ui').inert,true);
+  app.escape();assert.equal(app.node('#dialogue-log').hidden,true);
+  assert.equal(app.node('#story-dialogue-ui').inert,false);
+  app.node('#interruption-next').focus();
+  app.key({code:'Space',key:' ',preventDefault(){}});
+  assert.equal(app.save().dialogueProgress.index,before+1);
+  for(let i=0;i<9;i++)app.click('#dialogue-next');
+  app.node('#dialogue-choices').children[2].click();
+  assert.ok(app.save().dialogueLog.some(e=>e.member==='dreamer'&&e.text==='결국 제가 찾으러 가는 거네요.'));
+  const resumed=boot(app.save());resumed.click('#continue-story');
+  assert.ok(resumed.save().dialogueLog.some(e=>e.member==='deokgae'&&e.text==='야, 정형준!'));
+  resumed.click('#new-story');
+  assert.deepEqual(resumed.save().heardHints,[]);
+  assert.deepEqual(resumed.save().dialogueLog,[]);
+});
+
+test('opening dialogue history pauses timed knocking and resumes the same sequence',()=>{
+  const app=boot({scene:'door-closeup',outsideDialogue:{kind:'knock',state:{phase:'scene',index:0}}});
+  app.click('#continue-story');
+  assert.equal(app.node('#dialogue-text').textContent,'똑똑—');
+  app.click('#dialogue-history-button');app.flush();
+  assert.equal(app.save().outsideDialogue.state.index,0);
+  assert.equal(app.node('#dialogue-text').textContent,'똑똑—');
+  app.click('#dialogue-log-backdrop');app.flush();
+  assert.equal(app.node('#dialogue-text').textContent,'잠깐만!');
 });

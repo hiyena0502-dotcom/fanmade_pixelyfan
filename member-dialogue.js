@@ -53,9 +53,9 @@ const members={
   stage:{name:"",portrait:null}
 };
 const ui=$("#story-dialogue-ui");
-let state=null,onProgress=()=>{},onComplete=()=>{};
+let state=null,onProgress=()=>{},onComplete=()=>{},onLine=()=>{},lastLoggedKey=null;
 let readChoices=new Set();
-let sequence=null,sequenceTimer=0;
+let sequence=null,sequenceTimer=0,sequencePaused=false,sequenceDeadline=0,remainingDelay=0;
 function normalize(saved){
   if(!saved||!["opening","repeat","choices","reply"].includes(saved.phase)) return {phase:"opening",index:0,choice:null};
   if(saved.phase==="choices") return {phase:"choices",index:0,choice:null,repeat:Boolean(saved.repeat)};
@@ -79,6 +79,9 @@ function render(){
   const picking=state.phase==="choices"||state.phase==="scene-choices";
   const line=picking?null:sequence?lastMain():(state.phase==="opening"?opening:state.phase==="repeat"?repeatOpening:choices[state.choice].lines)[state.index];
   const interruption=!picking&&line.member==="deokgae";
+  ui.dataset.interruption=interruption?"true":"false";
+  const loggedKey=state.phase+":"+state.choice+":"+state.index;
+  if(!picking&&loggedKey!==lastLoggedKey){lastLoggedKey=loggedKey;onLine(line)}
   const mainLine=lastMain(),member=members[mainLine.member];
   ui.dataset.speaker=mainLine.member;
   ui.setAttribute("aria-label",member.name?member.name+"의 대화":"상황 묘사");
@@ -95,9 +98,10 @@ function render(){
     image.alt="대화 중인 "+member.name;
   }
   const waiting=Boolean(sequence&&!picking&&mainLine.delay);
-  $("#dialogue-next").disabled=picking||waiting;
+  $("#dialogue-next").disabled=picking||waiting||interruption;
   $("#dialogue-next").setAttribute("aria-label",picking?"대답을 선택해 주세요":waiting?"잠시 기다려 주세요":"다음 대사");
   $("#dialogue-interruption").hidden=!interruption;
+  $(".story-frame")?.classList.toggle("is-talking",true);
   if(interruption){
     $("#dialogue-interruption").dataset.member=line.member;
     $("#interruption-name").textContent=members[line.member].name;
@@ -114,17 +118,19 @@ function render(){
       if(!sequence&&readChoices.has(index)) button.setAttribute("aria-label",choice.label+" (이미 읽은 대화)");
       button.addEventListener("click",()=>{
         if(!state)return;
+        onLine({member:"dreamer",text:choice.label});
         if(sequence){const callback=sequence.choose;close();callback(index);return}
         state={phase:"reply",index:0,choice:index};
-        onProgress(snapshot());render();$("#dialogue-next").focus({preventScroll:true});
+        onProgress(snapshot());render();
       });
       $("#dialogue-choices").appendChild(button);
     });
     $("#dialogue-choices").querySelector("button")?.focus({preventScroll:true});
   }
+  if(!picking&&!waiting) (interruption?$("#interruption-next"):$("#dialogue-next")).focus({preventScroll:true});
 }
 function advance(){
-  if(!state||state.phase==="choices"||state.phase==="scene-choices") return;
+  if(!state||sequencePaused||state.phase==="choices"||state.phase==="scene-choices") return;
   if(sequence){
     clearTimeout(sequenceTimer);
     if(state.index+1<sequence.lines.length) state.index++;
@@ -138,30 +144,33 @@ function advance(){
   else {const choice=state.choice;close();onComplete({choice});return}
   onProgress(snapshot());render();
 }
-function close(){clearTimeout(sequenceTimer);sequenceTimer=0;sequence=null;ui.hidden=true;$("#dialogue-portrait").hidden=true;state=null;$("#dialogue-interruption").hidden=true;$("#dialogue-choices").hidden=true}
-function open({saved=null,repeat=false,answeredChoices=[],progress=()=>{},complete=()=>{}}={}){
+function close(){clearTimeout(sequenceTimer);sequenceTimer=0;sequencePaused=false;remainingDelay=0;sequence=null;ui.hidden=true;$(".story-frame")?.classList.remove("is-talking");$("#dialogue-portrait").hidden=true;state=null;$("#dialogue-interruption").hidden=true;$("#dialogue-choices").hidden=true}
+function open({saved=null,repeat=false,answeredChoices=[],progress=()=>{},complete=()=>{},line=()=>{}}={}){
   sequence=null;clearTimeout(sequenceTimer);
+  lastLoggedKey=null;
   readChoices=new Set((Array.isArray(answeredChoices)?answeredChoices:[]).filter(choice=>Number.isInteger(choice)&&choices[choice]));
   state=normalize(saved||(repeat?{phase:"repeat",index:0}:null));
-  onProgress=progress;onComplete=complete;
+  onProgress=progress;onComplete=complete;onLine=line;
   ui.hidden=false;onProgress(snapshot());render();
-  if(state.phase!=="choices") $("#dialogue-next").focus({preventScroll:true});
+  if(state.phase!=="choices") (ui.dataset.interruption==="true"?$("#interruption-next"):$("#dialogue-next")).focus({preventScroll:true});
 }
 $("#dialogue-next").addEventListener("click",advance);
 $("#interruption-next").addEventListener("click",advance);
 document.addEventListener("keydown",event=>{
-  if(!state||event.repeat) return;
-  if(state.phase==="choices"||state.phase==="scene-choices"){
-    if(event.key==="Tab"){
-      const buttons=[...$("#dialogue-choices").querySelectorAll("button")];
-      const first=buttons[0],last=buttons.at(-1);
-      if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus()}
-      else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus()}
-    }
-    return;
+  if(!state||event.repeat||($("#dialogue-log")&&!$("#dialogue-log").hidden)) return;
+  const picking=state.phase==="choices"||state.phase==="scene-choices";
+  const history=$("#dialogue-history-button");
+  if((event.code==="Space"||event.code==="Enter")&&!picking&&document.activeElement!==history){
+    event.preventDefault();if(!$("#dialogue-next").disabled||!$("#dialogue-interruption").hidden)advance();
   }
-  if(event.code==="Space"||event.code==="Enter") {event.preventDefault();if(!$("#dialogue-next").disabled)advance()}
-  if(event.key==="Tab"){event.preventDefault();$("#dialogue-next").focus({preventScroll:true})}
+  if(event.key==="Tab"){
+    const advanceButton=$("#dialogue-interruption").hidden?$("#dialogue-next"):$("#interruption-next");
+    const buttons=[...(picking?[...$("#dialogue-choices").querySelectorAll("button")]:advanceButton.disabled?[]:[advanceButton]),...(history?[history]:[])];
+    const first=buttons[0],last=buttons.at(-1);
+    if(!buttons.includes(document.activeElement)){event.preventDefault();first?.focus()}
+    else if(event.shiftKey&&document.activeElement===first){event.preventDefault();last?.focus()}
+    else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first?.focus()}
+  }
 });
 function fitPortrait(image){
   if(!image.naturalWidth) return;
@@ -182,15 +191,30 @@ function fitPortrait(image){
 }
 document.querySelectorAll("[data-member-image]").forEach(image=>{image.addEventListener("load",()=>fitPortrait(image));if(image.complete)fitPortrait(image)});
 function scheduleSequence(){
-  if(sequence&&state.phase==="scene"&&lastMain().delay) sequenceTimer=setTimeout(advance,lastMain().delay);
+  if(sequence&&!sequencePaused&&state.phase==="scene"&&lastMain().delay){
+    remainingDelay=lastMain().delay;sequenceDeadline=Date.now()+remainingDelay;
+    sequenceTimer=setTimeout(()=>{sequenceTimer=0;advance()},remainingDelay);
+  }
 }
-function play({lines,choices:options=[],saved=null,progress=()=>{},complete=()=>{},choose=()=>{}}){
-  close();sequence={lines,choices:options,choose};onProgress=progress;onComplete=complete;
+function play({lines,choices:options=[],saved=null,progress=()=>{},complete=()=>{},choose=()=>{},line=()=>{}}){
+  close();lastLoggedKey=null;sequence={lines,choices:options,choose};onProgress=progress;onComplete=complete;onLine=line;
   const picking=saved?.phase==="scene-choices"&&options.length;
   const index=Number.isInteger(saved?.index)&&saved.index>=0&&saved.index<lines.length?saved.index:0;
   state={phase:picking?"scene-choices":"scene",index};
   ui.hidden=false;onProgress(snapshot());render();scheduleSequence();
   if(!picking) $("#dialogue-next").focus({preventScroll:true});
 }
-window.PixelyDialogue={open,play,close,isOpen:()=>Boolean(state)};
+function pause(){
+  sequencePaused=true;
+  if(sequenceTimer){remainingDelay=Math.max(0,sequenceDeadline-Date.now());clearTimeout(sequenceTimer);sequenceTimer=0}
+}
+function resume(){
+  if(!sequencePaused)return;
+  sequencePaused=false;
+  if(sequence&&state?.phase==="scene"&&lastMain().delay){
+    sequenceDeadline=Date.now()+remainingDelay;
+    sequenceTimer=setTimeout(()=>{sequenceTimer=0;advance()},remainingDelay);
+  }
+}
+window.PixelyDialogue={open,play,close,pause,resume,isOpen:()=>Boolean(state)};
 })();

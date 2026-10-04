@@ -10,13 +10,14 @@
   <link rel="preload" as="image" href="assets/home/home-bg.png?v=85" />
   <link rel="preload" as="image" href="assets/story/chapter1/living-room.webp?v=90" />
   <link rel="preload" as="image" href="assets/story/chapter1/exterior/sky-v138.webp" />
-  <link rel="stylesheet" href="styles/rebuild.css?v=148" />
-  <link rel="stylesheet" href="styles/member-dialogue.css?v=148" />
+  <link rel="stylesheet" href="styles/rebuild.css?v=149" />
+  <link rel="stylesheet" href="styles/member-dialogue.css?v=149" />
   <link rel="stylesheet" href="styles/game-interaction.css?v=121" />
   <script src="game-interaction.js?v=121" defer></script>
-  <script src="member-dialogue.js?v=148" defer></script>
-  <script src="atmosphere.js?v=148" defer></script>
-  <script src="rebuild.js?v=148" defer></script>
+  <script src="journal.js?v=149" defer></script>
+  <script src="member-dialogue.js?v=149" defer></script>
+  <script src="atmosphere.js?v=149" defer></script>
+  <script src="rebuild.js?v=149" defer></script>
 </head>
 <body>
   <main class="rebuild-root">
@@ -74,7 +75,7 @@
 
           <nav class="hud-tools" aria-label="게임 도구">
             <button type="button" class="object-tool" id="bag-button" aria-label="가방" disabled><span class="tool-icon tool-icon--bag" aria-hidden="true"></span><small>가방</small></button>
-            <button type="button" class="object-tool" id="diary-button" aria-label="다이어리" disabled><span class="tool-icon tool-icon--diary" aria-hidden="true"></span><small>기록</small></button>
+            <button type="button" class="object-tool" id="diary-button" aria-label="다이어리" disabled><span class="tool-icon tool-icon--diary" aria-hidden="true"></span><small>기록</small><i id="diary-notification" class="notification-dot" hidden aria-hidden="true"></i></button>
             <button type="button" class="object-tool" id="story-menu-button" aria-label="메뉴"><span class="tool-icon tool-icon--menu" aria-hidden="true"></span><small>메뉴</small></button>
           </nav>
         </header>
@@ -154,9 +155,11 @@
               <span class="interruption-name" id="interruption-name"></span>
               <span class="interruption-place" id="interruption-place"></span>
               <strong id="interruption-text"></strong>
+              <span class="interruption-cue" aria-hidden="true">▾</span>
             </button>
           </aside>
           <div class="dialogue-bottom">
+            <button type="button" class="dialogue-history-button" id="dialogue-history-button" aria-label="지난 대화 보기">지난 대화</button>
             <div class="dialogue-choices" id="dialogue-choices" role="group" aria-label="대답 선택" hidden></div>
             <button type="button" class="subtitle-bar" id="dialogue-next" aria-label="다음 대사">
               <span class="member-motif" aria-hidden="true">
@@ -212,7 +215,10 @@
           </div>
         </section>
 
-        <p class="active-quest" id="active-quest" aria-live="polite"></p>
+        <aside class="mission-widget" aria-label="현재 할 일">
+          <p class="active-quest" id="active-quest" aria-live="polite"></p>
+          <button type="button" class="hint-trigger" id="quest-hint-button" hidden>힌트</button>
+        </aside>
         <div class="panel-backdrop" id="panel-backdrop" hidden aria-hidden="true"></div>
         <section class="menu-sheet" id="story-menu" role="dialog" aria-modal="true" aria-labelledby="story-menu-title" tabindex="-1" hidden>
           <header>
@@ -226,8 +232,18 @@
         </section>
         <section class="tool-sheet" id="tool-sheet" role="dialog" aria-modal="true" aria-labelledby="tool-title" tabindex="-1" hidden>
           <header><h2 id="tool-title"></h2></header>
+          <div class="journal-tabs" id="journal-tabs" role="group" aria-label="기록장 내용" hidden>
+            <button type="button" id="journal-tasks" aria-pressed="true">할 일</button>
+            <button type="button" id="journal-notes" aria-pressed="false">메모</button>
+          </div>
           <div id="tool-content"></div>
           <p class="panel-hint">창 밖을 누르면 닫혀요</p>
+        </section>
+        <div class="dialogue-log-backdrop" id="dialogue-log-backdrop" hidden></div>
+        <section class="dialogue-log" id="dialogue-log" role="dialog" aria-modal="true" aria-labelledby="dialogue-log-title" tabindex="-1" hidden>
+          <h2 id="dialogue-log-title">지난 대화</h2>
+          <div id="dialogue-log-content"></div>
+          <p class="panel-hint">창 밖을 누르거나 Esc를 누르면 닫혀요</p>
         </section>
       </div>
     </section>

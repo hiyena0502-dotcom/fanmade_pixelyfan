@@ -9,6 +9,8 @@ let busy=false;
 let sessionSave;
 let panelOpener=null;
 const panelSelectors=["#tool-sheet","#story-menu"];
+const journal=window.PixelyJournal;
+let journalTab="tasks",hintIndex=0;
 
 // Game motion is explicit: the requested effects must not silently disappear
 // when Windows/Chrome reports reduced motion. Players can still turn it off.
@@ -91,7 +93,7 @@ function writeSave(scene="exterior",patch={}){
     savedAt:Date.now()
   };
   sessionSave=data;
-  $("#active-quest").textContent=data.decorationQuest==="accepted"?"공룡에게 부탁받은 생일 장식 찾기":data.chapterIntroSeen?"":"집에 들어가자";
+  updateJournalUI(data);
   try{localStorage.setItem(SAVE_KEY,JSON.stringify(data))}
   catch{renderContinue();toast("이번 진행은 현재 탭에서만 유지돼. 브라우저 저장 공간을 사용할 수 없어.");return null}
   renderContinue();
@@ -128,6 +130,7 @@ function showScene(name){
 
   $("#bag-button").disabled=!["living-room","kitchen"].includes(name);
   $("#diary-button").disabled=!["living-room","kitchen"].includes(name);
+  updateJournalUI(readSave());
 }
 function normalizeStoryScene(scene){
   return scenes.some(s=>s.dataset.scene===scene)?scene:"exterior";
@@ -164,7 +167,7 @@ function startStory(scene="exterior"){
   showScene(scene);
   closePanels(false);
 
-  $("#active-quest").textContent=readSave()?.decorationQuest==="accepted"?"공룡에게 부탁받은 생일 장식 찾기":readSave()?.chapterIntroSeen?"":"집에 들어가자";
+  updateJournalUI(readSave());
   const pending=readSave()?.outsideDialogue;
   if(["exterior","door-closeup"].includes(scene)&&pending){playOutside(pending.kind,pending.state);return}
   if(scene==="living-room"&&(readSave()?.dialogueProgress||!readSave()?.openingSeen)) beginGongryongDialogue();
@@ -268,7 +271,7 @@ function playOutside(kind,saved=null){
   closePanels(false);setBusy(true);
   const scene=["door","knock","invited"].includes(kind)?"door-closeup":"exterior";
   showScene(scene);
-  window.PixelyDialogue.play({...script,saved,
+  window.PixelyDialogue.play({...script,saved,line:recordDialogueLine,
     progress:state=>{
       $(".story-frame").dataset.doorEffect=script.lines[state.index]?.effect||"";
       writeSave(scene,{outsideDialogue:{kind,state}});
@@ -352,6 +355,7 @@ function beginGongryongDialogue(){
     saved:save?.dialogueProgress,
     repeat:Boolean(save?.openingSeen),
     answeredChoices:save?.answeredDecorationChoices,
+    line:recordDialogueLine,
     progress:dialogueProgress=>writeSave("living-room",{dialogueProgress}),
     complete:({choice})=>{
       const newlyAccepted=readSave()?.decorationQuest!=="accepted";
@@ -360,25 +364,97 @@ function beginGongryongDialogue(){
       writeSave("living-room",{openingSeen:true,dialogueProgress:null,decorationQuest:"accepted",answeredDecorationChoices});
       setBusy(false);
       $("#talk-gongryong").focus({preventScroll:true});
-      if(newlyAccepted) toast("공룡에게 부탁받은 생일 장식 찾기");
+      if(newlyAccepted) toast("새 부탁이 기록장에 추가됐어.");
     }
   });
 }
 $("#talk-gongryong").addEventListener("click",beginGongryongDialogue);
 document.querySelectorAll("[data-outside-object]").forEach(button=>button.addEventListener("click",()=>{if(!busy)playOutside(button.dataset.outsideObject)}));
 
+function updateJournalUI(save){
+  $("#active-quest").textContent=save?.decorationQuest==="accepted"?"생일 장식 찾기":save?.chapterIntroSeen?"":"집에 들어가자";
+  $("#quest-hint-button").hidden=save?.decorationQuest!=="accepted";
+  const unread=Boolean(save&&(save.decorationQuest==="accepted"||journal.notes(save).length)&&save.journalSeenRevision!==journal.revision(save));
+  $("#diary-notification").hidden=!unread;
+  $("#diary-button").setAttribute("aria-label",unread?"다이어리 · 새 기록":"다이어리");
+}
+function recordDialogueLine(line){
+  const save=readSave()||{};
+  writeSave(save.scene||"exterior",journal.record(save,line));
+}
+function element(tag,text,className=""){
+  const node=document.createElement(tag);node.textContent=text;node.className=className;return node;
+}
+function renderJournal(){
+  const content=$("#tool-content"),save=readSave();content.replaceChildren();
+  $("#journal-tasks").setAttribute("aria-pressed",String(journalTab==="tasks"));
+  $("#journal-notes").setAttribute("aria-pressed",String(journalTab==="notes"));
+  if(journalTab==="tasks"){
+    content.appendChild(element("h3",save?.decorationQuest==="accepted"?"생일 장식 찾기":"아직 받은 부탁이 없어."));
+    if(save?.decorationQuest==="accepted"){
+      content.appendChild(element("p","공룡의 부탁", "journal-kicker"));
+      content.appendChild(element("p","집을 둘러보면서 요정들에게 생일 장식을 받아 오자."));
+    }
+  }else{
+    const notes=journal.notes(save);
+    if(!notes.length) content.appendChild(element("p","대화에서 알아낸 내용이 여기에 적혀. 궁금한 건 공룡에게 물어보자."));
+    notes.forEach(note=>{
+      const card=element("blockquote",note.text,"journal-note");
+      card.appendChild(element("cite","공룡에게 들은 이야기"));content.appendChild(card);
+    });
+  }
+}
 function openTool(kind){
+  if(busy) return;
   const sheet=$("#tool-sheet"),content=$("#tool-content");
   sheet.className="tool-sheet tool-sheet--"+kind;
   $("#tool-title").textContent=kind==="bag"?"꿈뜰이의 가방":"꿈뜰이의 기록장";
-  content.replaceChildren();
-  const paragraph=document.createElement("p");
-  paragraph.textContent=kind==="bag"?"가방이 비어 있다.":readSave()?.decorationQuest==="accepted"?"공룡에게 부탁받은 생일 장식 찾기":"아직 적힌 내용이 없다.";
-  content.appendChild(paragraph);
+  $("#journal-tabs").hidden=kind!=="diary";
+  if(kind==="diary"){
+    journalTab="tasks";renderJournal();
+    const save=readSave();if(save&&!journal.notes(save).length)writeSave(save.scene,{journalSeenRevision:journal.revision(save)});
+  }else{content.replaceChildren();content.appendChild(element("p","가방이 비어 있다."))}
   openPanel("#tool-sheet",kind==="bag"?"#bag-button":"#diary-button");
 }
+function renderHints(){
+  const content=$("#tool-content"),hints=journal.availableHints(readSave());content.replaceChildren();
+  content.appendChild(element("p","공룡에게 들은 이야기를 하나씩 떠올려 보자.","journal-kicker"));
+  hints.slice(0,hintIndex).forEach(hint=>content.appendChild(element("blockquote",hint.text,"journal-note")));
+  if(hintIndex<hints.length){
+    const button=element("button",hintIndex?"다음 힌트":"힌트 보기","hint-reveal");
+    button.addEventListener("click",()=>{hintIndex++;renderHints();$("#tool-sheet").focus({preventScroll:true})});content.appendChild(button);
+  }else{
+    content.appendChild(element("p",journal.notes(readSave()).length?"지금까지 들은 힌트는 여기까지야.":"더 궁금하면 공룡에게 ‘어떤 장식인데요?’를 물어보자."));
+  }
+}
+$("#quest-hint-button").addEventListener("click",()=>{
+  if(busy||readSave()?.decorationQuest!=="accepted") return;
+  hintIndex=0;$("#tool-sheet").className="tool-sheet tool-sheet--hint";
+  $("#tool-title").textContent="힌트";$("#journal-tabs").hidden=true;renderHints();
+  openPanel("#tool-sheet","#quest-hint-button");
+});
+$("#journal-tasks").addEventListener("click",()=>{journalTab="tasks";renderJournal()});
+$("#journal-notes").addEventListener("click",()=>{journalTab="notes";renderJournal();const save=readSave();if(save)writeSave(save.scene,{journalSeenRevision:journal.revision(save)})});
+function closeDialogueLog(){
+  window.PixelyDialogue.resume();
+  $("#dialogue-log").hidden=true;$("#dialogue-log-backdrop").hidden=true;
+  $("#story-dialogue-ui").inert=false;
+  if(window.PixelyDialogue.isOpen()) $("#dialogue-history-button").focus({preventScroll:true});
+}
+$("#dialogue-history-button").addEventListener("click",()=>{
+  window.PixelyDialogue.pause();
+  const content=$("#dialogue-log-content");content.replaceChildren();
+  const names={gongryong:"공룡",rader:"라더",deokgae:"덕개",dreamer:"꿈뜰이",unknown:"???",stage:"상황"};
+  const lines=journal.log(readSave());
+  if(!lines.length)content.appendChild(element("p","이전에 지나간 대화는 아직 기록되지 않았어."));
+  lines.forEach(line=>{const row=element("div","","log-entry");row.appendChild(element("strong",names[line.member]||""));row.appendChild(element("p",line.text));content.appendChild(row)});
+  $("#dialogue-log").hidden=false;$("#dialogue-log-backdrop").hidden=false;
+  $("#story-dialogue-ui").inert=true;$("#dialogue-log").focus({preventScroll:true});
+  content.scrollTop=content.scrollHeight;
+});
+$("#dialogue-log-backdrop").addEventListener("click",closeDialogueLog);
 $("#new-story").addEventListener("click",()=>{
-  writeSave("exterior",{chapter:0,chapterIntroSeen:false,openingSeen:false,dialogueProgress:null,decorationQuest:null,answeredDecorationChoices:[],outsideDialogue:null,arrivalSeen:false,doorInvited:false});
+  writeSave("exterior",{chapter:0,chapterIntroSeen:false,openingSeen:false,dialogueProgress:null,decorationQuest:null,answeredDecorationChoices:[],dialogueLog:[],heardHints:[],journalSeenRevision:null,outsideDialogue:null,arrivalSeen:false,doorInvited:false});
   runPrologue();
 });
 $("#continue-story").addEventListener("click",()=>{
@@ -422,6 +498,11 @@ $("#save-progress").addEventListener("click",()=>{
 $("#bag-button").addEventListener("click",()=>openTool("bag"));
 $("#diary-button").addEventListener("click",()=>openTool("diary"));
 document.addEventListener("keydown",event=>{
+  if(!$("#dialogue-log").hidden){
+    if(event.key==="Escape"){event.preventDefault();closeDialogueLog()}
+    if(event.key==="Tab"){event.preventDefault();$("#dialogue-log").focus({preventScroll:true})}
+    return;
+  }
   if(event.key==="Tab"){
     const panel=panelSelectors.map(selector=>$(selector)).find(node=>!node.hidden);
     if(panel){

@@ -97,3 +97,47 @@
 .member-dialogue-ui[data-speaker="stage"] .subtitle-name,.member-dialogue-ui[data-speaker="stage"] .subtitle-divider{display:none}
 .member-dialogue-ui[data-speaker="stage"] .subtitle-bar{grid-template-columns:1fr 20px}
 .member-dialogue-ui[data-speaker="stage"] .subtitle-text{font-style:italic;font-weight:500}
+
+/* Warm, quiet dialogue; placement characters remain in the scene. */
+.member-dialogue-ui{--dialogue-bottom:56px;--member-outline:#655b61}
+.dialogue-bottom{gap:8px;width:min(1040px,88vw)}
+.subtitle-bar{gap:16px;min-height:86px;padding:18px 24px;border-width:2px;outline:0;border-radius:18px;background:#fffaf5f5;box-shadow:0 8px 26px #342b3924;color:#3e3740}
+.subtitle-name{font-size:clamp(18px,1.65vw,24px);font-weight:700;letter-spacing:0;border-radius:10px;padding:6px 12px}
+.subtitle-text{font-size:clamp(18px,1.6vw,23px);font-weight:500;line-height:1.65;text-align:left;letter-spacing:-.02em}
+.subtitle-divider{width:1px;min-height:26px;background:#655b6133}
+.subtitle-cue{font-size:17px;opacity:.75}
+.member-motif{width:60px;height:46px;top:-38px}
+.dialogue-choices{width:min(600px,100%);gap:7px;padding:8px;border-radius:16px;background:#fffaf52b}
+.dialogue-choices button{padding:13px 20px;border:1px solid #b8aaa2;border-radius:11px;background:#fffaf5f5;font-size:16px;font-weight:500;box-shadow:0 3px 10px #342b3912;text-align:left;color:#49414b}
+.dialogue-choices button:hover{background:#fffdf8;border-color:var(--member-accent)}
+.dialogue-choices button.is-read{background:#f1ece7f5;color:#60585f;border-color:#b8aaa2;box-shadow:0 3px 10px #342b3912}
+.dialogue-choices button.is-read:hover{background:#fffaf5;color:#49414b}
+.dialogue-choices button.is-read::after{content:"✓ 읽음";float:right;margin-left:12px;font-size:12px;color:#776a60;line-height:24px}
+.dialogue-history-button{position:absolute;right:0;bottom:-36px;padding:6px 12px;border:1px solid #fff9ef99;border-radius:10px;background:#fffaf5e8;color:#5d515c;font:inherit;font-size:12px;pointer-events:auto;cursor:pointer}
+.dialogue-history-button:focus-visible{outline:2px solid #625268;outline-offset:3px}
+.member-dialogue-ui[data-interruption="true"] .subtitle-cue{visibility:hidden}
+.interruption button{border-width:2px;outline:0;border-radius:14px;background:#fffaf5;box-shadow:0 6px 22px #342b3924}
+.interruption button::after{border-width:2px;background:#fffaf5}
+.interruption strong{font-size:clamp(21px,2vw,28px);font-weight:700;color:#57412d;text-shadow:none}
+.interruption-cue{display:block;text-align:right;margin-top:8px;color:#74604c;font-size:17px}
+@media(max-width:600px){
+  .member-dialogue-ui{--dialogue-bottom:max(52px,calc(env(safe-area-inset-bottom) + 48px))}
+  .dialogue-bottom{width:calc(100% - 24px);gap:7px}
+  .subtitle-bar{padding:14px 12px;gap:10px;min-height:86px;grid-template-columns:auto 1px 1fr 12px}
+  .subtitle-name{font-size:17px;padding:5px 9px}
+  .subtitle-text{font-size:16px}
+  .member-dialogue-ui[data-speaker="dreamer"] .subtitle-bar{grid-template-columns:12px 1fr 1px auto}
+  .dialogue-choices button{font-size:15px;padding:11px 14px}
+  .dialogue-portrait{height:65dvh}
+}
+@media(max-height:500px){
+  .member-dialogue-ui{--dialogue-bottom:44px}
+  .dialogue-bottom{width:88vw;gap:5px}
+  .subtitle-bar{min-height:68px;padding:11px 15px;gap:10px}
+  .subtitle-name{font-size:17px}
+  .subtitle-text{font-size:16px;line-height:1.4}
+  .dialogue-choices{display:flex;flex-direction:column;max-height:38dvh;overflow:auto;width:min(620px,100%);gap:5px;padding:5px}
+  .dialogue-choices button{padding:8px 12px;font-size:13px;flex-shrink:0}
+  .interruption{top:8%;width:36vw}
+  .interruption strong{font-size:19px;margin-top:7px}
+}
