@@ -14,7 +14,7 @@ function availableHints(save){
   if(save?.decorationQuest!=="accepted") return [];
   return [{id:"request",text:"돌아다니다가 요정들 보이면 장식만 좀 받아와 줄 수 있어?"},...notes(save)];
 }
-function revision(save){return (save?.decorationQuest==="accepted"?"request":"")+":"+notes(save).map(h=>h.id).join(",")}
+function revision(save){return save?.decorationQuest==="accepted"?"request":""}
 function log(save){
   return (Array.isArray(save?.dialogueLog)?save.dialogueLog:[]).filter(e=>e&&typeof e.text==="string"&&typeof e.member==="string").slice(-200);
 }

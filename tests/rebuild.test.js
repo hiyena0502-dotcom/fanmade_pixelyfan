@@ -126,7 +126,6 @@ test('chapter leads into the full opening, then a chosen reply starts the record
   assert.equal(app.save().decorationQuest,'accepted');
   assert.equal(app.save().dialogueProgress,null);
   app.click('#diary-button');assert.equal(app.node('#tool-content').children[0].textContent,'생일 장식 찾기');
-  assert.equal(app.node('#journal-tabs').hidden,false);
   app.escape();assert.equal(app.node('#tool-sheet').hidden,true);
   app.click('#leave-house');app.enter();
   assert.equal(app.node('#story-dialogue-ui').hidden,true);
@@ -437,7 +436,7 @@ test('optional hints never expose an unplayed response and do not alter story pr
   assert.deepEqual(app.save().answeredDecorationChoices,[2]);
 });
 
-test('heard clues survive a partial reply and only become read when the memo is opened',()=>{
+test('heard clues survive a partial reply while the diary contains only the task',()=>{
   const app=boot({scene:'living-room',chapterIntroSeen:true,openingSeen:true,decorationQuest:'accepted',dialogueProgress:{phase:'reply',choice:0,index:0,revision:2}});
   app.click('#continue-story');
   assert.deepEqual(app.save().heardHints,['decorations']);
@@ -449,11 +448,14 @@ test('heard clues survive a partial reply and only become read when the memo is 
   assert.deepEqual(resumed.save().heardHints,['decorations','ttoni','tt']);
   for(let i=0;i<4;i++)resumed.click('#dialogue-next');
   resumed.click('#diary-button');
-  assert.equal(resumed.node('#diary-notification').hidden,false);
-  resumed.click('#journal-notes');
-  assert.equal(resumed.node('#tool-content').children.length,3);
   assert.equal(resumed.node('#diary-notification').hidden,true);
-  assert.doesNotMatch(resumed.node('#tool-content').children.map(e=>e.textContent).join(' '),/다락|복도|필립|프리츠|0\/4/);
+  assert.equal(resumed.node('#tool-content').children.length,3);
+  const taskText=resumed.node('#tool-content').children.map(e=>e.textContent).join(' ');
+  assert.match(taskText,/생일 장식 찾기/);
+  assert.doesNotMatch(taskText,/또니|티티|문구랑|다락|복도|필립|프리츠|0\/4/);
+  resumed.escape();resumed.click('#quest-hint-button');
+  for(let i=0;i<4;i++)resumed.node('#tool-content').children.at(-1).click();
+  assert.match(resumed.node('#tool-content').children.map(e=>e.textContent).join(' '),/티티부터/);
 });
 
 test('dialogue history includes interruptions and choices, persists, and freezes progression while open',()=>{

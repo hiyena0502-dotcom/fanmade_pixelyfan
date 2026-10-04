@@ -10,7 +10,7 @@ let sessionSave;
 let panelOpener=null;
 const panelSelectors=["#tool-sheet","#story-menu"];
 const journal=window.PixelyJournal;
-let journalTab="tasks",hintIndex=0;
+let hintIndex=0;
 
 // Game motion is explicit: the requested effects must not silently disappear
 // when Windows/Chrome reports reduced motion. Players can still turn it off.
@@ -374,7 +374,7 @@ document.querySelectorAll("[data-outside-object]").forEach(button=>button.addEve
 function updateJournalUI(save){
   $("#active-quest").textContent=save?.decorationQuest==="accepted"?"생일 장식 찾기":save?.chapterIntroSeen?"":"집에 들어가자";
   $("#quest-hint-button").hidden=save?.decorationQuest!=="accepted";
-  const unread=Boolean(save&&(save.decorationQuest==="accepted"||journal.notes(save).length)&&save.journalSeenRevision!==journal.revision(save));
+  const unread=Boolean(save&&save.decorationQuest==="accepted"&&save.journalSeenRevision!==journal.revision(save));
   $("#diary-notification").hidden=!unread;
   $("#diary-button").setAttribute("aria-label",unread?"다이어리 · 새 기록":"다이어리");
 }
@@ -387,21 +387,10 @@ function element(tag,text,className=""){
 }
 function renderJournal(){
   const content=$("#tool-content"),save=readSave();content.replaceChildren();
-  $("#journal-tasks").setAttribute("aria-pressed",String(journalTab==="tasks"));
-  $("#journal-notes").setAttribute("aria-pressed",String(journalTab==="notes"));
-  if(journalTab==="tasks"){
-    content.appendChild(element("h3",save?.decorationQuest==="accepted"?"생일 장식 찾기":"아직 받은 부탁이 없어."));
-    if(save?.decorationQuest==="accepted"){
-      content.appendChild(element("p","공룡의 부탁", "journal-kicker"));
-      content.appendChild(element("p","집을 둘러보면서 요정들에게 생일 장식을 받아 오자."));
-    }
-  }else{
-    const notes=journal.notes(save);
-    if(!notes.length) content.appendChild(element("p","대화에서 알아낸 내용이 여기에 적혀. 궁금한 건 공룡에게 물어보자."));
-    notes.forEach(note=>{
-      const card=element("blockquote",note.text,"journal-note");
-      card.appendChild(element("cite","공룡에게 들은 이야기"));content.appendChild(card);
-    });
+  content.appendChild(element("h3",save?.decorationQuest==="accepted"?"생일 장식 찾기":"아직 받은 부탁이 없어."));
+  if(save?.decorationQuest==="accepted"){
+    content.appendChild(element("p","공룡의 부탁", "journal-kicker"));
+    content.appendChild(element("p","집을 둘러보면서 요정들에게 생일 장식을 받아 오자."));
   }
 }
 function openTool(kind){
@@ -409,10 +398,9 @@ function openTool(kind){
   const sheet=$("#tool-sheet"),content=$("#tool-content");
   sheet.className="tool-sheet tool-sheet--"+kind;
   $("#tool-title").textContent=kind==="bag"?"꿈뜰이의 가방":"꿈뜰이의 기록장";
-  $("#journal-tabs").hidden=kind!=="diary";
   if(kind==="diary"){
-    journalTab="tasks";renderJournal();
-    const save=readSave();if(save&&!journal.notes(save).length)writeSave(save.scene,{journalSeenRevision:journal.revision(save)});
+    renderJournal();
+    const save=readSave();if(save)writeSave(save.scene,{journalSeenRevision:journal.revision(save)});
   }else{content.replaceChildren();content.appendChild(element("p","가방이 비어 있다."))}
   openPanel("#tool-sheet",kind==="bag"?"#bag-button":"#diary-button");
 }
@@ -430,11 +418,9 @@ function renderHints(){
 $("#quest-hint-button").addEventListener("click",()=>{
   if(busy||readSave()?.decorationQuest!=="accepted") return;
   hintIndex=0;$("#tool-sheet").className="tool-sheet tool-sheet--hint";
-  $("#tool-title").textContent="힌트";$("#journal-tabs").hidden=true;renderHints();
+  $("#tool-title").textContent="힌트";renderHints();
   openPanel("#tool-sheet","#quest-hint-button");
 });
-$("#journal-tasks").addEventListener("click",()=>{journalTab="tasks";renderJournal()});
-$("#journal-notes").addEventListener("click",()=>{journalTab="notes";renderJournal();const save=readSave();if(save)writeSave(save.scene,{journalSeenRevision:journal.revision(save)})});
 function closeDialogueLog(){
   window.PixelyDialogue.resume();
   $("#dialogue-log").hidden=true;$("#dialogue-log-backdrop").hidden=true;
