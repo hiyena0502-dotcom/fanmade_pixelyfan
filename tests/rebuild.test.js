@@ -48,7 +48,7 @@ function boot(saved,{failStorage=false}={}){
     return nodes.get(selector);
   }
   const screens=['home','story'].map(name=>Object.assign(node('screen:'+name),{dataset:{screen:name},hidden:name!=='home'}));
-  const scenes=['exterior','door-closeup','living-room','kitchen','stairs','bathroom','storage','upper-hall'].map(name=>Object.assign(node('scene:'+name),{dataset:{scene:name},hidden:name!=='exterior'}));
+  const scenes=['exterior','door-closeup','living-room','kitchen','stairs','bathroom','storage','upper-hall','basement','attic'].map(name=>Object.assign(node('scene:'+name),{dataset:{scene:name},hidden:name!=='exterior'}));
   const inspections=['laundry','birdhouse','garden'].map(name=>Object.assign(node('inspect:'+name),{dataset:{inspect:name},parentElement:node('stage')}));
   const document={
     querySelector(selector){
@@ -478,7 +478,7 @@ test('knock pauses cannot be skipped by keyboard and reload resumes the outside 
   assert.equal(resumed.activeElement(),resumed.node('#go-kitchen'));
 });
 test('shape rooms support travel, tools, saves, reload, and return focus',()=>{
-  for(const [room,label,index,parent,parentIndex] of [['stairs','계단',4,'living',2],['bathroom','화장실',5,'stairs',4],['storage','창고',6,'kitchen',3],['upper-hall','2층 복도',7,'stairs',4]]){
+  for(const [room,label,index,parent,parentIndex] of [['stairs','계단',4,'living',2],['bathroom','화장실',5,'stairs',4],['storage','창고',6,'kitchen',3],['upper-hall','2층 복도',7,'stairs',4],['basement','지하',8,'stairs',4],['attic','다락',9,'upper-hall',7]]){
     const app=boot({scene:'living-room',chapterIntroSeen:true,openingSeen:true,decorationQuest:'accepted'});
     app.click('#continue-story');
     if(parent!=='living')app.click('#go-'+parent);

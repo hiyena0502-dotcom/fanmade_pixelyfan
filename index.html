@@ -10,13 +10,13 @@
   <link rel="preload" as="image" href="assets/home/home-bg.png?v=85" />
   <link rel="preload" as="image" href="assets/story/chapter1/living-room.webp?v=90" />
   <link rel="preload" as="image" href="assets/story/chapter1/exterior/sky-v163.webp" />
-  <link rel="stylesheet" href="styles/rebuild.css?v=165" />
-  <link rel="stylesheet" href="styles/member-dialogue.css?v=165" />
+  <link rel="stylesheet" href="styles/rebuild.css?v=166" />
+  <link rel="stylesheet" href="styles/member-dialogue.css?v=166" />
   <link rel="stylesheet" href="styles/game-interaction.css?v=121" />
   <script src="game-interaction.js?v=121" defer></script>
-  <script src="member-dialogue.js?v=165" defer></script>
-  <script src="atmosphere.js?v=165" defer></script>
-  <script src="rebuild.js?v=165" defer></script>
+  <script src="member-dialogue.js?v=166" defer></script>
+  <script src="atmosphere.js?v=166" defer></script>
+  <script src="rebuild.js?v=166" defer></script>
 </head>
 <body>
   <main class="rebuild-root">
@@ -150,11 +150,13 @@
         </section>
 
         <section class="scene shape-room stairs-scene" data-scene="stairs" hidden aria-label="픽셀리 집 계단">
-          <div class="shape-room-art" role="img" aria-label="단순한 도형으로 만든 계단과 난간">
+          <div class="shape-room-art" role="img" aria-label="왼쪽으로 올라가는 2층 계단과 그 옆의 지하로 내려가는 계단">
             <div class="shape-floor"></div><div class="stairs-window"></div>
             <div class="shape-staircase"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="stairs-rail"></div>
+            <div class="basement-stairwell" aria-hidden="true"><svg viewBox="0 0 300 220" preserveAspectRatio="none"><path fill="#79654e" stroke="#aa8f6d" stroke-width="8" d="M4 4h292v212H4Z"/><path fill="#bba180" stroke="#554936" stroke-width="4" d="M5 5h55v35h48v35h48v35h48v35h48v35h43v35H5Z"/><path fill="none" stroke="#dec5a4" stroke-width="5" d="M5 5h55m0 35h48m0 35h48m0 35h48m0 35h48m0 35h43"/></svg></div>
           </div>
           <button type="button" class="stairs-travel" id="go-upper-hall" aria-label="2층으로 가기">2층으로 가기</button>
+          <button type="button" class="stairs-travel basement-travel" id="go-basement" aria-label="지하로 가기">지하로 가기</button>
           <button type="button" class="scene-back-arrow room-direction room-direction--right" id="go-bathroom" aria-label="화장실로 이동"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m9 5 7 7-7 7" /></svg></button>
           <button type="button" class="scene-back-arrow scene-exit" id="stairs-to-living" aria-label="거실로 돌아가기"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 8 7 7 7-7" /></svg></button>
         </section>
@@ -172,56 +174,74 @@
         </section>
 
         <section class="scene shape-room upper-hall-scene" data-scene="upper-hall" hidden aria-label="픽셀리 집 2층 복도">
-          <div class="upper-hall-art" role="img" aria-label="계단을 올라와 복도 끝 요정방을 바라보는 시점. 가까운 곳부터 왼쪽 잠뜰, 각별, 수현의 방문, 오른쪽 공룡, 덕개, 라더의 방문">
+          <div class="upper-hall-art" role="img" aria-label="계단을 올라와 긴 복도 끝 요정방을 바라보는 시점. 입구에서 안쪽으로 왼쪽 수현, 각별, 잠뜰의 방문, 오른쪽 라더, 덕개, 공룡의 방문">
             <svg class="upper-hall-perspective" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-              <!-- The stairs sit at the right end of the supplied plan; look toward its left end. -->
-              <path fill="#eee3d1" d="M0 0h1600l-570 230H570Z"/>
-              <path fill="#dcc7ab" d="M0 0 570 230v335L0 900Z"/>
-              <path fill="#d2b998" d="M1600 0 1030 230v335l570 335Z"/>
-              <path fill="#e6d6bd" d="M570 230h460v335H570Z"/>
-              <path fill="#b89870" d="M0 900 570 565h460l570 335Z"/>
+              <path fill="#eee3d1" d="M0 0h1600l-720 300H720Z"/>
+              <path fill="#dcc7ab" d="M0 0 720 300v235L0 900Z"/>
+              <path fill="#d2b998" d="M1600 0 880 300v235l720 365Z"/>
+              <path fill="#e6d6bd" d="M720 300h160v235H720Z"/>
+              <path fill="#b89870" d="M0 900 720 535h160l720 365Z"/>
               <g fill="none" stroke="#8c7254" stroke-width="5">
-                <path d="M0 16 570 243h460l570-227M0 876 570 554h460l570 322"/>
-                <path d="M0 900 570 565M1600 900 1030 565M230 900 636 565M525 900 713 565M1075 900 887 565M1370 900 964 565" stroke-width="2" opacity=".45"/>
-                <path d="M468 625h664M337 702h926M157 808h1286" stroke-width="2" opacity=".3"/>
+                <path d="M0 16 720 311h160l720-295M0 884 720 525h160l720 359"/>
+                <path d="M0 900 720 535M1600 900 880 535M260 900 746 535M560 900 776 535M1040 900 824 535M1340 900 854 535" stroke-width="2" opacity=".45"/>
+                <path d="M669 561h262M610 591h380M523 635h554M389 703h822M184 807h1232" stroke-width="2" opacity=".3"/>
               </g>
-              <path fill="#b4a18a" stroke="#8e7961" stroke-width="3" d="m615 584-198 250h766L985 584Z"/>
-              <path fill="#cfc0a7" d="m646 595-162 216h632L954 595Z"/>
-              <!-- Paired doors keep the near-to-far order from the floor plan. -->
-              <g stroke="#795f47" stroke-width="6" stroke-linejoin="round">
-                <path fill="#ac8562" d="m65 152 244 105v460L65 860Z"/>
-                <path fill="#bc9874" d="m367 273 96 41v312l-96 58Z"/>
-                <path fill="#c8a887" d="m502 328 45 19v235l-45 27Z"/>
-                <path fill="#ac8562" d="m1535 152-244 105v460l244 143Z"/>
-                <path fill="#bc9874" d="m1233 273-96 41v312l96 58Z"/>
-                <path fill="#c8a887" d="m1098 328-45 19v235l45 27Z"/>
-              </g>
-              <g fill="none" stroke="#ddc5a5" stroke-width="4" opacity=".7">
-                <path d="m89 190 196 84v400L89 789ZM389 303l53 23v277l-53 32ZM1511 190l-196 84v400l196 115ZM1211 303l-53 23v277l53 32Z"/>
-              </g>
-              <g fill="#ead1a0" stroke="#765b40" stroke-width="3">
-                <ellipse cx="276" cy="485" rx="8" ry="11"/><ellipse cx="437" cy="468" rx="5" ry="8"/><ellipse cx="533" cy="465" rx="3" ry="6"/>
-                <ellipse cx="1324" cy="485" rx="8" ry="11"/><ellipse cx="1163" cy="468" rx="5" ry="8"/><ellipse cx="1067" cy="465" rx="3" ry="6"/>
-              </g>
-              <rect x="710" y="302" width="180" height="257" rx="5" fill="#a89e8d" stroke="#746b5d" stroke-width="7"/>
-              <rect x="736" y="377" width="128" height="139" rx="3" fill="#d4cbb9" stroke="#746b5d" stroke-width="5"/>
-              <g stroke="#746b5d" stroke-width="7"><path d="M756 379v135M785 379v135M814 379v135M843 379v135"/></g>
-              <circle cx="870" cy="538" r="6" fill="#746b5d"/>
-              <g fill="#f4d9a0" stroke="#967955" stroke-width="4">
-                <path d="m599 303 17-12 17 12v34h-34ZM967 303l17-12 17 12v34h-34Z"/>
-              </g>
+              <path fill="#b4a18a" stroke="#8e7961" stroke-width="3" d="m759 548-342 286h766L841 548Z"/>
+              <path fill="#cfc0a7" d="m765 558-281 253h632L835 558Z"/>
+              <polygon points="54 142.75 288 198 288 754 54 872.625" fill="#b08b66" stroke="#795f47" stroke-width="6" stroke-linejoin="round"/>
+              <polygon points="68 166.75 274 212 274 728 68 838.625" fill="none" stroke="#ddc5a5" stroke-width="3" opacity=".65"/>
+              <ellipse cx="270" cy="491" rx="5" ry="8" fill="#ead1a0" stroke="#765b40" stroke-width="3"/>
+              <polygon points="388.8 221.8 540 257.5 540 626.25 388.8 702.9" fill="#b08b66" stroke="#795f47" stroke-width="6" stroke-linejoin="round"/>
+              <polygon points="397.8 245.8 531 271.5 531 600.25 397.8 668.9" fill="none" stroke="#ddc5a5" stroke-width="3" opacity=".65"/>
+              <ellipse cx="522" cy="456.875" rx="5" ry="8" fill="#ead1a0" stroke="#765b40" stroke-width="3"/>
+              <polygon points="597.6 271.1 691.2 293.2 691.2 549.6 597.6 597.05" fill="#b08b66" stroke="#795f47" stroke-width="6" stroke-linejoin="round"/>
+              <polygon points="606.6 295.1 682.2 307.2 682.2 523.6 606.6 563.05" fill="none" stroke="#ddc5a5" stroke-width="3" opacity=".65"/>
+              <ellipse cx="673.2" cy="436.4" rx="5" ry="8" fill="#ead1a0" stroke="#765b40" stroke-width="3"/>
+              <polygon points="1546 142.75 1312 198 1312 754 1546 872.625" fill="#b08b66" stroke="#795f47" stroke-width="6" stroke-linejoin="round"/>
+              <polygon points="1532 166.75 1326 212 1326 728 1532 838.625" fill="none" stroke="#ddc5a5" stroke-width="3" opacity=".65"/>
+              <ellipse cx="1330" cy="491" rx="5" ry="8" fill="#ead1a0" stroke="#765b40" stroke-width="3"/>
+              <polygon points="1211.2 221.8 1060 257.5 1060 626.25 1211.2 702.9" fill="#b08b66" stroke="#795f47" stroke-width="6" stroke-linejoin="round"/>
+              <polygon points="1202.2 245.8 1069 271.5 1069 600.25 1202.2 668.9" fill="none" stroke="#ddc5a5" stroke-width="3" opacity=".65"/>
+              <ellipse cx="1078" cy="456.875" rx="5" ry="8" fill="#ead1a0" stroke="#765b40" stroke-width="3"/>
+              <polygon points="1002.4 271.1 908.8 293.2 908.8 549.6 1002.4 597.05" fill="#b08b66" stroke="#795f47" stroke-width="6" stroke-linejoin="round"/>
+              <polygon points="993.4 295.1 917.8 307.2 917.8 523.6 993.4 563.05" fill="none" stroke="#ddc5a5" stroke-width="3" opacity=".65"/>
+              <ellipse cx="926.8" cy="436.4" rx="5" ry="8" fill="#ead1a0" stroke="#765b40" stroke-width="3"/>
+              <rect x="748" y="336" width="104" height="197" rx="4" fill="#a89e8d" stroke="#746b5d" stroke-width="5"/>
+              <rect x="762" y="393" width="76" height="101" rx="3" fill="#d4cbb9" stroke="#746b5d" stroke-width="4"/>
+              <g stroke="#746b5d" stroke-width="5"><path d="M775 395v97M792 395v97M809 395v97M826 395v97"/></g>
+              <circle cx="839" cy="515" r="4" fill="#746b5d"/>
+              <g fill="#f4d9a0" stroke="#967955" stroke-width="3"><path d="m727 341 6-8 6 8v23h-12ZM861 341l6-8 6 8v23h-12Z"/></g>
               <path fill="#856a4f" d="M0 868h175l125 32H0Zm1600 0h-175l-125 32h300Z"/>
               <path fill="#dcc3a3" d="M0 852h175l125 16H0Zm1600 0h-175l-125 16h300Z"/>
             </svg>
-            <span class="hall-door-name hall-door-name--left hall-door-name--near">잠뜰</span>
+            <span class="hall-door-name hall-door-name--left hall-door-name--near">수현</span>
             <span class="hall-door-name hall-door-name--left hall-door-name--middle">각별</span>
-            <span class="hall-door-name hall-door-name--left hall-door-name--far">수현</span>
-            <span class="hall-door-name hall-door-name--right hall-door-name--near">공룡</span>
+            <span class="hall-door-name hall-door-name--left hall-door-name--far">잠뜰</span>
+            <span class="hall-door-name hall-door-name--right hall-door-name--near">라더</span>
             <span class="hall-door-name hall-door-name--right hall-door-name--middle">덕개</span>
-            <span class="hall-door-name hall-door-name--right hall-door-name--far">라더</span>
+            <span class="hall-door-name hall-door-name--right hall-door-name--far">공룡</span>
             <span class="hall-door-name hall-door-name--fairy">요정방</span>
           </div>
+          <button type="button" class="attic-travel" id="go-attic" aria-label="다락으로 가기"><svg viewBox="0 0 160 140" aria-hidden="true" focusable="false"><path fill="#b39470" stroke="#806348" stroke-width="5" d="m45 8 104 9-27 24-87-9Z"/><g fill="none" stroke="#806348" stroke-width="7" stroke-linecap="round"><path d="M61 36 24 110M104 41l-37 74"/><path d="m54 50 42 5m-51 13 42 5m-51 13 42 5m-51 13 42 5" stroke-width="5"/></g></svg><span>다락으로 가기</span></button>
           <button type="button" class="scene-back-arrow scene-exit" id="upper-hall-to-stairs" aria-label="1층 계단으로 돌아가기"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 8 7 7 7-7" /></svg></button>
+        </section>
+
+        <section class="scene shape-room basement-scene" data-scene="basement" hidden aria-label="픽셀리 집 지하">
+          <div class="shape-room-art" role="img" aria-label="촬영 소품 선반, 보관 상자와 조명 스탠드가 있는 지하 보관실">
+            <div class="shape-floor"></div>
+            <div class="storage-shelf"><i></i><i></i><i></i></div>
+            <div class="storage-box storage-box--a"></div><div class="storage-box storage-box--b"></div><div class="storage-box storage-box--c"></div><div class="storage-box storage-box--d"></div>
+            <div class="prop-light"><i></i></div><div class="prop-panel"></div>
+          </div>
+          <button type="button" class="scene-back-arrow scene-exit" id="basement-to-stairs" aria-label="계단으로 돌아가기"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 8 7 7 7-7" /></svg></button>
+        </section>
+        <section class="scene shape-room attic-scene" data-scene="attic" hidden aria-label="픽셀리 집 다락">
+          <div class="shape-room-art" role="img" aria-label="낮은 경사 지붕과 나무 들보 아래 상자를 보관하는 다락">
+            <svg class="attic-roof" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path fill="#dfcfb7" d="M0 0h1600v900H0Z"/><path fill="#baa181" d="M0 0h1600v270L800 85 0 270Z"/><path fill="#ceba9c" d="M0 270 800 85l800 185v410H0Z"/><path fill="#b39470" d="M0 680h1600v220H0Z"/><g fill="none" stroke="#8e7254" stroke-width="18"><path d="M0 280 800 90l800 190M0 678h1600M270 220v460M1330 220v460"/><path d="M800 100v95"/></g><circle cx="800" cy="315" r="70" fill="#cededc" stroke="#9f8260" stroke-width="15"/><path d="M800 249v132M734 315h132" stroke="#9f8260" stroke-width="10"/></svg>
+            <div class="storage-box storage-box--a"></div><div class="storage-box storage-box--b"></div><div class="storage-box storage-box--c"></div><div class="storage-box storage-box--d"></div>
+            <div class="attic-trunk"></div>
+          </div>
+          <button type="button" class="scene-back-arrow scene-exit" id="attic-to-upper-hall" aria-label="2층 복도로 돌아가기"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 8 7 7 7-7" /></svg></button>
         </section>
 
         <section class="member-dialogue-ui" id="story-dialogue-ui" data-speaker="gongryong" hidden aria-label="공룡과 대화">
