@@ -61,15 +61,17 @@ function boot(saved,{failStorage=false}={}){
   return {node,scenes,flush,click:selector=>node(selector).click(),save:()=>JSON.parse(storage.get(key)||'null'),
     start(){node('#new-story').click();for(let n=0;n<6;n++)node('#intro-monologue').click();flush();node('#dialogue-next').click();node('#dialogue-next').click();flush()},
     prepareEntry(){
-      if(this.save()?.doorInvited||this.save()?.chapterIntroSeen||this.save()?.openingSeen){node('#door-hotspot').click();flush();return false}
-      node('#door-hotspot').click();node('#dialogue-next').click();
+      if(this.save()?.scene!=='door-closeup')node('#door-hotspot').click();
+      node('#door-closeup-hotspot').click();
+      if(this.save()?.doorInvited||this.save()?.chapterIntroSeen||this.save()?.openingSeen)return 'panel';
+      node('#dialogue-next').click();
       node('#dialogue-choices').children[0].click();flush();
       if(node('#dialogue-text').textContent==='잠깐만!'){
         node('#dialogue-next').click();flush();node('#dialogue-next').click();node('#dialogue-next').click();
       }
-      return true;
+      return 'dialogue';
     },
-    enter(){if(this.prepareEntry())node('#dialogue-choices').children[0].click();flush()},
+    enter(){if(this.prepareEntry()==='panel')node('#enter-house').click();else node('#dialogue-choices').children[0].click();flush()},
     activeElement:()=>document.activeElement,
     key(event){documentListeners.get('keydown').forEach(fn=>fn(event))},
     escape(){documentListeners.get('keydown').forEach(fn=>fn({key:'Escape',preventDefault(){}}))}};
@@ -88,6 +90,9 @@ test('arrival uses Dreamer subtitles, door cancellation stays at the door, and i
   app.click('#dialogue-next');app.flush();
   assert.equal(app.node('#quest-notice-title').textContent,'집에 들어가자');
   app.click('#door-hotspot');
+  assert.equal(app.scenes[1].hidden,false);
+  assert.equal(app.node('#story-dialogue-ui').hidden,true);
+  app.click('#door-closeup-hotspot');
   assert.equal(app.node('#dialogue-text').textContent,'바로 들어가도 되려나?');
   app.click('#dialogue-next');app.node('#dialogue-choices').children[1].click();
   assert.equal(app.scenes[1].hidden,false);
@@ -99,26 +104,39 @@ test('arrival uses Dreamer subtitles, door cancellation stays at the door, and i
   assert.equal(app.save().scene,"door-closeup");
   const resumed=boot(app.save());resumed.click('#continue-story');resumed.click('#door-closeup-hotspot');
   assert.equal(resumed.node('#story-dialogue-ui').hidden,true);
-  assert.equal(resumed.node('.story-frame').classList.contains('is-busy'),true);
+  assert.equal(resumed.node('#door-choice').hidden,false);
+  resumed.click('#enter-house');
   resumed.flush();assert.equal(resumed.scenes[2].hidden,false);
 });
 
-test('returning through either door skips the invitation, including older saves',()=>{
+test('returning opens the door image and entry choices without repeating dialogue',()=>{
   for(const scene of ['exterior','door-closeup']){
     const app=boot({scene,chapterIntroSeen:true,openingSeen:true,decorationQuest:'accepted'});
-    app.click('#continue-story');app.click(scene==='exterior'?'#door-hotspot':'#door-closeup-hotspot');app.flush();
-    assert.equal(app.scenes[2].hidden,false);
+    app.click('#continue-story');
+    if(scene==='exterior'){
+      app.click('#door-hotspot');assert.equal(app.scenes[1].hidden,false);
+      assert.equal(app.node('#door-choice').hidden,true);
+    }
+    app.click('#door-closeup-hotspot');
+    assert.equal(app.node('#door-choice').hidden,false);
     assert.equal(app.node('#story-dialogue-ui').hidden,true);
     assert.equal(app.save().outsideDialogue??null,null);
-    app.click('#leave-house');app.click('#door-hotspot');app.flush();
+    app.click('#keep-looking');assert.equal(app.scenes[1].hidden,false);
+    assert.equal(app.activeElement(),app.node('#door-closeup-hotspot'));
+    app.click('#door-closeup-hotspot');app.click('#enter-house');app.flush();
     assert.equal(app.scenes[2].hidden,false);
     assert.equal(app.node('#story-dialogue-ui').hidden,true);
+    app.click('#leave-house');app.enter();
+    assert.equal(app.scenes[2].hidden,false);
   }
 });
 
-test('a saved repeated invitation enters the house without replaying its dialogue',()=>{
+test('a saved repeated invitation restores entry choices without replaying dialogue',()=>{
   const app=boot({scene:'door-closeup',chapterIntroSeen:true,openingSeen:true,doorInvited:true,outsideDialogue:{kind:'invited',state:{phase:'scene',index:0}}});
-  app.click('#continue-story');app.flush();
+  app.click('#continue-story');
+  assert.equal(app.node('#door-choice').hidden,false);
+  assert.equal(app.scenes[1].hidden,false);
+  app.click('#enter-house');app.flush();
   assert.equal(app.scenes[2].hidden,false);
   assert.equal(app.node('#story-dialogue-ui').hidden,true);
   assert.equal(app.save().outsideDialogue,null);
@@ -184,9 +202,10 @@ test('outside clicks dismiss only the active panel and restore its opener',()=>{
     assert.equal(app.node('#tool-sheet').hidden,true);
     assert.equal(app.activeElement(),app.node(opener));
   }
-  app.click('#leave-house');app.click('#door-hotspot');app.flush();
-  assert.equal(app.scenes[2].hidden,false);
-  assert.equal(app.activeElement(),app.node('#talk-gongryong'));
+  app.click('#leave-house');app.click('#door-hotspot');app.click('#door-closeup-hotspot');app.click('#panel-backdrop');
+  assert.equal(app.scenes[1].hidden,false);
+  assert.equal(app.node('#door-choice').hidden,true);
+  assert.equal(app.activeElement(),app.node('#door-closeup-hotspot'));
 });
 
 test('panels are mutually exclusive and keyboard users can close a panel without a close button',()=>{
@@ -405,7 +424,7 @@ test('chapter replay preserves the quest and saved dialogue progress',()=>{
 });
 
 test('knock pauses cannot be skipped by keyboard and reload resumes the outside sequence',()=>{
-  const app=boot();app.start();app.click('#door-hotspot');app.click('#dialogue-next');
+  const app=boot();app.start();app.click('#door-hotspot');app.click('#door-closeup-hotspot');app.click('#dialogue-next');
   app.node('#dialogue-choices').children[0].click();
   assert.equal(app.node('#dialogue-text').textContent,'똑똑—');
   app.key({code:'Space',preventDefault(){}});

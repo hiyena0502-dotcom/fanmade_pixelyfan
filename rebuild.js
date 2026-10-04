@@ -8,7 +8,7 @@ let introCleanup=null;
 let busy=false;
 let sessionSave;
 let panelOpener=null;
-const panelSelectors=["#tool-sheet","#story-menu"];
+const panelSelectors=["#tool-sheet","#story-menu","#door-choice"];
 function journalRevision(save){return save?.decorationQuest==="accepted"?"request":""}
 
 // Game motion is explicit: the requested effects must not silently disappear
@@ -169,7 +169,7 @@ function startStory(scene="exterior"){
   updateJournalUI(readSave());
   const pending=readSave()?.outsideDialogue;
   if(["exterior","door-closeup"].includes(scene)&&pending?.kind==="invited"){
-    writeSave(scene,{outsideDialogue:null,doorInvited:true});enterHouse();return;
+    writeSave("door-closeup",{outsideDialogue:null,doorInvited:true});showScene("door-closeup");openEntryChoices();return;
   }
   if(["exterior","door-closeup"].includes(scene)&&pending){playOutside(pending.kind,pending.state);return}
   if(scene==="living-room"&&(readSave()?.dialogueProgress||!readSave()?.openingSeen)) beginGongryongDialogue();
@@ -257,8 +257,7 @@ const outsideScripts={
     {member:"stage",text:"집 안쪽에서 무언가 우당탕 넘어지는 소리가 난다.",delay:1500,effect:"crash"},
     {member:"unknown",text:"잠깐만!"},
     {member:"stage",text:"……",delay:1000},
-    {member:"unknown",text:"문 열려 있어! 들어와!"},
-    {member:"dreamer",text:"……들어가도 되는 것 같네."}
+    {member:"unknown",text:"문 열려 있어! 들어와!"}
   ],choices:[{label:"들어간다"},{label:"그래도 조금 더 둘러본다"}]}
 };
 function finishOutside(scene="exterior"){
@@ -289,8 +288,11 @@ function playOutside(kind,saved=null){
 function beginDoor(){
   if(busy)return;
   const save=readSave();
-  if(save?.doorInvited||save?.chapterIntroSeen||save?.openingSeen){enterHouse();return}
+  if(save?.doorInvited||save?.chapterIntroSeen||save?.openingSeen){openEntryChoices();return}
   playOutside("door");
+}
+function openEntryChoices(){
+  openPanel("#door-choice","#door-closeup-hotspot","#enter-house");
 }
 function playChapterCard({number,title},after){
   const card=$("#chapter-card");
@@ -415,8 +417,17 @@ $("#continue-story").addEventListener("click",()=>{
   const save=readSave();
   if(save) startStory(save.scene||"exterior");
 });
-$("#door-hotspot").addEventListener("click",beginDoor);
+$("#door-hotspot").addEventListener("click",()=>{
+  if(busy)return;
+  closePanels(false);showScene("door-closeup");writeSave("door-closeup",{outsideDialogue:null});
+  $("#door-closeup-hotspot").focus({preventScroll:true});
+});
 $("#door-closeup-hotspot").addEventListener("click",beginDoor);
+$("#enter-house").addEventListener("click",()=>{
+  if(busy)return;
+  closePanels(false);writeSave("door-closeup",{outsideDialogue:null,doorInvited:true});enterHouse();
+});
+$("#keep-looking").addEventListener("click",()=>closePanels());
 $("#door-closeup-back").addEventListener("click",()=>{
   closePanels(false);
   showScene("exterior");

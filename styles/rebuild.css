@@ -407,12 +407,11 @@ button{color:inherit}
 .exterior-decoration img{display:block;width:100%;height:100%;object-fit:fill}
 .exterior-sign img{transform-origin:49.45% 59.2%;animation:exterior-sign-sway 5.5s ease-in-out infinite}
 .birdhouse-character img{transform-origin:68.4% 55.7%;animation:birdhouse-character-bob 3.6s ease-in-out infinite}
-.laundry-cloth img{transform-origin:25.3% 65.4%;animation:laundry-cloth-sway 6s ease-in-out infinite}
+.laundry-cloth img{animation:none}
 .blue-worm img{animation:blue-worm-wiggle 4.2s ease-in-out infinite}
 .exterior-scene[hidden] .exterior-decoration img{animation-play-state:paused}
 @keyframes exterior-sign-sway{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
 @keyframes birdhouse-character-bob{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-3px) rotate(1.5deg)}}
-@keyframes laundry-cloth-sway{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(3deg)}}
 @keyframes blue-worm-wiggle{0%,100%{transform:translateX(0)}50%{transform:translateX(1px)}}
 
 /* Room exits remain visible above the artwork and below dialogue. */

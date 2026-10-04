@@ -138,3 +138,23 @@
   .interruption{top:8%;width:36vw}
   .interruption strong{font-size:19px;margin-top:7px}
 }
+
+/* Names sit above the bar; its text uses a symmetric full-width area. */
+.dialogue-bottom{gap:60px}
+.subtitle-bar,.member-dialogue-ui[data-speaker="dreamer"] .subtitle-bar,.member-dialogue-ui[data-speaker="stage"] .subtitle-bar{display:block;padding:22px 52px}
+.subtitle-divider{display:none}
+.subtitle-name{position:absolute;left:76px;right:auto;bottom:calc(100% + 10px);max-width:calc(100% - 110px);z-index:2}
+.member-motif{left:24px;right:auto;top:auto;bottom:calc(100% + 10px);width:42px;height:34px;z-index:2}
+.member-dialogue-ui[data-speaker="dreamer"] .subtitle-name{left:auto;right:76px}
+.member-dialogue-ui[data-speaker="dreamer"] .member-motif{left:auto;right:24px}
+.subtitle-text{text-align:center}
+.subtitle-cue{position:absolute;left:auto;right:22px;bottom:15px}
+@media(max-width:600px){
+  .dialogue-bottom{gap:50px}
+  .subtitle-bar,.member-dialogue-ui[data-speaker="dreamer"] .subtitle-bar,.member-dialogue-ui[data-speaker="stage"] .subtitle-bar{padding:18px 40px}
+  .subtitle-name{left:60px;font-size:17px}
+  .member-motif{left:18px;width:32px;height:27px}
+  .member-dialogue-ui[data-speaker="dreamer"] .subtitle-name{right:60px}
+  .member-dialogue-ui[data-speaker="dreamer"] .member-motif{right:18px}
+}
+@media(max-height:500px){.dialogue-bottom{gap:48px}.dialogue-choices{max-height:30dvh}}
