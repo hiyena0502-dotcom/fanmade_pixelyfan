@@ -7,6 +7,22 @@ const source=fs.readFileSync(path.join(__dirname,'../rebuild.js'),'utf8');
 const dialogueSource=fs.readFileSync(path.join(__dirname,'../member-dialogue.js'),'utf8');
 const key='pixely-rebuild-save-v1';
 
+test('main game image files are present and contain complete image data',()=>{
+  const root=path.join(__dirname,'..');
+  const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
+  const images=new Set([...html.matchAll(/(?:src|href)="(assets\/[^"?]+\.(?:png|webp))(?:\?[^" ]*)?"/g)].map(match=>match[1]));
+  assert.ok(images.size>12);
+  for(const image of images){
+    const bytes=fs.readFileSync(path.join(root,image));
+    assert.ok(bytes.length>20,'Image is empty or truncated: '+image);
+    if(image.endsWith('.webp')){
+      assert.equal(bytes.toString('ascii',0,4),'RIFF',image);
+      assert.equal(bytes.toString('ascii',8,12),'WEBP',image);
+      assert.equal(bytes.readUInt32LE(4)+8,bytes.length,'Incomplete WebP: '+image);
+    }else assert.equal(bytes.subarray(0,8).toString('hex'),'89504e470d0a1a0a',image);
+  }
+});
+
 function boot(saved,{failStorage=false}={}){
   const nodes=new Map(),timers=new Map(),documentListeners=new Map();
   let nextTimer=0,now=0;
