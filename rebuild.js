@@ -27,9 +27,9 @@ $("#toggle-motion").addEventListener("click",()=>{
   try{localStorage.setItem(MOTION_KEY,motionEnabled?"full":"reduced")}catch{}
 });
 $("#replay-chapter").addEventListener("click",()=>{
-  if(busy||scenes.find(scene=>!scene.hidden)?.dataset.scene!=="living-room") return;
+  if(busy||!readSave()?.chapterIntroSeen) return;
   closePanels(false);setBusy(true);
-  playChapterCard({number:1,title:"생일 준비"},()=>{setBusy(false);$("#talk-gongryong").focus({preventScroll:true})});
+  playChapterCard({number:1,title:"생일 준비"},()=>{setBusy(false);$("#story-menu-button").focus({preventScroll:true})});
 });
 
 
@@ -127,8 +127,8 @@ function showScene(name){
       :"픽셀리 집 앞";
   $("#hud-place").textContent=placeLabel;
 
-  $("#bag-button").disabled=!["living-room","kitchen"].includes(name);
-  $("#diary-button").disabled=!["living-room","kitchen"].includes(name);
+  $("#bag-button").disabled=false;
+  $("#diary-button").disabled=false;
   updateJournalUI(readSave());
 }
 function normalizeStoryScene(scene){
@@ -372,7 +372,7 @@ document.querySelectorAll("[data-outside-object]").forEach(button=>button.addEve
 
 function updateJournalUI(save){
   $("#active-quest").textContent=save?.decorationQuest==="accepted"?"생일 장식 찾기":save?.chapterIntroSeen?"":"집에 들어가자";
-  $("#quest-hint-button").hidden=save?.decorationQuest!=="accepted";
+  $("#quest-hint-button").hidden=false;
   const unread=Boolean(save&&save.decorationQuest==="accepted"&&save.journalSeenRevision!==journal.revision(save));
   $("#diary-notification").hidden=!unread;
   $("#diary-button").setAttribute("aria-label",unread?"다이어리 · 새 기록":"다이어리");
@@ -404,7 +404,7 @@ function openTool(kind){
   openPanel("#tool-sheet",kind==="bag"?"#bag-button":"#diary-button");
 }
 $("#quest-hint-button").addEventListener("click",()=>{
-  if(busy||readSave()?.decorationQuest!=="accepted") return;
+  if(busy) return;
   $("#tool-sheet").className="tool-sheet tool-sheet--hint";
   $("#tool-title").textContent="힌트";$("#tool-content").replaceChildren();
   openPanel("#tool-sheet","#quest-hint-button");
@@ -459,7 +459,7 @@ $("#leave-house").addEventListener("click",()=>{
   writeSave("exterior");
 });
 $("#story-menu-button").addEventListener("click",()=>{
-  $("#replay-chapter").disabled=scenes.find(scene=>!scene.hidden)?.dataset.scene!=="living-room";
+  $("#replay-chapter").disabled=!readSave()?.chapterIntroSeen;
   openPanel("#story-menu","#story-menu-button","#save-progress");
 });
 $("#return-home").addEventListener("click",()=>{closePanels(false);showScreen("home")});

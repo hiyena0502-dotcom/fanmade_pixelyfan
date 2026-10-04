@@ -482,3 +482,29 @@ test('opening dialogue history pauses timed knocking and resumes the same sequen
   app.click('#dialogue-log-backdrop');app.flush();
   assert.equal(app.node('#dialogue-text').textContent,'잠깐만!');
 });
+
+test('all tools and the empty hint window work outside and at the door before a quest',()=>{
+  for(const scene of ['exterior','door-closeup']){
+    const app=boot({scene,arrivalSeen:true,openingSeen:false});app.click('#continue-story');
+    assert.equal(app.node('#bag-button').disabled,false);
+    assert.equal(app.node('#diary-button').disabled,false);
+    assert.equal(app.node('#quest-hint-button').hidden,false);
+    app.click('#bag-button');assert.equal(app.node('#tool-content').children[0].textContent,'가방이 비어 있다.');app.escape();
+    app.click('#diary-button');assert.equal(app.node('#tool-sheet').hidden,false);app.escape();
+    app.click('#quest-hint-button');assert.equal(app.node('#tool-sheet').hidden,false);
+    assert.equal(app.node('#tool-content').children.length,0);app.escape();
+    app.click('#story-menu-button');assert.equal(app.node('#story-menu').hidden,false);
+    assert.equal(app.node('#replay-chapter').disabled,true);
+    assert.equal(app.save().scene,scene);
+  }
+});
+
+test('replaying a seen chapter outside preserves the scene and restores menu focus',()=>{
+  const app=boot({scene:'exterior',chapterIntroSeen:true,openingSeen:true,decorationQuest:'accepted'});
+  app.click('#continue-story');app.click('#story-menu-button');
+  assert.equal(app.node('#replay-chapter').disabled,false);
+  app.click('#replay-chapter');app.flush();
+  assert.equal(app.save().scene,'exterior');
+  assert.equal(app.save().decorationQuest,'accepted');
+  assert.equal(app.activeElement(),app.node('#story-menu-button'));
+});
