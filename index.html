@@ -10,13 +10,13 @@
   <link rel="preload" as="image" href="assets/home/home-bg.png?v=85" />
   <link rel="preload" as="image" href="assets/story/chapter1/living-room.webp?v=90" />
   <link rel="preload" as="image" href="assets/story/chapter1/exterior/sky-v163.webp" />
-  <link rel="stylesheet" href="styles/rebuild.css?v=164" />
-  <link rel="stylesheet" href="styles/member-dialogue.css?v=164" />
+  <link rel="stylesheet" href="styles/rebuild.css?v=165" />
+  <link rel="stylesheet" href="styles/member-dialogue.css?v=165" />
   <link rel="stylesheet" href="styles/game-interaction.css?v=121" />
   <script src="game-interaction.js?v=121" defer></script>
-  <script src="member-dialogue.js?v=164" defer></script>
-  <script src="atmosphere.js?v=164" defer></script>
-  <script src="rebuild.js?v=164" defer></script>
+  <script src="member-dialogue.js?v=165" defer></script>
+  <script src="atmosphere.js?v=165" defer></script>
+  <script src="rebuild.js?v=165" defer></script>
 </head>
 <body>
   <main class="rebuild-root">
@@ -154,7 +154,7 @@
             <div class="shape-floor"></div><div class="stairs-window"></div>
             <div class="shape-staircase"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="stairs-rail"></div>
           </div>
-          <button type="button" class="scene-back-arrow room-direction room-direction--left" id="go-upper-hall" aria-label="2층 복도로 이동"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 5 8 12l7 7" /></svg></button>
+          <button type="button" class="stairs-travel" id="go-upper-hall" aria-label="2층으로 가기">2층으로 가기</button>
           <button type="button" class="scene-back-arrow room-direction room-direction--right" id="go-bathroom" aria-label="화장실로 이동"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m9 5 7 7-7 7" /></svg></button>
           <button type="button" class="scene-back-arrow scene-exit" id="stairs-to-living" aria-label="거실로 돌아가기"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 8 7 7 7-7" /></svg></button>
         </section>
@@ -172,13 +172,54 @@
         </section>
 
         <section class="scene shape-room upper-hall-scene" data-scene="upper-hall" hidden aria-label="픽셀리 집 2층 복도">
-          <div class="upper-hall-art" role="img" aria-label="복도 끝 요정방에서부터 위쪽은 수현, 각별, 잠뜰의 방, 아래쪽은 라더, 덕개, 공룡의 방 순서인 2층 평면도">
-            <div class="upper-hall-plan">
-              <div class="upper-hall-walkway"></div>
-              <div class="fairy-room-door"><span>요정방</span><i></i></div>
-              <div class="upper-room-row upper-room-row--top"><div><span>수현</span><i></i></div><div><span>각별</span><i></i></div><div><span>잠뜰</span><i></i></div></div>
-              <div class="upper-room-row upper-room-row--bottom"><div><i></i><span>라더</span></div><div><i></i><span>덕개</span></div><div><i></i><span>공룡</span></div></div>
-            </div>
+          <div class="upper-hall-art" role="img" aria-label="계단을 올라와 복도 끝 요정방을 바라보는 시점. 가까운 곳부터 왼쪽 잠뜰, 각별, 수현의 방문, 오른쪽 공룡, 덕개, 라더의 방문">
+            <svg class="upper-hall-perspective" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <!-- The stairs sit at the right end of the supplied plan; look toward its left end. -->
+              <path fill="#eee3d1" d="M0 0h1600l-570 230H570Z"/>
+              <path fill="#dcc7ab" d="M0 0 570 230v335L0 900Z"/>
+              <path fill="#d2b998" d="M1600 0 1030 230v335l570 335Z"/>
+              <path fill="#e6d6bd" d="M570 230h460v335H570Z"/>
+              <path fill="#b89870" d="M0 900 570 565h460l570 335Z"/>
+              <g fill="none" stroke="#8c7254" stroke-width="5">
+                <path d="M0 16 570 243h460l570-227M0 876 570 554h460l570 322"/>
+                <path d="M0 900 570 565M1600 900 1030 565M230 900 636 565M525 900 713 565M1075 900 887 565M1370 900 964 565" stroke-width="2" opacity=".45"/>
+                <path d="M468 625h664M337 702h926M157 808h1286" stroke-width="2" opacity=".3"/>
+              </g>
+              <path fill="#b4a18a" stroke="#8e7961" stroke-width="3" d="m615 584-198 250h766L985 584Z"/>
+              <path fill="#cfc0a7" d="m646 595-162 216h632L954 595Z"/>
+              <!-- Paired doors keep the near-to-far order from the floor plan. -->
+              <g stroke="#795f47" stroke-width="6" stroke-linejoin="round">
+                <path fill="#ac8562" d="m65 152 244 105v460L65 860Z"/>
+                <path fill="#bc9874" d="m367 273 96 41v312l-96 58Z"/>
+                <path fill="#c8a887" d="m502 328 45 19v235l-45 27Z"/>
+                <path fill="#ac8562" d="m1535 152-244 105v460l244 143Z"/>
+                <path fill="#bc9874" d="m1233 273-96 41v312l96 58Z"/>
+                <path fill="#c8a887" d="m1098 328-45 19v235l45 27Z"/>
+              </g>
+              <g fill="none" stroke="#ddc5a5" stroke-width="4" opacity=".7">
+                <path d="m89 190 196 84v400L89 789ZM389 303l53 23v277l-53 32ZM1511 190l-196 84v400l196 115ZM1211 303l-53 23v277l53 32Z"/>
+              </g>
+              <g fill="#ead1a0" stroke="#765b40" stroke-width="3">
+                <ellipse cx="276" cy="485" rx="8" ry="11"/><ellipse cx="437" cy="468" rx="5" ry="8"/><ellipse cx="533" cy="465" rx="3" ry="6"/>
+                <ellipse cx="1324" cy="485" rx="8" ry="11"/><ellipse cx="1163" cy="468" rx="5" ry="8"/><ellipse cx="1067" cy="465" rx="3" ry="6"/>
+              </g>
+              <rect x="710" y="302" width="180" height="257" rx="5" fill="#a89e8d" stroke="#746b5d" stroke-width="7"/>
+              <rect x="736" y="377" width="128" height="139" rx="3" fill="#d4cbb9" stroke="#746b5d" stroke-width="5"/>
+              <g stroke="#746b5d" stroke-width="7"><path d="M756 379v135M785 379v135M814 379v135M843 379v135"/></g>
+              <circle cx="870" cy="538" r="6" fill="#746b5d"/>
+              <g fill="#f4d9a0" stroke="#967955" stroke-width="4">
+                <path d="m599 303 17-12 17 12v34h-34ZM967 303l17-12 17 12v34h-34Z"/>
+              </g>
+              <path fill="#856a4f" d="M0 868h175l125 32H0Zm1600 0h-175l-125 32h300Z"/>
+              <path fill="#dcc3a3" d="M0 852h175l125 16H0Zm1600 0h-175l-125 16h300Z"/>
+            </svg>
+            <span class="hall-door-name hall-door-name--left hall-door-name--near">잠뜰</span>
+            <span class="hall-door-name hall-door-name--left hall-door-name--middle">각별</span>
+            <span class="hall-door-name hall-door-name--left hall-door-name--far">수현</span>
+            <span class="hall-door-name hall-door-name--right hall-door-name--near">공룡</span>
+            <span class="hall-door-name hall-door-name--right hall-door-name--middle">덕개</span>
+            <span class="hall-door-name hall-door-name--right hall-door-name--far">라더</span>
+            <span class="hall-door-name hall-door-name--fairy">요정방</span>
           </div>
           <button type="button" class="scene-back-arrow scene-exit" id="upper-hall-to-stairs" aria-label="1층 계단으로 돌아가기"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 8 7 7 7-7" /></svg></button>
         </section>

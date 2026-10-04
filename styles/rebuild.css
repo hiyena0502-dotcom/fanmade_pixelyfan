@@ -450,11 +450,11 @@ button{color:inherit}
 .shape-room-art{position:absolute;inset:0;overflow:hidden;background:#f1e3cb}
 .shape-room-art>div{position:absolute;box-sizing:border-box}
 .shape-floor{inset:68% 0 0;background:#cdb494;border-top:8px solid #b39878}
-.stairs-window{left:18%;top:18%;width:18%;height:30%;border:12px solid #bca488;background:#d4e5e6;border-radius:70px 70px 4px 4px;box-shadow:inset 0 0 0 5px #f9f1e4}
-.shape-staircase{left:45%;bottom:27%;width:35%;height:55%;display:flex;align-items:flex-end;filter:drop-shadow(12px 12px 0 #bda78a)}
+.stairs-window{left:67%;top:18%;width:18%;height:30%;border:12px solid #bca488;background:#d4e5e6;border-radius:70px 70px 4px 4px;box-shadow:inset 0 0 0 5px #f9f1e4}
+.shape-staircase{left:20%;bottom:27%;width:42%;height:55%;display:flex;flex-direction:row-reverse;align-items:flex-end;filter:drop-shadow(12px 12px 0 #bda78a)}
 .shape-staircase i{flex:1;background:#c3a07c;border:3px solid #9c7c5b;border-top:10px solid #e1c3a0}
 .shape-staircase i:nth-child(1){height:17%}.shape-staircase i:nth-child(2){height:33%}.shape-staircase i:nth-child(3){height:50%}.shape-staircase i:nth-child(4){height:67%}.shape-staircase i:nth-child(5){height:83%}.shape-staircase i:nth-child(6){height:100%}
-.stairs-rail{left:45%;top:22%;width:40%;height:10px;background:#8f7258;border-radius:8px;transform:rotate(-43deg);transform-origin:right center}
+.stairs-rail{left:20%;top:15%;width:50%;height:10px;background:#8f7258;border-radius:8px;transform:rotate(43deg);transform-origin:left center}
 .bathroom-scene .shape-room-art{background-color:#e5eeee;background-image:linear-gradient(#c9d9d9 2px,transparent 2px),linear-gradient(90deg,#c9d9d9 2px,transparent 2px);background-size:90px 90px}
 .bathroom-scene .shape-floor{background:#b8cbcb;border-color:#9eabab}
 .bath-mirror{left:15%;top:17%;width:20%;height:25%;background:#c8dddd;border:9px solid #9cb8b6;border-radius:50%}
@@ -473,18 +473,22 @@ button{color:inherit}
 .storage-box--c{left:24%;top:49%;width:22%;height:18%}.storage-box--d{left:69%;top:53%;width:17%;height:21%}
 @media(max-width:600px){.stairs-window{border-width:6px}.storage-shelf{border-width:7px}.bath-mirror{border-width:6px}}
 
-/* Upstairs follows the retained floor-plan order; doors are scenery for now. */
-.upper-hall-art{position:absolute;inset:0;background:#f0e5d5}
-.upper-hall-plan{position:absolute;left:12%;right:12%;top:20%;bottom:22%;border:5px solid #b6a38c;border-radius:12px;background:#e4d2b6;overflow:hidden}
-.upper-hall-walkway{position:absolute;left:0;right:0;top:36%;height:28%;background:repeating-linear-gradient(90deg,#c6ac86 0 70px,#bca17b 71px 73px);border-block:3px solid #9c8364}
-.upper-room-row{position:absolute;left:20%;right:5%;height:36%;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.upper-room-row--top{top:0}.upper-room-row--bottom{bottom:0}
-.upper-room-row>div{display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:18px 12px;background:#faf3e6;border-inline:2px solid #c5b499}
-.upper-room-row span,.fairy-room-door span{color:#6b5846;font-size:clamp(14px,1.6vw,21px);font-weight:600}
-.upper-room-row i{display:block;width:42%;height:14px;background:#947a5b;border:2px solid #715b43;border-radius:3px}
-.fairy-room-door{position:absolute;left:3%;top:22%;width:12%;height:56%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#c0b5a5;border:3px solid #8d8072;border-radius:8px}
-.fairy-room-door i{display:block;width:70%;height:42%;border:3px solid #6e6964;border-radius:4px;background:repeating-linear-gradient(90deg,#827b72 0 4px,#e1d9cc 5px 14px)}
-@media(max-width:600px){.upper-hall-plan{left:8%;right:8%;top:24%;bottom:24%;border-width:3px}.upper-room-row{gap:5px}.upper-room-row>div{padding:16px 3px}.fairy-room-door{border-width:2px}.fairy-room-door span{font-size:12px}.upper-room-row i{width:62%}}
+/* Stairs are the upward travel target, with text directly over the steps. */
+.stairs-travel{position:absolute;z-index:5;left:37%;top:52%;transform:translate(-50%,-50%);min-height:48px;padding:10px 17px;border:1px solid #fff1d699;border-radius:5px;background:#745539b8;color:#fff7e6;font-size:clamp(15px,1.5vw,21px);font-weight:650;letter-spacing:.03em;cursor:pointer;box-shadow:0 3px 10px #563b2824;transition:background .18s ease}
+.stairs-travel:hover{background:#61472ee8}.stairs-travel:focus-visible{outline:3px solid #fff5dd;outline-offset:4px}
+.story-frame.is-busy .stairs-travel{pointer-events:none}.story-frame.is-talking .stairs-travel{visibility:hidden;pointer-events:none}
+/* Eye-level view from the staircase landing, looking along the upstairs hall. */
+.upper-hall-art{position:absolute;inset:0;overflow:hidden;background:#e6d6bd}
+.upper-hall-perspective{position:absolute;inset:0;width:100%;height:100%}
+.hall-door-name{position:absolute;transform:translate(-50%,-50%);display:block;max-width:12%;text-align:center;white-space:nowrap;padding:5px 9px;border:1px solid #8b705155;border-radius:4px;background:#eee0c8;color:#654b35;font-weight:650;box-shadow:0 2px 0 #765b4020;pointer-events:none}
+.hall-door-name--near{top:36%;font-size:clamp(14px,1.5vw,22px)}
+.hall-door-name--middle{top:39.5%;font-size:clamp(11px,1.1vw,16px);padding:4px 6px}
+.hall-door-name--far{top:42%;font-size:clamp(9px,.85vw,13px);padding:3px 4px}
+.hall-door-name--left.hall-door-name--near{left:12%}.hall-door-name--right.hall-door-name--near{left:88%}
+.hall-door-name--left.hall-door-name--middle{left:26%}.hall-door-name--right.hall-door-name--middle{left:74%}
+.hall-door-name--left.hall-door-name--far{left:32.8%}.hall-door-name--right.hall-door-name--far{left:67.2%}
+.hall-door-name--fairy{left:50%;top:38%;font-size:clamp(12px,1.25vw,18px);padding:5px 8px}
+@media(max-width:600px){.stairs-travel{padding:8px 12px}.hall-door-name{border-radius:3px;padding:3px 4px}.hall-door-name--far{padding:2px}.hall-door-name--near{max-width:16%}}
 
 .quest-notice{position:absolute;z-index:80;left:50%;top:50%;transform:translate(-50%,-50%);width:min(330px,calc(100% - 48px));padding:20px 24px;border:1px solid #fff9f2;border-radius:16px;background:#fffaf6f5;color:#55464c;box-shadow:0 10px 32px #46323a24;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .22s ease,visibility .22s ease;text-align:center}
 .quest-notice.is-visible{opacity:1;visibility:visible}
