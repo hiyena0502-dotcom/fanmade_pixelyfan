@@ -86,7 +86,7 @@ function writeSave(scene="exterior",patch={}){
   const data={
     ...previous,
     scene,
-    chapter:previous.chapterIntroSeen||scene==="living-room"?1:0,
+    chapter:previous.chapterIntroSeen||["living-room","kitchen"].includes(scene)?1:0,
     ...patch,
     savedAt:Date.now()
   };
@@ -100,7 +100,7 @@ function writeSave(scene="exterior",patch={}){
 function renderContinue(){
   const save=readSave(),button=$("#continue-story"),copy=$("#continue-copy");
   button.disabled=!save;
-  const labels={"exterior":"12월 28일 · 집 앞","door-closeup":"12월 28일 · 문 앞","living-room":"CHAPTER I · 거실"};
+  const labels={"exterior":"12월 28일 · 집 앞","door-closeup":"12월 28일 · 문 앞","living-room":"CHAPTER I · 거실","kitchen":"CHAPTER I · 주방"};
   copy.textContent=save?labels[save.scene]:"NO SAVE DATA";
 }
 function showScreen(name){
@@ -119,13 +119,15 @@ function showScene(name){
   });
   const placeLabel=name==="living-room"
     ?"픽셀리 집 · 거실"
-    :name==="door-closeup"
+    :name==="kitchen"
+      ?"픽셀리 집 · 주방"
+      :name==="door-closeup"
       ?"픽셀리 집 · 문 앞"
       :"픽셀리 집 앞";
   $("#hud-place").textContent=placeLabel;
 
-  $("#bag-button").disabled=name!=="living-room";
-  $("#diary-button").disabled=name!=="living-room";
+  $("#bag-button").disabled=!["living-room","kitchen"].includes(name);
+  $("#diary-button").disabled=!["living-room","kitchen"].includes(name);
 }
 function normalizeStoryScene(scene){
   return scenes.some(s=>s.dataset.scene===scene)?scene:"exterior";
@@ -164,7 +166,7 @@ function startStory(scene="exterior"){
 
   $("#active-quest").textContent=readSave()?.decorationQuest==="accepted"?"공룡에게 부탁받은 생일 장식 찾기":readSave()?.chapterIntroSeen?"":"집에 들어가자";
   const pending=readSave()?.outsideDialogue;
-  if(scene!=="living-room"&&pending){playOutside(pending.kind,pending.state);return}
+  if(["exterior","door-closeup"].includes(scene)&&pending){playOutside(pending.kind,pending.state);return}
   if(scene==="living-room"&&(readSave()?.dialogueProgress||!readSave()?.openingSeen)) beginGongryongDialogue();
 }
 function runPrologue(){
@@ -391,6 +393,16 @@ $("#door-closeup-back").addEventListener("click",()=>{
   writeSave("exterior");
   $("#door-hotspot").focus({preventScroll:true});
 });
+
+function moveRoom(destination,focusTarget){
+  if(busy) return;
+  closePanels(false);
+  showScene(destination);
+  writeSave(destination);
+  $(focusTarget).focus({preventScroll:true});
+}
+$("#go-kitchen").addEventListener("click",()=>moveRoom("kitchen","#kitchen-to-living"));
+$("#kitchen-to-living").addEventListener("click",()=>moveRoom("living-room","#go-kitchen"));
 
 $("#leave-house").addEventListener("click",()=>{
   showScene("exterior");
