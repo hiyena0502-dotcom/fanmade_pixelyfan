@@ -455,3 +455,6 @@ button{color:inherit}
 @media(max-height:500px){.mission-widget{top:96px}.dialogue-log{padding:18px;max-height:90dvh}#dialogue-log-content{max-height:calc(90dvh - 110px)}}
 
 @media(max-width:600px){.hint-trigger{right:12px;top:14px}.tool-sheet--hint{right:12px;top:58px;width:min(280px,calc(100% - 24px))}}
+
+/* Returning out of a scene always uses the same downward exit. */
+.scene-back-arrow.scene-exit{left:50%;right:auto;transform:translateX(-50%)}

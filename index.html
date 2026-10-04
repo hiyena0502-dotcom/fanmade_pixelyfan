@@ -10,14 +10,14 @@
   <link rel="preload" as="image" href="assets/home/home-bg.png?v=85" />
   <link rel="preload" as="image" href="assets/story/chapter1/living-room.webp?v=90" />
   <link rel="preload" as="image" href="assets/story/chapter1/exterior/sky-v138.webp" />
-  <link rel="stylesheet" href="styles/rebuild.css?v=152" />
-  <link rel="stylesheet" href="styles/member-dialogue.css?v=152" />
+  <link rel="stylesheet" href="styles/rebuild.css?v=153" />
+  <link rel="stylesheet" href="styles/member-dialogue.css?v=153" />
   <link rel="stylesheet" href="styles/game-interaction.css?v=121" />
   <script src="game-interaction.js?v=121" defer></script>
-  <script src="journal.js?v=152" defer></script>
-  <script src="member-dialogue.js?v=152" defer></script>
-  <script src="atmosphere.js?v=152" defer></script>
-  <script src="rebuild.js?v=152" defer></script>
+  <script src="journal.js?v=153" defer></script>
+  <script src="member-dialogue.js?v=153" defer></script>
+  <script src="atmosphere.js?v=153" defer></script>
+  <script src="rebuild.js?v=153" defer></script>
 </head>
 <body>
   <main class="rebuild-root">
@@ -116,8 +116,8 @@
             <div class="scene-snow" data-snowfall="closeup" aria-hidden="true"></div>
             <button type="button" class="hotspot hotspot-door-closeup" id="door-closeup-hotspot" aria-label="현관문 두드리기"></button>
           </div>
-          <button type="button" class="scene-back-arrow door-closeup-back" id="door-closeup-back" aria-label="집 앞으로 돌아가기">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 5 8 12l7 7" /></svg>
+          <button type="button" class="scene-back-arrow scene-exit door-closeup-back" id="door-closeup-back" aria-label="집 앞으로 돌아가기">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 8 7 7 7-7" /></svg>
           </button>
 
         </section>
@@ -134,7 +134,7 @@
           <button type="button" class="scene-back-arrow room-direction room-direction--left" id="go-kitchen" aria-label="주방으로 이동">
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 5 8 12l7 7" /></svg>
           </button>
-          <button type="button" class="scene-back-arrow" id="leave-house" aria-label="집 밖으로 나가기">
+          <button type="button" class="scene-back-arrow scene-exit" id="leave-house" aria-label="집 밖으로 나가기">
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 8 7 7 7-7" /></svg>
           </button>
         </section>
