@@ -433,9 +433,9 @@ function moveRoom(destination,focusTarget){
 }
 $("#go-kitchen").addEventListener("click",()=>moveRoom("kitchen","#kitchen-to-living"));
 $("#kitchen-to-living").addEventListener("click",()=>moveRoom("living-room","#go-kitchen"));
-for(const room of ["stairs","bathroom","storage"]){
-  $("#go-"+room).addEventListener("click",()=>moveRoom(room,"#"+room+"-to-living"));
-  $("#"+room+"-to-living").addEventListener("click",()=>moveRoom("living-room","#go-"+room));
+for(const [room,parent] of [["stairs","living"],["bathroom","stairs"],["storage","kitchen"]]){
+  $("#go-"+room).addEventListener("click",()=>moveRoom(room,"#"+room+"-to-"+parent));
+  $("#"+room+"-to-"+parent).addEventListener("click",()=>moveRoom(parent==="living"?"living-room":parent,"#go-"+room));
 }
 
 $("#leave-house").addEventListener("click",()=>{

@@ -229,7 +229,10 @@ test('interruptions preserve the main subtitle and resume at the exact line',()=
   assert.equal(app.node('#dialogue-text').textContent,'요정들은 뭐… 알아서 오겠지.');
   const resumed=boot(app.save());resumed.click('#continue-story');
   assert.equal(resumed.node('#interruption-text').textContent,'야, 정형준!');
-  resumed.click('#interruption-next');
+  resumed.click('#dialogue-interruption');
+  assert.equal(resumed.node('#interruption-text').textContent,'야, 정형준!');
+  assert.equal(resumed.node('#dialogue-next').disabled,false);
+  resumed.click('#dialogue-next');
   assert.equal(resumed.node('#dialogue-interruption').hidden,true);
   assert.equal(resumed.node('#dialogue-text').textContent,'왜!');
 });
@@ -437,9 +440,11 @@ test('knock pauses cannot be skipped by keyboard and reload resumes the outside 
   assert.equal(resumed.activeElement(),resumed.node('#go-kitchen'));
 });
 test('shape rooms support travel, tools, saves, reload, and return focus',()=>{
-  for(const [room,label,index] of [['stairs','계단',4],['bathroom','화장실',5],['storage','창고',6]]){
+  for(const [room,label,index,parent,parentIndex] of [['stairs','계단',4,'living',2],['bathroom','화장실',5,'stairs',4],['storage','창고',6,'kitchen',3]]){
     const app=boot({scene:'living-room',chapterIntroSeen:true,openingSeen:true,decorationQuest:'accepted'});
-    app.click('#continue-story');app.click('#go-'+room);
+    app.click('#continue-story');
+    if(parent!=='living')app.click('#go-'+parent);
+    app.click('#go-'+room);
     assert.equal(app.scenes[index].hidden,false);
     assert.equal(app.save().scene,room);
     assert.equal(app.node('#hud-place').textContent,'픽셀리 집 · '+label);
@@ -449,8 +454,8 @@ test('shape rooms support travel, tools, saves, reload, and return focus',()=>{
     app.click('#story-menu-button');assert.equal(app.node('#story-menu').hidden,false);app.escape();
     const resumed=boot(app.save());resumed.click('#continue-story');
     assert.equal(resumed.scenes[index].hidden,false);
-    resumed.click('#'+room+'-to-living');
-    assert.equal(resumed.scenes[2].hidden,false);
+    resumed.click('#'+room+'-to-'+parent);
+    assert.equal(resumed.scenes[parentIndex].hidden,false);
     assert.equal(resumed.activeElement(),resumed.node('#go-'+room));
     assert.equal(resumed.save().decorationQuest,'accepted');
   }

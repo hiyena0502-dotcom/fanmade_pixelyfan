@@ -96,7 +96,7 @@ function render(){
     image.alt="대화 중인 "+member.name;
   }
   const waiting=Boolean(sequence&&!picking&&mainLine.delay);
-  $("#dialogue-next").disabled=picking||waiting||interruption;
+  $("#dialogue-next").disabled=picking||waiting;
   $("#dialogue-next").setAttribute("aria-label",picking?"대답을 선택해 주세요":waiting?"잠시 기다려 주세요":"다음 대사");
   $("#dialogue-interruption").hidden=!interruption;
   $(".story-frame")?.classList.toggle("is-talking",true);
@@ -124,7 +124,7 @@ function render(){
     });
     $("#dialogue-choices").querySelector("button")?.focus({preventScroll:true});
   }
-  if(!picking&&!waiting) (interruption?$("#interruption-next"):$("#dialogue-next")).focus({preventScroll:true});
+  if(!picking&&!waiting) $("#dialogue-next").focus({preventScroll:true});
 }
 function advance(){
   if(!state||state.phase==="choices"||state.phase==="scene-choices") return;
@@ -148,18 +148,17 @@ function open({saved=null,repeat=false,answeredChoices=[],progress=()=>{},comple
   state=normalize(saved||(repeat?{phase:"repeat",index:0}:null));
   onProgress=progress;onComplete=complete;
   ui.hidden=false;onProgress(snapshot());render();
-  if(state.phase!=="choices") (ui.dataset.interruption==="true"?$("#interruption-next"):$("#dialogue-next")).focus({preventScroll:true});
+  if(state.phase!=="choices") $("#dialogue-next").focus({preventScroll:true});
 }
 $("#dialogue-next").addEventListener("click",advance);
-$("#interruption-next").addEventListener("click",advance);
 document.addEventListener("keydown",event=>{
   if(!state||event.repeat) return;
   const picking=state.phase==="choices"||state.phase==="scene-choices";
   if((event.code==="Space"||event.code==="Enter")&&!picking){
-    event.preventDefault();if(!$("#dialogue-next").disabled||!$("#dialogue-interruption").hidden)advance();
+    event.preventDefault();if(!$("#dialogue-next").disabled)advance();
   }
   if(event.key==="Tab"){
-    const advanceButton=$("#dialogue-interruption").hidden?$("#dialogue-next"):$("#interruption-next");
+    const advanceButton=$("#dialogue-next");
     const buttons=[...(picking?[...$("#dialogue-choices").querySelectorAll("button")]:advanceButton.disabled?[]:[advanceButton])];
     const first=buttons[0],last=buttons.at(-1);
     if(!buttons.includes(document.activeElement)){event.preventDefault();first?.focus()}

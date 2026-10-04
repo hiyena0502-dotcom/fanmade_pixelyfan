@@ -168,18 +168,17 @@ button{color:inherit}
   width:max(100%,calc(100dvh * 16 / 9));aspect-ratio:16 / 9;
 }
 .door-closeup-stage{width:max(100%,calc(100dvh * 1671 / 941));aspect-ratio:1671 / 941}
-.exterior-stage{width:max(100%,calc(100dvh * 2047 / 1200));aspect-ratio:2047 / 1200;background:#8ed9f9;isolation:isolate}
+.exterior-stage{width:max(100%,calc(100dvh * 16 / 9));aspect-ratio:16 / 9;background:#8ed9f9;isolation:isolate}
 .exterior-layers{position:absolute;inset:0;pointer-events:none}
 .exterior-layer{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:fill;pointer-events:none}
-.exterior-cloud{height:calc(100% * 1339 * 2047 / 2048 / 1200);animation:exterior-cloud-flow var(--cloud-duration,160s) linear infinite;animation-delay:var(--cloud-delay,0s)}
+.exterior-cloud{height:calc(100% * 1339 / 1152);animation:exterior-cloud-flow var(--cloud-duration,160s) linear infinite;animation-delay:var(--cloud-delay,0s)}
 .exterior-scene[hidden] .exterior-cloud{animation-play-state:paused}
-[data-exterior-layer="foreground-bushes"]{transform:scaleY(1.65);transform-origin:center bottom}
 @keyframes exterior-cloud-flow{from{transform:translate(var(--cloud-start,130%),var(--cloud-y,0%))}to{transform:translate(var(--cloud-end,-170%),var(--cloud-y,0%))}}
-@media(prefers-reduced-motion:reduce){:root:not([data-game-motion="full"]) .exterior-cloud{height:calc(100% * 1339 * 2047 / 2048 / 1200);animation:none;transform:none}}
+@media(prefers-reduced-motion:reduce){:root:not([data-game-motion="full"]) .exterior-cloud{animation:none;transform:none}}
 .exterior-stage>.scene-art,.door-closeup-art{display:block;width:100%;height:100%;object-fit:cover}
 .living-room-art{position:absolute;inset:0;transform:none;filter:none;animation:none}
 .hotspot{position:absolute;z-index:8;border:0;padding:0;background:transparent;cursor:pointer}
-.hotspot-door{left:47%;top:57.5%;width:5%;height:12.5%}
+.hotspot-door{left:47.5%;top:57.5%;width:4%;height:14%}
 .hotspot-door-closeup{left:39%;top:20.2%;width:21.6%;height:60.3%}
 .hotspot:focus-visible{outline:2px solid var(--ui-accent);outline-offset:4px;border-radius:8px}
 .game-frame-ui{display:none}
@@ -406,11 +405,15 @@ button{color:inherit}
 
 .exterior-decoration{position:absolute;inset:0;pointer-events:none}
 .exterior-decoration img{display:block;width:100%;height:100%;object-fit:fill}
-.exterior-sign img{transform-origin:49.45% 59.5%;animation:exterior-sign-sway 5.5s ease-in-out infinite}
-.birdhouse-character img{transform-origin:69.25% 55.5%;animation:birdhouse-character-bob 3.6s ease-in-out infinite}
+.exterior-sign img{transform-origin:49.45% 59.2%;animation:exterior-sign-sway 5.5s ease-in-out infinite}
+.birdhouse-character img{transform-origin:68.4% 55.7%;animation:birdhouse-character-bob 3.6s ease-in-out infinite}
+.laundry-cloth img{transform-origin:21.3% 65.5%;animation:laundry-cloth-sway 6s ease-in-out infinite}
+.sleep-mark img{animation:sleep-mark-rise 4.2s ease-in-out infinite}
 .exterior-scene[hidden] .exterior-decoration img{animation-play-state:paused}
 @keyframes exterior-sign-sway{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
 @keyframes birdhouse-character-bob{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-3px) rotate(1.5deg)}}
+@keyframes laundry-cloth-sway{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(3deg)}}
+@keyframes sleep-mark-rise{0%{transform:translateY(5px);opacity:0}20%,55%{opacity:1}100%{transform:translateY(-14px);opacity:0}}
 
 /* Room exits remain visible above the artwork and below dialogue. */
 .scene-back-arrow.room-direction{top:50%;bottom:auto;transform:translateY(-50%);width:60px;height:60px}
@@ -445,9 +448,9 @@ button{color:inherit}
 /* Returning out of a scene always uses the same downward exit. */
 .scene-back-arrow.scene-exit{left:50%;right:auto;transform:translateX(-50%)}
 .scene-back-arrow.room-link{bottom:auto;width:56px;height:56px}
-.scene-back-arrow.room-link--stairs{left:58%;top:18%;transform:translateX(-50%)}
-.scene-back-arrow.room-link--bathroom{left:auto;right:24px;top:36%}
-.scene-back-arrow.room-link--storage{left:auto;right:24px;top:59%}
+.scene-back-arrow.room-link--stairs{left:auto;right:24px;top:59%}
+.scene-back-arrow.room-link--bathroom{left:auto;right:24px;top:50%;transform:translateY(-50%)}
+.scene-back-arrow.room-link--storage{left:50%;top:18%;transform:translateX(-50%)}
 .shape-room-art{position:absolute;inset:0;overflow:hidden;background:#f1e3cb}
 .shape-room-art>div{position:absolute;box-sizing:border-box}
 .shape-floor{inset:68% 0 0;background:#cdb494;border-top:8px solid #b39878}
@@ -472,9 +475,9 @@ button{color:inherit}
 .storage-box:after{content:"";position:absolute;top:0;bottom:0;left:42%;width:16%;background:#e0c8a1}
 .storage-box--a{left:23%;top:25%;width:14%;height:16%}.storage-box--b{left:42%;top:26%;width:16%;height:15%}
 .storage-box--c{left:24%;top:49%;width:22%;height:18%}.storage-box--d{left:69%;top:53%;width:17%;height:21%}
-@media(max-width:600px){.scene-back-arrow.room-link{width:48px;height:48px}.scene-back-arrow.room-link--bathroom,.scene-back-arrow.room-link--storage{right:12px}.stairs-window{border-width:6px}.storage-shelf{border-width:7px}.bath-mirror{border-width:6px}}
+@media(max-width:600px){.scene-back-arrow.room-link{width:48px;height:48px}.scene-back-arrow.room-link--bathroom,.scene-back-arrow.room-link--stairs{right:12px}.stairs-window{border-width:6px}.storage-shelf{border-width:7px}.bath-mirror{border-width:6px}}
 
-.quest-notice{position:absolute;z-index:80;left:50%;top:35%;transform:translate(-50%,-50%);width:min(330px,calc(100% - 48px));padding:20px 24px;border:1px solid #fff9f2;border-radius:16px;background:#fffaf6f5;color:#55464c;box-shadow:0 10px 32px #46323a24;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .22s ease,visibility .22s ease;text-align:center}
+.quest-notice{position:absolute;z-index:80;left:50%;top:50%;transform:translate(-50%,-50%);width:min(330px,calc(100% - 48px));padding:20px 24px;border:1px solid #fff9f2;border-radius:16px;background:#fffaf6f5;color:#55464c;box-shadow:0 10px 32px #46323a24;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .22s ease,visibility .22s ease;text-align:center}
 .quest-notice.is-visible{opacity:1;visibility:visible}
 .quest-notice span{display:block;margin-bottom:8px;font-size:11px;color:#9a8068;letter-spacing:.04em}
 .quest-notice strong{font-size:18px;font-weight:650;line-height:1.6}
