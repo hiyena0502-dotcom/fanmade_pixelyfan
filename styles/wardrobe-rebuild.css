@@ -978,3 +978,9 @@ html,body{
     grid-template-columns:repeat(2,minmax(0,1fr))!important;
   }
 }
+
+/* Larger original-art cards for the wardrobe feedback. */
+@media(min-width:1101px){
+  .wardrobe-options.wardrobe-dev-options{grid-template-columns:repeat(2,minmax(180px,1fr))!important}
+  .wardrobe-option-wrap,.wardrobe-option-wrap>.wardrobe-option{width:100%!important;max-width:none!important;height:auto!important;min-height:0!important;max-height:none!important;aspect-ratio:1 / 1!important}
+}
