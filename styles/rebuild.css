@@ -484,7 +484,7 @@ button{color:inherit}
 .storage-scene{--room-inset:18%}
 .bathroom-scene{--room-inset:12%}
 .attic-scene{--room-inset:7%}
-.basement-scene{--room-inset:2%}
+.basement-scene{--room-inset:0%}
 .stairs-travel{left:29%;top:50%;font-size:clamp(14px,1.35vw,19px);background:#654a32db;border-color:#eddbb873;box-shadow:0 4px 15px #3523192b}
 .basement-travel{left:59%;top:75%;font-size:clamp(13px,1.25vw,18px)}
 .hall-door-name{background:linear-gradient(#f0e1c6,#dec9a8);border-color:#80624366;box-shadow:0 2px 3px #513c2926,inset 0 1px #fff2d6}
