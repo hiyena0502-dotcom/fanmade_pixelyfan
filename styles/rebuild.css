@@ -187,8 +187,8 @@ button{color:inherit}
 .minimal-hud{position:absolute;inset:0;z-index:30;pointer-events:none}
 .hud-date{
   position:absolute;left:24px;top:24px;display:flex;align-items:center;gap:16px;
-  padding:15px 20px;min-height:66px;max-width:calc(100% - 100px);
-  border:1px solid #fffaf4;border-radius:15px;
+  padding:11px 16px;min-height:56px;max-width:calc(100% - 100px);
+  border:1px solid #fffaf4;border-radius:12px;
   background:#fffaf6ed;box-shadow:var(--ui-shadow);color:var(--ui-ink);
 }
 .hud-date-stamp{padding-right:16px;border-right:1px solid var(--ui-line);font-size:16px;font-weight:650;letter-spacing:.04em;white-space:nowrap}
@@ -196,16 +196,16 @@ button{color:inherit}
 .hud-place-copy small{font-size:8px;letter-spacing:.18em;color:var(--ui-muted)}
 .hud-place-copy strong{font-size:14px;font-weight:650;letter-spacing:-.03em}
 .inventory-rack{
-  position:absolute;right:24px;bottom:100px;
-  display:flex;align-items:center;gap:8px;padding:10px;
-  border:1px solid #fffcf4;border-radius:16px;background:#fffaf6eb;box-shadow:var(--ui-shadow);
+  position:absolute;right:24px;bottom:94px;
+  display:flex;align-items:center;gap:6px;padding:8px;
+  border:1px solid #fffcf4;border-radius:12px;background:#fffaf6e6;box-shadow:var(--ui-shadow);
 }
-.inventory-rack>span{font-size:9px;text-align:center;color:var(--ui-muted);letter-spacing:.09em;width:32px}
-.inventory-rack i{display:block;width:48px;height:48px;border:1px solid var(--ui-line);border-radius:10px;background:#a69cad12}
+.inventory-rack>span{font-size:9px;text-align:center;color:var(--ui-muted);letter-spacing:.09em;width:29px}
+.inventory-rack i{display:block;width:34px;height:34px;border:1px solid var(--ui-line);border-radius:7px;background:#a69cad0c;box-shadow:inset 0 1px 3px #463b4410}
 .hud-tools{position:absolute;right:24px;bottom:24px;display:flex;gap:8px;pointer-events:auto}
 .object-tool{
   display:grid;place-items:center;grid-template-rows:1fr auto;gap:7px;
-  width:60px;height:62px;padding:10px 7px 8px;border:1px solid #fffaf3;border-radius:14px;
+  width:56px;height:58px;padding:9px 7px 7px;border:1px solid #fffaf3;border-radius:12px;
   background:#fffaf6ed;box-shadow:var(--ui-shadow);color:var(--ui-ink);cursor:pointer;
   transition:transform .15s ease,background-color .15s ease;
 }
@@ -448,31 +448,6 @@ button{color:inherit}
 /* Returning out of a scene always uses the same downward exit. */
 .scene-back-arrow.scene-exit{left:50%;right:auto;top:auto;transform:translateX(-50%)}
 .shape-room-art{position:absolute;inset:0;overflow:hidden;background:#f1e3cb}
-.shape-room-art>div{position:absolute;box-sizing:border-box}
-.shape-floor{inset:68% 0 0;background:#cdb494;border-top:8px solid #b39878}
-.stairs-window{left:67%;top:18%;width:18%;height:30%;border:12px solid #bca488;background:#d4e5e6;border-radius:70px 70px 4px 4px;box-shadow:inset 0 0 0 5px #f9f1e4}
-.shape-staircase{left:20%;bottom:27%;width:42%;height:55%;display:flex;flex-direction:row-reverse;align-items:flex-end;filter:drop-shadow(12px 12px 0 #bda78a)}
-.shape-staircase i{flex:1;background:#c3a07c;border:3px solid #9c7c5b;border-top:10px solid #e1c3a0}
-.shape-staircase i:nth-child(1){height:17%}.shape-staircase i:nth-child(2){height:33%}.shape-staircase i:nth-child(3){height:50%}.shape-staircase i:nth-child(4){height:67%}.shape-staircase i:nth-child(5){height:83%}.shape-staircase i:nth-child(6){height:100%}
-.stairs-rail{left:20%;top:15%;width:50%;height:10px;background:#8f7258;border-radius:8px;transform:rotate(43deg);transform-origin:left center}
-.bathroom-scene .shape-room-art{background-color:#e5eeee;background-image:linear-gradient(#c9d9d9 2px,transparent 2px),linear-gradient(90deg,#c9d9d9 2px,transparent 2px);background-size:90px 90px}
-.bathroom-scene .shape-floor{background:#b8cbcb;border-color:#9eabab}
-.bath-mirror{left:15%;top:17%;width:20%;height:25%;background:#c8dddd;border:9px solid #9cb8b6;border-radius:50%}
-.bath-sink{left:13%;top:46%;width:24%;height:23%;background:#f7f5ed;border:6px solid #c2cecb;border-radius:12px 12px 24px 24px}
-.bath-sink:before{content:"";position:absolute;left:15%;right:15%;top:12%;height:25%;border:5px solid #d7dfdc;border-radius:50%;background:#c6d6d5}
-.bath-sink i{position:absolute;left:48%;top:-25%;height:30%;width:8%;border:5px solid #91a7a5;border-bottom:0;border-radius:12px 12px 0 0}
-.bath-tub{left:46%;top:48%;width:37%;height:25%;background:#f8f6ee;border:10px solid #d4dfdb;border-radius:30px 30px 70px 70px;box-shadow:inset 0 14px 0 #b3ced0,0 10px 0 #99adab}
-.bath-toilet{left:77%;top:28%;width:12%;height:14%;background:#f8f6ee;border:5px solid #c4d0cb;border-radius:12px}
-.bath-toilet i{position:absolute;top:60%;left:-15%;width:130%;height:140%;border:10px solid #f8f6ee;border-radius:50%;background:#b9cdca;box-shadow:0 8px 0 #acbdb7;box-sizing:border-box}
-.storage-scene .shape-room-art{background:#e5dccb}.storage-scene .shape-floor{background:#b6a68c;border-color:#9e8b73}
-.storage-shelf{left:18%;top:21%;width:45%;height:48%;border-left:12px solid #927a5b;border-right:12px solid #927a5b;display:flex;flex-direction:column;justify-content:space-between}
-.storage-shelf i{height:12px;background:#a58a67;box-shadow:0 7px 0 #c2ab89}
-.storage-box{background:#cba475;border:5px solid #aa875b;border-radius:3px}
-.storage-box:after{content:"";position:absolute;top:0;bottom:0;left:42%;width:16%;background:#e0c8a1}
-.storage-box--a{left:23%;top:25%;width:14%;height:16%}.storage-box--b{left:42%;top:26%;width:16%;height:15%}
-.storage-box--c{left:24%;top:49%;width:22%;height:18%}.storage-box--d{left:69%;top:53%;width:17%;height:21%}
-@media(max-width:600px){.stairs-window{border-width:6px}.storage-shelf{border-width:7px}.bath-mirror{border-width:6px}}
-
 /* Stairs are the upward travel target, with text directly over the steps. */
 .stairs-travel{position:absolute;z-index:5;left:37%;top:52%;transform:translate(-50%,-50%);min-height:48px;padding:10px 17px;border:1px solid #fff1d699;border-radius:5px;background:#745539b8;color:#fff7e6;font-size:clamp(15px,1.5vw,21px);font-weight:650;letter-spacing:.03em;cursor:pointer;box-shadow:0 3px 10px #563b2824;transition:background .18s ease}
 .stairs-travel:hover{background:#61472ee8}.stairs-travel:focus-visible{outline:3px solid #fff5dd;outline-offset:4px}
@@ -496,25 +471,30 @@ button{color:inherit}
 .quest-notice strong{font-size:18px;font-weight:650;line-height:1.6}
 
 /* New storage spaces connect through the staircase and upstairs ceiling hatch. */
-.basement-stairwell{left:67%;top:66%;width:23%;height:25%;background:#79654e}
-.basement-stairwell svg{display:block;width:100%;height:100%}
-.basement-travel{left:78.5%;top:76%;font-size:clamp(14px,1.4vw,20px)}
 .attic-travel{position:absolute;z-index:5;left:58%;top:8%;width:clamp(115px,12vw,165px);padding:0;border:0;background:none;color:#644b33;cursor:pointer}
 .attic-travel svg{display:block;width:100%;height:clamp(85px,12vh,125px)}
 .attic-travel span{display:block;padding:7px 9px;border:1px solid #fff1d6aa;border-radius:5px;background:#745539bd;color:#fff7e6;font-size:clamp(13px,1.2vw,17px);font-weight:650}
 .attic-travel:hover span{background:#61472ee8}.attic-travel:focus-visible{outline:3px solid #886445;outline-offset:4px;border-radius:5px}
 .story-frame.is-busy .attic-travel{pointer-events:none}.story-frame.is-talking .attic-travel{visibility:hidden;pointer-events:none}
-.basement-scene .shape-room-art{background:#d0c9b9}.basement-scene .shape-floor{background:#9c988b;border-color:#79766b}
-.basement-scene .storage-shelf{left:10%;top:22%;width:39%;height:47%;border-color:#7e7768}
-.basement-scene .storage-box--a{left:14%;top:26%;width:12%;height:14%}.basement-scene .storage-box--b{left:30%;top:25%;width:14%;height:15%}
-.basement-scene .storage-box--c{left:15%;top:49%;width:25%;height:18%}.basement-scene .storage-box--d{left:55%;top:59%;width:18%;height:17%}
-.prop-panel{left:77%;top:30%;width:10%;height:39%;background:#b8b1a0;border:7px solid #827a68;transform:rotate(6deg)}
-.prop-light{left:66%;top:41%;width:5px;height:27%;background:#736d62}
-.prop-light:before{content:"";position:absolute;left:-34px;top:-40px;width:68px;height:62px;border:9px solid #746e62;border-radius:50%;background:#dbd7c7;box-sizing:border-box}
-.prop-light:after{content:"";position:absolute;left:-28px;bottom:-13px;width:60px;height:6px;border-radius:5px;background:#736d62}
-.attic-roof{position:absolute;inset:0;width:100%;height:100%}
-.attic-scene .storage-box--a{left:13%;top:55%;width:16%;height:20%}.attic-scene .storage-box--b{left:18%;top:41%;width:13%;height:15%}
-.attic-scene .storage-box--c{left:67%;top:56%;width:20%;height:18%}.attic-scene .storage-box--d{left:72%;top:41%;width:13%;height:15%}
-.attic-trunk{left:40%;top:59%;width:20%;height:17%;background:#ab8460;border:5px solid #826346;border-radius:14px 14px 4px 4px;box-shadow:inset 0 12px 0 #c29e77}
-.attic-trunk:before{content:"";position:absolute;left:48%;top:20%;width:8%;height:30%;background:#dec493;border:2px solid #9a7c50}
-@media(max-width:600px){.basement-travel{padding:8px 10px}.attic-travel{left:55%;top:9%;width:110px}.attic-travel svg{height:80px}.prop-light:before{left:-22px;width:45px;height:43px;border-width:6px}.prop-panel{border-width:4px}}
+/* Room width is part of the staging: hard black mattes for enclosed spaces,
+   a broad stage for the basement, and unobstructed exits at viewport centres. */
+.shape-room{background:#050505;--room-inset:0%}
+.shape-room .shape-room-art{inset:0 var(--room-inset);background:#171813}
+.room-depth-art{display:block;width:100%;height:100%;object-fit:fill;pointer-events:none;user-select:none}
+.storage-scene{--room-inset:18%}
+.bathroom-scene{--room-inset:12%}
+.attic-scene{--room-inset:7%}
+.basement-scene{--room-inset:2%}
+.stairs-travel{left:29%;top:50%;font-size:clamp(14px,1.35vw,19px);background:#654a32db;border-color:#eddbb873;box-shadow:0 4px 15px #3523192b}
+.basement-travel{left:59%;top:75%;font-size:clamp(13px,1.25vw,18px)}
+.hall-door-name{background:linear-gradient(#f0e1c6,#dec9a8);border-color:#80624366;box-shadow:0 2px 3px #513c2926,inset 0 1px #fff2d6}
+.upper-hall-art::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 40%,transparent 38%,#38281726)}
+@media(max-width:600px){
+  .storage-scene{--room-inset:12%}.bathroom-scene{--room-inset:8%}.attic-scene{--room-inset:4%}.basement-scene{--room-inset:0%}
+  .inventory-rack i{width:30px;height:30px}.inventory-rack{bottom:84px}
+  .stairs-travel{left:28%;padding:8px 10px;font-size:13px}.basement-travel{left:60%;top:76%;font-size:12px}
+}
+@media(max-width:420px){
+  .hud-tools{gap:4px}.object-tool{width:44px;height:52px}
+  .inventory-rack{padding:6px;gap:4px}.inventory-rack i{width:26px;height:26px}.inventory-rack>span{width:24px}
+}

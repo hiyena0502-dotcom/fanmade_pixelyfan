@@ -10,13 +10,13 @@
   <link rel="preload" as="image" href="assets/home/home-bg.png?v=85" />
   <link rel="preload" as="image" href="assets/story/chapter1/living-room.webp?v=90" />
   <link rel="preload" as="image" href="assets/story/chapter1/exterior/sky-v163.webp" />
-  <link rel="stylesheet" href="styles/rebuild.css?v=167" />
-  <link rel="stylesheet" href="styles/member-dialogue.css?v=167" />
+  <link rel="stylesheet" href="styles/rebuild.css?v=168" />
+  <link rel="stylesheet" href="styles/member-dialogue.css?v=168" />
   <link rel="stylesheet" href="styles/game-interaction.css?v=121" />
   <script src="game-interaction.js?v=121" defer></script>
-  <script src="member-dialogue.js?v=167" defer></script>
-  <script src="atmosphere.js?v=167" defer></script>
-  <script src="rebuild.js?v=167" defer></script>
+  <script src="member-dialogue.js?v=168" defer></script>
+  <script src="atmosphere.js?v=168" defer></script>
+  <script src="rebuild.js?v=168" defer></script>
 </head>
 <body>
   <main class="rebuild-root">
@@ -150,10 +150,8 @@
         </section>
 
         <section class="scene shape-room stairs-scene" data-scene="stairs" hidden aria-label="픽셀리 집 계단">
-          <div class="shape-room-art" role="img" aria-label="왼쪽으로 올라가는 2층 계단과 그 옆의 지하로 내려가는 계단">
-            <div class="shape-floor"></div><div class="stairs-window"></div>
-            <div class="shape-staircase"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="stairs-rail"></div>
-            <div class="basement-stairwell" aria-hidden="true"><svg viewBox="0 0 300 220" preserveAspectRatio="none"><path fill="#79654e" stroke="#aa8f6d" stroke-width="8" d="M4 4h292v212H4Z"/><path fill="#bba180" stroke="#554936" stroke-width="4" d="M5 5h55v35h48v35h48v35h48v35h48v35h43v35H5Z"/><path fill="none" stroke="#dec5a4" stroke-width="5" d="M5 5h55m0 35h48m0 35h48m0 35h48m0 35h48m0 35h43"/></svg></div>
+          <div class="shape-room-art" role="img" aria-label="왼쪽으로 올라가는 나무 계단, 옆의 지하 계단과 장식장">
+            <img class="room-depth-art" src="assets/story/rooms-v168/stairs.svg" alt="" draggable="false" />
           </div>
           <button type="button" class="stairs-travel" id="go-upper-hall" aria-label="2층으로 가기">2층으로 가기</button>
           <button type="button" class="stairs-travel basement-travel" id="go-basement" aria-label="지하로 가기">지하로 가기</button>
@@ -161,14 +159,14 @@
           <button type="button" class="scene-back-arrow scene-exit" id="stairs-to-living" aria-label="거실로 돌아가기"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 8 7 7 7-7" /></svg></button>
         </section>
         <section class="scene shape-room bathroom-scene" data-scene="bathroom" hidden aria-label="픽셀리 집 화장실">
-          <div class="shape-room-art" role="img" aria-label="단순한 도형으로 만든 거울, 세면대, 욕조와 변기">
-            <div class="shape-floor"></div><div class="bath-mirror"></div><div class="bath-sink"><i></i></div><div class="bath-tub"></div><div class="bath-toilet"><i></i></div>
+          <div class="shape-room-art" role="img" aria-label="타일 벽과 원근 바닥, 거울과 욕조가 있는 아담한 화장실">
+            <img class="room-depth-art" src="assets/story/rooms-v168/bathroom.svg" alt="" draggable="false" />
           </div>
           <button type="button" class="scene-back-arrow scene-exit" id="bathroom-to-stairs" aria-label="계단으로 돌아가기"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 8 7 7 7-7" /></svg></button>
         </section>
         <section class="scene shape-room storage-scene" data-scene="storage" hidden aria-label="픽셀리 집 창고">
-          <div class="shape-room-art" role="img" aria-label="단순한 도형으로 만든 선반과 보관 상자">
-            <div class="shape-floor"></div><div class="storage-shelf"><i></i><i></i><i></i></div><div class="storage-box storage-box--a"></div><div class="storage-box storage-box--b"></div><div class="storage-box storage-box--c"></div><div class="storage-box storage-box--d"></div>
+          <div class="shape-room-art" role="img" aria-label="어두운 좁은 창고의 뒤쪽 선반과 가까운 앞쪽 보관대">
+            <img class="room-depth-art" src="assets/story/rooms-v168/storage.svg" alt="" draggable="false" />
           </div>
           <button type="button" class="scene-back-arrow scene-exit" id="storage-to-kitchen" aria-label="주방으로 돌아가기"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 8 7 7 7-7" /></svg></button>
         </section>
@@ -176,11 +174,14 @@
         <section class="scene shape-room upper-hall-scene" data-scene="upper-hall" hidden aria-label="픽셀리 집 2층 복도">
           <div class="upper-hall-art" role="img" aria-label="계단을 올라와 긴 복도 끝 요정방을 바라보는 시점. 입구에서 안쪽으로 왼쪽 수현, 각별, 잠뜰의 방문, 오른쪽 라더, 덕개, 공룡의 방문">
             <svg class="upper-hall-perspective" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <defs><linearGradient id="hall-left" x2="1" y2="0"><stop stop-color="#bba080"/><stop offset="1" stop-color="#e1ccb0"/></linearGradient><linearGradient id="hall-right" x2="1" y2="0"><stop stop-color="#d8c19f"/><stop offset="1" stop-color="#a68c6b"/></linearGradient><linearGradient id="hall-floor" x2="0" y2="1"><stop stop-color="#b89870"/><stop offset="1" stop-color="#d2b38b"/></linearGradient><radialGradient id="hall-light"><stop stop-color="#fff1c7" stop-opacity=".3"/><stop offset="1" stop-color="#fff1c7" stop-opacity="0"/></radialGradient></defs>
               <path fill="#eee3d1" d="M0 0h1600l-720 300H720Z"/>
-              <path fill="#dcc7ab" d="M0 0 720 300v235L0 900Z"/>
-              <path fill="#d2b998" d="M1600 0 880 300v235l720 365Z"/>
+              <path fill="url(#hall-left)" d="M0 0 720 300v235L0 900Z"/>
+              <path fill="url(#hall-right)" d="M1600 0 880 300v235l720 365Z"/>
               <path fill="#e6d6bd" d="M720 300h160v235H720Z"/>
-              <path fill="#b89870" d="M0 900 720 535h160l720 365Z"/>
+              <path fill="url(#hall-floor)" d="M0 900 720 535h160l720 365Z"/>
+              <path fill="#a38a68" opacity=".28" d="M0 712 720 493v42L0 900Zm1600 0L880 493v42l720 365Z"/>
+              <path d="M0 712 720 493M1600 712 880 493" stroke="#efd9b8" stroke-width="5"/>
               <g fill="none" stroke="#8c7254" stroke-width="5">
                 <path d="M0 16 720 311h160l720-295M0 884 720 525h160l720 359"/>
                 <path d="M0 900 720 535M1600 900 880 535M260 900 746 535M560 900 776 535M1040 900 824 535M1340 900 854 535" stroke-width="2" opacity=".45"/>
@@ -206,11 +207,12 @@
               <polygon points="1002.4 271.1 908.8 293.2 908.8 549.6 1002.4 597.05" fill="#b08b66" stroke="#795f47" stroke-width="6" stroke-linejoin="round"/>
               <polygon points="993.4 295.1 917.8 307.2 917.8 523.6 993.4 563.05" fill="none" stroke="#ddc5a5" stroke-width="3" opacity=".65"/>
               <ellipse cx="926.8" cy="436.4" rx="5" ry="8" fill="#ead1a0" stroke="#765b40" stroke-width="3"/>
-              <rect x="748" y="336" width="104" height="197" rx="4" fill="#a89e8d" stroke="#746b5d" stroke-width="5"/>
-              <rect x="762" y="393" width="76" height="101" rx="3" fill="#d4cbb9" stroke="#746b5d" stroke-width="4"/>
-              <g stroke="#746b5d" stroke-width="5"><path d="M775 395v97M792 395v97M809 395v97M826 395v97"/></g>
-              <circle cx="839" cy="515" r="4" fill="#746b5d"/>
+              <rect x="748" y="336" width="104" height="197" rx="4" fill="#b08b66" stroke="#795f47" stroke-width="5"/>
+              <rect x="761" y="352" width="78" height="82" rx="3" fill="#b99873" stroke="#8a6b4b" stroke-width="2"/>
+              <rect x="761" y="449" width="78" height="69" rx="3" fill="#b99873" stroke="#8a6b4b" stroke-width="2"/>
+              <circle cx="835" cy="444" r="4" fill="#e7c796"/>
               <g fill="#f4d9a0" stroke="#967955" stroke-width="3"><path d="m727 341 6-8 6 8v23h-12ZM861 341l6-8 6 8v23h-12Z"/></g>
+              <ellipse cx="800" cy="390" rx="470" ry="405" fill="url(#hall-light)"/>
               <path fill="#856a4f" d="M0 868h175l125 32H0Zm1600 0h-175l-125 32h300Z"/>
               <path fill="#dcc3a3" d="M0 852h175l125 16H0Zm1600 0h-175l-125 16h300Z"/>
             </svg>
@@ -227,19 +229,14 @@
         </section>
 
         <section class="scene shape-room basement-scene" data-scene="basement" hidden aria-label="픽셀리 집 지하">
-          <div class="shape-room-art" role="img" aria-label="촬영 소품 선반, 보관 상자와 조명 스탠드가 있는 지하 보관실">
-            <div class="shape-floor"></div>
-            <div class="storage-shelf"><i></i><i></i><i></i></div>
-            <div class="storage-box storage-box--a"></div><div class="storage-box storage-box--b"></div><div class="storage-box storage-box--c"></div><div class="storage-box storage-box--d"></div>
-            <div class="prop-light"><i></i></div><div class="prop-panel"></div>
+          <div class="shape-room-art" role="img" aria-label="넓은 지하 보관실의 여러 선반, 서랍장과 작업대">
+            <img class="room-depth-art" src="assets/story/rooms-v168/basement.svg" alt="" draggable="false" />
           </div>
           <button type="button" class="scene-back-arrow scene-exit" id="basement-to-stairs" aria-label="계단으로 돌아가기"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 8 7 7 7-7" /></svg></button>
         </section>
         <section class="scene shape-room attic-scene" data-scene="attic" hidden aria-label="픽셀리 집 다락">
-          <div class="shape-room-art" role="img" aria-label="낮은 경사 지붕과 나무 들보 아래 상자를 보관하는 다락">
-            <svg class="attic-roof" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path fill="#dfcfb7" d="M0 0h1600v900H0Z"/><path fill="#baa181" d="M0 0h1600v270L800 85 0 270Z"/><path fill="#ceba9c" d="M0 270 800 85l800 185v410H0Z"/><path fill="#b39470" d="M0 680h1600v220H0Z"/><g fill="none" stroke="#8e7254" stroke-width="18"><path d="M0 280 800 90l800 190M0 678h1600M270 220v460M1330 220v460"/><path d="M800 100v95"/></g><circle cx="800" cy="315" r="70" fill="#cededc" stroke="#9f8260" stroke-width="15"/><path d="M800 249v132M734 315h132" stroke="#9f8260" stroke-width="10"/></svg>
-            <div class="storage-box storage-box--a"></div><div class="storage-box storage-box--b"></div><div class="storage-box storage-box--c"></div><div class="storage-box storage-box--d"></div>
-            <div class="attic-trunk"></div>
+          <div class="shape-room-art" role="img" aria-label="경사 지붕 아래 창빛과 나무 궤짝이 있는 다락">
+            <img class="room-depth-art" src="assets/story/rooms-v168/attic.svg" alt="" draggable="false" />
           </div>
           <button type="button" class="scene-back-arrow scene-exit" id="attic-to-upper-hall" aria-label="2층 복도로 돌아가기"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m5 8 7 7 7-7" /></svg></button>
         </section>
