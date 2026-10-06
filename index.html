@@ -3,116 +3,102 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#18333a" />
+  <meta name="theme-color" content="#aee5f5" />
   <title>꿈뜰이의 대환장 나들이</title>
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
   <main class="title-screen" id="title-screen">
-    <div class="paper-grain" aria-hidden="true"></div>
-    <div class="sky-blob sky-blob-a" aria-hidden="true"></div>
-    <div class="sky-blob sky-blob-b" aria-hidden="true"></div>
-    <div class="moon" aria-hidden="true"></div>
+    <div class="sky" aria-hidden="true">
+      <div class="sun"></div>
+      <div class="cloud cloud-a"></div>
+      <div class="cloud cloud-b"></div>
+      <div class="cloud cloud-c"></div>
+      <div class="far-hill far-hill-a"></div>
+      <div class="far-hill far-hill-b"></div>
+    </div>
 
-    <div class="doodle doodle-spark doodle-spark-a" aria-hidden="true">✦</div>
-    <div class="doodle doodle-spark doodle-spark-b" aria-hidden="true">✧</div>
-    <div class="doodle doodle-mark" aria-hidden="true">?!</div>
-    <div class="doodle doodle-arrow" aria-hidden="true">↝</div>
+    <section class="meadow" aria-hidden="true">
+      <div class="meadow-back"></div>
+      <div class="meadow-front"></div>
 
-    <div class="snow-hill hill-back" aria-hidden="true"></div>
-    <div class="snow-hill hill-front" aria-hidden="true"></div>
+      <div class="path">
+        <i class="step s1"></i>
+        <i class="step s2"></i>
+        <i class="step s3"></i>
+        <i class="step s4"></i>
+        <i class="step s5"></i>
+        <i class="step s6"></i>
+        <i class="step s7"></i>
+      </div>
 
-    <section class="title-copy" aria-labelledby="game-title">
+      <div class="flower f1">✿</div>
+      <div class="flower f2">✿</div>
+      <div class="flower f3">✿</div>
+      <div class="flower f4">✿</div>
+      <div class="flower f5">✿</div>
+      <div class="flower f6">✿</div>
+      <div class="flower f7">✿</div>
+      <div class="flower f8">✿</div>
+
+      <div class="grass g1">︿</div>
+      <div class="grass g2">︿</div>
+      <div class="grass g3">︿</div>
+      <div class="grass g4">︿</div>
+      <div class="grass g5">︿</div>
+      <div class="grass g6">︿</div>
+    </section>
+
+    <section class="house-stage" aria-hidden="true">
+      <div class="house-shadow"></div>
+      <img class="house-art" src="./assets/title/house.webp" alt="" />
+      <div class="tiny-note note-one">!</div>
+      <div class="tiny-note note-two">?</div>
+    </section>
+
+    <section class="title-content" aria-labelledby="game-title">
       <p class="anniversary">잠뜰TV 13주년 기념 팬게임</p>
 
-      <div class="game-logo" aria-label="꿈뜰이의 대환장 나들이">
+      <div class="logo-wrap">
         <span class="logo-kicker">꿈뜰이의</span>
-        <div class="logo-main" id="game-title">
-          <span class="logo-word logo-word-chaos">대환장</span>
-          <span class="logo-word logo-word-trip">나들이</span>
-        </div>
-        <span class="logo-burst" aria-hidden="true">!</span>
-        <span class="logo-star logo-star-a" aria-hidden="true">★</span>
-        <span class="logo-star logo-star-b" aria-hidden="true">✦</span>
-        <p class="logo-subtitle">초대는 받았고, 귀가는 미정!</p>
+        <h1 id="game-title">
+          <span class="logo-chaos">대환장</span>
+          <span class="logo-trip">나들이</span>
+        </h1>
+        <span class="logo-bang" aria-hidden="true">!</span>
+        <span class="logo-spark spark-a" aria-hidden="true">✦</span>
+        <span class="logo-spark spark-b" aria-hidden="true">✧</span>
+        <p class="subtitle">초대는 받았고, 귀가는 미정!</p>
       </div>
 
-      <div class="menu-card">
-        <span class="tape tape-a" aria-hidden="true"></span>
-        <span class="tape tape-b" aria-hidden="true"></span>
+      <nav class="main-menu" aria-label="메인 메뉴">
+        <button class="menu-item is-active" type="button" data-placeholder="새 게임">
+          <span class="menu-mark">✦</span>
+          <span class="menu-label">새 게임</span>
+          <span class="menu-arrow">→</span>
+        </button>
+        <button class="menu-item" type="button" data-placeholder="이어하기">
+          <span class="menu-mark">✦</span>
+          <span class="menu-label">이어하기</span>
+          <span class="menu-arrow">→</span>
+        </button>
+        <button class="menu-item" type="button" data-placeholder="설정">
+          <span class="menu-mark">✦</span>
+          <span class="menu-label">설정</span>
+          <span class="menu-arrow">→</span>
+        </button>
+        <button class="menu-item" type="button" data-placeholder="크레딧">
+          <span class="menu-mark">✦</span>
+          <span class="menu-label">크레딧</span>
+          <span class="menu-arrow">→</span>
+        </button>
+      </nav>
 
-        <nav class="main-menu" aria-label="메인 메뉴">
-          <button class="menu-item is-primary" type="button" data-placeholder="새 게임">
-            <span class="menu-number">01</span>
-            <span class="menu-label">새 게임</span>
-            <span class="menu-doodle" aria-hidden="true">→</span>
-          </button>
-          <button class="menu-item" type="button" data-placeholder="이어하기">
-            <span class="menu-number">02</span>
-            <span class="menu-label">이어하기</span>
-            <span class="menu-doodle" aria-hidden="true">→</span>
-          </button>
-          <button class="menu-item" type="button" data-placeholder="설정">
-            <span class="menu-number">03</span>
-            <span class="menu-label">설정</span>
-            <span class="menu-doodle" aria-hidden="true">→</span>
-          </button>
-          <button class="menu-item" type="button" data-placeholder="크레딧">
-            <span class="menu-number">04</span>
-            <span class="menu-label">크레딧</span>
-            <span class="menu-doodle" aria-hidden="true">→</span>
-          </button>
-        </nav>
-
-        <p class="menu-note" id="menu-note" aria-live="polite">
-          메인 화면 디자인 프로토타입
-        </p>
-      </div>
+      <p class="menu-note" id="menu-note" aria-live="polite">메인 화면 디자인 프로토타입</p>
     </section>
 
-    <section class="scene-illustration" aria-hidden="true">
-      <div class="house-shadow"></div>
-
-      <div class="house">
-        <div class="chimney">
-          <i class="smoke smoke-a"></i>
-          <i class="smoke smoke-b"></i>
-        </div>
-
-        <div class="roof roof-top"></div>
-        <div class="house-back">
-          <span class="window window-a"></span>
-          <span class="window window-b"></span>
-        </div>
-
-        <div class="roof roof-low"></div>
-        <div class="house-front">
-          <span class="window window-c"></span>
-          <span class="door">
-            <i class="door-light"></i>
-          </span>
-          <span class="hanging-sign">PIXELY<br>HOUSE</span>
-        </div>
-
-        <span class="snow-cap snow-cap-top"></span>
-        <span class="snow-cap snow-cap-low"></span>
-        <span class="tiny-bush bush-a"></span>
-        <span class="tiny-bush bush-b"></span>
-      </div>
-
-      <div class="footprints footprints-a">
-        <i></i><i></i><i></i><i></i>
-      </div>
-
-      <div class="foreground-scribble" aria-hidden="true"></div>
-    </section>
-
-    <div class="snow" id="snow" aria-hidden="true"></div>
-
-    <div class="corner-note" aria-hidden="true">
-      <span>12.28</span>
-      <span>WINTER CHAOS</span>
-    </div>
+    <div class="corner-doodle corner-doodle-a" aria-hidden="true">↝</div>
+    <div class="corner-doodle corner-doodle-b" aria-hidden="true">✦</div>
   </main>
 
   <script src="./app.js"></script>
