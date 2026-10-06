@@ -143,19 +143,30 @@
 .painted-cloud::before,.painted-cloud::after{content:'';position:absolute;background:#fffdf0ca;border-radius:60% 45% 40% 55%;bottom:12%;left:17%;width:40%;height:170%}
 .painted-cloud::after{left:47%;width:31%;height:125%}
 .scene.is-active .member-room-art,.scene.is-active .living-room-art,.scene.is-active .kitchen-art,.scene.is-active .room-depth-art{animation:room-arrive .5s ease-out both}
-.house-entry-transition{background:#152620;transition:none}.house-entry-transition.is-active{animation:entry-fade .86s ease-in both}
-/* The supplied close-up is a separate painting, without scaling the wide garden. */
+/* Frame and leaf are the two original transparent paintings, aligned in CSS. */
 .door-closeup-stage{position:absolute;inset:auto;left:50%;top:50%;width:max(100vw,177.6833dvh);height:auto;aspect-ratio:1672/941;transform:translate(-50%,-50%);overflow:hidden}
-.door-closeup-art{display:block;width:100%;height:100%;object-fit:fill}
-.scene.is-active .door-closeup-art{animation:room-arrive .5s ease-out both}
+.door-closeup-art{position:relative;z-index:2;display:block;width:100%;height:100%;object-fit:fill;pointer-events:none}
+.door-interior{position:absolute;left:38%;top:18.5%;width:23.4%;height:63.5%;z-index:1;background:#263128;overflow:hidden}
+.door-interior img{width:100%;height:100%;object-fit:cover;filter:brightness(.38) blur(.8px)}
+.door-interior::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#111b15b0,transparent 65%),linear-gradient(0deg,#e5bd6840,transparent 28%)}
+.door-opening{display:block;left:38.3%;top:18.85%;width:23.1%;height:63.35%;z-index:3;border-radius:0;background:transparent;overflow:visible;perspective:1200px}
+.door-opening-leaf{position:absolute;inset:0;border-radius:0;overflow:hidden;transform-origin:100% 52%;transform:none;animation:none;backface-visibility:hidden;filter:brightness(1)}
+.door-opening-leaf>img{position:absolute;width:360.345%;height:132.349%;max-width:none;left:-129.957%;top:-14.909%;pointer-events:none}
+.door-opening-leaf .door-sign{position:absolute;left:18%;top:14%;width:64%;height:auto;aspect-ratio:957/793;pointer-events:none}
+.door-sign img{position:absolute;display:block;left:-37.513%;top:-10.593%;width:174.713%;height:auto;max-width:none;transform-origin:49.9% 15.3%;filter:drop-shadow(0 3px 2px #4a291b45);animation:door-sign-breeze 5.8s ease-in-out infinite}
+.story-frame[data-effect="knock"] .door-sign img{animation:door-sign-knocked 1.4s ease-out,door-sign-breeze 5.8s 1.4s ease-in-out infinite}
+.story-frame.house-entering .door-sign img{animation:door-sign-opening 1.5s ease-out both}
+@keyframes door-sign-breeze{0%,100%{transform:rotate(-1.2deg)}50%{transform:rotate(1.4deg)}}
+@keyframes door-sign-knocked{0%,100%{transform:rotate(0)}15%{transform:rotate(-4deg)}35%{transform:rotate(3deg)}56%{transform:rotate(-1.8deg)}76%{transform:rotate(.8deg)}}
+@keyframes door-sign-opening{0%{transform:rotate(0)}25%{transform:rotate(-3.5deg)}58%{transform:rotate(1.8deg)}100%{transform:rotate(-.5deg)}}
+.hotspot-door-closeup{left:38.3%;top:18.85%;width:23.1%;height:63.35%;z-index:4;border-radius:50% 50% 0 0 / 33% 33% 0 0}
+.scene.is-active .door-closeup-stage{animation:room-arrive .45s ease-out both}
 .house-entering .door-closeup-art{animation:none}
-.hotspot-door-closeup,.door-opening{left:37.92%;top:18.49%;width:23.33%;height:63.34%;border-radius:50% 50% 0 0 / 34% 34% 0 0}
-.hotspot-door-closeup{z-index:4}
-.door-opening-leaf>img{width:428.63%;height:157.88%;left:-162.54%;top:-29.19%}
-.story-frame[data-effect="knock"] .door-opening{display:block}
 .story-frame[data-effect="knock"] .door-opening-leaf{animation:painted-door-knock .6s ease-in-out}
-.story-frame.house-entering .door-opening-leaf{animation:door-leaf-open .65s ease-in-out both}
-@keyframes painted-door-knock{0%,100%{transform:none}20%,60%{transform:translateX(1px)}40%,80%{transform:translateX(-1px)}}
+.story-frame.house-entering .door-opening-leaf{animation:painted-door-open 1.15s .18s cubic-bezier(.25,.1,.25,1) both}
+.house-entry-transition{background:#152620;transition:none;opacity:0}.house-entry-transition.is-active{animation:entry-fade .55s 1.55s ease-in both}
+@keyframes painted-door-knock{0%,100%{transform:none}20%,60%{transform:rotateY(-.6deg)}40%,80%{transform:rotateY(.4deg)}}
+@keyframes painted-door-open{0%{transform:rotateY(0);filter:brightness(1)}15%{transform:rotateY(-5deg);filter:brightness(.96)}100%{transform:rotateY(-82deg);filter:brightness(.6)}}
 @keyframes leaves-in-breeze{0%,100%{transform:rotate(-.08deg)}50%{transform:rotate(.12deg)}}
 @keyframes cloth-in-breeze{0%,100%{transform:rotate(-.22deg)}35%{transform:rotate(.3deg)}70%{transform:rotate(-.1deg)}}
 @keyframes bird-look-around{0%,60%,100%{transform:none}67%,74%{transform:rotate(-1deg) translateY(-1px)}84%{transform:rotate(.6deg)}}
@@ -167,4 +178,5 @@
 .scene[hidden] .exterior-composition *,[data-screen="home"][hidden] .exterior-composition *,[data-screen="home"][hidden] .title-star{animation-play-state:paused}
 :root[data-game-motion="reduced"] .exterior-composition *,:root[data-game-motion="reduced"] .member-room-art,:root[data-game-motion="reduced"] .scene-art,:root[data-game-motion="reduced"] .room-depth-art,:root[data-game-motion="reduced"] .home-title,:root[data-game-motion="reduced"] .home-menu,:root[data-game-motion="reduced"] .title-star,:root[data-game-motion="reduced"] .house-entry-transition{animation:none!important}
 :root[data-game-motion="reduced"] .painted-cloud{left:calc(7% + var(--cloud-index)*26%);transform:none}
-:root[data-game-motion="reduced"] .door-closeup-art,:root[data-game-motion="reduced"] .door-opening-leaf{animation:none!important}
+:root[data-game-motion="reduced"] .door-closeup-stage,:root[data-game-motion="reduced"] .door-opening-leaf{animation:none!important}
+:root[data-game-motion="reduced"] .door-sign img{animation:none!important;transform:none}

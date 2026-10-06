@@ -65,6 +65,6 @@ test('four prism artwork states and all new room backgrounds exist',()=>{
 });
 test('active entry point loads new story scripts and omits old birthday runtime',()=>{
   const html=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');
-  for(const script of ['prologue-state.js','prologue-data.js','prologue-audio.js','prologue.js','member-dialogue.js'])assert.ok(html.includes('src="'+script+'?v=178"'));
+  for(const script of ['prologue-state.js','prologue-data.js','prologue-audio.js','prologue.js','member-dialogue.js'])assert.ok(html.includes('src="'+script+'?v=179"'));
   assert.equal(/src="(?:rebuild|atmosphere)\.js/.test(html),false);assert.match(html,/<title>뜰팁/);
 });

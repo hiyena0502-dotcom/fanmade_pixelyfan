@@ -56,7 +56,7 @@ function setup(){
   $('.exterior-stage').replaceChildren();const stage=$('.exterior-stage');
   stage.append(window.PixelyExterior.create());
   hotspot('.exterior-stage','door-hotspot','현관문 살펴보기',46.8,57.5,6.2,14.8,()=>move('door-closeup'));
-  image('door-closeup','.door-closeup-art','door-v178.png');$$('.door-opening-leaf img').forEach(img=>img.src=asset(ART+'door-v178.png'));
+  image('door-closeup','.door-closeup-art','door-frame-v179.png');$$('.door-opening-leaf>img').forEach(img=>img.src=asset(ART+'door-leaf-v179.png'));$$('.door-sign img').forEach(img=>img.src=asset(ART+'door-sign-v179.png'));$$('.door-interior img').forEach(img=>img.src=asset(ART+'living-room.svg'));
   image('living-room','.living-room-art','living-room.svg');$('.living-room-art').alt='밝은 초여름 거실, 오래된 사진과 촬영 소품';
   image('kitchen','.kitchen-art','kitchen.svg');$('.kitchen-art').alt='음료와 컵이 놓인 밝은 주방';
   $$('.scene-snow,.home-snow,.hall-door-name,.inventory-rack,.hud-date,.hint-trigger').forEach(n=>n.remove());
@@ -159,7 +159,7 @@ function enterHouse(){
   clearTimeout(timer);timer=setTimeout(()=>{
     save.entryPending=false;transition.hidden=true;transition.classList.remove('is-active');frame.classList.remove('house-entering');flag('entered_house');showScene('living-room');visited('living-room');setBusy(false);
     if(!save.done.includes('welcome'))play('welcome');
-  },motion?860:0);
+  },motion?2100:0);
 }
 function knock(){if(busy)return;if(save.flags.entered_house){enterHouse();return}
   dynamicScript('knock',[{member:'stage',text:'똑똑—',delay:600,effect:'knock'},{member:'stage',text:'안쪽에서 발소리가 가까워진다.',delay:800}]);play('knock');
