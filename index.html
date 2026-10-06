@@ -3,75 +3,115 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#22333b" />
+  <meta name="theme-color" content="#18333a" />
   <title>꿈뜰이의 대환장 나들이</title>
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
   <main class="title-screen" id="title-screen">
-    <div class="sky-glow" aria-hidden="true"></div>
+    <div class="paper-grain" aria-hidden="true"></div>
+    <div class="sky-blob sky-blob-a" aria-hidden="true"></div>
+    <div class="sky-blob sky-blob-b" aria-hidden="true"></div>
     <div class="moon" aria-hidden="true"></div>
 
-    <div class="landscape landscape-back" aria-hidden="true"></div>
-    <div class="landscape landscape-front" aria-hidden="true"></div>
+    <div class="doodle doodle-spark doodle-spark-a" aria-hidden="true">✦</div>
+    <div class="doodle doodle-spark doodle-spark-b" aria-hidden="true">✧</div>
+    <div class="doodle doodle-mark" aria-hidden="true">?!</div>
+    <div class="doodle doodle-arrow" aria-hidden="true">↝</div>
 
-    <div class="house" aria-hidden="true">
-      <div class="chimney"></div>
-      <div class="roof roof-back"></div>
-      <div class="house-body house-body-back">
-        <span class="window window-a"></span>
-        <span class="window window-b"></span>
-      </div>
-      <div class="roof roof-front"></div>
-      <div class="house-body house-body-front">
-        <span class="window window-c"></span>
-        <span class="door"></span>
-      </div>
-      <div class="snow-cap snow-cap-a"></div>
-      <div class="snow-cap snow-cap-b"></div>
-    </div>
+    <div class="snow-hill hill-back" aria-hidden="true"></div>
+    <div class="snow-hill hill-front" aria-hidden="true"></div>
 
-    <div class="foreground-branch branch-left" aria-hidden="true"></div>
-    <div class="foreground-branch branch-right" aria-hidden="true"></div>
-    <div class="snow" id="snow" aria-hidden="true"></div>
-
-    <section class="title-content" aria-labelledby="game-title">
+    <section class="title-copy" aria-labelledby="game-title">
       <p class="anniversary">잠뜰TV 13주년 기념 팬게임</p>
 
-      <div class="title-lockup">
-        <p class="title-kicker">꿈뜰이의</p>
-        <h1 id="game-title">대환장 나들이</h1>
-        <p class="subtitle">초대는 받았고, 귀가는 미정!</p>
+      <div class="game-logo" aria-label="꿈뜰이의 대환장 나들이">
+        <span class="logo-kicker">꿈뜰이의</span>
+        <div class="logo-main" id="game-title">
+          <span class="logo-word logo-word-chaos">대환장</span>
+          <span class="logo-word logo-word-trip">나들이</span>
+        </div>
+        <span class="logo-burst" aria-hidden="true">!</span>
+        <span class="logo-star logo-star-a" aria-hidden="true">★</span>
+        <span class="logo-star logo-star-b" aria-hidden="true">✦</span>
+        <p class="logo-subtitle">초대는 받았고, 귀가는 미정!</p>
       </div>
 
-      <nav class="main-menu" aria-label="메인 메뉴">
-        <button class="menu-item is-primary" type="button" data-placeholder="새 게임">
-          <span class="menu-marker" aria-hidden="true">◆</span>
-          <span>새 게임</span>
-        </button>
-        <button class="menu-item" type="button" data-placeholder="이어하기">
-          <span class="menu-marker" aria-hidden="true">◇</span>
-          <span>이어하기</span>
-        </button>
-        <button class="menu-item" type="button" data-placeholder="설정">
-          <span class="menu-marker" aria-hidden="true">◇</span>
-          <span>설정</span>
-        </button>
-        <button class="menu-item" type="button" data-placeholder="크레딧">
-          <span class="menu-marker" aria-hidden="true">◇</span>
-          <span>크레딧</span>
-        </button>
-      </nav>
+      <div class="menu-card">
+        <span class="tape tape-a" aria-hidden="true"></span>
+        <span class="tape tape-b" aria-hidden="true"></span>
 
-      <p class="menu-note" id="menu-note" aria-live="polite">
-        현재는 메인 화면 디자인 프로토타입입니다.
-      </p>
+        <nav class="main-menu" aria-label="메인 메뉴">
+          <button class="menu-item is-primary" type="button" data-placeholder="새 게임">
+            <span class="menu-number">01</span>
+            <span class="menu-label">새 게임</span>
+            <span class="menu-doodle" aria-hidden="true">→</span>
+          </button>
+          <button class="menu-item" type="button" data-placeholder="이어하기">
+            <span class="menu-number">02</span>
+            <span class="menu-label">이어하기</span>
+            <span class="menu-doodle" aria-hidden="true">→</span>
+          </button>
+          <button class="menu-item" type="button" data-placeholder="설정">
+            <span class="menu-number">03</span>
+            <span class="menu-label">설정</span>
+            <span class="menu-doodle" aria-hidden="true">→</span>
+          </button>
+          <button class="menu-item" type="button" data-placeholder="크레딧">
+            <span class="menu-number">04</span>
+            <span class="menu-label">크레딧</span>
+            <span class="menu-doodle" aria-hidden="true">→</span>
+          </button>
+        </nav>
+
+        <p class="menu-note" id="menu-note" aria-live="polite">
+          메인 화면 디자인 프로토타입
+        </p>
+      </div>
     </section>
 
-    <div class="title-meta" aria-hidden="true">
+    <section class="scene-illustration" aria-hidden="true">
+      <div class="house-shadow"></div>
+
+      <div class="house">
+        <div class="chimney">
+          <i class="smoke smoke-a"></i>
+          <i class="smoke smoke-b"></i>
+        </div>
+
+        <div class="roof roof-top"></div>
+        <div class="house-back">
+          <span class="window window-a"></span>
+          <span class="window window-b"></span>
+        </div>
+
+        <div class="roof roof-low"></div>
+        <div class="house-front">
+          <span class="window window-c"></span>
+          <span class="door">
+            <i class="door-light"></i>
+          </span>
+          <span class="hanging-sign">PIXELY<br>HOUSE</span>
+        </div>
+
+        <span class="snow-cap snow-cap-top"></span>
+        <span class="snow-cap snow-cap-low"></span>
+        <span class="tiny-bush bush-a"></span>
+        <span class="tiny-bush bush-b"></span>
+      </div>
+
+      <div class="footprints footprints-a">
+        <i></i><i></i><i></i><i></i>
+      </div>
+
+      <div class="foreground-scribble" aria-hidden="true"></div>
+    </section>
+
+    <div class="snow" id="snow" aria-hidden="true"></div>
+
+    <div class="corner-note" aria-hidden="true">
       <span>12.28</span>
-      <span class="meta-line"></span>
-      <span>WINTER</span>
+      <span>WINTER CHAOS</span>
     </div>
   </main>
 
