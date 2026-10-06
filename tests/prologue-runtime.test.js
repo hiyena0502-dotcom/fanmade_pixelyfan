@@ -2,7 +2,7 @@ const {test}=require('node:test'),assert=require('node:assert/strict');
 const {boot}=require('./prologue-dom');
 const State=require('../prologue-state');
 function tourSave(scene='living-room'){return {...State.fresh(),scene,introDone:true,done:['arrival','welcome-door','welcome','photos','permission-question','permission'],flags:{entered_house:true,house_roam_enabled:true,room_tour_permission:true,met_gongryong:true}}}
-function begin(){const b=boot();b.click('new-story');for(let i=0;i<20;i++)b.document.querySelector('#intro-monologue').click();b.advanceTime(1200);b.drainDialogue();b.click('door-hotspot');b.click('door-closeup-hotspot');b.drainDialogue();b.advanceTime(2000);b.drainDialogue();b.click('old-photos');b.drainDialogue();return b}
+function begin(){const b=boot();b.click('new-story');for(let i=0;i<20;i++)b.document.querySelector('#intro-monologue').click();b.advanceTime(1200);b.drainDialogue();b.click('door-hotspot');b.drainDialogue();b.advanceTime(2000);b.drainDialogue();b.click('old-photos');b.drainDialogue();return b}
 function task(b){b.click('go-stairs');b.click('go-upper-hall');b.click('go-attic');b.drainDialogue();b.click('attic-to-upper-hall');b.click('upper-hall-to-stairs');b.click('go-basement')}
 test('new story plays the summer introduction and unlocks the tour only after the photos',()=>{
   const b=begin();const s=b.getSave();assert.equal(s.flags.house_roam_enabled,true);assert.equal(s.flags.room_tour_permission,true);assert.equal(s.flags.met_gongryong,true);assert.equal(b.document.querySelector('.hud-date'),null);
@@ -31,18 +31,21 @@ test('reload after the half-second prism glimpse resumes its reaction before ano
   const s=tourSave('basement');s.flags.prism_found=true;s.flags.target_box_found=true;s.rotation=2;s.angle=70;const b=boot(s);b.click('continue-story');assert.equal(b.getSave().pending.id,'prism-glimpse');b.drainDialogue();assert.equal(b.document.querySelector('#prism-inspector').hidden,false);assert.equal(b.document.querySelector('#prism-face').textContent,'다시 만져본다');
 });
 test('re-entering the house skips the first meeting and leaves the completed quest intact',()=>{
-  const s=tourSave();s.flags.basement_task_started=true;const b=boot(s);b.click('continue-story');b.click('leave-house');b.click('door-hotspot');b.click('door-closeup-hotspot');b.advanceTime(1200);assert.equal(b.getSave().scene,'living-room');assert.equal(b.window.PixelyDialogue.isOpen(),false);assert.equal(b.getSave().flags.basement_task_started,true);
+  const s=tourSave();s.flags.basement_task_started=true;const b=boot(s);b.click('continue-story');b.click('leave-house');b.click('door-hotspot');b.advanceTime(1200);assert.equal(b.getSave().scene,'living-room');assert.equal(b.window.PixelyDialogue.isOpen(),false);assert.equal(b.getSave().flags.basement_task_started,true);
 });
 test('storage failure leaves a new game playable in memory',()=>{
-  const b=boot(null,{failStorage:true});b.click('new-story');for(let i=0;i<20;i++)b.document.querySelector('#intro-monologue').click();b.advanceTime(1200);b.drainDialogue();b.click('door-hotspot');assert.equal(b.document.querySelector('[data-scene="door-closeup"]').hidden,false);assert.equal(b.document.querySelector('#continue-story').disabled,false);
+  const b=boot(null,{failStorage:true});b.click('new-story');for(let i=0;i<20;i++)b.document.querySelector('#intro-monologue').click();b.advanceTime(1200);b.drainDialogue();b.click('door-hotspot');assert.equal(b.getSave(),null);assert.equal(b.window.PixelyDialogue.isOpen(),true);assert.equal(b.document.querySelector('#continue-story').disabled,false);
 });
-test('original layered garden details enlarge and return without changing story progress',()=>{
-  const s={...tourSave('exterior'),flags:{...tourSave().flags}};const b=boot(s);b.click('continue-story');
+test('wide garden keeps original layers and removes optional details and camera zoom',()=>{
+  const b=boot(tourSave('exterior'));b.click('continue-story');
   const layers=b.document.querySelectorAll('.exterior-stage .exterior-layer');assert.equal(layers.length,15);
   assert.match(layers[0].src,/01-sky.png$/);assert.match(layers[14].src,/15-door-critter.png$/);
-  for(const id of ['inspect-birdhouse','inspect-pot','inspect-garden','inspect-laundry']){
-    b.click(id);assert.equal(b.document.querySelector('#outside-detail').hidden,false);assert.ok(b.document.querySelector('#outside-detail-copy').textContent.length>10);
-    b.click('outside-detail-back');assert.equal(b.document.querySelector('#outside-detail').hidden,true);assert.equal(b.getSave().scene,'exterior');
-  }
-  b.click('door-hotspot');assert.equal(b.getSave().scene,'door-closeup');assert.equal(b.document.querySelectorAll('.door-camera .exterior-layer').length,15);
+  for(const id of ['inspect-birdhouse','inspect-pot','inspect-garden','inspect-laundry','outside-detail','door-closeup-hotspot'])assert.equal(b.document.querySelector('#'+id),null);
+  b.click('door-hotspot');b.advanceTime(1200);assert.equal(b.getSave().scene,'living-room');
+});
+test('old close-up saves return to the wide garden and can enter the house',()=>{
+  const b=boot(tourSave('door-closeup'));b.click('continue-story');assert.equal(b.getSave().scene,'exterior');b.click('door-hotspot');b.advanceTime(1200);assert.equal(b.getSave().scene,'living-room');
+});
+test('home motion control persists and agrees with the in-game control',()=>{
+  const b=boot();b.click('home-motion');assert.equal(b.document.documentElement.dataset.gameMotion,'reduced');assert.equal(b.storage.get('pixely-game-motion'),'reduced');assert.equal(b.document.querySelector('#toggle-motion').getAttribute('aria-pressed'),'false');b.click('home-motion');assert.equal(b.document.documentElement.dataset.gameMotion,'full');
 });

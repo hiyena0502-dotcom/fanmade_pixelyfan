@@ -5,9 +5,9 @@ const KEY='pixely-anniversary-prologue-v1',ART='assets/story/prologue/';
 const asset=path=>window.PixelyAsset?window.PixelyAsset(path):path;
 const names={gongryong:'공룡',rader:'라더',deokgae:'덕개',gakbyeol:'각별',suhyeon:'수현',jamddul:'잠뜰',ttoni:'또니',yukto:'육토',philip:'필립',fritz:'프리츠',dreamer:'꿈뜰이',stage:'상황',unknown:'???'};
 const places={'exterior':'집 앞','door-closeup':'현관문','living-room':'거실',kitchen:'주방',storage:'창고',stairs:'계단',bathroom:'욕실','upper-hall':'2층 복도',attic:'다락',basement:'지하'};
-let save=null,busy=false,timer=0,noticeTimer=0,toastTimer=0,lastOpener=null,motion=true,flash=false,drag=null;
+let save=null,busy=false,timer=0,noticeTimer=0,toastTimer=0,lastOpener=null,motion=!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches,flash=false,drag=null;
 const frame=$('.story-frame'),scenes=()=>$$('.scene[data-scene]');
-try{save=State.normalize(JSON.parse(localStorage.getItem(KEY)||'null'));motion=localStorage.getItem('pixely-game-motion')!=='reduced';flash=localStorage.getItem('pixely-prologue-flash')==='on'}catch{}
+try{save=State.normalize(JSON.parse(localStorage.getItem(KEY)||'null'));const preference=localStorage.getItem('pixely-game-motion');if(preference)motion=preference!=='reduced';flash=localStorage.getItem('pixely-prologue-flash')==='on'}catch{}
 function node(tag,text='',className=''){const n=document.createElement(tag);n.textContent=text;n.className=className;return n}
 function notice(text){$('#quest-notice-title').textContent=text;$('#quest-notice').classList.add('is-visible');clearTimeout(noticeTimer);noticeTimer=setTimeout(()=>$('#quest-notice').classList.remove('is-visible'),2100)}
 function toast(text){$('#toast').textContent=text;$('#toast').classList.add('is-visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').classList.remove('is-visible'),2200)}
@@ -23,6 +23,8 @@ function panel(selector,opener){closePanels(false);lastOpener=opener||document.a
 function renderContinue(){const b=$('#continue-story');b.disabled=!save;$('#continue-copy').textContent=save?(save.ending?'PROLOGUE · 완료':'PROLOGUE · '+(places[save.scene]||names[save.scene.slice(5)]+' 방')):'NO SAVE DATA'}
 function showScreen(name){$$('[data-screen]').forEach(s=>{s.hidden=s.dataset.screen!==name;s.classList.toggle('is-active',!s.hidden)})}
 function showScene(name){
+  // Saves made before the close-up was removed resume in the same wide garden.
+  if(name==='door-closeup')name='exterior';
   save.scene=State.scenes.includes(name)?name:'exterior';frame.dataset.location=save.scene;
   scenes().forEach(s=>{s.hidden=s.dataset.scene!==save.scene;s.classList.toggle('is-active',!s.hidden)});
   const placeNode=$('#hud-place');if(placeNode)placeNode.textContent='픽셀리 집 · '+(places[save.scene]||names[save.scene.slice(5)]+' 방');
@@ -37,11 +39,6 @@ function hotspot(scene,id,label,x,y,w,h,callback,visible=''){
   const b=node('button',visible,'pro-hotspot');b.type='button';b.id=id;b.setAttribute('aria-label',label);b.style.cssText=`left:${x}%;top:${y}%;width:${w}%;height:${h}%`;b.addEventListener('click',()=>{if(!busy){Audio.init();callback()}});$(scene).append(b);return b;
 }
 function inspect(id,text,member='dreamer'){dynamicScript(id,[{member,text}]);play(id)}
-function outsideDetail(title,text,x,y,zoom,opener){
-  $('#outside-detail-title').textContent=title;$('#outside-detail-copy').textContent=text;
-  const art=$('#outside-detail-art');art.style.setProperty('--focus-x',x+'%');art.style.setProperty('--focus-y',y+'%');art.style.setProperty('--detail-zoom',String(zoom));
-  panel('#outside-detail',opener);
-}
 function dynamicScript(id,lines){Data.scripts[id]=lines}
 function visited(scene){flag('visited_'+({'living-room':'livingroom','upper-hall':'second_floor'}[scene]||scene.replaceAll('-','_')))}
 function move(to){
@@ -60,20 +57,11 @@ function setup(){
   // Keep every original layer in the artist's shared coordinate space.
   $('.exterior-stage').replaceChildren();const stage=$('.exterior-stage');
   stage.append(window.PixelyExterior.create());
-  hotspot('.exterior-stage','door-hotspot','현관문 살펴보기',46.8,57.5,6.2,14.8,()=>move('door-closeup'));
-  hotspot('.exterior-stage','inspect-birdhouse','새집 살펴보기',63,48,7.5,30,()=>outsideDetail('새집','새집 위에 누가 앉아 있네! 뭔가 열심히 얘기하는 것 같다',66,64,3,$('#inspect-birdhouse')));
-  hotspot('.exterior-stage','inspect-pot','화분 살펴보기',45.2,66,3.5,7,()=>outsideDetail('작은 화분','꽃이랑 새잎이 잘 자라고 있다 기념일이라 더 예쁘게 꾸며 둔 걸까',47,69,4,$('#inspect-pot')));
-  hotspot('.exterior-stage','inspect-garden','텃밭 살펴보기',63.8,77,25.2,12,()=>outsideDetail('텃밭','채소가 가득하다 저 작은 파란 건… 여기에도 누가 있네?',76,83,2.3,$('#inspect-garden')));
-  hotspot('.exterior-stage','inspect-laundry','빨랫줄 살펴보기',13.3,66,13.3,12,()=>outsideDetail('빨랫줄','알록달록한 빨랫감이 바람에 살랑인다 얼굴이 있는 것 같기도 하고…',20,72,3,$('#inspect-laundry')));
-  const doorArt=$('.door-closeup-art');doorArt.remove();const camera=window.PixelyExterior.create();camera.classList.add('door-camera');$('.door-closeup-stage').insertBefore(camera,$('.door-opening'));
-  $$('.door-opening-leaf img').forEach(n=>n.src=asset('assets/story/exterior-v175/04-house.png'));$$('.door-sign').forEach(n=>n.remove());
+  hotspot('.exterior-stage','door-hotspot','현관문 두드리기',46.8,57.5,6.2,14.8,knock);
   image('living-room','.living-room-art','living-room.svg');$('.living-room-art').alt='밝은 초여름 거실, 오래된 사진과 촬영 소품';
   image('kitchen','.kitchen-art','kitchen.svg');$('.kitchen-art').alt='음료와 컵이 놓인 밝은 주방';
   $$('.scene-snow,.home-snow,.hall-door-name,.inventory-rack,.hud-date,.hint-trigger').forEach(n=>n.remove());
-  $('.home-title').replaceChildren(node('small','PIXELY · 13TH ANNIVERSARY'),node('h1','뜰팁'),node('p','프리즘 너머의 이야기'));
   $('.home-illustration-slot').style.backgroundImage='none';$('.home-illustration-slot').replaceChildren(window.PixelyExterior.create({decorative:true}));
-  const detail=node('section','','prism-inspector outside-detail');detail.id='outside-detail';detail.hidden=true;detail.tabIndex=-1;detail.setAttribute('role','dialog');detail.setAttribute('aria-modal','true');detail.setAttribute('aria-label','정원 소품 확대');
-  detail.innerHTML='<h2 id="outside-detail-title"></h2><div class="outside-detail-window" id="outside-detail-art"></div><p id="outside-detail-copy"></p><button type="button" id="outside-detail-back">집 앞으로 돌아가기</button>';frame.append(detail);$('#outside-detail-art').append(window.PixelyExterior.create({decorative:true}));$('#outside-detail-back').addEventListener('click',()=>closePanels());
   hotspot('[data-scene="living-room"] .living-room-stage','old-photos','오래된 사진 살펴보기',50,58,14,9,()=>play(save.done.includes('photos')?'photos-repeat':'photos'));
   hotspot('[data-scene="living-room"] .living-room-stage','old-camera','옛 카메라 살펴보기',69,60,9,16,()=>inspect('camera','몇 번이고 촬영에 쓰였을 카메라다. 손잡이에 작은 흠집이 남아 있다.'));
   hotspot('[data-scene="living-room"] .living-room-stage','archive-books','자료 선반 살펴보기',68,27,11,32,()=>inspect('archive','사진, 파일, 촬영 소품… 오랫동안 모아 둔 흔적들이 나와 있다.'));
@@ -119,6 +107,7 @@ function setup(){
 function settingsUI(){
   document.documentElement.dataset.gameMotion=motion?'full':'reduced';frame.dataset.flash=flash?'full':'reduced';
   $('#toggle-motion').textContent='애니메이션: '+(motion?'켜짐':'꺼짐');$('#toggle-motion').setAttribute('aria-pressed',String(motion));
+  $('#home-motion').setAttribute('aria-pressed',String(motion));$('#home-motion').setAttribute('aria-label','배경 애니메이션 '+(motion?'끄기':'켜기'));
   $('#toggle-sound').textContent='생활 소리: '+(Audio.enabled?'켜짐':'꺼짐');$('#toggle-sound').setAttribute('aria-pressed',String(Audio.enabled));
   $('#toggle-flash').textContent='강한 빛 효과: '+(flash?'켜짐':'줄임');$('#toggle-flash').setAttribute('aria-pressed',String(flash));
 }
@@ -253,12 +242,12 @@ function prepareDynamicScripts(){
 setup();prepareDynamicScripts();
 // The door opens into the greeting; re-entry bypasses all first-visit dialogue.
 
-$('#new-story').addEventListener('click',()=>start(true));$('#continue-story').addEventListener('click',()=>start());$('#door-closeup-hotspot').addEventListener('click',knock);
-$('#door-closeup-back').addEventListener('click',()=>move('exterior'));$('#talk-gongryong').addEventListener('click',()=>{if(busy)return;if(!save.flags.house_roam_enabled){notice('거실의 오래된 사진을 살펴보자');return}inspect('gongryong-repeat','위에도 다 열어놨어. 궁금하면 둘러봐.','gongryong')});
+$('#new-story').addEventListener('click',()=>start(true));$('#continue-story').addEventListener('click',()=>start());
+$('#talk-gongryong').addEventListener('click',()=>{if(busy)return;if(!save.flags.house_roam_enabled){notice('거실의 오래된 사진을 살펴보자');return}inspect('gongryong-repeat','위에도 다 열어놨어. 궁금하면 둘러봐.','gongryong')});
 for(const [id,to]of Object.entries({'go-kitchen':'kitchen','kitchen-to-living':'living-room','go-storage':'storage','storage-to-kitchen':'kitchen','go-stairs':'stairs','stairs-to-living':'living-room','go-bathroom':'bathroom','bathroom-to-stairs':'stairs','go-upper-hall':'upper-hall','upper-hall-to-stairs':'stairs','go-basement':'basement','basement-to-stairs':'stairs','go-attic':'attic','attic-to-upper-hall':'upper-hall','leave-house':'exterior'}))$('#'+id).addEventListener('click',()=>move(to));
 $('#story-menu-button').addEventListener('click',()=>{if(!busy)panel('#story-menu',$('#story-menu-button'))});$('#return-home').addEventListener('click',home);
 $('#save-progress').addEventListener('click',()=>{if(store())toast('현재 진행을 저장했어.');closePanels()});$('#bag-button').addEventListener('click',()=>openTool('bag'));$('#diary-button').addEventListener('click',()=>openTool('diary'));
-$('#toggle-motion').addEventListener('click',()=>{motion=!motion;try{localStorage.setItem('pixely-game-motion',motion?'full':'reduced')}catch{}settingsUI()});
+for(const button of ['toggle-motion','home-motion'])$('#'+button).addEventListener('click',()=>{motion=!motion;try{localStorage.setItem('pixely-game-motion',motion?'full':'reduced')}catch{}settingsUI()});
 $('#panel-backdrop').addEventListener('click',()=>{if(!busy)closePanels()});
 document.addEventListener('keydown',e=>{
   if(frame.classList.contains('intro-running')&&(e.code==='Enter'||e.code==='Space')&&!e.repeat){e.preventDefault();intro.advance?.();return}
