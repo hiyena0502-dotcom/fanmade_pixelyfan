@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#edf0d0" />
   <title>꿈뜰이의 우당탕탕 대환장 나들이!!</title>
-  <link rel="stylesheet" href="./style.css?v=reset-007" />
-  <link rel="stylesheet" href="./diary.css?v=reset-007" />
-  <link rel="preload" href="./assets/fonts/gaegu-ui-bold.woff" as="font" type="font/woff" crossorigin />
+  <link rel="stylesheet" href="./style.css?v=game-menu-008" />
+  <link rel="stylesheet" href="./diary.css?v=game-menu-008" />
+  <link rel="preload" href="./assets/fonts/gowun-menu-bold.woff" as="font" type="font/woff" crossorigin />
 </head>
 <body>
   <main class="title-screen" id="title-screen">
@@ -40,51 +40,45 @@
             <div class="diary-heading">
               <span class="diary-eyebrow">꿈뜰이의</span>
               <h2 class="diary-title">나들이 다이어리</h2>
-              <p>원하는 메뉴를 골라 주세요.</p>
+              
             </div>
             <svg class="diary-doodle" viewBox="0 0 80 80" aria-hidden="true"><path d="m41 9 8 19 20 3-15 14 4 21-18-11-18 10 4-21-14-14 21-2z"/><path d="m13 12-4-6M63 13l6-7M65 61l8 4M9 48l-7 2"/></svg>
           </header>
 
           <nav class="main-menu">
             <button class="menu-item menu-new is-active" type="button" data-action="new">
-              <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 34 34"><path d="m17 3 4 9 10 2-7 7 2 10-9-5-9 5 2-10-7-7 10-2z"/></svg></span>
+              <span class="menu-icon" aria-hidden="true">◆</span>
               <span class="menu-copy"><strong>새 게임</strong><small>처음부터 시작하기</small></span>
-              <span class="menu-arrow">→</span>
+              <span class="menu-arrow" aria-hidden="true">◆</span>
             </button>
 
             <button class="menu-item menu-continue" type="button" data-action="continue">
-              <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 34 34"><path d="M7 8c6-5 17-2 20 4 4 8-1 17-10 18-6 0-10-3-11-8"/><path d="m5 6 2 9 8-2M13 11v11l9-5z"/></svg></span>
+              <span class="menu-icon" aria-hidden="true">◆</span>
               <span class="menu-copy"><strong>이어하기</strong><small>마지막 기록에서 계속</small></span>
-              <span class="menu-arrow">→</span>
+              <span class="menu-arrow" aria-hidden="true">◆</span>
             </button>
 
             <button class="menu-item menu-chapter" type="button" data-action="chapter">
-              <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 34 34"><path d="m5 5 11 3 13-3v23l-13 3-11-3zM16 8v23"/><path d="m9 12 3 1M20 12l5-1M20 18l5-1"/></svg></span>
+              <span class="menu-icon" aria-hidden="true">◆</span>
               <span class="menu-copy"><strong>챕터</strong><small>열린 챕터 확인하기</small></span>
-              <span class="menu-arrow">→</span>
+              <span class="menu-arrow" aria-hidden="true">◆</span>
             </button>
 
             <button class="menu-item menu-wardrobe" type="button" data-action="wardrobe">
-              <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 34 34"><path d="M13 7a4 4 0 1 1 7 3l-3 2v3M17 15 4 26q-2 3 2 3h23q4 0 2-3L17 15"/></svg></span>
+              <span class="menu-icon" aria-hidden="true">◆</span>
               <span class="menu-copy"><strong>꿈뜰이 옷장</strong><small>꿈뜰이 꾸미기</small></span>
-              <span class="menu-arrow">→</span>
+              <span class="menu-arrow" aria-hidden="true">◆</span>
             </button>
 
             <button class="menu-item menu-settings" type="button" data-action="settings">
-              <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 34 34"><path d="M5 8h24M5 18h24M5 28h24"/><path d="M12 4v8M24 14v8M11 24v8"/></svg></span>
+              <span class="menu-icon" aria-hidden="true">◆</span>
               <span class="menu-copy"><strong>설정</strong><small>화면 · 소리 · 대사 설정</small></span>
-              <span class="menu-arrow">→</span>
+              <span class="menu-arrow" aria-hidden="true">◆</span>
             </button>
 
-            <button class="menu-item menu-soon" type="button" data-action="soon" disabled>
-              <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 34 34"><circle cx="7" cy="17" r="1.5"/><circle cx="17" cy="17" r="1.5"/><circle cx="27" cy="17" r="1.5"/></svg></span>
-              <span class="menu-copy"><strong>추가 예정</strong><small>새 기능을 준비 중이에요</small></span>
-              <span class="soon-badge">준비 중</span>
-            </button>
           </nav>
 
-          <span class="diary-page-number" aria-hidden="true">— 01 —</span>
-          <button class="credits-link" type="button" data-action="credits">크레딧</button>
+          <span class="diary-page-number" aria-hidden="true">◆</span>
           <p class="menu-note" id="menu-note" aria-live="polite"></p>
         </div>
       </div>
@@ -107,6 +101,6 @@
       </g>
     </svg>
   </main>
-  <script src="./app.js?v=reset-006"></script>
+  <script src="./app.js?v=game-menu-008"></script>
 </body>
 </html>
