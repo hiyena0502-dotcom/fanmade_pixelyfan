@@ -55,6 +55,8 @@ function move(to){
   store();
 }
 function setup(){
+  // Interactive room objects must remain exposed to accessibility navigation.
+  $$('.shape-room-art,.upper-hall-art').forEach(art=>art.setAttribute('role','group'));
   // Keep every original layer in the artist's shared coordinate space.
   $('.exterior-stage').replaceChildren();const stage=$('.exterior-stage');
   stage.append(window.PixelyExterior.create());
