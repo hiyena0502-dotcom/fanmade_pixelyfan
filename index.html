@@ -15,15 +15,13 @@
       <img class="scene-layer scene-fence" src="./assets/title/scene-fence.png" alt="" />
       <img class="scene-layer scene-lawn" src="./assets/title/scene-lawn.png" alt="" />
       <img class="scene-house" src="./assets/title/scene-house.png" alt="" />
-      <img class="scene-bushes" src="./assets/title/scene-bushes.png" alt="" />
     </div>
 
     <section class="hero" aria-labelledby="game-title">
-      <p class="fan-label">잠뜰TV 13주년 기념 팬게임</p>
       <img
         id="game-title"
         class="main-title"
-        src="./assets/title/main-title.webp"
+        src="./assets/title/main-title.png"
         alt="꿈뜰이의 우당탕탕 대환장 나들이!!"
       />
       <p class="subtitle">초대는 받았고, 귀가는 미정!</p>
@@ -38,13 +36,10 @@
         </div>
 
         <div class="menu-sheet">
-          <header class="menu-head">
+          <div class="menu-topline">
             <span class="menu-stamp">MENU</span>
-            <div>
-              <h2>오늘은 어디부터?</h2>
-              <p>원하는 메뉴를 골라 주세요.</p>
-            </div>
-          </header>
+            <span class="menu-mini">잠뜰TV 13주년 기념 팬게임</span>
+          </div>
 
           <nav class="main-menu">
             <button class="menu-item menu-new is-active" type="button" data-action="new">
@@ -102,11 +97,11 @@
             </button>
           </nav>
 
-          <button class="credits-link" type="button" data-action="credits">크레딧</button>
-          <p class="menu-note" id="menu-note" aria-live="polite"></p>
+          <div class="menu-footer">
+            <button class="credits-link" type="button" data-action="credits">크레딧</button>
+            <p class="menu-note" id="menu-note" aria-live="polite"></p>
+          </div>
         </div>
-
-        <img class="notebook-grass" src="./assets/title/scene-grass.png" alt="" aria-hidden="true" />
       </div>
     </section>
   </main>
