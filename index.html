@@ -3,19 +3,78 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#171717" />
+  <meta name="theme-color" content="#22333b" />
   <title>꿈뜰이의 대환장 나들이</title>
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
-  <main id="app" class="app-shell">
-    <section class="reset-screen" aria-labelledby="game-title">
-      <p class="eyebrow">잠뜰TV 13주년 기념 팬게임</p>
-      <h1 id="game-title">꿈뜰이의 대환장 나들이</h1>
-      <p class="subtitle">초대는 받았고, 귀가는 미정!</p>
-      <p class="status">NEW PROTOTYPE · RESET</p>
+  <main class="title-screen" id="title-screen">
+    <div class="sky-glow" aria-hidden="true"></div>
+    <div class="moon" aria-hidden="true"></div>
+
+    <div class="landscape landscape-back" aria-hidden="true"></div>
+    <div class="landscape landscape-front" aria-hidden="true"></div>
+
+    <div class="house" aria-hidden="true">
+      <div class="chimney"></div>
+      <div class="roof roof-back"></div>
+      <div class="house-body house-body-back">
+        <span class="window window-a"></span>
+        <span class="window window-b"></span>
+      </div>
+      <div class="roof roof-front"></div>
+      <div class="house-body house-body-front">
+        <span class="window window-c"></span>
+        <span class="door"></span>
+      </div>
+      <div class="snow-cap snow-cap-a"></div>
+      <div class="snow-cap snow-cap-b"></div>
+    </div>
+
+    <div class="foreground-branch branch-left" aria-hidden="true"></div>
+    <div class="foreground-branch branch-right" aria-hidden="true"></div>
+    <div class="snow" id="snow" aria-hidden="true"></div>
+
+    <section class="title-content" aria-labelledby="game-title">
+      <p class="anniversary">잠뜰TV 13주년 기념 팬게임</p>
+
+      <div class="title-lockup">
+        <p class="title-kicker">꿈뜰이의</p>
+        <h1 id="game-title">대환장 나들이</h1>
+        <p class="subtitle">초대는 받았고, 귀가는 미정!</p>
+      </div>
+
+      <nav class="main-menu" aria-label="메인 메뉴">
+        <button class="menu-item is-primary" type="button" data-placeholder="새 게임">
+          <span class="menu-marker" aria-hidden="true">◆</span>
+          <span>새 게임</span>
+        </button>
+        <button class="menu-item" type="button" data-placeholder="이어하기">
+          <span class="menu-marker" aria-hidden="true">◇</span>
+          <span>이어하기</span>
+        </button>
+        <button class="menu-item" type="button" data-placeholder="설정">
+          <span class="menu-marker" aria-hidden="true">◇</span>
+          <span>설정</span>
+        </button>
+        <button class="menu-item" type="button" data-placeholder="크레딧">
+          <span class="menu-marker" aria-hidden="true">◇</span>
+          <span>크레딧</span>
+        </button>
+      </nav>
+
+      <p class="menu-note" id="menu-note" aria-live="polite">
+        현재는 메인 화면 디자인 프로토타입입니다.
+      </p>
     </section>
+
+    <div class="title-meta" aria-hidden="true">
+      <span>12.28</span>
+      <span class="meta-line"></span>
+      <span>WINTER</span>
+    </div>
   </main>
+
   <script src="./app.js"></script>
 </body>
 </html>
