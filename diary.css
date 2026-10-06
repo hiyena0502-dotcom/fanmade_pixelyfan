@@ -17,7 +17,7 @@
 .menu-item{isolation:isolate;grid-template-columns:24px minmax(0,1fr) 24px;gap:7px;min-height:0;padding:6px 14px;border:0;border-radius:0;background:transparent;box-shadow:none;color:var(--journal-ink);transition:color .18s ease,transform .18s ease}
 .menu-item::before,.menu-item::after{content:"";position:absolute;pointer-events:none;z-index:-1;inset:1px;clip-path:polygon(12px 0,calc(100% - 12px) 0,100% 12px,100% calc(100% - 12px),calc(100% - 12px) 100%,12px 100%,0 calc(100% - 12px),0 12px);opacity:0;transition:opacity .18s ease}
 .menu-item::before{background:#b39560}
-.menu-item::after{inset:3px;background:linear-gradient(90deg,#dfc38c70,#fff0c880,#dfc38c70);clip-path:polygon(11px 0,calc(100% - 11px) 0,100% 11px,100% calc(100% - 11px),calc(100% - 11px) 100%,11px 100%,0 calc(100% - 11px),0 11px);box-shadow:inset 0 0 0 4px #fff4d480}
+.menu-item::after{inset:3px;background:linear-gradient(90deg,#f1dfb9,#fff0ce,#f1dfb9);clip-path:polygon(11px 0,calc(100% - 11px) 0,100% 11px,100% calc(100% - 11px),calc(100% - 11px) 100%,11px 100%,0 calc(100% - 11px),0 11px);box-shadow:inset 0 0 0 4px #fff4d480}
 .menu-item.is-active::before,.menu-item.is-active::after,.menu-item:is(:hover,:focus-visible)::before,.menu-item:is(:hover,:focus-visible)::after{opacity:1}
 .menu-item:not(:disabled):is(:hover,:focus-visible){background:transparent;filter:none;box-shadow:none;transform:none;outline:none}
 .menu-item:focus-visible{outline:2px solid #766343;outline-offset:4px}
