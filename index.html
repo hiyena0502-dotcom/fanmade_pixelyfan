@@ -3,86 +3,130 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#b9e8f6" />
+  <meta name="theme-color" content="#c99169" />
   <title>꿈뜰이의 대환장 나들이</title>
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
   <main class="title-screen" id="title-screen">
-    <div class="morning-sky" aria-hidden="true">
-      <div class="sun"></div>
-      <div class="cloud cloud-a"></div>
-      <div class="cloud cloud-b"></div>
-      <div class="cloud cloud-c"></div>
-      <div class="far-hill far-hill-a"></div>
-      <div class="far-hill far-hill-b"></div>
+    <div class="desk" aria-hidden="true">
+      <span class="desk-paper desk-paper-a"></span>
+      <span class="desk-paper desk-paper-b"></span>
+      <span class="desk-pencil"></span>
+      <span class="desk-clip"></span>
     </div>
 
-    <img class="lawn-art" src="./assets/title/lawn.png" alt="" aria-hidden="true" />
-    <img class="house-art" src="./assets/title/house.png" alt="" aria-hidden="true" />
+    <section class="journal" aria-labelledby="game-title">
+      <div class="journal-shadow" aria-hidden="true"></div>
+      <div class="journal-cover" aria-hidden="true"></div>
 
-    <div class="scene-doodle doodle-one" aria-hidden="true">✦</div>
-    <div class="scene-doodle doodle-two" aria-hidden="true">?</div>
-    <div class="scene-doodle doodle-three" aria-hidden="true">↝</div>
-
-    <section class="title-content" aria-labelledby="game-title">
-      <p class="anniversary">잠뜰TV 13주년 기념 팬게임</p>
-
-      <div class="logo-wrap">
-        <span class="logo-kicker">꿈뜰이의</span>
-
-        <h1 id="game-title">
-          <span class="logo-chaos">대환장</span>
-          <span class="logo-trip">나들이</span>
-        </h1>
-
-        <span class="logo-bang" aria-hidden="true">!</span>
-        <span class="logo-spark logo-spark-a" aria-hidden="true">★</span>
-        <span class="logo-spark logo-spark-b" aria-hidden="true">✦</span>
-
-        <p class="subtitle">초대는 받았고, 귀가는 미정!</p>
+      <div class="journal-tabs" aria-hidden="true">
+        <span class="tab tab-orange"></span>
+        <span class="tab tab-yellow"></span>
+        <span class="tab tab-green"></span>
+        <span class="tab tab-blue"></span>
       </div>
 
-      <div class="menu-board">
-        <span class="tape tape-a" aria-hidden="true"></span>
-        <span class="tape tape-b" aria-hidden="true"></span>
+      <div class="journal-pages">
+        <div class="page page-left">
+          <span class="page-corner page-corner-left" aria-hidden="true"></span>
+          <span class="tape tape-left" aria-hidden="true"></span>
 
-        <nav class="main-menu" aria-label="메인 메뉴">
-          <button class="menu-item is-active" type="button" data-placeholder="새 게임">
-            <span class="menu-number">01</span>
-            <span class="menu-label">새 게임</span>
-            <span class="menu-arrow" aria-hidden="true">→</span>
-          </button>
+          <p class="anniversary">잠뜰TV 13주년 기념 팬게임</p>
 
-          <button class="menu-item" type="button" data-placeholder="이어하기">
-            <span class="menu-number">02</span>
-            <span class="menu-label">이어하기</span>
-            <span class="menu-arrow" aria-hidden="true">→</span>
-          </button>
+          <div class="logo-cluster">
+            <span class="logo-kicker">꿈뜰이의</span>
+            <h1 id="game-title">
+              <span class="logo-chaos">대환장</span>
+              <span class="logo-trip">나들이</span>
+            </h1>
+            <span class="logo-pop" aria-hidden="true">!</span>
+            <span class="logo-star star-a" aria-hidden="true">✦</span>
+            <span class="logo-star star-b" aria-hidden="true">★</span>
+          </div>
 
-          <button class="menu-item" type="button" data-placeholder="설정">
-            <span class="menu-number">03</span>
-            <span class="menu-label">설정</span>
-            <span class="menu-arrow" aria-hidden="true">→</span>
-          </button>
+          <div class="subtitle-sticker">초대는 받았고, 귀가는 미정!</div>
 
-          <button class="menu-item" type="button" data-placeholder="크레딧">
-            <span class="menu-number">04</span>
-            <span class="menu-label">크레딧</span>
-            <span class="menu-arrow" aria-hidden="true">→</span>
-          </button>
-        </nav>
+          <div class="scribble-row" aria-hidden="true">
+            <span>✎</span>
+            <span class="scribble-line"></span>
+            <span>✦</span>
+            <span>↘</span>
+          </div>
 
-        <p class="menu-note" id="menu-note" aria-live="polite">
-          메인 화면 디자인 프로토타입
-        </p>
+          <div class="memo-note">
+            <span class="memo-pin" aria-hidden="true"></span>
+            <p>생일날 아침.</p>
+            <p>픽셀리 멤버들의 집에 도착했다.</p>
+            <p class="memo-last">…근데 왜 이렇게 조용하지?</p>
+          </div>
+
+          <div class="tiny-stickers" aria-hidden="true">
+            <span class="tiny-sticker tiny-yellow">12.28</span>
+            <span class="tiny-sticker tiny-green">BIRTHDAY</span>
+            <span class="tiny-sticker tiny-coral">GO!</span>
+          </div>
+        </div>
+
+        <div class="binding" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+
+        <div class="page page-right">
+          <span class="page-corner page-corner-right" aria-hidden="true"></span>
+          <span class="tape tape-photo" aria-hidden="true"></span>
+
+          <div class="photo-card" aria-hidden="true">
+            <div class="photo-scene">
+              <div class="photo-sky"></div>
+              <img class="photo-lawn" src="./assets/title/lawn.png" alt="" />
+              <img class="photo-house" src="./assets/title/house.png" alt="" />
+            </div>
+            <div class="photo-caption">
+              <span>PIXELY HOUSE</span>
+              <span class="photo-heart">♡</span>
+            </div>
+          </div>
+
+          <div class="menu-area">
+            <div class="menu-title-sticker">MENU</div>
+
+            <nav class="main-menu" aria-label="메인 메뉴">
+              <button class="menu-item menu-new is-active" type="button" data-placeholder="새 게임">
+                <span class="menu-dot"></span>
+                <span class="menu-label">새 게임</span>
+                <span class="menu-arrow">→</span>
+              </button>
+              <button class="menu-item menu-continue" type="button" data-placeholder="이어하기">
+                <span class="menu-dot"></span>
+                <span class="menu-label">이어하기</span>
+                <span class="menu-arrow">→</span>
+              </button>
+              <button class="menu-item menu-settings" type="button" data-placeholder="설정">
+                <span class="menu-dot"></span>
+                <span class="menu-label">설정</span>
+                <span class="menu-arrow">→</span>
+              </button>
+              <button class="menu-item menu-credits" type="button" data-placeholder="크레딧">
+                <span class="menu-dot"></span>
+                <span class="menu-label">크레딧</span>
+                <span class="menu-arrow">→</span>
+              </button>
+            </nav>
+
+            <p class="menu-note" id="menu-note" aria-live="polite">
+              메뉴를 골라 주세요.
+            </p>
+          </div>
+
+          <div class="right-page-doodles" aria-hidden="true">
+            <span class="doodle-arrow">↝</span>
+            <span class="doodle-note">?</span>
+            <span class="doodle-spark">✦</span>
+          </div>
+        </div>
       </div>
     </section>
-
-    <div class="corner-note" aria-hidden="true">
-      <strong>12.28</strong>
-      <span>오늘도 무사히 귀가할 수 있을까?</span>
-    </div>
   </main>
 
   <script src="./app.js"></script>
