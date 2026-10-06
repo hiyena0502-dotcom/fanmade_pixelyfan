@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#f3efcf" />
-  <title>꿈뜰이의 대환장 나들이</title>
+  <meta name="theme-color" content="#edf0d0" />
+  <title>꿈뜰이의 우당탕탕 대환장 나들이!!</title>
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
@@ -18,18 +18,14 @@
       <img class="scene-bushes" src="./assets/title/scene-bushes.png" alt="" />
     </div>
 
-    <section class="logo-area" aria-labelledby="game-title">
+    <section class="hero" aria-labelledby="game-title">
       <p class="fan-label">잠뜰TV 13주년 기념 팬게임</p>
-      <div class="title-logo">
-        <span class="logo-small">꿈뜰이의</span>
-        <h1 id="game-title">
-          <span class="logo-chaos">대환장</span>
-          <span class="logo-trip">나들이</span>
-        </h1>
-        <span class="logo-pop">!!</span>
-        <span class="logo-heart">♥</span>
-        <span class="logo-star">★</span>
-      </div>
+      <img
+        id="game-title"
+        class="main-title"
+        src="./assets/title/main-title.webp"
+        alt="꿈뜰이의 우당탕탕 대환장 나들이!!"
+      />
       <p class="subtitle">초대는 받았고, 귀가는 미정!</p>
     </section>
 
@@ -41,35 +37,73 @@
           <span></span><span></span><span></span>
         </div>
 
-        <div class="menu-content">
-          <p class="menu-kicker">MENU</p>
-          <h2>오늘의 기록</h2>
-          <p class="menu-sub">어디서부터 시작할까?</p>
+        <div class="menu-sheet">
+          <header class="menu-head">
+            <span class="menu-stamp">MENU</span>
+            <div>
+              <h2>오늘은 어디부터?</h2>
+              <p>원하는 메뉴를 골라 주세요.</p>
+            </div>
+          </header>
 
           <nav class="main-menu">
-            <button class="menu-item is-active" type="button" data-placeholder="새 게임">
-              <span class="menu-no">01</span>
-              <span class="menu-text">새 게임</span>
+            <button class="menu-item menu-new is-active" type="button" data-action="new">
+              <span class="menu-icon">✦</span>
+              <span class="menu-copy">
+                <strong>새 게임</strong>
+                <small>처음부터 시작하기</small>
+              </span>
               <span class="menu-arrow">→</span>
             </button>
-            <button class="menu-item" type="button" data-placeholder="이어하기">
-              <span class="menu-no">02</span>
-              <span class="menu-text">이어하기</span>
+
+            <button class="menu-item menu-continue" type="button" data-action="continue">
+              <span class="menu-icon">▶</span>
+              <span class="menu-copy">
+                <strong>이어하기</strong>
+                <small>마지막 기록에서 계속</small>
+              </span>
               <span class="menu-arrow">→</span>
             </button>
-            <button class="menu-item" type="button" data-placeholder="설정">
-              <span class="menu-no">03</span>
-              <span class="menu-text">설정</span>
+
+            <button class="menu-item menu-chapter" type="button" data-action="chapter">
+              <span class="menu-icon">▣</span>
+              <span class="menu-copy">
+                <strong>챕터</strong>
+                <small>열린 챕터 확인하기</small>
+              </span>
               <span class="menu-arrow">→</span>
             </button>
-            <button class="menu-item" type="button" data-placeholder="크레딧">
-              <span class="menu-no">04</span>
-              <span class="menu-text">크레딧</span>
+
+            <button class="menu-item menu-wardrobe" type="button" data-action="wardrobe">
+              <span class="menu-icon">♡</span>
+              <span class="menu-copy">
+                <strong>꿈뜰이 옷장</strong>
+                <small>꿈뜰이 꾸미기</small>
+              </span>
               <span class="menu-arrow">→</span>
+            </button>
+
+            <button class="menu-item menu-settings" type="button" data-action="settings">
+              <span class="menu-icon">⚙</span>
+              <span class="menu-copy">
+                <strong>설정</strong>
+                <small>화면 · 소리 · 대사 설정</small>
+              </span>
+              <span class="menu-arrow">→</span>
+            </button>
+
+            <button class="menu-item menu-soon" type="button" data-action="soon" disabled>
+              <span class="menu-icon">…</span>
+              <span class="menu-copy">
+                <strong>추가 예정</strong>
+                <small>새 기능을 준비 중이에요</small>
+              </span>
+              <span class="soon-badge">COMING SOON</span>
             </button>
           </nav>
 
-          <p class="menu-note" id="menu-note" aria-live="polite">메뉴를 선택해 주세요.</p>
+          <button class="credits-link" type="button" data-action="credits">크레딧</button>
+          <p class="menu-note" id="menu-note" aria-live="polite"></p>
         </div>
 
         <img class="notebook-grass" src="./assets/title/scene-grass.png" alt="" aria-hidden="true" />
