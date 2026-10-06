@@ -111,7 +111,7 @@
 :root[data-game-motion="reduced"] .summer-cloud{animation:none}
 
 /* Original artist layers, from far sky to the small foreground creatures. */
-.exterior-stage,.door-closeup-stage{inset:auto;left:50%;top:50%;width:min(100vw,177.7778dvh);height:auto;aspect-ratio:16/9;transform:translate(-50%,-50%);overflow:hidden}
+.exterior-stage,.door-closeup-stage{inset:auto;left:50%;top:50%;width:max(100vw,177.7778dvh);height:auto;aspect-ratio:16/9;transform:translate(-50%,-50%);overflow:hidden}
 .exterior-composition{position:absolute;inset:0;isolation:isolate;pointer-events:none;overflow:hidden}
 .exterior-layer{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;user-select:none}
 .home-illustration-slot>.exterior-composition{width:max(100vw,177.7778dvh);height:max(56.25vw,100dvh);left:50%;top:50%;right:auto;bottom:auto;transform:translate(-50%,-50%)}
@@ -121,7 +121,7 @@
 .exterior-layer--blue-butterfly{animation:butterfly-flutter 6s ease-in-out infinite}
 .exterior-layer--door-critter{animation:critter-peek 7s ease-in-out infinite}
 .exterior-clouds{position:absolute;inset:0;overflow:hidden;pointer-events:none}
-.painted-cloud{position:absolute;left:0;top:calc(8% + var(--cloud-index)*5%);width:17%;height:4%;border-radius:50%;background:#fffef0bb;filter:blur(1px);opacity:.8;animation:painted-cloud-drift calc(105s + var(--cloud-index)*17s) calc(var(--cloud-index)*-31s - 14s) linear infinite;transform:translateX(-120%)}
+.painted-cloud{position:absolute;left:100%;top:calc(8% + var(--cloud-index)*5%);width:17%;height:4%;border-radius:50%;background:#fffef0bb;filter:blur(1px);opacity:.8;animation:painted-cloud-drift calc(105s + var(--cloud-index)*17s) calc(var(--cloud-index)*-31s - 14s) linear infinite;transform:none}
 .painted-cloud::before,.painted-cloud::after{content:'';position:absolute;background:#fffef0db;border-radius:50%;bottom:14%;left:17%;width:40%;height:190%}
 .painted-cloud::after{left:46%;width:35%;height:135%}
 .door-camera{transform:scale(3.5);transform-origin:50% 65%;animation:door-camera-arrive .6s ease-out both}
@@ -139,7 +139,7 @@
 @keyframes bird-bob{0%,65%,100%{transform:none}73%{transform:translateY(-4px)}82%{transform:translateY(1px)}}
 @keyframes butterfly-flutter{0%,100%{transform:none}25%{transform:translate(-9px,-7px)}65%{transform:translate(5px,-12px)}}
 @keyframes critter-peek{0%,65%,100%{transform:none}78%,87%{transform:translateY(-3px)}}
-@keyframes painted-cloud-drift{to{transform:translateX(720%)}}
+@keyframes painted-cloud-drift{to{transform:translateX(-720%)}}
 @keyframes door-camera-arrive{from{transform:scale(3.2);opacity:.5}to{transform:scale(3.5);opacity:1}}
 @keyframes camera-knock{0%,100%{transform:scale(3.5)}30%{transform:scale(3.5) translateX(1px)}65%{transform:scale(3.5) translateX(-1px)}}
 @keyframes camera-enter{to{transform:scale(3.9);filter:brightness(.65)}}
