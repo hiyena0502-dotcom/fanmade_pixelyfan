@@ -3,31 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="잠뜰님의 생일을 준비하는 비공식 팬메이드 포인트앤클릭 어드벤처." />
+  <meta name="description" content="픽셀리의 13주년 방문에서 시작되는 비공식 팬메이드 포인트앤클릭 어드벤처." />
   <meta name="theme-color" content="#17223d" />
-  <title>꿈뜰이의 우당탕 생일 준비 대작전!!</title>
+  <title>뜰팁 · 프리즘 너머의 이야기</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-  <link rel="preload" as="image" href="assets/home/home-bg.png?v=85" />
-  <link rel="preload" as="image" href="assets/story/chapter1/living-room.webp?v=90" />
-  <link rel="preload" as="image" href="assets/story/chapter1/exterior/sky-v163.webp" />
   <link rel="stylesheet" href="styles/rebuild.css?v=173" />
-  <link rel="stylesheet" href="styles/member-dialogue.css?v=173" />
+  <link rel="stylesheet" href="styles/member-dialogue.css?v=175" />
   <link rel="stylesheet" href="styles/game-interaction.css?v=121" />
   <script src="game-interaction.js?v=121" defer></script>
-  <script src="member-dialogue.js?v=173" defer></script>
-  <script src="atmosphere.js?v=173" defer></script>
-  <script src="rebuild.js?v=173" defer></script>
+  <script src="member-dialogue.js?v=175" defer></script>
+
+  <link rel="stylesheet" href="styles/prologue.css?v=175" />
+  <script src="prologue-state.js?v=175" defer></script>
+  <script src="prologue-data.js?v=175" defer></script>
+  <script src="prologue-audio.js?v=175" defer></script>
+  <script src="exterior-art.js?v=175" defer></script>
+  <script src="prologue.js?v=175" defer></script>
 </head>
 <body>
   <main class="rebuild-root">
     <section class="screen home-screen is-active" data-screen="home">
       <div class="home-illustration-slot" aria-hidden="true"></div>
-      <div class="home-snow" id="home-snow" aria-hidden="true"></div>
+
 
       <div class="home-copy">
-        <header class="home-title">
-          <img src="assets/home/title-logo.png?v=83" alt="꿈뜰이의 우당탕 생일 준비 대작전!!" />
-        </header>
+        <header class="home-title"><small>PIXELY · 13TH ANNIVERSARY</small><h1>뜰팁</h1><p>프리즘 너머의 이야기</p></header>
 
         <nav class="home-menu" aria-label="메인 메뉴">
           <button class="title-menu-item" type="button" id="new-story">
@@ -80,41 +80,15 @@
         </header>
 
         <section class="scene exterior-scene is-active" data-scene="exterior" aria-label="픽셀리 집 앞">
-          <div class="scene-art-stage exterior-stage">
-          <div class="exterior-layers" role="img" aria-label="눈 덮인 픽셀리 집의 아침 풍경">
-            <img class="exterior-layer" data-exterior-layer="sky" src="assets/story/chapter1/exterior/sky-v163.webp" width="2048" height="1152" alt="" draggable="false" />
-            <img class="exterior-layer" data-exterior-layer="landscape" src="assets/story/chapter1/exterior/landscape-v163.webp" width="2048" height="1152" alt="" draggable="false" />
-            <img class="exterior-layer" data-exterior-layer="fence" src="assets/story/chapter1/exterior/fence-v163.webp" width="2048" height="1152" alt="" draggable="false" />
-            <img class="exterior-layer exterior-cloud exterior-cloud--1" data-exterior-layer="cloud-1" src="assets/story/chapter1/exterior/cloud-1-v130.webp" width="2048" height="1339" alt="" draggable="false" />
-            <img class="exterior-layer exterior-cloud exterior-cloud--2" data-exterior-layer="cloud-2" src="assets/story/chapter1/exterior/cloud-2-v130.webp" width="2048" height="1339" alt="" draggable="false" />
-            <img class="exterior-layer exterior-cloud exterior-cloud--3" data-exterior-layer="cloud-3" src="assets/story/chapter1/exterior/cloud-3-v130.webp" width="2048" height="1339" alt="" draggable="false" />
-            <img class="exterior-layer exterior-cloud exterior-cloud--4" data-exterior-layer="cloud-4" src="assets/story/chapter1/exterior/cloud-4-v130.webp" width="2048" height="1339" alt="" draggable="false" />
-            <img class="exterior-layer exterior-cloud exterior-cloud--5" data-exterior-layer="cloud-5" src="assets/story/chapter1/exterior/cloud-5-v130.webp" width="2048" height="1339" alt="" draggable="false" />
-            <img class="exterior-layer exterior-cloud exterior-cloud--6" data-exterior-layer="cloud-6" src="assets/story/chapter1/exterior/cloud-6-v130.webp" width="2048" height="1339" alt="" draggable="false" />
-            <img class="exterior-layer" data-exterior-layer="ground" src="assets/story/chapter1/exterior/ground-v163.webp" width="2048" height="1152" alt="" draggable="false" />
-            <img class="exterior-layer" data-exterior-layer="house" src="assets/story/chapter1/exterior/house-v163.webp" width="2048" height="1152" alt="" draggable="false" />
-            <img class="exterior-layer" data-exterior-layer="bushes" src="assets/story/chapter1/exterior/bushes-v163.webp" width="2048" height="1152" alt="" draggable="false" />
-            <img class="exterior-layer" data-exterior-layer="objects" src="assets/story/chapter1/exterior/objects-v164.webp" width="2048" height="1152" alt="" draggable="false" />
-            <div class="exterior-decoration exterior-sign" aria-hidden="true"><img src="assets/story/chapter1/exterior/exterior-sign-v163.webp" width="2048" height="1152" alt="" draggable="false" /></div>
-            <div class="exterior-decoration birdhouse-character" aria-hidden="true"><img src="assets/story/chapter1/exterior/birdhouse-character-v163.webp" width="2048" height="1152" alt="" draggable="false" /></div>
-            <div class="exterior-decoration laundry-cloth" aria-hidden="true"><img src="assets/story/chapter1/exterior/laundry-cloth-v163.webp" width="2048" height="1152" alt="" draggable="false" /></div>
-            <div class="exterior-decoration blue-worm" aria-hidden="true"><img src="assets/story/chapter1/exterior/blue-worm-v163.webp" width="2048" height="1152" alt="" draggable="false" /></div>
-            <div class="scene-snow" data-snowfall="exterior" aria-hidden="true"></div>
-            <img class="exterior-layer" data-exterior-layer="foreground-bushes" src="assets/story/chapter1/exterior/foreground-bushes-v163.webp" width="2048" height="1152" alt="" draggable="false" />
-          </div>
-          <button type="button" class="hotspot exterior-inspect inspect-birdhouse" data-outside-object="birdhouse" disabled aria-label="새집 살펴보기"></button>
-          <button type="button" class="hotspot exterior-inspect inspect-pot" data-outside-object="pot" disabled aria-label="화분 살펴보기"></button>
-          <button type="button" class="hotspot exterior-inspect inspect-garden" data-outside-object="garden" disabled aria-label="텃밭 살펴보기"></button>
-          <button type="button" class="hotspot hotspot-door" id="door-hotspot" aria-label="현관문 살펴보기"></button>
-          </div>
+          <div class="scene-art-stage exterior-stage"><img class="pro-scene-image" src="assets/story/prologue/exterior-summer.svg" alt="6월 초여름의 픽셀리 집" draggable="false" /></div>
         </section>
 
         <section class="scene door-closeup-scene" data-scene="door-closeup" hidden aria-label="픽셀리 집 현관문">
           <div class="door-closeup-stage">
-            <img class="door-closeup-art" src="assets/story/chapter1/door-closeup-v143.webp" width="1671" height="941" alt="꽃과 화분이 놓인 픽셀리 집 현관문" draggable="false" />
-            <div class="door-sign" aria-hidden="true"><img src="assets/story/chapter1/door-sign-v145.webp" width="1672" height="941" alt="" draggable="false" /></div>
-            <div class="door-opening" aria-hidden="true"><div class="door-opening-leaf"><img src="assets/story/chapter1/door-closeup-v143.webp" alt="" draggable="false" /><div class="door-sign" aria-hidden="true"><img src="assets/story/chapter1/door-sign-v145.webp" width="1672" height="941" alt="" draggable="false" /></div></div></div>
-            <div class="scene-snow" data-snowfall="closeup" aria-hidden="true"></div>
+            <img class="door-closeup-art" src="assets/story/prologue/door-summer.svg" width="1671" height="941" alt="꽃과 화분이 놓인 픽셀리 집 현관문" draggable="false" />
+
+            <div class="door-opening" aria-hidden="true"><div class="door-opening-leaf"><img src="assets/story/prologue/door-summer.svg" alt="" draggable="false" /></div></div>
+
             <button type="button" class="hotspot hotspot-door-closeup" id="door-closeup-hotspot" aria-label="현관문 두드리기"></button>
           </div>
           <button type="button" class="scene-back-arrow scene-exit door-closeup-back" id="door-closeup-back" aria-label="집 앞으로 돌아가기">
@@ -125,8 +99,8 @@
 
         <section class="scene living-room-scene" data-scene="living-room" hidden aria-label="픽셀리 집 거실">
           <div class="living-room-stage">
-          <img class="scene-art living-room-art" src="assets/story/chapter1/living-room.webp?v=90" alt="따뜻한 겨울 아침의 픽셀리 집 거실" draggable="false" />
-            <div class="scene-snow window-snow" data-snowfall="window" aria-hidden="true"></div>
+          <img class="scene-art living-room-art" src="assets/story/prologue/living-room.svg" alt="밝은 초여름의 픽셀리 집 거실" draggable="false" />
+
             <button type="button" class="room-character" id="talk-gongryong" aria-label="공룡에게 말 걸기">
               <span class="character-crop"><img src="assets/characters/gongryong-placeholder.png" data-member-image="gongryong" alt="공룡" draggable="false" /></span>
               <span class="character-label" aria-hidden="true">공룡</span>
@@ -143,7 +117,7 @@
 
         <section class="scene kitchen-scene" data-scene="kitchen" hidden aria-label="픽셀리 집 주방">
           <button type="button" class="scene-back-arrow room-direction room-direction--left" id="go-storage" aria-label="창고로 이동"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 5 8 12l7 7" /></svg></button>
-          <img class="scene-art kitchen-art" src="assets/story/chapter1/kitchen-v148.webp" width="1672" height="941" alt="겨울 햇살이 비치는 픽셀리 집 주방과 식탁" draggable="false" />
+          <img class="scene-art kitchen-art" src="assets/story/prologue/kitchen.svg" width="1672" height="941" alt="음료와 컵이 놓인 초여름의 주방" draggable="false" />
           <button type="button" class="scene-back-arrow room-direction room-direction--right" id="kitchen-to-living" aria-label="거실로 돌아가기">
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m9 5 7 7-7 7" /></svg>
           </button>

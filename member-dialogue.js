@@ -50,6 +50,11 @@ const members={
   deokgae:{name:"덕개",portrait:"assets/characters/deokgae-v162.webp"},
   gakbyeol:{name:"각별",portrait:"assets/characters/gakbyeol-v162.webp"},
   suhyeon:{name:"수현",portrait:"assets/characters/suhyeon-v162.webp"},
+  jamddul:{name:"잠뜰",portrait:"assets/story/prologue/jamddul-standin.svg"},
+  ttoni:{name:"또니",portrait:"assets/story/prologue/ttoni-standin.svg"},
+  yukto:{name:"육토",portrait:"assets/story/prologue/yukto-standin.svg"},
+  philip:{name:"필립",portrait:"assets/story/prologue/philip-standin.svg"},
+  fritz:{name:"프리츠",portrait:"assets/story/prologue/fritz-standin.svg"},
   dreamer:{name:"꿈뜰이",portrait:null},
   unknown:{name:"???",portrait:null},
   stage:{name:"",portrait:null}
@@ -71,7 +76,7 @@ function normalize(saved){
 }
 function snapshot(){return {...state,revision:2}}
 function lastMain(){
-  if(sequence) return sequence.lines[Math.min(state.index,sequence.lines.length-1)];
+  if(sequence) return sequence.lines.slice(0,Math.min(state.index+1,sequence.lines.length)).filter(l=>!l.side).at(-1)||{member:"stage",text:""};
   if(state.phase==="opening") return opening.slice(0,state.index+1).filter(l=>l.member!=="deokgae").at(-1);
   if(state.phase==="repeat") return repeatOpening[state.index];
   if(state.phase==="reply") return choices[state.choice].lines.slice(0,state.index+1).filter(l=>l.member!=="deokgae").at(-1)||opening.at(-1);
@@ -79,10 +84,12 @@ function lastMain(){
 }
 function render(){
   const picking=state.phase==="choices"||state.phase==="scene-choices";
-  const line=picking?null:sequence?lastMain():(state.phase==="opening"?opening:state.phase==="repeat"?repeatOpening:choices[state.choice].lines)[state.index];
-  const interruption=!picking&&line.member==="deokgae";
+  const line=picking?null:sequence?sequence.lines[state.index]:(state.phase==="opening"?opening:state.phase==="repeat"?repeatOpening:choices[state.choice].lines)[state.index];
+  const interruption=!picking&&Boolean(sequence?line.side:line.member==="deokgae");
   ui.dataset.interruption=interruption?"true":"false";
-  const mainLine=lastMain(),member=members[mainLine.member];
+  const mainLine=lastMain(),member=members[mainLine.member]||members.unknown;
+  ui.dataset.mainEmpty=mainLine.text?'false':'true';
+  ui.dataset.emotion=mainLine.emotion||(/[?!？！]|잠깐|건드리지|올라가/.test(mainLine.text)?"alarm":"idle");
   ui.dataset.speaker=mainLine.member;
   ui.setAttribute("aria-label",member.name?member.name+"의 대화":"상황 묘사");
   $("#dialogue-text").textContent=mainLine.text;
@@ -90,18 +97,18 @@ function render(){
   const portrait=$("#dialogue-portrait"),image=$("#dialogue-portrait-image");
   portrait.hidden=!member.portrait;
   if(member.portrait){
-    if(image.getAttribute("src")!==member.portrait) image.src=member.portrait;
+    if(image.getAttribute("src")!==member.portrait) image.src=window.PixelyAsset?window.PixelyAsset(member.portrait):member.portrait;
     image.alt="대화 중인 "+member.name;
   }
-  const waiting=Boolean(sequence&&!picking&&mainLine.delay);
+  const waiting=Boolean(sequence&&!picking&&line.delay);
   $("#dialogue-next").disabled=picking||waiting;
   $("#dialogue-next").setAttribute("aria-label",picking?"대답을 선택해 주세요":waiting?"잠시 기다려 주세요":"다음 대사");
   $("#dialogue-interruption").hidden=!interruption;
   $(".story-frame")?.classList.toggle("is-talking",true);
   if(interruption){
     $("#dialogue-interruption").dataset.member=line.member;
-    $("#interruption-name").textContent=members[line.member].name;
-    $("#interruption-place").textContent=line.member==="deokgae"?"주방 쪽에서":"";
+    $("#interruption-name").textContent=(members[line.member]||members.unknown).name;
+    $("#interruption-place").textContent=line.place||(line.member==="deokgae"?"주방 쪽에서":"");
     $("#interruption-text").textContent=line.text;
   }
   $("#dialogue-choices").hidden=!picking;
@@ -183,7 +190,7 @@ function fitPortrait(image){
 }
 document.querySelectorAll("[data-member-image]").forEach(image=>{image.addEventListener("load",()=>fitPortrait(image));if(image.complete)fitPortrait(image)});
 function scheduleSequence(){
-  if(sequence&&state.phase==="scene"&&lastMain().delay) sequenceTimer=setTimeout(advance,lastMain().delay);
+  if(sequence&&state.phase==="scene"&&sequence.lines[state.index]?.delay) sequenceTimer=setTimeout(advance,sequence.lines[state.index].delay);
 }
 function play({lines,choices:options=[],saved=null,progress=()=>{},complete=()=>{},choose=()=>{}}){
   close();sequence={lines,choices:options,choose};onProgress=progress;onComplete=complete;

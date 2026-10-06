@@ -1,0 +1,83 @@
+{
+  "canvas": [
+    2048,
+    1152
+  ],
+  "layers": [
+    {
+      "order": 1,
+      "original": "무제27_20261006154628.png",
+      "asset": "01-sky.png"
+    },
+    {
+      "order": 2,
+      "original": "무제27_20261006154633.png",
+      "asset": "02-mountains.png"
+    },
+    {
+      "order": 3,
+      "original": "무제27_20261006154638.png",
+      "asset": "03-fence.png"
+    },
+    {
+      "order": 4,
+      "original": "무제27_20261006154642.png",
+      "asset": "04-house.png"
+    },
+    {
+      "order": 5,
+      "original": "무제27_20261006154647.png",
+      "asset": "05-lawn.png"
+    },
+    {
+      "order": 6,
+      "original": "무제27_20261006154652.png",
+      "asset": "06-garden-bushes.png"
+    },
+    {
+      "order": 7,
+      "original": "무제27_20261006154656.png",
+      "asset": "07-house-flowers.png"
+    },
+    {
+      "order": 8,
+      "original": "무제27_20261006154702.png",
+      "asset": "08-garden-props.png"
+    },
+    {
+      "order": 9,
+      "original": "무제27_20261006154707.png",
+      "asset": "09-vegetable-bed.png"
+    },
+    {
+      "order": 10,
+      "original": "무제27_20261006154711.png",
+      "asset": "10-grass-details.png"
+    },
+    {
+      "order": 11,
+      "original": "무제27_20261006154716.png",
+      "asset": "11-foreground-flowers.png"
+    },
+    {
+      "order": 12,
+      "original": "무제27_20261006154723.png",
+      "asset": "12-laundry.png"
+    },
+    {
+      "order": 13,
+      "original": "무제27_20261006154727.png",
+      "asset": "13-blue-butterfly.png"
+    },
+    {
+      "order": 14,
+      "original": "무제27_20261006154732.png",
+      "asset": "14-bird.png"
+    },
+    {
+      "order": 15,
+      "original": "무제27_20261006154736.png",
+      "asset": "15-door-critter.png"
+    }
+  ]
+}
