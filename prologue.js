@@ -23,8 +23,6 @@ function panel(selector,opener){closePanels(false);lastOpener=opener||document.a
 function renderContinue(){const b=$('#continue-story');b.disabled=!save;$('#continue-copy').textContent=save?(save.ending?'PROLOGUE · 완료':'PROLOGUE · '+(places[save.scene]||names[save.scene.slice(5)]+' 방')):'NO SAVE DATA'}
 function showScreen(name){$$('[data-screen]').forEach(s=>{s.hidden=s.dataset.screen!==name;s.classList.toggle('is-active',!s.hidden)})}
 function showScene(name){
-  // Saves made before the close-up was removed resume in the same wide garden.
-  if(name==='door-closeup')name='exterior';
   save.scene=State.scenes.includes(name)?name:'exterior';frame.dataset.location=save.scene;
   scenes().forEach(s=>{s.hidden=s.dataset.scene!==save.scene;s.classList.toggle('is-active',!s.hidden)});
   const placeNode=$('#hud-place');if(placeNode)placeNode.textContent='픽셀리 집 · '+(places[save.scene]||names[save.scene.slice(5)]+' 방');
@@ -57,7 +55,8 @@ function setup(){
   // Keep every original layer in the artist's shared coordinate space.
   $('.exterior-stage').replaceChildren();const stage=$('.exterior-stage');
   stage.append(window.PixelyExterior.create());
-  hotspot('.exterior-stage','door-hotspot','현관문 두드리기',46.8,57.5,6.2,14.8,knock);
+  hotspot('.exterior-stage','door-hotspot','현관문 살펴보기',46.8,57.5,6.2,14.8,()=>move('door-closeup'));
+  image('door-closeup','.door-closeup-art','door-v178.png');$$('.door-opening-leaf img').forEach(img=>img.src=asset(ART+'door-v178.png'));
   image('living-room','.living-room-art','living-room.svg');$('.living-room-art').alt='밝은 초여름 거실, 오래된 사진과 촬영 소품';
   image('kitchen','.kitchen-art','kitchen.svg');$('.kitchen-art').alt='음료와 컵이 놓인 밝은 주방';
   $$('.scene-snow,.home-snow,.hall-door-name,.inventory-rack,.hud-date,.hint-trigger').forEach(n=>n.remove());
@@ -243,6 +242,7 @@ setup();prepareDynamicScripts();
 // The door opens into the greeting; re-entry bypasses all first-visit dialogue.
 
 $('#new-story').addEventListener('click',()=>start(true));$('#continue-story').addEventListener('click',()=>start());
+$('#door-closeup-hotspot').addEventListener('click',knock);$('#door-closeup-back').addEventListener('click',()=>move('exterior'));
 $('#talk-gongryong').addEventListener('click',()=>{if(busy)return;if(!save.flags.house_roam_enabled){notice('거실의 오래된 사진을 살펴보자');return}inspect('gongryong-repeat','위에도 다 열어놨어. 궁금하면 둘러봐.','gongryong')});
 for(const [id,to]of Object.entries({'go-kitchen':'kitchen','kitchen-to-living':'living-room','go-storage':'storage','storage-to-kitchen':'kitchen','go-stairs':'stairs','stairs-to-living':'living-room','go-bathroom':'bathroom','bathroom-to-stairs':'stairs','go-upper-hall':'upper-hall','upper-hall-to-stairs':'stairs','go-basement':'basement','basement-to-stairs':'stairs','go-attic':'attic','attic-to-upper-hall':'upper-hall','leave-house':'exterior'}))$('#'+id).addEventListener('click',()=>move(to));
 $('#story-menu-button').addEventListener('click',()=>{if(!busy)panel('#story-menu',$('#story-menu-button'))});$('#return-home').addEventListener('click',home);
