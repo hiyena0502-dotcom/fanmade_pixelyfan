@@ -1,0 +1,129 @@
+@font-face {
+  font-family: "Diary Hand";
+  src: url("./assets/fonts/gaegu-ui-regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Diary Hand";
+  src: url("./assets/fonts/gaegu-ui-bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+.notebook { --diary-ink: #644c39; --diary-muted: #927c64; }
+.notebook-page {
+  border: clamp(10px,.8vw,16px) solid #ad7853;
+  border-radius: 25px 33px 29px 22px;
+  background:
+    radial-gradient(ellipse at 0 50%,#ba987624,transparent 17%),
+    repeating-linear-gradient(0deg,#a07c4910 0 1px,transparent 1px 5px),
+    linear-gradient(100deg,#f7e7c3,#fff6df 20%,#fff7e5 82%,#f5e4c2);
+  box-shadow: 6px 9px 0 #90603f38,0 16px 24px #5b42241f,
+    inset 6px 0 10px #a0744433,inset -3px 0 8px #a074441a;
+}
+.notebook-page::before {
+  content:""; position:absolute; inset:-7px; pointer-events:none;
+  border:1px dashed #f5d9ab96; border-radius:19px 27px 23px 17px;
+}
+.notebook-page::after {
+  content:""; position:absolute; inset:4% 4% 5% 9%; pointer-events:none;
+  background:
+    linear-gradient(90deg,transparent 6%,#ce8e8738 6% 6.25%,transparent 6.25%),
+    repeating-linear-gradient(0deg,transparent 0 31px,#a7ab8c24 31px 32px);
+  opacity:.62;
+}
+.ring-stack {left:calc(-1 * clamp(29px,2.4vw,46px));top:10%;bottom:10%;width:clamp(45px,4.2vw,80px)}
+.ring-stack span {height:clamp(10px,.88vw,17px);border:1px solid #a67a52;
+  background:linear-gradient(0deg,#9c6840,#e7bd83 43%,#f8d9a1 62%,#ba8a55);
+  box-shadow:0 3px 3px #583e3030;
+}
+.ring-stack span::after {right:-7%;top:-45%;width:39%;background:#826044;
+  box-shadow:inset 0 2px 3px #53392388,0 1px 1px #fff6dd;
+}
+.menu-sheet {left:15%;right:9%;top:7.5%;bottom:16%;color:var(--diary-ink)}
+.menu-head {position:relative;align-items:flex-start;justify-content:space-between;
+  margin:0 0 clamp(12px,2vh,25px);padding:0 0 clamp(8px,1vh,14px);
+  border-bottom:1px solid #c3a17a65;
+}
+.diary-heading {position:relative;z-index:1}
+.diary-heading::before {content:"";position:absolute;z-index:-1;left:-13px;top:-9px;
+  width:58px;height:18px;background:#eacb7661;transform:rotate(-18deg);
+  clip-path:polygon(0 10%,98% 0,100% 90%,2% 100%);
+}
+.diary-eyebrow {font-family:"Diary Hand",sans-serif;font-size:clamp(17px,1.35vw,26px);font-weight:400;color:#9c7b58}
+.diary-title {margin:-1px 0 4px;font-family:"Diary Hand",sans-serif;
+  font-size:clamp(29px,2.55vw,49px);font-weight:700;line-height:1.05;
+  letter-spacing:-.04em;transform:rotate(-1.2deg);transform-origin:left center;
+}
+.menu-head p {font-size:clamp(10px,.78vw,15px);font-weight:400;color:#967c64;letter-spacing:.015em}
+.diary-doodle {flex-shrink:0;width:clamp(36px,3.5vw,68px);margin:8px -3px 0 8px;
+  fill:#f3d98760;stroke:#cba15b;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transform:rotate(13deg);
+}
+.main-menu {gap:0;grid-template-rows:repeat(6,minmax(0,1fr));min-height:0}
+.menu-item {isolation:isolate;grid-template-columns:clamp(25px,2.3vw,44px) minmax(0,1fr) auto;
+  gap:clamp(10px,1.1vw,20px);min-height:0;padding:6px 5px;
+  border:0;border-bottom:1px dashed #bba48755;border-radius:0;background:transparent;
+  box-shadow:none;transition:transform .18s ease;
+}
+.menu-item:last-child {border-bottom:0}
+.menu-item:not(:disabled):is(:hover,:focus-visible) {background:transparent;box-shadow:none;filter:none;transform:translateX(5px)}
+.menu-item:focus-visible {outline:2px dashed #ad8460;outline-offset:3px;border-radius:5px}
+.menu-icon {width:100%;height:auto;aspect-ratio:1;border:0;border-radius:0;background:transparent;
+  color:#a47755;transform:rotate(-7deg);
+}
+.menu-icon svg {width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}
+.menu-new .menu-icon {color:#d38471}.menu-continue .menu-icon{color:#bb9b58}
+.menu-chapter .menu-icon{color:#7a9362}.menu-wardrobe .menu-icon{color:#749cb2}
+.menu-settings .menu-icon{color:#a084ab}
+.menu-copy {align-items:flex-start}
+.menu-copy strong {position:relative;z-index:0;font-family:"Diary Hand",sans-serif;
+  font-size:clamp(24px,2.2vw,42px);font-weight:700;letter-spacing:-.025em;line-height:1.1;color:var(--diary-ink);
+}
+.menu-copy strong::after {content:"";position:absolute;z-index:-1;left:-5px;right:-9px;bottom:0;
+  height:.35em;background:var(--item-line);opacity:0;transform:rotate(-1.5deg);
+  clip-path:polygon(1% 17%,99% 0,100% 83%,0 100%);transition:opacity .18s ease;
+}
+.menu-item.is-active .menu-copy strong::after,.menu-item:not(:disabled):is(:hover,:focus-visible) .menu-copy strong::after {opacity:.38}
+.menu-copy small {margin-top:4px;font-size:clamp(10px,.8vw,15px);font-weight:400;line-height:1.35;color:#95816a}
+.menu-arrow {font-family:"Diary Hand",sans-serif;font-weight:400;font-size:clamp(26px,2.5vw,48px);color:#bd8164}
+.menu-item:disabled {opacity:.54;filter:none}
+.soon-badge {padding:3px 7px;border:1px dashed #b89f81;border-radius:3px;background:transparent;
+  font-family:"Diary Hand",sans-serif;font-size:clamp(13px,1.1vw,21px);font-weight:400;letter-spacing:0;transform:rotate(5deg);color:#947e65;
+}
+.credits-link {margin-top:10px;font-family:"Diary Hand",sans-serif;font-size:clamp(16px,1.35vw,26px);font-weight:400;color:#947c60;text-decoration-thickness:1px}
+.credits-link:focus-visible {outline:2px dashed #ad8460;outline-offset:4px}
+.diary-page-number {position:absolute;bottom:0;left:50%;transform:translateX(-50%);font-family:"Diary Hand",sans-serif;font-size:15px;color:#b6a083;pointer-events:none}
+.menu-note {position:absolute;bottom:-2.5rem;left:0;right:0;font-weight:400;font-size:clamp(10px,.75vw,14px);color:#826b53}
+.subtitle {font-family:"Diary Hand",sans-serif;font-weight:700;font-size:clamp(17px,1.5vw,29px);letter-spacing:-.02em}
+.fan-label {font-weight:500;letter-spacing:.04em}
+@media(min-width:821px) and (max-height:650px) {
+  .menu-sheet {top:6%;bottom:11%}
+  .menu-head {margin-bottom:6px;padding-bottom:6px}
+  .diary-eyebrow {font-size:16px}.diary-title {font-size:29px}
+  .menu-head p {display:none}.menu-copy strong {font-size:26px}
+  .menu-copy small {display:none}.credits-link {margin-top:4px;font-size:16px}
+  .menu-note {bottom:-1.5rem}.diary-page-number {font-size:12px}
+}
+@media(max-width:820px) {
+  .notebook {height:680px}
+  .notebook-page {border-width:11px}
+  .ring-stack {left:-30px;width:48px}
+  .menu-sheet {left:16%;right:9%;top:7%;bottom:10%}
+  .diary-eyebrow {font-size:20px}.diary-title {font-size:36px}
+  .menu-head p {font-size:11px}.diary-doodle {width:45px}
+  .menu-item {grid-template-columns:30px minmax(0,1fr) auto;min-height:56px;gap:12px;padding:7px 0}
+  .menu-copy strong {font-size:29px}.menu-copy small {display:block;font-size:11px}
+  .menu-arrow {font-size:35px}.soon-badge {font-size:16px;max-width:none}
+  .credits-link {font-size:21px}.menu-note {font-size:10px;bottom:-2rem}
+  .subtitle {font-size:clamp(20px,4vw,28px)}
+}
+@media(max-width:420px) {
+  .notebook {height:640px}.diary-title {font-size:30px}
+  .diary-doodle {width:34px}.menu-copy strong {font-size:25px}
+  .menu-copy small {font-size:10px}.menu-item {grid-template-columns:24px minmax(0,1fr) auto;gap:9px}
+  .soon-badge {font-size:13px;padding:2px 4px}.menu-arrow {font-size:30px}
+}
+@media(prefers-reduced-motion:reduce) {.menu-item,.menu-copy strong::after{transition:none}}
