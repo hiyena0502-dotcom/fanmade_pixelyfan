@@ -119,3 +119,33 @@ body,.scene {background:#eef2ef}
   .scene-fence {top:calc(103.54vw + 26px);bottom:auto;height:68px;
     background-size:auto 753.23px;background-position:center -481.23px}
 }
+
+/* The supplied shrub artwork is framed using its complete alpha bounds. */
+.bush-left{aspect-ratio:204/129}
+.bush-left img{width:1003.9216%;left:-366.1765%;top:-554.2636%;height:auto}
+.bush-right{aspect-ratio:154/100}
+.bush-right img{width:1329.8701%;left:-723.3766%;top:-729%;height:auto}
+@media(min-width:821px){
+ .bush-left{left:calc(23vw - var(--house-width) / 2 - 3vw);width:min(18vw,22svh);bottom:7svh}
+ .bush-right{left:calc(23vw + var(--house-width) / 2 - 8vw);width:min(14vw,18svh);bottom:7svh}
+}
+/* Clearer color and depth, keeping the brown paper palette. */
+.scene-bg{filter:saturate(.62) brightness(1.07);opacity:.62}
+.scene-landscape{filter:blur(10px) saturate(.57) brightness(1.08);opacity:.72}
+.scene-house{filter:saturate(.87) brightness(1.02) contrast(1.02)}
+.scene-bush{filter:saturate(.78) brightness(1.04)}
+.scene-ground{filter:saturate(.58) hue-rotate(8deg) brightness(1.04)}
+.scene-fence{filter:saturate(.7) brightness(1.03)}
+.menu-copy strong,.diary-title{color:#59473e}
+.menu-copy small{color:#756151}
+.notebook-page{border-color:#a97f62;box-shadow:5px 7px 0 #8c694f,10px 13px 0 #98795f1f,0 18px 30px #78655320,inset 8px 0 12px #b3977c26,inset -2px 0 3px #fffaf0}
+/* Small scrapbook embellishments stay clear of the menu hit areas. */
+.diary-decor{position:absolute;inset:0;pointer-events:none;z-index:3}
+.washi{position:absolute;top:1.5%;width:clamp(65px,7vw,125px);height:clamp(18px,2.6svh,26px);opacity:.78;box-shadow:0 1px 2px #78655315;clip-path:polygon(3% 0,97% 0,100% 25%,97% 48%,100% 76%,97% 100%,3% 100%,0 76%,3% 48%,0 25%)}
+.washi-check{left:10%;transform:rotate(-12deg);background-color:#bbd0be;background-image:repeating-linear-gradient(0deg,transparent 0 7px,#f8fcf580 7px 11px),repeating-linear-gradient(90deg,transparent 0 7px,#f8fcf580 7px 11px)}
+.washi-dots{right:9%;transform:rotate(10deg);background-color:#e8bbb6;background-image:radial-gradient(#fff7ef 1.6px,transparent 1.8px);background-size:10px 10px}
+.flower-sticker{position:absolute;left:11%;bottom:2.5%;width:clamp(85px,10svh,120px);height:auto;transform:rotate(-9deg);filter:drop-shadow(1px 2px 1px #73594225)}
+.star-sticker{position:absolute;right:5%;top:7.5%;width:clamp(45px,6svh,65px);height:auto;transform:rotate(12deg);filter:drop-shadow(1px 2px 1px #73594225)}
+.diary-tab{position:absolute;right:-2%;width:18px;height:clamp(32px,5svh,50px);border-radius:2px 5px 5px 2px;box-shadow:1px 2px 2px #73594220}
+.tab-rose{top:35%;background:#d6aaa1;border:1px solid #bf8e86}
+.tab-blue{top:43%;background:#b4ccd1;border:1px solid #99b6bc}
