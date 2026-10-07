@@ -150,3 +150,21 @@ body,.scene {background:#eef2ef}
 .diary-tab{position:absolute;right:-2%;width:18px;height:clamp(32px,5svh,50px);border-radius:2px 5px 5px 2px;box-shadow:1px 2px 2px #73594220}
 .tab-rose{top:35%;background:#d6aaa1;border:1px solid #bf8e86}
 .tab-blue{top:43%;background:#b4ccd1;border:1px solid #99b6bc}
+
+/* Desktop composition: one large house and a slim journal, all scenery tied to the same baseline. */
+@media(min-width:821px){
+ .title-screen{--scene-center:29vw;--house-width:min(55vw,92svh);--house-foot:10svh;--ground-height:30svh;--fence-height:10svh}
+ .notebook{right:5%;top:7%;width:35%;height:86%}
+ .hero{left:calc(var(--scene-center) - var(--title-width)/2);top:2svh}
+ .subtitle{background:linear-gradient(90deg,transparent,#fff7e8f2 12% 88%,transparent);text-shadow:0 1px 0 #fff9e9}
+ .fan-label{padding:3px 10px;background:#fff7e8db;border-radius:3px;width:fit-content}
+ .scene-house{left:calc(var(--scene-center) - var(--house-width)/2);top:auto;bottom:var(--house-foot);width:var(--house-width);height:auto}
+ .scene-ground{height:var(--ground-height)}
+ .scene-ground-art{width:200svh;left:calc(var(--scene-center) + var(--house-width)/20 - 100svh);top:-79.59svh}
+ .scene-fence{bottom:var(--ground-height);height:var(--fence-height);background-size:auto 110.769svh;background-position:center -70.769svh}
+ .bush-left{left:calc(var(--scene-center) - var(--house-width)*.465);bottom:calc(var(--house-foot) - 2svh);width:calc(var(--house-width)*.27)}
+ .bush-right{left:calc(var(--scene-center) + var(--house-width)*.24);bottom:calc(var(--house-foot) - 2svh);width:calc(var(--house-width)*.23)}
+ .menu-sheet{left:14%;right:9%}
+ .ring-stack{left:-44px;width:72px}
+ .star-sticker{right:4%;top:8%}
+}
