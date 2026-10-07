@@ -1,37 +1,37 @@
 @font-face{font-family:"Game Batang";src:url("./assets/fonts/gowun-menu-bold.woff") format("woff");font-weight:700;font-style:normal;font-display:swap}
 /* A bound journal with inset paper and an adventure-game selection frame. */
-.notebook{--journal-ink:#536346;--journal-gold:#b0bc77}
-.notebook-page{border:clamp(13px,1.3vw,24px) solid #b8ca99;border-radius:12px 22px 22px 12px;background:radial-gradient(ellipse at 0 50%,#c6bb7830,transparent 25%),linear-gradient(100deg,#efe8bc,#fff7d8 15%,#fff9e2 70%,#f1e8b9);box-shadow:5px 7px 0 #9aaa7c,10px 13px 0 #9aaa7c1f,0 18px 30px #697c4824,inset 8px 0 12px #a9b47726,inset -2px 0 3px #fffaf0}
-.notebook-page::before{content:"";position:absolute;inset:-10px;border:1px solid #f8efba;border-radius:7px 15px 15px 7px;pointer-events:none}
-.notebook-page::after{content:"";position:absolute;inset:13px 12px 13px 9%;border:1px solid #c6c98d80;box-shadow:inset 3px 0 0 #fff7e3,3px 0 0 #fff7e3;pointer-events:none;background:linear-gradient(90deg,#bec68c1c,transparent 8%);z-index:1}
+.notebook{--journal-ink:#625147;--journal-gold:#b49a81}
+.notebook-page{border:clamp(13px,1.3vw,24px) solid #b59176;border-radius:12px 22px 22px 12px;background:radial-gradient(ellipse at 0 50%,#c5a78c24,transparent 25%),linear-gradient(100deg,#f0e4d4,#fff7eb 15%,#fffbf2 70%,#f1e5d5);box-shadow:5px 7px 0 #98795f,10px 13px 0 #98795f1f,0 18px 30px #78655320,inset 8px 0 12px #b3977c26,inset -2px 0 3px #fffaf0}
+.notebook-page::before{content:"";position:absolute;inset:-10px;border:1px solid #e8cfb0;border-radius:7px 15px 15px 7px;pointer-events:none}
+.notebook-page::after{content:"";position:absolute;inset:13px 12px 13px 9%;border:1px solid #c9b59c70;box-shadow:inset 3px 0 0 #fff7e3,3px 0 0 #fff7e3;pointer-events:none;background:linear-gradient(90deg,#c5ac9217,transparent 8%);z-index:1}
 .ring-stack{left:calc(-1 * clamp(30px,2.7vw,52px));width:clamp(48px,4.7vw,88px);top:9%;bottom:9%}
-.ring-stack span{height:clamp(12px,1vw,19px);border:1px solid #b29f6b;background:linear-gradient(0deg,#c3af75,#e5d397 37%,#fff2bd 59%,#d6c184 83%,#b4a36a);box-shadow:0 3px 3px #7c87502b}
-.ring-stack span::after{width:35%;right:-6%;top:-34%;background:#9aab7c;box-shadow:inset 0 2px 3px #65764e66,0 1px 1px #fff5d1}
+.ring-stack span{height:clamp(12px,1vw,19px);border:1px solid #ad9474;background:linear-gradient(0deg,#bba083,#e1c9a8 37%,#fff0d4 59%,#d2b58d 83%,#aa8e70);box-shadow:0 3px 3px #7c65502b}
+.ring-stack span::after{width:35%;right:-6%;top:-34%;background:#9e8067;box-shadow:inset 0 2px 3px #6b513e66,0 1px 1px #fff5d1}
 .menu-sheet{left:15%;right:8%;top:7%;bottom:16%;color:var(--journal-ink)}
-.menu-head{display:block;position:relative;text-align:center;margin:0 0 clamp(20px,3vh,34px);padding:0 0 clamp(20px,3vh,34px);border-bottom:1px solid #b0bc7780}
-.menu-head::after{content:"◆";position:absolute;bottom:-.62em;left:50%;transform:translateX(-50%);padding:0 14px;background:#fff7d8;color:#b4a45c;font-size:14px}
-.diary-eyebrow{display:block;margin:0 0 9px;font-family:"Game Batang",serif;font-weight:700;font-size:clamp(17px,1.3vw,25px);color:#819061;letter-spacing:.15em}
-.diary-title{font-family:"Game Batang",serif;font-size:clamp(29px,2.7vw,48px);font-weight:700;line-height:1.4;letter-spacing:-.055em;margin:0;color:#536346;text-shadow:0 2px 0 #fff9e9}
+.menu-head{display:block;position:relative;text-align:center;margin:0 0 clamp(20px,3vh,34px);padding:0 0 clamp(20px,3vh,34px);border-bottom:1px solid #b49a8180}
+.menu-head::after{content:"◆";position:absolute;bottom:-.62em;left:50%;transform:translateX(-50%);padding:0 14px;background:#fff7eb;color:#b29a7c;font-size:14px}
+.diary-eyebrow{display:block;margin:0 0 9px;font-family:"Game Batang",serif;font-weight:700;font-size:clamp(17px,1.3vw,25px);color:#9a816d;letter-spacing:.15em}
+.diary-title{font-family:"Game Batang",serif;font-size:clamp(29px,2.7vw,48px);font-weight:700;line-height:1.4;letter-spacing:-.055em;margin:0;color:#625147;text-shadow:0 2px 0 #fff9e9}
 .diary-doodle{display:none}
 .main-menu{flex:1;gap:clamp(8px,1.6vh,18px);grid-template-rows:repeat(5,minmax(0,1fr));min-height:0}
 .menu-item{isolation:isolate;grid-template-columns:24px minmax(0,1fr) 24px;gap:7px;min-height:0;padding:6px 14px;border:0;border-radius:0;background:transparent;box-shadow:none;color:var(--journal-ink);transition:color .18s ease,transform .18s ease}
 .menu-item::before,.menu-item::after{content:"";position:absolute;pointer-events:none;z-index:-1;inset:1px;clip-path:polygon(12px 0,calc(100% - 12px) 0,100% 12px,100% calc(100% - 12px),calc(100% - 12px) 100%,12px 100%,0 calc(100% - 12px),0 12px);opacity:0;transition:opacity .18s ease}
-.menu-item::before{background:#bbc887}
-.menu-item::after{inset:3px;background:linear-gradient(90deg,#edf1ce,#fff2bf,#edf1ce);clip-path:polygon(11px 0,calc(100% - 11px) 0,100% 11px,100% calc(100% - 11px),calc(100% - 11px) 100%,11px 100%,0 calc(100% - 11px),0 11px);box-shadow:inset 0 0 0 4px #fff8d980}
+.menu-item::before{background:#c3a58a}
+.menu-item::after{inset:3px;background:linear-gradient(90deg,#f2e5d8,#fff2e1,#f2e5d8);clip-path:polygon(11px 0,calc(100% - 11px) 0,100% 11px,100% calc(100% - 11px),calc(100% - 11px) 100%,11px 100%,0 calc(100% - 11px),0 11px);box-shadow:inset 0 0 0 4px #fff8d980}
 .menu-item.is-active::before,.menu-item.is-active::after,.menu-item:is(:hover,:focus-visible)::before,.menu-item:is(:hover,:focus-visible)::after{opacity:1}
 .menu-item:not(:disabled):is(:hover,:focus-visible){background:transparent;filter:none;box-shadow:none;transform:none;outline:none}
-.menu-item:focus-visible{outline:2px solid #8fa36a;outline-offset:4px}
+.menu-item:focus-visible{outline:2px solid #a68b73;outline-offset:4px}
 .menu-copy{align-items:center;text-align:center;gap:5px}
-.menu-copy strong{font-family:"Game Batang",serif;font-weight:700;font-size:clamp(25px,2.35vw,42px);line-height:1.3;letter-spacing:.02em;color:#536346;text-shadow:0 1px 0 #fff9e9}
-.menu-copy small{font-family:system-ui,sans-serif;font-weight:400;font-size:clamp(10px,.76vw,14px);line-height:1.4;letter-spacing:.02em;color:#718059}
-.menu-item.is-active .menu-copy strong{color:#58623d}
-.menu-icon,.menu-arrow{display:grid;place-items:center;opacity:0;transform:none;font-family:serif;font-size:15px;font-weight:400;color:#b2a05a;background:transparent;border:0;border-radius:0;width:24px;height:auto;transition:opacity .18s ease}
+.menu-copy strong{font-family:"Game Batang",serif;font-weight:700;font-size:clamp(25px,2.35vw,42px);line-height:1.3;letter-spacing:.02em;color:#625147;text-shadow:0 1px 0 #fff9e9}
+.menu-copy small{font-family:system-ui,sans-serif;font-weight:400;font-size:clamp(10px,.76vw,14px);line-height:1.4;letter-spacing:.02em;color:#87735f}
+.menu-item.is-active .menu-copy strong{color:#855d47}
+.menu-icon,.menu-arrow{display:grid;place-items:center;opacity:0;transform:none;font-family:serif;font-size:15px;font-weight:400;color:#b49471;background:transparent;border:0;border-radius:0;width:24px;height:auto;transition:opacity .18s ease}
 .menu-item.is-active .menu-icon,.menu-item.is-active .menu-arrow{opacity:1}
 .menu-item.is-active .menu-icon{animation:cursor-glow 2s ease-in-out infinite}
-.diary-page-number{position:absolute;bottom:-8%;left:50%;transform:translateX(-50%);font-size:12px;color:#b4be80}
-.menu-note{position:absolute;left:0;right:0;bottom:-13%;min-height:1.3em;margin:0;text-align:center;font-family:system-ui,sans-serif;font-size:clamp(10px,.74vw,14px);font-weight:400;line-height:1.5;color:#74835a}
-.subtitle{position:relative;display:table;margin:12px auto 0;padding:10px 25px 12px;border-block:1px solid #b6c18c99;background:linear-gradient(90deg,transparent,#fff7cfe6 12% 88%,transparent);font-family:"Game Batang",serif;font-weight:700;font-size:clamp(19px,1.65vw,31px);line-height:1.4;letter-spacing:-.03em;color:#657147;text-shadow:0 1px 0 #fff9e9;white-space:nowrap}
-.subtitle::before,.subtitle::after{content:"◆";position:absolute;top:50%;transform:translateY(-50%);font-size:8px;color:#b3ac6a}.subtitle::before{left:0}.subtitle::after{right:0}
+.diary-page-number{position:absolute;bottom:-8%;left:50%;transform:translateX(-50%);font-size:12px;color:#c0a58a}
+.menu-note{position:absolute;left:0;right:0;bottom:-13%;min-height:1.3em;margin:0;text-align:center;font-family:system-ui,sans-serif;font-size:clamp(10px,.74vw,14px);font-weight:400;line-height:1.5;color:#8a735f}
+.subtitle{position:relative;display:table;margin:12px auto 0;padding:10px 25px 12px;border-block:1px solid #bca58b88;background:linear-gradient(90deg,transparent,#fff7e8cc 12% 88%,transparent);font-family:"Game Batang",serif;font-weight:700;font-size:clamp(19px,1.65vw,31px);line-height:1.4;letter-spacing:-.03em;color:#775c48;text-shadow:0 1px 0 #fff9e9;white-space:nowrap}
+.subtitle::before,.subtitle::after{content:"◆";position:absolute;top:50%;transform:translateY(-50%);font-size:8px;color:#b49c7f}.subtitle::before{left:0}.subtitle::after{right:0}
 .fan-label{margin:12px auto 0;font-size:clamp(10px,.78vw,15px);font-weight:500;letter-spacing:.07em;text-align:center}
 .scene-house{top:38%}.scene-bush{bottom:3.8%}
 @keyframes cursor-glow{50%{opacity:.48}}
@@ -63,7 +63,7 @@
   .bush-left {left:calc(23vw - var(--house-width) / 2 - 2vw);bottom:4svh;width:min(20vw,25svh)}
   .bush-right {left:calc(23vw + var(--house-width) / 2 - 14vw);bottom:4svh;width:min(19vw,24svh)}
   .subtitle {margin-top:6px;padding-block:7px;font-size:clamp(17px,2.5svh,24px)}
-  .fan-label {margin-top:8px;font-size:clamp(11px,1.5svh,14px);color:#697650}
+  .fan-label {margin-top:8px;font-size:clamp(11px,1.5svh,14px);color:#7e6b5b}
   .menu-sheet {top:7%;bottom:15%}
   .menu-head {padding-bottom:clamp(12px,2.2svh,24px);margin-bottom:clamp(16px,2.5svh,28px)}
   .diary-eyebrow {font-size:clamp(15px,2.1svh,21px);margin-bottom:6px}
@@ -72,7 +72,7 @@
   .menu-item {padding-block:8px}
   .menu-copy {gap:4px}
   .menu-copy strong {font-size:clamp(23px,min(2.35vw,3.3svh),34px);line-height:1.25}
-  .menu-copy small {margin-top:0;font-size:clamp(10px,1.4svh,12px);line-height:1.3;color:#6e7955}
+  .menu-copy small {margin-top:0;font-size:clamp(10px,1.4svh,12px);line-height:1.3;color:#806b58}
   .foreground-grass {width:min(28vw,30svh);bottom:-1%;z-index:10}
 }
 @media (min-width:821px) and (max-height:650px) {
@@ -88,16 +88,34 @@
   .scene-house {top:calc(50vw + 124px)}
   .scene-bush {top:calc(96vw + 124px)}
   .foreground-grass {width:35%;bottom:0}
-  .menu-copy small {color:#6e7955;margin-top:0;line-height:1.3}
+  .menu-copy small {color:#806b58;margin-top:0;line-height:1.3}
 }
 
-/* Warm spring pastels for the layered landscape. */
-body,.scene {background:#f0f3d7}
-.scene-bg {filter:sepia(.32) saturate(.3) brightness(1.15);opacity:.32}
-.scene-landscape {filter:blur(12px) sepia(.25) saturate(.38) brightness(1.18);opacity:.68}
-.scene-fence {filter:sepia(.16) saturate(.65) brightness(1.06)}
-.scene-lawn {filter:sepia(.18) saturate(.55) brightness(1.1)}
-.scene-house {filter:sepia(.16) saturate(.7) brightness(1.055)}
-.scene-bush {filter:sepia(.2) saturate(.64) brightness(1.12)}
-.foreground-grass g {fill:#bed5a5;stroke:#94b580}
-.fan-label {color:#697650}
+/* Soft storybook colors without a green-yellow cast. */
+body,.scene {background:#eef2ef}
+.scene-bg {filter:saturate(.4) brightness(1.14);opacity:.4}
+.scene-landscape {filter:blur(12px) saturate(.4) brightness(1.17);opacity:.65}
+.scene-house {filter:sepia(.05) saturate(.72) brightness(1.04)}
+.scene-bush {filter:saturate(.58) brightness(1.12)}
+.foreground-grass g {fill:#b5c9b1;stroke:#8fa990}
+.fan-label {color:#7e6b5b}
+
+/* Crop the existing landscape sprites and anchor the path to the front door. */
+.scene-ground {position:absolute;z-index:3;left:0;right:0;bottom:0;height:18svh;overflow:hidden;
+  background:#b5cf8d;filter:saturate(.48) hue-rotate(8deg) brightness(1.07)}
+.scene-ground-art {position:absolute;max-width:none;width:158.01svh;height:auto;
+  left:calc(23vw + var(--house-width) / 20 - 79.005svh);top:-62.878svh}
+.scene-fence {position:absolute;z-index:2;left:0;right:0;top:auto;bottom:18svh;height:8svh;
+  transform:none;background-image:url("./assets/title/scene-fence.png");
+  background-repeat:repeat-x;background-size:auto 88.615svh;background-position:center -56.615svh;
+  filter:saturate(.56) brightness(1.06)}
+@media(min-width:821px) {
+  .scene-house {bottom:9svh}
+  .bush-left,.bush-right {bottom:7svh}
+}
+@media(max-width:820px) {
+  .scene-ground {top:calc(103.54vw + 94px);height:auto;bottom:0}
+  .scene-ground-art {width:850.8px;left:calc(52.55% - 425.4px);top:-338.58px}
+  .scene-fence {top:calc(103.54vw + 26px);bottom:auto;height:68px;
+    background-size:auto 753.23px;background-position:center -481.23px}
+}
