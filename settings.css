@@ -1,0 +1,56 @@
+.settings-dialog{width:min(860px,88vw);height:min(710px,88svh);max-height:88svh;padding:0;border:10px solid #925d39;border-radius:24px;color:#654631;background:#fff7e8;box-shadow:0 14px 0 #603b2738,0 25px 90px #33271b50;overflow:hidden;user-select:none;font-family:"Malgun Gothic","Noto Sans KR",sans-serif;font-size:18px}
+.settings-dialog::backdrop{background:#263b2b66}
+.settings-shell{height:100%;display:flex;flex-direction:column;background:radial-gradient(ellipse at 85% 0,#fffdf7,transparent 60%),#fff7e8}
+.settings-heading{position:relative;padding:26px 34px 20px;display:flex;align-items:center;gap:18px;border-bottom:1px solid #b592652e}
+.settings-emblem{width:53px;height:53px;flex:none;display:grid;place-items:center;border:2px solid #ba946e;border-radius:50%;background:#f0e2ca}
+.settings-emblem svg{width:31px;height:31px;stroke:#825b3a;fill:none;stroke-width:1.8;stroke-linejoin:round}
+.settings-heading h2{margin:0;font-size:30px;letter-spacing:-.06em;line-height:1.25}
+.settings-heading p{margin:7px 0 0;color:#9b795a;font-size:15px}
+.settings-close{position:absolute;right:24px;top:27px;width:40px;height:40px;border:0;border-radius:50%;font-size:28px;background:#eee0ca;color:#815638;cursor:pointer}
+.settings-tabs{display:flex;gap:8px;padding:20px 34px 0}
+.settings-tabs button{flex:1;border:1px solid #c6b393;border-radius:11px 11px 0 0;padding:13px 8px;background:#efe5d2;color:#947254;cursor:pointer;font:700 17px "Malgun Gothic","Noto Sans KR",sans-serif}
+.settings-tabs button[aria-selected=true]{background:#fbf4e6;color:#67452d;border-color:#98754c;border-bottom-color:#fbf4e6;box-shadow:inset 0 4px #94a575}
+.settings-panels{min-height:0;flex:1;margin:0 34px;padding:16px 22px 18px;background:#fbf4e6;border:1px solid #c6b393;border-radius:0 0 12px 12px;overflow-y:auto;scrollbar-color:#b99b73 #f5ead8}
+.settings-panel[hidden]{display:none}
+.settings-row{display:flex;justify-content:space-between;align-items:center;gap:22px;padding:17px 0;border-bottom:1px dashed #cdbb9b;min-height:74px}
+.settings-row:last-child{border-bottom:0}
+.settings-row>label,.settings-row .setting-label{font-weight:700;font-size:18px;letter-spacing:-.04em}
+.settings-row small{display:block;margin-top:6px;color:#997959;font-size:13px;font-weight:400;line-height:1.5;letter-spacing:0}
+.settings-slider{display:flex;align-items:center;gap:14px;flex:0 0 48%}
+.settings-slider output{width:58px;flex:none;font-size:16px;font-weight:700;text-align:right;font-variant-numeric:tabular-nums;color:#896442}
+.settings-dialog input[type=range]{width:100%;height:8px;margin:0;appearance:none;border:1px solid #bdac89;border-radius:6px;background:linear-gradient(to right,#91a473 var(--range-fill,50%),#e5d7be var(--range-fill,50%));cursor:pointer}
+.settings-dialog input[type=range]::-webkit-slider-thumb{appearance:none;width:21px;height:21px;border:2px solid #9b7754;border-radius:50%;background:#fffaf0;box-shadow:0 2px 1px #947d5940}
+.settings-dialog input[type=range]::-moz-range-thumb{width:18px;height:18px;border:2px solid #9b7754;border-radius:50%;background:#fffaf0}
+.settings-dialog select{width:160px;border:1px solid #b79b75;border-radius:9px;background:#fffcf3;color:#765333;padding:10px 12px;font:inherit;font-size:16px;cursor:pointer}
+.settings-switch{position:relative;flex:none;display:flex;align-items:center;gap:10px;cursor:pointer}
+.settings-switch input{appearance:none;width:54px;height:29px;margin:0;border:1px solid #bca384;border-radius:20px;background:#dfd2bb;cursor:pointer;position:relative;transition:background .18s}
+.settings-switch input::before{content:"";position:absolute;left:3px;top:3px;width:21px;height:21px;border-radius:50%;background:#fffaf0;box-shadow:0 1px 3px #573d3333;transition:transform .18s}
+.settings-switch input:checked{background:#91a573;border-color:#778f5c}
+.settings-switch input:checked::before{transform:translateX(25px)}
+.settings-switch span{font-size:15px;width:33px;color:#95775b}
+.settings-switch input:checked~.switch-off,.settings-switch input:not(:checked)~.switch-on{display:none}
+.settings-samples{display:flex;justify-content:flex-end;gap:9px;padding-top:18px}
+.settings-small-button{border:1px solid #c6ac88;border-radius:8px;background:#fffaf0;color:#896447;padding:8px 13px;font:inherit;font-size:14px;cursor:pointer}
+.dialogue-preview{position:relative;min-height:87px;margin-top:19px;padding:22px;background:#fffdf5;border:1px solid #d2bc94;border-radius:11px}
+.dialogue-preview-label{font-size:12px;color:#9a7c5b;display:block;margin-bottom:10px}
+.dialogue-preview-text{margin:0;min-height:34px;font-size:var(--dialogue-font-size,22px);line-height:1.6;color:#67492f}
+.dialogue-preview button{position:absolute;right:12px;top:12px}
+.settings-footer{padding:20px 34px;display:flex;align-items:center;gap:18px}
+.settings-status{font-size:13px;color:#9b7c59;margin:0;flex:1;text-align:right;line-height:1.5}
+.settings-done{padding:12px 30px;background:#91a573;border:1px solid #718852;color:#fffef2;border-radius:10px;font:700 17px "Malgun Gothic","Noto Sans KR",sans-serif;cursor:pointer;box-shadow:0 3px 0 #6d824b}
+.settings-dialog button:hover{filter:brightness(1.035)}
+.settings-dialog :is(button,input,select):focus-visible{outline:3px solid #c9944e;outline-offset:4px}
+.settings-help{margin:5px 0;font-size:16px;line-height:1.7}
+.settings-help div{display:flex;align-items:center;gap:26px;padding:18px 0;border-bottom:1px dashed #cdbb9b}
+.settings-help dt{min-width:125px;font-weight:700}
+.settings-help dd{margin:0;color:#91704f}
+.settings-help kbd{display:inline-block;padding:3px 10px;background:#eee1c8;border:1px solid #c6af8d;border-bottom-width:3px;border-radius:6px;font:inherit;font-size:14px}
+.animations-off .layer-title,.animations-off .door-sign{animation:none!important;transform:none!important}
+.animations-off :is(.menu-item,.menu-content,.menu-icon,.wardrobe-tag){transition:none!important}
+.animations-off .menu-item:hover .menu-content,.animations-off .menu-item:focus-visible .menu-content,.animations-off .menu-item:hover .menu-icon,.animations-off .menu-item.is-active .menu-icon,.animations-off .wardrobe-tag:hover,.animations-off .wardrobe-tag:focus-visible{transform:none!important}
+.leaves-off .leaf-breeze,.leaves-off .bush-leaves{visibility:hidden}
+.smoke-off .chimney-smoke{visibility:hidden}
+.smoke-off .chimney-smoke span{animation-play-state:paused}
+.interaction-hints .house-touch::after,.interaction-hints .bush-touch::after{content:"?";position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);display:grid;place-items:center;width:34px;height:34px;border:2px dashed #a47a45;border-radius:50%;background:#fff6d9;color:#89603b;font:700 21px "Malgun Gothic",sans-serif;box-shadow:0 2px 8px #65412830;pointer-events:none}
+.dialogue-text{font-size:var(--dialogue-font-size,22px)}
+@media(prefers-reduced-motion:reduce){.settings-switch input,.settings-switch input::before{transition:none}}
