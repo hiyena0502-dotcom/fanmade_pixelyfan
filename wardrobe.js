@@ -1,5 +1,5 @@
 "use strict";
-(()=>{const KEY="pixely-wardrobe-v1",LAYOUT_KEY="pixely-wardrobe-layout-v1";
+(()=>{const KEY="pixely-wardrobe-v1",LAYOUT_KEY="pixely-wardrobe-layout-v2";
 const outfits={basic:{name:"기본 의상"},outing:{name:"나들이 의상"}};
 const avatar=document.getElementById("dream-avatar"),preview=document.getElementById("preview-name"),status=document.getElementById("equipped-status"),wear=document.getElementById("wear-outfit");
 let equipped="basic",selected="basic";try{const value=localStorage.getItem(KEY);if(outfits[value])equipped=value}catch{}selected=equipped;
@@ -13,6 +13,8 @@ const controls=[["book-x","옷장 X",-450,450,1,0,"px"],["book-y","옷장 Y",-30
 let values={};try{values=JSON.parse(localStorage.getItem(LAYOUT_KEY))||{}}catch{}
 const defaults=Object.fromEntries(controls.map(([key,,,,,defaultValue])=>[key,defaultValue]));
 values={...defaults,...values};
+// Ignore malformed or out-of-range saved values from earlier wardrobe versions.
+controls.forEach(([key,,min,max,,,])=>{const v=Number(values[key]);values[key]=Number.isFinite(v)&&v>=min&&v<=max?v:defaults[key]});
 const panel=document.getElementById("wardrobe-dev"),controlRoot=document.getElementById("dev-controls");
 function apply(){controls.forEach(([key,,,,,defaultValue,unit])=>{const value=Number(values[key]);values[key]=Number.isFinite(value)?value:defaultValue;document.body.style.setProperty("--"+key,values[key]+unit)});try{localStorage.setItem(LAYOUT_KEY,JSON.stringify(values))}catch{}}
 controls.forEach(([key,label,min,max,step,defaultValue])=>{const row=document.createElement("label");row.className="dev-control";const span=document.createElement("span"),input=document.createElement("input"),output=document.createElement("output");span.textContent=label;input.type="range";input.min=min;input.max=max;input.step=step;input.value=values[key];output.textContent=values[key];input.addEventListener("input",()=>{values[key]=Number(input.value);output.textContent=input.value;apply()});row.append(span,input,output);controlRoot.append(row)});apply();
