@@ -3,7 +3,7 @@ const assert=require('node:assert/strict');
 const {render,sampleRate,effectKind}=require('../sounds.js');
 
 test('every sound is finite, unclipped, audible, and fades without a hard edge',()=>{
-  const variants=[...['paper','wood','pop','soft','pixel','bubble','rustle'].map(kind=>[kind,'']),['wood','house']];
+  const variants=[...['wood','soft','pixel','bubble','rustle'].map(kind=>[kind,'']),['wood','house']];
   for(const [kind,target] of variants){
     const samples=render(kind,target);
     assert.ok(samples.length>sampleRate*.1&&samples.length<sampleRate*2,kind);
@@ -39,7 +39,7 @@ test('house and bush clicks request their own effects even when motion is disabl
 test('each interactive object has a distinct fixed effect',()=>{
   assert.equal(effectKind('house'),'wood');
   assert.equal(effectKind('bush'),'rustle');
-  assert.equal(effectKind('menu'),'pop');
+  assert.equal(effectKind('menu'),'none');
   assert.equal(effectKind('unknown'),'none');
   assert.notDeepEqual(render(effectKind('house'),'house'),render(effectKind('bush'),'bush'));
 });

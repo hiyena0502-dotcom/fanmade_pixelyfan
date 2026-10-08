@@ -33,6 +33,9 @@ test('actual playback routes each object and the switch mutes all effects withou
   assert.equal(await app.api.playEffect('house'),true);
   assert.equal(await app.api.playEffect('bush'),true);
   assert.deepEqual(app.rendered.map(args=>args.slice(0,2)),[['wood','house'],['rustle','bush']]);
+  const before=app.played.length;
+  await app.api.playEffect('menu');
+  assert.equal(app.played.length,before,'buttons are silent even with effects on');
   const toggle=app.node('effectsEnabled');toggle.checked=false;toggle.listeners.change();
   assert.equal(await app.api.playEffect('house'),false);
   assert.equal(await app.api.playEffect('bush'),false);
