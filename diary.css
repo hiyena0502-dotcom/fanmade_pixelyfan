@@ -7,7 +7,7 @@
 .fan-label{margin:2.1svh 0 0;font-size:clamp(18px,2.6svh,28px);line-height:1.2;color:#8c5936}
 .fan-label span{display:inline-block;color:#f58696;font-size:1.25em;transform:rotate(-10deg)}
 .header-star{position:absolute;left:-6%;top:57%;width:4svh;fill:none;stroke:#efb844;stroke-width:3;stroke-linejoin:round;transform:rotate(-8deg)}
-.main-menu{position:absolute;left:24%;right:14%;top:48.5%;bottom:14%;display:grid;grid-template-rows:repeat(4,minmax(0,1fr));gap:0}
+.main-menu{position:absolute;left:20%;right:15%;top:48.5%;bottom:21%;display:grid;grid-template-rows:repeat(4,minmax(0,1fr));gap:0}
 .menu-item{appearance:none;position:relative;border:0;background:transparent;color:#65391e;cursor:pointer;touch-action:manipulation}
 .main-menu .menu-item{display:grid;grid-template-columns:clamp(28px,4.7svh,48px) minmax(0,1fr) clamp(25px,4svh,42px);align-items:center;gap:clamp(9px,1.5svh,17px);padding:0 0 7px;text-align:left;min-height:0}
 .main-menu .menu-item::after{content:"";position:absolute;left:0;right:0;bottom:12%;height:2px;background:#986c4b;border-radius:60% 35% 55% 20%;transform:rotate(.7deg)}
@@ -32,6 +32,7 @@
 .heart-doodle{color:#f78491;transform:rotate(-12deg)}
 .star-doodle{color:#ffc54c}
 .flower-doodle{color:#74c5e5}
-.wardrobe-tag{position:absolute;left:61.5%;top:37.1%;width:26.5%;height:7.2%;padding:0 7px 7px;text-align:left;transform:rotate(4deg);font-size:clamp(18px,3svh,32px);font-weight:700;line-height:1.05;letter-spacing:-.07em;white-space:nowrap}
+.wardrobe-tag{position:absolute;left:65%;top:85.2%;width:25%;height:7.5%;display:flex;align-items:center;justify-content:center;gap:5px;padding:3px 5px;text-align:left;transform:rotate(3deg);font-size:clamp(16px,2.5svh,27px);font-weight:700;line-height:1.05;letter-spacing:-.07em;white-space:nowrap}
+.wardrobe-tag svg{width:1.05em;height:1.05em;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .wardrobe-tag:hover,.wardrobe-tag.is-active{color:#9e6041}
 .wardrobe-tag:focus-visible{outline-offset:1px}
