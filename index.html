@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#68caf1" />
   <title>꿈뜰이의 우당탕탕 대환장 나들이!!</title>
-  <link rel="stylesheet" href="./style.css?v=single-bush-sound-039" />
-  <link rel="stylesheet" href="./diary.css?v=single-bush-sound-039" />
-  <link rel="stylesheet" href="./settings.css?v=single-bush-sound-039" />
+  <link rel="stylesheet" href="./style.css?v=collection-menu-040" />
+  <link rel="stylesheet" href="./diary.css?v=collection-menu-040" />
+  <link rel="stylesheet" href="./settings.css?v=collection-menu-040" />
+  <link rel="stylesheet" href="./collection.css?v=collection-menu-040" />
   <link rel="preload" href="./assets/fonts/gowun-ui-bold-v2.woff" as="font" type="font/woff" crossorigin />
 </head>
 <body>
@@ -62,6 +63,9 @@
         <button class="menu-item menu-chapter" type="button" data-action="chapter">
           <span class="menu-content"><span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M16 9Q10 4 4 7v18q6-3 12 1 6-4 12-1V7q-6-3-12 2Zm0 0v17M8 12l4 1m-4 4 4 1m8-5 4-1m-4 6 4-1"/></svg></span><span class="menu-name">챕터</span></span>
         </button>
+        <button class="menu-item menu-collection" type="button" data-action="collection">
+          <span class="menu-content"><span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><rect x="5" y="7" width="22" height="21" rx="2"/><path d="M5 12h22M11 7v21m8-12 1.4 3 3.2.4-2.3 2.2.6 3.2-2.9-1.5-2.9 1.5.6-3.2-2.3-2.2 3.2-.4Z"/></svg></span><span class="menu-name">콜렉션</span></span>
+        </button>
         <button class="menu-item menu-settings" type="button" data-action="settings">
           <span class="menu-content"><span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="m13 4 6 0 1 4 4 2 4-1 3 5-3 3-1 4 2 3-5 4-3-2-4 1-2 3-6-2v-4l-3-3-4-1 1-6 4-1 2-3Z"/><circle cx="16" cy="17" r="4"/></svg></span><span class="menu-name">설정</span></span>
         </button>
@@ -81,8 +85,20 @@
       <footer class="settings-footer"><button type="button" class="settings-small-button" data-reset-settings>기본값으로</button><p class="settings-status" role="status" aria-live="polite">변경하면 바로 저장돼요</p><button type="button" class="settings-done" data-close-settings>완료</button></footer>
     </div>
   </dialog>
-  <script src="./sounds.js?v=single-bush-sound-039"></script>
-  <script src="./settings.js?v=single-bush-sound-039"></script>
-  <script src="./app.js?v=single-bush-sound-039"></script>
+  <dialog id="collection-dialog" class="settings-dialog collection-dialog" aria-labelledby="collection-title">
+    <div class="settings-shell">
+      <header class="settings-heading">
+        <span class="settings-emblem" aria-hidden="true"><svg viewBox="0 0 32 32"><rect x="5" y="7" width="22" height="21" rx="2"/><path d="M5 12h22M11 7v21m8-12 1.4 3 3.2.4-2.3 2.2.6 3.2-2.9-1.5-2.9 1.5.6-3.2-2.3-2.2 3.2-.4Z"/></svg></span>
+        <div><h2 id="collection-title">콜렉션</h2></div>
+        <button type="button" class="settings-close" aria-label="콜렉션 창 닫기" data-close-collection>×</button>
+      </header>
+      <div class="collection-empty"><svg viewBox="0 0 64 64" aria-hidden="true"><rect x="10" y="13" width="44" height="42" rx="4"/><path d="M10 23h44M22 13v42m15-25 2.8 6 6.4.8-4.6 4.4 1.2 6.4-5.8-3-5.8 3 1.2-6.4-4.6-4.4 6.4-.8Z"/></svg><p>아직 수집한 항목이 없어요</p></div>
+      <footer class="settings-footer"><button type="button" class="settings-done" data-close-collection>닫기</button></footer>
+    </div>
+  </dialog>
+  <script src="./sounds.js?v=collection-menu-040"></script>
+  <script src="./settings.js?v=collection-menu-040"></script>
+  <script src="./app.js?v=collection-menu-040"></script>
+  <script src="./collection.js?v=collection-menu-040"></script>
 </body>
 </html>
