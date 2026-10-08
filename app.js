@@ -97,6 +97,7 @@ function setActive(item){
 }
 
 items.forEach((item)=>{
+  item.addEventListener("click",()=>{void window.PixelySettings.playEffect("menu");});
   item.addEventListener("mouseenter",()=>setActive(item));
   item.addEventListener("focus",()=>setActive(item));
 });

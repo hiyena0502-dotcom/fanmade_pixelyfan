@@ -1,9 +1,9 @@
 "use strict";
 
 (() => {
-  const DEFAULTS=Object.freeze({masterVolume:80,effectsVolume:75,textVolume:45,effectsSound:"none",textSound:"none",textSpeed:35,textSize:22,autoDelay:2500,motion:true,interactionHints:false,skipReadOnly:true,autoSave:true});
+  const DEFAULTS=Object.freeze({masterVolume:80,effectsVolume:75,textVolume:45,effectsEnabled:true,textSound:"none",textSpeed:35,textSize:22,autoDelay:2500,motion:true,interactionHints:false,skipReadOnly:true,autoSave:true});
   const numeric={masterVolume:[0,100],effectsVolume:[0,100],textVolume:[0,100],autoDelay:[500,5000]};
-  const choices={textSpeed:[15,35,65,0],textSize:[18,22,26],effectsSound:["none","paper","wood","pop"],textSound:["none","soft","pixel","bubble"]};
+  const choices={textSpeed:[15,35,65,0],textSize:[18,22,26],textSound:["none","soft","pixel","bubble"]};
   function normalize(value){
     const source=value&&typeof value==="object"&&!Array.isArray(value)?value:{};
     // Fold older independent switches into one preference without re-enabling disabled effects.
@@ -19,7 +19,7 @@
       return [key,next];
     }));
   }
-  function volume(settings,bus){return settings.masterVolume/100*(settings[`${bus}Volume`]??100)/100;}
+  function volume(settings,bus){return bus==="effects"&&!settings.effectsEnabled?0:settings.masterVolume/100*(settings[`${bus}Volume`]??100)/100;}
   function canSkip(settings,alreadyRead){return !settings.skipReadOnly||alreadyRead===true;}
   if(typeof module!=="undefined"&&module.exports){module.exports={DEFAULTS,normalize,volume,canSkip};return;}
 
@@ -52,6 +52,7 @@
       }
     });
     dialog.querySelectorAll("[data-sound-check]").forEach(button=>{button.disabled=settings[`${button.dataset.soundCheck}Sound`]==="none";});
+    dialog.querySelector('[data-setting="effectsVolume"]').disabled=!settings.effectsEnabled;
   }
   function apply(){
     document.body.classList.toggle("motions-off",!settings.motion);
@@ -138,7 +139,8 @@
   dialog.querySelector("[data-replay-preview]").addEventListener("click",showPreview);
 
   async function playSound(bus,{target="",previewSound=false}={}){
-    const kind=settings[`${bus}Sound`];
+    if(bus==="effects"&&!settings.effectsEnabled) return false;
+    const kind=bus==="effects"?window.PixelySounds.effectKind(target):settings.textSound;
     if(kind==="none") return;
     const Audio=window.AudioContext||window.webkitAudioContext;
     if(!Audio){if(previewSound) status.textContent="이 브라우저에서는 소리 미리듣기를 사용할 수 없어요";return false;}
@@ -169,5 +171,7 @@
     }catch{if(previewSound) status.textContent="소리를 재생하지 못했어요";return false;}
   }
   dialog.querySelectorAll("[data-sound-check]").forEach(button=>button.addEventListener("click",()=>playSound(button.dataset.soundCheck,{previewSound:true})));
+  // Each UI button has a fixed tap sound; voice preview keeps its own audio.
+  dialog.querySelectorAll('button:not([data-sound-check])').forEach(button=>button.addEventListener("click",()=>{void playSound("effects",{target:"menu"});}));
   syncControls();apply();
 })();

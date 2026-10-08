@@ -78,7 +78,8 @@
     }
     return samples;
   }
-  const api=Object.freeze({sampleRate:RATE,render});
+  function effectKind(target){return ({house:"wood",bush:"paper",menu:"pop"})[target]??"none";}
+  const api=Object.freeze({sampleRate:RATE,render,effectKind});
   if(typeof module!=="undefined"&&module.exports) module.exports=api;
   else window.PixelySounds=api;
 })();

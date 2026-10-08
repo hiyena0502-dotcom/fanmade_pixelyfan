@@ -1,6 +1,6 @@
 const test=require('node:test');
 const assert=require('node:assert/strict');
-const {render,sampleRate}=require('../sounds.js');
+const {render,sampleRate,effectKind}=require('../sounds.js');
 
 test('every sound is finite, unclipped, audible, and fades without a hard edge',()=>{
   const variants=[...['paper','wood','pop','soft','pixel','bubble'].map(kind=>[kind,'']),...['paper','wood','pop'].flatMap(kind=>['house','bush'].map(target=>[kind,target]))];
@@ -22,7 +22,7 @@ test('every sound is finite, unclipped, audible, and fades without a hard edge',
   assert.equal(render('invalid').length,0);
 });
 
-test('house and bush clicks use the selected effect even when motion is disabled',()=>{
+test('house and bush clicks request their own effects even when motion is disabled',()=>{
   const vm=require('node:vm'),fs=require('node:fs');
   const heard=[],animated=[];
   let motion=false;
@@ -34,4 +34,12 @@ test('house and bush clicks use the selected effect even when motion is disabled
   assert.deepEqual(heard,['house','bush']);assert.deepEqual(animated,[]);
   motion=true;handlers.houseClick();
   assert.deepEqual(heard,['house','bush','house']);assert.deepEqual(animated,['house','sign']);
+});
+
+test('each interactive object has a distinct fixed effect',()=>{
+  assert.equal(effectKind('house'),'wood');
+  assert.equal(effectKind('bush'),'paper');
+  assert.equal(effectKind('menu'),'pop');
+  assert.equal(effectKind('unknown'),'none');
+  assert.notDeepEqual(render(effectKind('house'),'house'),render(effectKind('bush'),'bush'));
 });
