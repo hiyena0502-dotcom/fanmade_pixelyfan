@@ -9,15 +9,15 @@ button{font:inherit}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
 .scene{position:absolute;inset:0;z-index:-1;background:#7ccff2 url("./assets/title/storybook-garden-oct8.webp") center/cover no-repeat}
 .scene-render{position:absolute;left:0;bottom:0;width:auto;height:100%;max-width:none}
-.leaf-breeze{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none}
-.drifting-leaf{position:absolute;left:106%;top:var(--leaf-top);width:var(--leaf-size);height:var(--leaf-size);opacity:var(--leaf-opacity);animation:leaf-travel var(--leaf-duration) linear var(--leaf-delay) infinite;will-change:transform}
+.leaf-breeze{position:absolute;inset:0;z-index:4;overflow:hidden;pointer-events:none;--motion-scale:1}
+.drifting-leaf{position:absolute;left:106%;top:var(--leaf-top);width:var(--leaf-size);height:var(--leaf-size);opacity:var(--leaf-opacity);animation:leaf-travel calc(var(--leaf-duration) * var(--motion-scale)) linear calc(var(--leaf-delay) * var(--motion-scale)) infinite;will-change:transform}
 .leaf-sway{display:block;width:100%;height:100%;animation:leaf-sway var(--sway-duration) ease-in-out var(--sway-delay) infinite}
-.leaf-blade{display:block;width:100%;height:100%;overflow:visible;color:var(--leaf-color);animation:leaf-tumble var(--turn-duration) ease-in-out var(--sway-delay) infinite}
+.leaf-blade{display:block;width:100%;height:100%;overflow:visible;color:var(--leaf-color);filter:drop-shadow(0 1px 1px #244e373b);animation:leaf-tumble var(--turn-duration) ease-in-out var(--sway-delay) infinite}
 .leaf-vein{fill:none;stroke:#f1ffd4;stroke-opacity:.48;stroke-width:1.25;stroke-linecap:round}
 .leaf-breeze.is-paused *{animation-play-state:paused}
 @keyframes leaf-travel{from{transform:translate3d(0,0,0)}to{transform:translate3d(-120vw,var(--leaf-drift),0)}}
 @keyframes leaf-sway{0%,100%{transform:translate3d(0,calc(var(--sway-height) * -.5),0)}50%{transform:translate3d(0,var(--sway-height),0)}}
-@keyframes leaf-tumble{0%{transform:rotate(var(--leaf-angle)) rotateY(0deg)}25%{transform:rotate(calc(var(--leaf-angle) + 60deg)) rotateY(72deg)}50%{transform:rotate(calc(var(--leaf-angle) + 145deg)) rotateY(160deg)}75%{transform:rotate(calc(var(--leaf-angle) + 245deg)) rotateY(255deg)}100%{transform:rotate(calc(var(--leaf-angle) + 360deg)) rotateY(360deg)}}
+@keyframes leaf-tumble{0%{transform:rotate(var(--leaf-angle)) scaleX(1)}25%{transform:rotate(calc(var(--leaf-angle) + 55deg)) scaleX(.55)}50%{transform:rotate(calc(var(--leaf-angle) + 140deg)) scaleX(.9)}75%{transform:rotate(calc(var(--leaf-angle) + 250deg)) scaleX(.6)}100%{transform:rotate(calc(var(--leaf-angle) + 360deg)) scaleX(1)}}
 .hero{position:absolute;z-index:2;left:1.8vw;top:1.2svh;width:min(46vw,74svh)}
 .title-art{position:relative;width:100%;aspect-ratio:1492/839;overflow:hidden}
 .main-title{position:absolute;width:137.2654%;max-width:none;height:auto;left:-19.6381%;top:-18.236%;filter:drop-shadow(0 2px 2px #87533215)}
@@ -32,4 +32,4 @@ button{font:inherit}
 .notebook{position:absolute;left:59.228515625%;top:3.560529%;width:33.3984375%;height:92.879959%;container-type:size;pointer-events:auto}
 .journal-base{position:absolute;inset:0;overflow:hidden;pointer-events:none}
 .journal-art{position:absolute;width:299.415205%;height:auto;max-width:none;left:-177.339181%;top:-3.833516%}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}.leaf-breeze{display:none}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}.leaf-breeze{--motion-scale:2.5}.leaf-sway,.leaf-blade{animation:none}.leaf-blade{transform:rotate(var(--leaf-angle))}}
