@@ -101,15 +101,15 @@ if(breeze){
   const leaves=[];
 
   function spawn(leaf){
-    leaf.size=random(32,48)*Math.max(.75,Math.min(1.15,width/1920));
+    leaf.size=random(24,36)*Math.max(.75,Math.min(1.15,width/1920));
     leaf.x=width+leaf.size+random(0,width*.12);
     leaf.y=random(-leaf.size,height*.48);
-    leaf.vx=-random(85,150)*width/1920;
+    leaf.vx=-random(.085,.12)*width;
     leaf.vy=random(10,25)*height/911;
     leaf.phase=random(0,Math.PI*2);
     leaf.flutter=random(1.2,2.3);
     leaf.angle=random(0,360);
-    leaf.turn=random(-50,50);
+    leaf.turn=-random(55,100);
     leaf.age=0;
     leaf.element.style.width=`${leaf.size}px`;
     leaf.element.style.height=`${leaf.size}px`;
@@ -131,8 +131,8 @@ if(breeze){
 
   function render(leaf){
     leaf.element.style.transform=`translate3d(${leaf.x.toFixed(2)}px,${leaf.y.toFixed(2)}px,0)`;
-    const flip=motionPreference.matches?1:.72+Math.sin(leaf.age*1.7+leaf.phase)*.25;
-    leaf.blade.style.transform=`rotate(${leaf.angle.toFixed(2)}deg) scaleX(${flip.toFixed(3)})`;
+    const flip=motionPreference.matches?1:Math.cos(leaf.age*1.7+leaf.phase);
+    leaf.blade.style.transform=`rotate(${leaf.angle.toFixed(2)}deg) scaleX(${flip.toFixed(3)}) scaleY(.72)`;
   }
 
   for(let i=0;i<8;i++){
