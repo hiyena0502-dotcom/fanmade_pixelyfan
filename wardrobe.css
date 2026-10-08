@@ -35,3 +35,9 @@ html,body{min-height:100%;overflow:hidden}.wardrobe-page{--book-x:0px;--book-y:0
 .wardrobe-header{height:15%;min-height:0;padding-top:clamp(14px,2.6vh,28px)}
 .wardrobe-pages{height:83%;}
 @media(max-width:800px){.wardrobe-book{width:97vw;height:88svh;min-height:0}}
+
+/* Full-screen desktop wardrobe: nearly the entire visible game area. */
+.wardrobe-book{width:calc(100vw - 36px);max-width:none;height:calc(100svh - 64px);max-height:none;min-height:0;box-sizing:border-box;}
+.wardrobe-header{height:15%;}
+.wardrobe-pages{height:83%;}
+@media(max-width:800px){.wardrobe-book{width:calc(100vw - 14px);height:calc(100svh - 48px)}}
