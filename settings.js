@@ -31,7 +31,7 @@
   const status=dialog.querySelector(".settings-status");
   const preview=dialog.querySelector(".dialogue-preview-text");
   const media=new Set();
-  let settings,storageAvailable=true,audioContext,previewFrame=0;
+  let settings,storageAvailable=true,audioContext,activeSound,previewFrame=0;
   try{settings=normalize(JSON.parse(localStorage.getItem(KEY)));}catch{settings=normalize();}
 
   function persist(){
@@ -62,6 +62,7 @@
     preview.style.fontSize=`${settings.textSize}px`;
     document.querySelectorAll("audio[data-audio-bus],video[data-audio-bus]").forEach(element=>media.add(element));
     media.forEach(element=>{element.volume=volume(settings,element.dataset.audioBus||"effects");});
+    if(activeSound) activeSound.gain.gain.setValueAtTime(volume(settings,activeSound.bus),audioContext.currentTime);
     dispatchEvent(new CustomEvent("pixely:settingschange",{detail:{...settings}}));
   }
   function update(key,value){settings=normalize({...settings,[key]:value});syncControls();apply();persist();}
@@ -143,18 +144,19 @@
     try{
       audioContext??=new Audio();
       if(audioContext.state==="suspended") await audioContext.resume();
-      const level=volume(settings,bus),count=bus==="text"?3:1;
+      const level=volume(settings,bus);
       if(!level){status.textContent="현재 음량이 0으로 설정돼 있어요";return;}
-      const tones={paper:{type:"triangle",start:1800,end:450,duration:.045,level:.075},wood:{type:"sine",start:380,end:150,duration:.085,level:.2},pop:{type:"sine",start:390,end:880,duration:.095,level:.14},soft:{type:"sine",start:620,end:470,duration:.04,level:.09},pixel:{type:"triangle",start:1050,end:920,duration:.035,level:.06},bubble:{type:"sine",start:320,end:610,duration:.055,level:.11}};
-      const tone=tones[kind];
-      for(let i=0;i<count;i++){
-        const start=audioContext.currentTime+i*.13,oscillator=audioContext.createOscillator(),gain=audioContext.createGain();
-        oscillator.type=tone.type;oscillator.frequency.setValueAtTime(tone.start,start);
-        oscillator.frequency.exponentialRampToValueAtTime(tone.end,start+tone.duration);
-        gain.gain.setValueAtTime(0,start);gain.gain.linearRampToValueAtTime(level*tone.level,start+.003);gain.gain.exponentialRampToValueAtTime(.0001,start+tone.duration);
-        oscillator.connect(gain);gain.connect(audioContext.destination);oscillator.start(start);oscillator.stop(start+tone.duration+.01);
-        oscillator.onended=()=>{oscillator.disconnect();gain.disconnect();};
-      }
+      const samples=window.PixelySounds.render(kind);
+      const buffer=audioContext.createBuffer(1,samples.length,window.PixelySounds.sampleRate);
+      buffer.copyToChannel(samples,0);
+      // Repeated previews replace the previous phrase instead of overlapping it.
+      if(activeSound){activeSound.source.stop();activeSound.source.disconnect();activeSound.gain.disconnect();}
+      const source=audioContext.createBufferSource(),gain=audioContext.createGain();
+      source.buffer=buffer;gain.gain.value=level;
+      source.connect(gain);gain.connect(audioContext.destination);
+      activeSound={source,gain,bus};
+      source.onended=()=>{source.disconnect();gain.disconnect();if(activeSound?.source===source) activeSound=null;};
+      source.start();
       status.textContent="선택한 소리를 들려드려요";
     }catch{status.textContent="소리를 재생하지 못했어요";}
   }
