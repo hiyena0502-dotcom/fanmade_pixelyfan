@@ -1,4 +1,4 @@
-@font-face{font-family:"DreamUI";src:url("./assets/fonts/gowun-ui-bold-v3.woff") format("woff");font-weight:700;font-display:swap}
+@font-face{font-family:"DreamUI";src:url("./assets/fonts/gaegu-ui-bold-v2.woff") format("woff");font-weight:700;font-display:swap}
 @font-face{font-family:"DreamUI";src:url("./assets/fonts/gaegu-ui-regular.woff") format("woff");font-weight:400;font-display:swap}
 :root{--ink:#65452f;--muted:#94795d;--border:#e6d5bc;--paper:#fffaf0;--blue:#5c97b5;--accent:#e8b583}
 *{box-sizing:border-box}
