@@ -1,8 +1,8 @@
-.journal-heading{position:absolute;left:17%;right:11%;top:9%;text-align:left;font-weight:700;transform:rotate(-3deg)}
+.journal-heading{position:absolute;left:12.573099%;top:6.571741%;width:75.877193%;text-align:left;font-weight:700}
 .anniversary-art{position:relative;width:100%;overflow:hidden}
 .anniversary-art img{position:absolute;height:auto;max-width:none}
-.fan-label{margin:2.1cqh 0 0;font-size:clamp(18px,2.6cqh,28px);line-height:1.2;color:#8c5936}
-.fan-label span{display:inline-block;color:#f58696;font-size:1.25em;transform:rotate(-10deg)}
+.fan-label{display:flex;align-items:center;gap:.35em;width:fit-content;margin:1.8cqh 0 0 3%;font-family:"Game Hand","Malgun Gothic",sans-serif;font-size:clamp(23px,3.7cqh,37px);font-weight:700;line-height:1.1;letter-spacing:-.04em;white-space:nowrap;color:#754027;transform:rotate(-2deg);transform-origin:left center}
+.fan-label span{display:inline-block;color:#f17c91;font-size:1.05em;line-height:1;transform:rotate(-7deg)}
 .main-menu{position:absolute;left:20%;right:15%;top:48.5%;bottom:21%;display:grid;grid-template-rows:repeat(4,minmax(0,1fr));gap:0}
 .menu-item{appearance:none;position:relative;border:0;background:transparent;color:#65391e;cursor:pointer;touch-action:manipulation}
 .main-menu .menu-item{display:grid;grid-template-columns:clamp(28px,4.7cqh,48px) minmax(0,1fr) clamp(25px,4cqh,42px);align-items:center;gap:clamp(9px,1.5cqh,17px);padding:0 0 7px;text-align:left;min-height:0}
@@ -28,7 +28,10 @@
 .heart-doodle{color:#f78491;transform:rotate(-12deg)}
 .star-doodle{color:#ffc54c}
 .flower-doodle{color:#74c5e5}
-.wardrobe-tag{position:absolute;left:65%;top:85.2%;width:25%;height:7.5%;display:flex;align-items:center;justify-content:center;gap:5px;padding:3px 5px;text-align:left;transform:rotate(3deg);font-size:clamp(16px,2.5cqh,27px);font-weight:700;line-height:1.05;letter-spacing:-.07em;white-space:nowrap}
+.wardrobe-tag{position:absolute;left:64.327485%;top:35.37897%;width:27.923977%;height:10.952902%;padding:0;font-size:clamp(18px,2.9cqh,31px);font-weight:700;line-height:1.05;letter-spacing:-.07em;white-space:nowrap}
+.wardrobe-backing{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.wardrobe-backing img{position:absolute;width:1072.251309%;height:auto;max-width:none;left:-865.445026%;top:-358%}
+.wardrobe-content{position:absolute;inset:18% 8% 18% 6%;display:flex;align-items:center;justify-content:center;gap:5px;transform:rotate(9deg)}
 .wardrobe-tag svg{width:1.05em;height:1.05em;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .wardrobe-tag:hover,.wardrobe-tag.is-active{color:#9e6041}
 .wardrobe-tag:focus-visible{outline-offset:1px}
@@ -36,13 +39,14 @@
 .note-stickers{position:absolute;inset:0;pointer-events:none}
 .note-sticker{position:absolute;overflow:hidden}
 .note-sticker img{position:absolute;height:auto;max-width:none}
-.sticker-sprig{left:10.81871345%;top:39.32092004%;width:18.27485380%;height:13.14348302%}
-.sticker-sprig img{width:1638.40000000%;left:-1080.00000000%;top:-326.66666667%}
-.sticker-daisy{left:72.95321637%;top:36.91128149%;width:17.54385965%;height:12.04819277%}
-.sticker-daisy img{width:1706.66666667%;left:-1479.16666667%;top:-336.36363636%}
-.sticker-vine{left:8.18713450%;top:68.01752464%;width:19.29824561%;height:29.79189485%}
-.sticker-vine img{width:1551.51515152%;left:-1009.09090909%;top:-240.44117647%}
+.anniversary-art{aspect-ratio:519/250}
+.anniversary-art img{width:394.60500963%;left:-250.28901734%;top:-38%}
 
+.sticker-sprig{left:10.96491228%;top:39.43044907%;width:18.71345029%;height:13.47207010%}
+.sticker-sprig img{width:1600.00000000%;left:-1006.25000000%;top:-321.13821138%}
 
-.anniversary-art{aspect-ratio:1880/730}
-.anniversary-art img{width:103.29787234%;left:-2.28723404%;top:-7.53424658%}
+.sticker-daisy{left:71.19883041%;top:82.69441402%;width:19.88304094%;height:12.92442497%}
+.sticker-daisy img{width:1505.88235294%;left:-1250.00000000%;top:-669.49152542%}
+
+.sticker-vine{left:8.33333333%;top:67.57940854%;width:20.17543860%;height:30.23001095%}
+.sticker-vine img{width:1484.05797101%;left:-920.28985507%;top:-236.23188406%}
