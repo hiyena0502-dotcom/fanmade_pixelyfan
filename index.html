@@ -3,110 +3,48 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#eef2ef" />
+  <meta name="theme-color" content="#7ccff2" />
   <title>꿈뜰이의 우당탕탕 대환장 나들이!!</title>
-  <link rel="stylesheet" href="./style.css?v=house-journal-015" />
-  <link rel="stylesheet" href="./diary.css?v=house-journal-015" />
-  <link rel="preload" href="./assets/fonts/gowun-menu-bold.woff" as="font" type="font/woff" crossorigin />
+  <link rel="stylesheet" href="./style.css?v=scrapbook-live-016" />
+  <link rel="stylesheet" href="./diary.css?v=scrapbook-live-016" />
+  <link rel="preload" href="./assets/fonts/gaegu-ui-bold.woff" as="font" type="font/woff" crossorigin />
 </head>
 <body>
   <main class="title-screen" id="title-screen">
     <div class="scene" aria-hidden="true">
-      <img draggable="false" class="scene-layer scene-bg" src="./assets/title/scene-bg.png" alt="" />
-      <img draggable="false" class="scene-layer scene-landscape" src="./assets/title/scene-landscape.png" alt="" />
-      <div class="scene-fence"></div>
-      <div class="scene-ground"><img draggable="false" class="scene-ground-art" src="./assets/title/scene-lawn.png" alt="" /></div>
-      <div class="scene-house"><img draggable="false" src="./assets/title/scene-house.png" alt="" /></div>
-      <div class="scene-bush bush-left"><img draggable="false" src="./assets/title/scene-bushes-user-oct7.png" alt="" /></div>
-      <div class="scene-bush bush-right"><img draggable="false" src="./assets/title/scene-bushes-user-oct7.png" alt="" /></div>
+      <img class="scene-render" draggable="false" src="./assets/title/storybook-garden-oct8.webp" alt="" />
     </div>
-
     <section class="hero" aria-labelledby="game-title">
-      <div class="title-art"><img draggable="false" id="game-title" class="main-title" src="./assets/title/title-user-oct6.png" alt="꿈뜰이의 우당탕탕 대환장 나들이!!" /></div>
-      <p class="subtitle">초대는 받았고, 귀가는 미정!</p>
-      <p class="fan-label">잠뜰TV 13주년 기념 팬게임</p>
+      <h1 id="game-title" class="sr-only">꿈뜰이의 우당탕탕 대환장 나들이!!</h1>
+      <div class="title-art"><img class="main-title" draggable="false" src="./assets/title/title-user-oct8.webp" alt="꿈뜰이의 우당탕탕 대환장 나들이!!" /></div>
+      <p class="subtitle"><span class="ribbon-star" aria-hidden="true">★</span><span>초대는 받았고, 귀가는 <em>미정!</em></span><span class="ribbon-heart" aria-hidden="true">♥</span></p>
     </section>
-
     <section class="notebook" aria-label="메인 메뉴">
-      <div class="notebook-page">
-        <div class="diary-decor" aria-hidden="true">
-          <span class="washi washi-check"></span><span class="washi washi-dots"></span>
-          <svg class="flower-sticker" viewBox="0 0 150 120"><path d="M35 102Q42 70 66 45M81 105Q95 83 113 63" fill="none" stroke="#81a18b" stroke-width="4" stroke-linecap="round"/><path d="M45 83Q17 61 21 85Q30 97 43 95M55 68Q81 62 73 81Q60 89 51 80M93 87Q74 65 73 85Q78 98 88 98" fill="#9dbba5" stroke="#fffaf1" stroke-width="3"/><g fill="#f1cbc8" stroke="#fffaf1" stroke-width="4"><ellipse cx="66" cy="27" rx="11" ry="18"/><ellipse cx="66" cy="57" rx="11" ry="18"/><ellipse cx="50" cy="42" rx="18" ry="11"/><ellipse cx="82" cy="42" rx="18" ry="11"/></g><circle cx="66" cy="42" r="9" fill="#d9b47f" stroke="#fffaf1" stroke-width="3"/><g fill="#c4d9e5" stroke="#fffaf1" stroke-width="4"><ellipse cx="115" cy="45" rx="8" ry="13"/><ellipse cx="115" cy="67" rx="8" ry="13"/><ellipse cx="103" cy="56" rx="13" ry="8"/><ellipse cx="127" cy="56" rx="13" ry="8"/></g><circle cx="115" cy="56" r="6" fill="#d9b47f"/><path d="M15 32C1 19 10 10 17 20C28 8 37 20 15 32Z" fill="#e5b0ac" stroke="#fffaf1" stroke-width="4"/></svg>
-          <svg class="star-sticker" viewBox="0 0 80 100"><path d="m40 8 9 20 22 3-16 15 4 23-20-11-19 11 4-23L8 31l22-3Z" fill="#e7c898" stroke="#fffaf1" stroke-width="7" stroke-linejoin="round"/><path d="m41 18 5 14 15 2" fill="none" stroke="#f9e4bd" stroke-width="3" stroke-linecap="round"/><path d="M23 87C11 75 20 67 26 76C37 66 44 79 23 87Z" fill="#c3d8d0" stroke="#fffaf1" stroke-width="4"/></svg>
-          <span class="diary-tab tab-rose"></span><span class="diary-tab tab-blue"></span>
-        </div>
-        <div class="ring-stack" aria-hidden="true">
-          <span></span><span></span><span></span><span></span><span></span>
-          <span></span><span></span><span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-        </div>
-
-        <div class="menu-sheet">
-          <header class="menu-head">
-            <div class="diary-heading">
-              <span class="diary-eyebrow">꿈뜰이의</span>
-              <h2 class="diary-title">나들이 다이어리</h2>
-
-            </div>
-            <svg class="diary-doodle" viewBox="0 0 80 80" aria-hidden="true"><path d="m41 9 8 19 20 3-15 14 4 21-18-11-18 10 4-21-14-14 21-2z"/><path d="m13 12-4-6M63 13l6-7M65 61l8 4M9 48l-7 2"/></svg>
-          </header>
-
-          <nav class="main-menu">
-            <button class="menu-item menu-new is-active" type="button" data-action="new">
-              <span class="menu-icon" aria-hidden="true">◆</span>
-              <span class="menu-copy"><strong>새 게임</strong><small>처음부터 시작하기</small></span>
-              <span class="menu-arrow" aria-hidden="true">◆</span>
-            </button>
-
-            <button class="menu-item menu-continue" type="button" data-action="continue">
-              <span class="menu-icon" aria-hidden="true">◆</span>
-              <span class="menu-copy"><strong>이어하기</strong><small>마지막 기록에서 계속</small></span>
-              <span class="menu-arrow" aria-hidden="true">◆</span>
-            </button>
-
-            <button class="menu-item menu-chapter" type="button" data-action="chapter">
-              <span class="menu-icon" aria-hidden="true">◆</span>
-              <span class="menu-copy"><strong>챕터</strong><small>열린 챕터 확인하기</small></span>
-              <span class="menu-arrow" aria-hidden="true">◆</span>
-            </button>
-
-            <button class="menu-item menu-wardrobe" type="button" data-action="wardrobe">
-              <span class="menu-icon" aria-hidden="true">◆</span>
-              <span class="menu-copy"><strong>꿈뜰이 옷장</strong><small>꿈뜰이 꾸미기</small></span>
-              <span class="menu-arrow" aria-hidden="true">◆</span>
-            </button>
-
-            <button class="menu-item menu-settings" type="button" data-action="settings">
-              <span class="menu-icon" aria-hidden="true">◆</span>
-              <span class="menu-copy"><strong>설정</strong><small>화면 · 소리 · 대사 설정</small></span>
-              <span class="menu-arrow" aria-hidden="true">◆</span>
-            </button>
-
-          </nav>
-
-          <span class="diary-page-number" aria-hidden="true">◆</span>
-          <p class="menu-note" id="menu-note" aria-live="polite"></p>
-        </div>
-      </div>
+      <img class="journal-art" draggable="false" src="./assets/title/scrapbook-diary-oct8.webp" alt="" />
+      <header class="journal-heading">
+        <h2><span class="channel-name">잠뜰TV</span> <span class="anniversary-years">13주년</span></h2>
+        <p class="anniversary-word">ANNIVERSARY</p>
+        <p class="fan-label">팬메이드 게임 <span aria-hidden="true">♥</span></p>
+        <svg class="header-star" viewBox="0 0 48 48" aria-hidden="true"><path d="m24 4 6 13 14 2-10 10 2 14-12-7-12 7 2-14L4 19l14-2Z"/></svg>
+      </header>
+      <button class="menu-item wardrobe-tag" type="button" data-action="wardrobe" aria-label="꿈뜰이 옷장">꿈뜰이 옷장</button>
+      <nav class="main-menu" aria-label="게임 메뉴">
+        <button class="menu-item menu-new is-active" type="button" data-action="new" aria-current="true">
+          <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path class="icon-fill" d="m11 7 14 9-14 9Z"/></svg></span><span class="menu-name">새 게임</span><span class="row-doodle leaf-doodle" aria-hidden="true"><svg viewBox="0 0 40 36"><path d="M8 31 30 7"/><path d="M13 23Q2 4 18 12Q24 16 13 23M22 16Q19 1 33 4Q38 10 22 16"/></svg></span>
+        </button>
+        <button class="menu-item menu-continue" type="button" data-action="continue">
+          <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M9 5h14v23l-7-5-7 5Z"/><path d="M12 9h8"/></svg></span><span class="menu-name">이어하기</span><span class="row-doodle heart-doodle" aria-hidden="true">♡</span>
+        </button>
+        <button class="menu-item menu-chapter" type="button" data-action="chapter">
+          <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M16 9Q10 4 4 7v18q6-3 12 1 6-4 12-1V7q-6-3-12 2Zm0 0v17M8 12l4 1m-4 4 4 1m8-5 4-1m-4 6 4-1"/></svg></span><span class="menu-name">챕터</span><span class="row-doodle star-doodle" aria-hidden="true">☆</span>
+        </button>
+        <button class="menu-item menu-settings" type="button" data-action="settings">
+          <span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="m13 4 6 0 1 4 4 2 4-1 3 5-3 3-1 4 2 3-5 4-3-2-4 1-2 3-6-2v-4l-3-3-4-1 1-6 4-1 2-3Z"/><circle cx="16" cy="17" r="4"/></svg></span><span class="menu-name">설정</span><span class="row-doodle flower-doodle" aria-hidden="true">✿</span>
+        </button>
+      </nav>
     </section>
-    <svg class="foreground-grass" aria-hidden="true" viewBox="0 0 740 230" xmlns="http://www.w3.org/2000/svg">
-      <g fill="#76cbb0" stroke="#4c9f89" stroke-width="1.4">
-        <path d="M142 230C141 171 128 132 89 104C132 116 151 153 158 230Z"/>
-        <path d="M183 230C183 170 192 136 221 114C211 149 207 186 201 230Z"/>
-        <path d="M265 230C262 174 272 117 302 63C289 134 290 182 284 230Z"/>
-        <path d="M311 230C310 127 320 68 299 4C337 55 348 159 335 230Z"/>
-        <path d="M363 230C349 140 337 89 338 38C361 90 373 139 382 230Z"/>
-        <path d="M409 230C403 155 415 96 443 39C433 102 433 166 428 230Z"/>
-        <path d="M434 230C447 143 472 99 527 75C485 123 467 177 454 230Z"/>
-        <path d="M478 230C497 171 522 134 570 128C531 159 513 193 504 230Z"/>
-        <path d="M535 230C524 174 535 113 570 91C551 143 555 186 554 230Z"/>
-        <path d="M576 230C582 167 627 145 675 149C634 166 614 192 601 230Z"/>
-        <path d="M637 230C636 168 652 96 686 55C665 116 665 175 658 230Z"/>
-        <path d="M688 230C686 177 706 143 739 132C713 165 709 198 710 230Z"/>
-        <path d="M64 230C67 191 62 162 32 152C71 153 85 187 84 230Z"/>
-      </g>
-    </svg>
+    <p class="menu-note" id="menu-note" aria-live="polite"></p>
   </main>
-  <script src="./app.js?v=house-journal-015"></script>
+  <script src="./app.js?v=scrapbook-live-016"></script>
 </body>
 </html>
