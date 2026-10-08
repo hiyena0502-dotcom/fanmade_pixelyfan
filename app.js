@@ -1,5 +1,22 @@
 "use strict";
 
+const house=document.querySelector(".layer-house");
+const houseTouch=document.querySelector(".house-touch");
+let houseReaction;
+houseTouch?.addEventListener("click",()=>{
+  houseReaction?.cancel();
+  const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  houseReaction=house.animate(reduced?[
+    {filter:"brightness(1)"},{filter:"brightness(1.08)"},{filter:"brightness(1)"}
+  ]:[
+    {transform:"translateY(0) rotate(0deg) scale(1)"},
+    {transform:"translateY(.3%) rotate(-.7deg) scale(1.008,.99)",offset:.2},
+    {transform:"translateY(-.25%) rotate(.6deg) scale(.998,1.004)",offset:.45},
+    {transform:"translateY(.1%) rotate(-.3deg) scale(1)",offset:.7},
+    {transform:"translateY(0) rotate(0deg) scale(1)"}
+  ],{duration:reduced?250:480,easing:"ease-out"});
+});
+
 const items=[...document.querySelectorAll(".menu-item:not(:disabled)")];
 
 function setActive(item){
