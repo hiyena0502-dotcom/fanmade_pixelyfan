@@ -2,10 +2,9 @@
 .anniversary-art{position:relative;width:100%;overflow:hidden}
 .anniversary-art img{position:absolute;height:auto;max-width:none}
 .fan-label{display:flex;align-items:center;gap:.35em;width:fit-content;margin:1.8cqh 0 0 3%;font-family:"Game Hand","Malgun Gothic",sans-serif;font-size:clamp(23px,3.7cqh,37px);font-weight:700;line-height:1.1;letter-spacing:-.04em;white-space:nowrap;color:#754027;transform:rotate(-2deg);transform-origin:left center}
-.fan-label span{display:inline-block;color:#f17c91;font-size:1.05em;line-height:1;transform:rotate(-7deg)}
-.main-menu{position:absolute;left:20%;right:15%;top:48.5%;bottom:21%;display:grid;grid-template-rows:repeat(4,minmax(0,1fr));gap:0}
+.main-menu{position:absolute;left:20%;right:15%;top:52.5%;bottom:17%;display:grid;grid-template-rows:repeat(4,minmax(0,1fr));gap:0}
 .menu-item{appearance:none;position:relative;border:0;background:transparent;color:#65391e;cursor:pointer;touch-action:manipulation}
-.main-menu .menu-item{display:grid;grid-template-columns:clamp(28px,4.7cqh,48px) minmax(0,1fr) clamp(25px,4cqh,42px);align-items:center;gap:clamp(9px,1.5cqh,17px);padding:0 0 7px;text-align:left;min-height:0}
+.main-menu .menu-item{display:grid;grid-template-columns:clamp(28px,4.7cqh,48px) minmax(0,1fr);align-items:center;gap:clamp(9px,1.5cqh,17px);padding:0 0 7px;text-align:left;min-height:0}
 .main-menu .menu-item::after{content:"";position:absolute;left:0;right:0;bottom:12%;height:2px;background:#986c4b;border-radius:60% 35% 55% 20%;transform:rotate(.7deg)}
 .main-menu .menu-item:nth-child(2)::after{transform:rotate(-1deg)}
 .main-menu .menu-item:nth-child(3)::after{transform:rotate(.2deg)}
@@ -23,11 +22,6 @@
 .menu-item:hover .menu-name,.menu-item.is-active .menu-name{color:#905331}
 .menu-item:hover .menu-icon,.menu-item.is-active .menu-icon{background:#fff8eacb;transform:rotate(-6deg)}
 .menu-item:focus-visible{outline:3px dashed #cf8a54;outline-offset:4px;border-radius:5px;background:#fff5da35}
-.row-doodle{display:grid;place-items:center;font-size:clamp(25px,4.8cqh,50px);font-weight:700;line-height:1;transform:rotate(8deg)}
-.row-doodle svg{width:100%;fill:#90bd4e;stroke:#78a942;stroke-width:2;stroke-linecap:round}
-.heart-doodle{color:#f78491;transform:rotate(-12deg)}
-.star-doodle{color:#ffc54c}
-.flower-doodle{color:#74c5e5}
 .wardrobe-tag{position:absolute;left:64.327485%;top:35.37897%;width:27.923977%;height:10.952902%;padding:0;font-size:clamp(18px,2.9cqh,31px);font-weight:700;line-height:1.05;letter-spacing:-.07em;white-space:nowrap}
 .wardrobe-backing{position:absolute;inset:0;overflow:hidden;pointer-events:none}
 .wardrobe-backing img{position:absolute;width:1072.251309%;height:auto;max-width:none;left:-865.445026%;top:-358%}
