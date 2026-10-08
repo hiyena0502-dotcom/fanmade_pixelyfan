@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#68caf1" />
   <title>꿈뜰이의 우당탕탕 대환장 나들이!!</title>
-  <link rel="stylesheet" href="./style.css?v=user-layer-stack-025" />
-  <link rel="stylesheet" href="./diary.css?v=user-layer-stack-025" />
+  <link rel="stylesheet" href="./style.css?v=door-bush-bounce-026" />
+  <link rel="stylesheet" href="./diary.css?v=door-bush-bounce-026" />
   <link rel="preload" href="./assets/fonts/gaegu-ui-bold-v2.woff" as="font" type="font/woff" crossorigin />
 </head>
 <body>
@@ -18,10 +18,15 @@
         <img class="scene-layer layer-garden" draggable="false" src="./assets/title/layers-oct8/garden.webp" alt="" />
         <div class="scene-layer layer-house">
           <img class="scene-layer" draggable="false" src="./assets/title/layers-oct8/house.webp" alt="" />
+          <span class="door-sign"><img draggable="false" src="./assets/title/door-sign-user-oct8.webp" alt="PIXELY" /></span>
           <button class="house-touch" type="button" aria-label="집을 톡 건드리기"></button>
         </div>
         <img class="scene-layer layer-stones" draggable="false" src="./assets/title/layers-oct8/stones.webp" alt="" />
-        <img class="scene-layer layer-bush" draggable="false" src="./assets/title/layers-oct8/bush.webp" alt="" />
+        <div class="scene-layer layer-bush">
+          <img class="scene-layer bush-art" draggable="false" src="./assets/title/layers-oct8/bush.webp" alt="" />
+          <button class="bush-touch" type="button" aria-label="덤불을 부시럭거리기"></button>
+          <div class="bush-leaves" aria-hidden="true"></div>
+        </div>
       </div>
       <section class="hero" aria-labelledby="game-title">
         <h1 id="game-title" class="sr-only">꿈뜰이의 우당탕탕 대환장 나들이!!</h1>
@@ -59,6 +64,6 @@
       </nav>
     </section></div>
   </main>
-  <script src="./app.js?v=user-layer-stack-025"></script>
+  <script src="./app.js?v=door-bush-bounce-026"></script>
 </body>
 </html>

@@ -2,19 +2,70 @@
 
 const house=document.querySelector(".layer-house");
 const houseTouch=document.querySelector(".house-touch");
-let houseReaction;
+const sign=document.querySelector(".door-sign");
+let houseReaction,signReaction;
+const reducedMotion=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
 houseTouch?.addEventListener("click",()=>{
   houseReaction?.cancel();
-  const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
-  houseReaction=house.animate(reduced?[
-    {filter:"brightness(1)"},{filter:"brightness(1.08)"},{filter:"brightness(1)"}
-  ]:[
-    {transform:"translateY(0) rotate(0deg) scale(1)"},
-    {transform:"translateY(.3%) rotate(-.7deg) scale(1.008,.99)",offset:.2},
-    {transform:"translateY(-.25%) rotate(.6deg) scale(.998,1.004)",offset:.45},
-    {transform:"translateY(.1%) rotate(-.3deg) scale(1)",offset:.7},
-    {transform:"translateY(0) rotate(0deg) scale(1)"}
-  ],{duration:reduced?250:480,easing:"ease-out"});
+  signReaction?.cancel();
+  if(reducedMotion()) return;
+  // Two springy hops settle at the original position; no colour/filter changes.
+  houseReaction=house.animate([
+    {transform:"translateY(0) scale(1)"},
+    {transform:"translateY(.4%) scale(1.016,.98)",offset:.12},
+    {transform:"translateY(-1.8%) scale(.989,1.016)",offset:.3},
+    {transform:"translateY(0) scale(1.014,.984)",offset:.48},
+    {transform:"translateY(-.9%) scale(.994,1.008)",offset:.65},
+    {transform:"translateY(0) scale(1.006,.994)",offset:.82},
+    {transform:"translateY(0) scale(1)"}
+  ],{duration:900,easing:"ease-in-out"});
+  signReaction=sign.animate([
+    {transform:"rotate(0deg)"},{transform:"rotate(-7deg)"},
+    {transform:"rotate(5deg)"},{transform:"rotate(-2deg)"},{transform:"rotate(0deg)"}
+  ],{duration:1150,easing:"ease-in-out"});
+});
+
+const bush=document.querySelector(".bush-art");
+const bushTouch=document.querySelector(".bush-touch");
+const bushLeaves=document.querySelector(".bush-leaves");
+let bushReaction;
+bushTouch?.addEventListener("click",()=>{
+  bushReaction?.cancel();
+  bushLeaves.replaceChildren();
+  if(reducedMotion()) return;
+  bushReaction=bush.animate([
+    {transform:"rotate(0deg)"},
+    {transform:"rotate(-3deg) skewX(-2deg)",offset:.12},
+    {transform:"rotate(3.5deg) skewX(2.5deg)",offset:.27},
+    {transform:"rotate(-2.5deg) skewX(-1.5deg)",offset:.43},
+    {transform:"rotate(2deg) skewX(1.2deg)",offset:.6},
+    {transform:"rotate(-.8deg)",offset:.78},
+    {transform:"rotate(0deg)"}
+  ],{duration:850,easing:"ease-in-out"});
+  const greens=["#397e63","#4f8b58","#7fa95d","#a4bb70"];
+  const scale=bushLeaves.clientWidth/278;
+  for(let i=0;i<7;i++){
+    const leaf=document.createElement("span");
+    leaf.className="bush-leaf";
+    leaf.style.left=`${20+Math.random()*60}%`;
+    leaf.style.top=`${30+Math.random()*28}%`;
+    leaf.style.color=greens[i%greens.length];
+    leaf.innerHTML='<svg viewBox="0 0 34 34"><path d="M5 25C2 13 15 5 29 4C27 18 20 30 5 25Z"/></svg>';
+    bushLeaves.append(leaf);
+    const dx=(Math.random()-.5)*180*scale;
+    const lift=(30+Math.random()*35)*scale;
+    const drop=(95+Math.random()*45)*scale;
+    const angle=Math.random()*100-50;
+    const turn=(Math.random()-.5)*280;
+    const animation=leaf.animate([
+      {opacity:0,transform:`translate(0,0) rotate(${angle}deg)`},
+      {opacity:1,transform:`translate(${dx*.2}px,${-lift*.65}px) rotate(${angle+turn*.2}deg)`,offset:.15},
+      {opacity:1,transform:`translate(${dx*.45}px,${-lift}px) rotate(${angle+turn*.45}deg)`,offset:.36},
+      {opacity:.9,transform:`translate(${dx*.7}px,${drop*.1}px) rotate(${angle+turn*.7}deg)`,offset:.65},
+      {opacity:0,transform:`translate(${dx}px,${drop}px) rotate(${angle+turn}deg)`}
+    ],{duration:1300+Math.random()*450,delay:i*45,easing:"linear",fill:"forwards"});
+    animation.addEventListener("finish",()=>leaf.remove(),{once:true});
+  }
 });
 
 const items=[...document.querySelectorAll(".menu-item:not(:disabled)")];
