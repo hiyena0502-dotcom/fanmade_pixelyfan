@@ -32,13 +32,13 @@ if(breeze){
     const duration=16+(i*7%13);
     leaf.className="drifting-leaf";
     const settings={
-      "--leaf-top":`${-5+(i*37%97)}%`,
-      "--leaf-size":`clamp(12px,${(0.85+(i*3%9)*0.12).toFixed(2)}vw,31px)`,
+      "--leaf-top":`${6+(i*37%83)}%`,
+      "--leaf-size":`clamp(26px,${(1.85+(i*5%9)*0.11).toFixed(2)}vw,52px)`,
       "--leaf-color":greens[i%greens.length],
-      "--leaf-opacity":`${0.64+(i%4)*0.09}`,
+      "--leaf-opacity":`${0.88+(i%3)*0.05}`,
       "--leaf-duration":`${duration}s`,
       "--leaf-delay":`${-(i*0.618%1)*duration}s`,
-      "--leaf-drift":`${-14+(i*11%33)}vh`,
+      "--leaf-drift":`${-7+(i*11%17)}vh`,
       "--sway-height":`${12+(i*7%29)}px`,
       "--sway-duration":`${3.1+(i*3%8)*0.43}s`,
       "--sway-delay":`${-i*0.7}s`,
