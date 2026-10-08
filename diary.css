@@ -2,22 +2,22 @@
 .journal-heading{position:absolute;left:12.573099%;top:6.571741%;width:75.877193%;text-align:left;font-weight:700}
 .anniversary-art{position:relative;width:100%;overflow:hidden}
 .anniversary-art img{position:absolute;height:auto;max-width:none}
-.fan-label{display:flex;align-items:center;gap:.35em;width:fit-content;margin:1.8cqh 0 0 3%;font-family:"Diary Print","Malgun Gothic",serif;font-size:clamp(19px,2.75cqh,28px);font-weight:700;line-height:1.1;letter-spacing:-.04em;white-space:nowrap;color:#754027;transform:rotate(-2deg);transform-origin:left center;pointer-events:auto;transition:transform .2s ease}
+.fan-label{display:flex;align-items:center;gap:.35em;width:fit-content;margin:1.8cqh 0 0 3%;font-family:"Diary Print","Malgun Gothic",serif;font-size:clamp(14px,1.9cqh,19px);font-weight:700;line-height:1.1;letter-spacing:-.04em;white-space:nowrap;color:#754027;transform:rotate(-2deg);transform-origin:left center;pointer-events:none}
 .main-menu{position:absolute;left:20%;right:15%;top:52.5%;bottom:17%;display:grid;grid-template-rows:repeat(4,minmax(0,1fr));gap:0}
 .menu-item{font-family:"Diary Print","Malgun Gothic",serif;transition:transform .2s ease;appearance:none;position:relative;border:0;background:transparent;color:#65391e;cursor:pointer;touch-action:manipulation}
-.main-menu .menu-item{display:grid;grid-template-columns:clamp(28px,4.7cqh,48px) minmax(0,1fr);align-items:center;gap:clamp(9px,1.5cqh,17px);padding:0 0 7px;text-align:left;min-height:0}
+.main-menu .menu-item{display:flex;align-items:center;padding:0 0 7px;text-align:left;min-height:0}
 .main-menu .menu-item::after{content:"";position:absolute;left:0;right:0;bottom:12%;height:2px;background:#986c4b;border-radius:60% 35% 55% 20%;transform:rotate(.7deg)}
 .main-menu .menu-item:nth-child(2)::after{transform:rotate(-1deg)}
 .main-menu .menu-item:nth-child(3)::after{transform:rotate(.2deg)}
 .main-menu .menu-item:nth-child(4)::after{transform:rotate(-.6deg)}
 .menu-name{font-weight:700;font-size:clamp(26px,3.7cqh,38px);line-height:1.1;letter-spacing:-.025em;white-space:nowrap;transition:color .16s ease}
-.menu-icon{display:grid;place-items:center;width:100%;aspect-ratio:1;border:2px solid currentColor;border-radius:48% 52% 50% 46%;background:#fffaf04d;transition:background .16s ease,transform .16s ease}
+.menu-icon{display:grid;place-items:center;width:clamp(28px,4.7cqh,48px);flex:0 0 clamp(28px,4.7cqh,48px);aspect-ratio:1;border:2px solid currentColor;border-radius:50%;background:var(--badge-bg,#fffaf0);box-shadow:0 2px 3px #7044280d;transition:background .16s ease,transform .16s ease}
 .menu-icon svg{width:70%;height:70%;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .menu-icon .icon-fill{fill:currentColor;stroke-width:1}
-.menu-new .menu-icon{color:#f47b7a}
-.menu-continue .menu-icon{color:#49afe1}
-.menu-chapter .menu-icon{color:#84b849}
-.menu-settings .menu-icon{color:#ae7851}
+.menu-new{--badge-bg:#ffe9e4;--menu-accent:#b66e59}.menu-new .menu-icon{color:#ec8879}
+.menu-continue{--badge-bg:#e4f3fb;--menu-accent:#578ea7}.menu-continue .menu-icon{color:#58a8c9}
+.menu-chapter{--badge-bg:#eff4df;--menu-accent:#708f50}.menu-chapter .menu-icon{color:#89a65c}
+.menu-settings{--badge-bg:#f5e9db;--menu-accent:#a17b54}.menu-settings .menu-icon{color:#b68c68}
 .menu-continue .menu-icon svg path:first-child{fill:#57b9e945}
 .menu-settings .menu-icon svg path{fill:#b68c6352}
 .menu-item:hover .menu-name,.menu-item.is-active .menu-name{color:#905331}
@@ -46,6 +46,9 @@
 .sticker-vine{left:8.33333333%;top:67.57940854%;width:20.17543860%;height:30.23001095%}
 .sticker-vine img{width:1484.05797101%;left:-920.28985507%;top:-236.23188406%}
 
-.fan-label:hover{transform:rotate(1deg) scale(1.055)}
-.main-menu .menu-item:hover,.main-menu .menu-item:focus-visible{transform:translateX(7px) rotate(-.35deg)}
 .wardrobe-tag:hover,.wardrobe-tag:focus-visible{transform:translateY(-3px) rotate(-3deg)}
+
+.menu-content{display:flex;align-items:center;gap:clamp(9px,1.5cqh,17px);padding:.6cqh 1.5cqw .6cqh 1cqw;margin-left:-1cqw;border-radius:12px;transition:transform .2s ease,background .2s ease,box-shadow .2s ease}
+.main-menu .menu-item:hover .menu-content,.main-menu .menu-item:focus-visible .menu-content{transform:translateX(7px);background:#fff9ecb3;box-shadow:inset 3px 0 0 var(--menu-accent)}
+.main-menu .menu-item:hover .menu-name,.main-menu .menu-item:focus-visible .menu-name{color:var(--menu-accent)}
+.main-menu .menu-item:focus-visible{background:transparent}
