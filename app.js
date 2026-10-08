@@ -6,7 +6,7 @@ const sign=document.querySelector(".door-sign");
 let houseReaction,signReaction;
 const reducedMotion=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
 houseTouch?.addEventListener("click",()=>{
-  if(!window.PixelySettings.get().animations) return;
+  if(!window.PixelySettings.get().motion) return;
   houseReaction?.cancel();
   signReaction?.cancel();
   const calm=reducedMotion();
@@ -38,7 +38,7 @@ const bushTouch=document.querySelector(".bush-touch");
 const bushLeaves=document.querySelector(".bush-leaves");
 let bushReaction;
 bushTouch?.addEventListener("click",()=>{
-  if(!window.PixelySettings.get().animations) return;
+  if(!window.PixelySettings.get().motion) return;
   bushReaction?.cancel();
   bushLeaves.querySelectorAll(".bush-leaf").forEach(leaf=>leaf.getAnimations().forEach(animation=>animation.cancel()));
   bushLeaves.replaceChildren();
@@ -56,7 +56,6 @@ bushTouch?.addEventListener("click",()=>{
     {transform:"rotate(.45deg)",offset:.9},
     {transform:"rotate(0deg)"}
   ],{duration:calm?320:1350,easing:"ease-in-out"});
-  if(!window.PixelySettings.get().leaves) return;
   const greens=["#397e63","#4f8b58","#7fa95d","#a4bb70"];
   const scale=bushLeaves.clientWidth/278;
   for(let i=0;i<(calm?3:8);i++){
@@ -202,7 +201,7 @@ if(breeze){
   function syncVisibility(){
     cancelAnimationFrame(frame);
     lastTime=0;
-    if(!document.hidden&&window.PixelySettings.get().leaves) frame=requestAnimationFrame(animate);
+    if(!document.hidden&&window.PixelySettings.get().motion) frame=requestAnimationFrame(animate);
   }
   addEventListener("resize",()=>{
     const previousWidth=width,previousHeight=height;
@@ -219,8 +218,8 @@ if(breeze){
 }
 
 addEventListener("pixely:settingschange",event=>{
-  if(!event.detail.animations){houseReaction?.cancel();signReaction?.cancel();bushReaction?.cancel();}
-  if(!event.detail.animations||!event.detail.leaves){
+  if(!event.detail.motion){
+    houseReaction?.cancel();signReaction?.cancel();bushReaction?.cancel();
     bushLeaves.querySelectorAll(".bush-leaf").forEach(leaf=>leaf.getAnimations().forEach(animation=>animation.cancel()));
     bushLeaves.replaceChildren();
   }

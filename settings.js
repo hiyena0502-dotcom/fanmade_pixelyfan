@@ -1,13 +1,15 @@
 "use strict";
 
 (() => {
-  const DEFAULTS=Object.freeze({masterVolume:80,musicVolume:70,effectsVolume:75,textVolume:45,textSpeed:35,textSize:22,autoDelay:2500,animations:true,leaves:true,smoke:true,interactionHints:false,skipReadOnly:true,autoSave:true});
-  const numeric={masterVolume:[0,100],musicVolume:[0,100],effectsVolume:[0,100],textVolume:[0,100],autoDelay:[500,5000]};
-  const choices={textSpeed:[15,35,65,0],textSize:[18,22,26]};
+  const DEFAULTS=Object.freeze({masterVolume:80,effectsVolume:75,textVolume:45,effectsSound:"none",textSound:"none",textSpeed:35,textSize:22,autoDelay:2500,motion:true,interactionHints:false,skipReadOnly:true,autoSave:true});
+  const numeric={masterVolume:[0,100],effectsVolume:[0,100],textVolume:[0,100],autoDelay:[500,5000]};
+  const choices={textSpeed:[15,35,65,0],textSize:[18,22,26],effectsSound:["none","paper","wood","pop"],textSound:["none","soft","pixel","bubble"]};
   function normalize(value){
     const source=value&&typeof value==="object"&&!Array.isArray(value)?value:{};
+    // Fold older independent switches into one preference without re-enabling disabled effects.
+    const migrated={...source,motion:typeof source.motion==="boolean"?source.motion:!["animations","leaves","smoke"].some(key=>source[key]===false)};
     return Object.fromEntries(Object.entries(DEFAULTS).map(([key,fallback])=>{
-      let next=source[key];
+      let next=migrated[key];
       if(typeof fallback==="boolean") next=typeof next==="boolean"?next:fallback;
       else if(choices[key]) next=choices[key].includes(next)?next:fallback;
       else {
@@ -49,11 +51,10 @@
         control.style.setProperty("--range-fill",`${(value-Number(control.min))/(Number(control.max)-Number(control.min))*100}%`);
       }
     });
+    dialog.querySelectorAll("[data-sound-check]").forEach(button=>{button.disabled=settings[`${button.dataset.soundCheck}Sound`]==="none";});
   }
   function apply(){
-    document.body.classList.toggle("animations-off",!settings.animations);
-    document.body.classList.toggle("leaves-off",!settings.leaves);
-    document.body.classList.toggle("smoke-off",!settings.smoke);
+    document.body.classList.toggle("motions-off",!settings.motion);
     document.body.classList.toggle("interaction-hints",settings.interactionHints);
     document.documentElement.style.setProperty("--dialogue-font-size",`${settings.textSize}px`);
     document.documentElement.style.setProperty("--dialogue-character-ms",`${settings.textSpeed?1000/settings.textSpeed:0}ms`);
@@ -110,7 +111,7 @@
     });
   });
   controls.forEach(control=>control.addEventListener(control.type==="range"?"input":"change",()=>{
-    update(control.dataset.setting,control.type==="checkbox"?control.checked:Number(control.value));
+    update(control.dataset.setting,control.type==="checkbox"?control.checked:typeof DEFAULTS[control.dataset.setting]==="number"?Number(control.value):control.value);
     if(["textSpeed","textSize"].includes(control.dataset.setting)) showPreview();
   }));
 
@@ -135,6 +136,8 @@
   dialog.querySelector("[data-replay-preview]").addEventListener("click",showPreview);
 
   async function soundCheck(bus){
+    const kind=settings[`${bus}Sound`];
+    if(kind==="none") return;
     const Audio=window.AudioContext||window.webkitAudioContext;
     if(!Audio){status.textContent="이 브라우저에서는 소리 미리듣기를 사용할 수 없어요";return;}
     try{
@@ -142,15 +145,17 @@
       if(audioContext.state==="suspended") await audioContext.resume();
       const level=volume(settings,bus),count=bus==="text"?3:1;
       if(!level){status.textContent="현재 음량이 0으로 설정돼 있어요";return;}
+      const tones={paper:{type:"triangle",start:1800,end:450,duration:.045,level:.075},wood:{type:"sine",start:380,end:150,duration:.085,level:.2},pop:{type:"sine",start:390,end:880,duration:.095,level:.14},soft:{type:"sine",start:620,end:470,duration:.04,level:.09},pixel:{type:"triangle",start:1050,end:920,duration:.035,level:.06},bubble:{type:"sine",start:320,end:610,duration:.055,level:.11}};
+      const tone=tones[kind];
       for(let i=0;i<count;i++){
-        const start=audioContext.currentTime+i*.11,oscillator=audioContext.createOscillator(),gain=audioContext.createGain();
-        oscillator.type="sine";oscillator.frequency.setValueAtTime(bus==="text"?700:480,start);
-        oscillator.frequency.exponentialRampToValueAtTime(bus==="text"?620:260,start+.07);
-        gain.gain.setValueAtTime(0,start);gain.gain.linearRampToValueAtTime(level*.16,start+.006);gain.gain.exponentialRampToValueAtTime(.0001,start+.09);
-        oscillator.connect(gain);gain.connect(audioContext.destination);oscillator.start(start);oscillator.stop(start+.1);
+        const start=audioContext.currentTime+i*.13,oscillator=audioContext.createOscillator(),gain=audioContext.createGain();
+        oscillator.type=tone.type;oscillator.frequency.setValueAtTime(tone.start,start);
+        oscillator.frequency.exponentialRampToValueAtTime(tone.end,start+tone.duration);
+        gain.gain.setValueAtTime(0,start);gain.gain.linearRampToValueAtTime(level*tone.level,start+.003);gain.gain.exponentialRampToValueAtTime(.0001,start+tone.duration);
+        oscillator.connect(gain);gain.connect(audioContext.destination);oscillator.start(start);oscillator.stop(start+tone.duration+.01);
         oscillator.onended=()=>{oscillator.disconnect();gain.disconnect();};
       }
-      status.textContent=level?"선택한 음량으로 소리를 들려드려요":"현재 음량이 0으로 설정돼 있어요";
+      status.textContent="선택한 소리를 들려드려요";
     }catch{status.textContent="소리를 재생하지 못했어요";}
   }
   dialog.querySelectorAll("[data-sound-check]").forEach(button=>button.addEventListener("click",()=>soundCheck(button.dataset.soundCheck)));
