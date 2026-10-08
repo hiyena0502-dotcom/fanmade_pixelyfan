@@ -9,19 +9,21 @@ houseTouch?.addEventListener("click",()=>{
   houseReaction?.cancel();
   signReaction?.cancel();
   const calm=reducedMotion();
-  // Hold the compression briefly, release, then settle through smaller rebounds.
-  houseReaction=house.animate(calm?[{transform:"translateY(0)"},{transform:"translateY(-.8%)"},{transform:"translateY(0)"}]:[
+  // A shallow press, one crisp hop, then a small landing recoil.
+  houseReaction=house.animate(calm?[
     {transform:"translateY(0) scale(1)"},
-    {transform:"translateY(.7%) scale(1.11,.82)",offset:.13},
-    {transform:"translateY(.7%) scale(1.11,.82)",offset:.2},
-    {transform:"translateY(-4.3%) scale(.925,1.15)",offset:.37},
-    {transform:"translateY(-3.7%) scale(.965,1.065)",offset:.44},
-    {transform:"translateY(.35%) scale(1.075,.88)",offset:.58},
-    {transform:"translateY(-2.2%) scale(.96,1.08)",offset:.71},
-    {transform:"translateY(.12%) scale(1.035,.955)",offset:.82},
-    {transform:"translateY(-.8%) scale(.985,1.03)",offset:.91},
+    {transform:"translateY(.1%) scale(1.01,.98)",offset:.25},
+    {transform:"translateY(-.6%) scale(1)",offset:.55},
     {transform:"translateY(0) scale(1)"}
-  ],{duration:calm?400:1600,easing:"cubic-bezier(.36,0,.3,1)"});
+  ]:[
+    {transform:"translateY(0) scale(1)",easing:"ease-out"},
+    {transform:"translateY(.15%) scale(1.025,.955)",offset:.16},
+    {transform:"translateY(.15%) scale(1.025,.955)",offset:.22,easing:"cubic-bezier(.12,.72,.25,1)"},
+    {transform:"translateY(-1.85%) scale(.99,1.025)",offset:.43,easing:"ease-in"},
+    {transform:"translateY(0) scale(1.018,.977)",offset:.7,easing:"ease-out"},
+    {transform:"translateY(-.22%) scale(.997,1.005)",offset:.86},
+    {transform:"translateY(0) scale(1)"}
+  ],{duration:calm?360:780,easing:"ease-in-out"});
   signReaction=sign.animate(calm?[{transform:"rotate(0deg)"},{transform:"rotate(2deg)"},{transform:"rotate(0deg)"}]:[
     {transform:"rotate(0deg)",offset:0},{transform:"rotate(-18deg)",offset:.2},
     {transform:"rotate(14deg)",offset:.43},{transform:"rotate(-9deg)",offset:.63},

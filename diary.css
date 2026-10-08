@@ -2,7 +2,7 @@
 .journal-heading{position:absolute;left:12.573099%;top:6.571741%;width:75.877193%;text-align:left;font-weight:700}
 .anniversary-art{position:relative;width:100%;overflow:hidden}
 .anniversary-art img{position:absolute;height:auto;max-width:none}
-.fan-label{display:flex;align-items:center;gap:.35em;width:fit-content;margin:1.8cqh 0 0 3%;font-family:"Diary Print","Malgun Gothic",serif;font-size:clamp(14px,1.9cqh,19px);font-weight:700;line-height:1.1;letter-spacing:-.04em;white-space:nowrap;color:#754027;transform:rotate(-2deg);transform-origin:left center;pointer-events:none}
+.fan-label{position:absolute;left:50%;top:89.5%;width:fit-content;margin:0;font-family:"Diary Print","Malgun Gothic",serif;font-size:clamp(14px,1.9cqh,19px);font-weight:700;line-height:1.1;letter-spacing:-.04em;white-space:nowrap;color:#754027;transform:translateX(-50%);pointer-events:none}
 .main-menu{position:absolute;left:20%;right:15%;top:52.5%;bottom:17%;display:grid;grid-template-rows:repeat(4,minmax(0,1fr));gap:0}
 .menu-item{font-family:"Diary Print","Malgun Gothic",serif;transition:transform .2s ease;appearance:none;position:relative;border:0;background:transparent;color:#65391e;cursor:pointer;touch-action:manipulation}
 .main-menu .menu-item{display:flex;align-items:center;padding:0 0 7px;text-align:left;min-height:0}
