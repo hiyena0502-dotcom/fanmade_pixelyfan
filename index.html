@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#68caf1" />
   <title>꿈뜰이의 우당탕탕 대환장 나들이!!</title>
-  <link rel="stylesheet" href="./style.css?v=door-bush-leaf-027" />
-  <link rel="stylesheet" href="./diary.css?v=door-bush-leaf-027" />
-  <link rel="preload" href="./assets/fonts/gaegu-ui-bold-v2.woff" as="font" type="font/woff" crossorigin />
+  <link rel="stylesheet" href="./style.css?v=title-font-click-028" />
+  <link rel="stylesheet" href="./diary.css?v=title-font-click-028" />
+  <link rel="preload" href="./assets/fonts/gowun-ui-bold-v2.woff" as="font" type="font/woff" crossorigin />
 </head>
 <body>
   <main class="title-screen" id="title-screen">
@@ -19,12 +19,10 @@
         <div class="scene-layer layer-house">
           <img class="scene-layer" draggable="false" src="./assets/title/layers-oct8/house.webp" alt="" />
           <span class="door-sign"><img draggable="false" src="./assets/title/door-sign-user-oct8.webp" alt="PIXELY" /></span>
-          <button class="house-touch" type="button" aria-label="집을 톡 건드리기"></button>
         </div>
         <img class="scene-layer layer-stones" draggable="false" src="./assets/title/layers-oct8/stones.webp" alt="" />
         <div class="scene-layer layer-bush">
           <img class="scene-layer bush-art" draggable="false" src="./assets/title/layers-oct8/bush.webp" alt="" />
-          <button class="bush-touch" type="button" aria-label="덤불을 부시럭거리기"></button>
           <div class="bush-leaves" aria-hidden="true"></div>
         </div>
       </div>
@@ -33,6 +31,11 @@
         <img class="scene-layer layer-subtitle" draggable="false" src="./assets/title/layers-oct8/subtitle.webp" alt="초대는 받았고, 귀가는 미정!" />
         <img class="scene-layer layer-title" draggable="false" src="./assets/title/layers-oct8/title.webp" alt="꿈뜰이의 우당탕탕 대환장 나들이!!" />
       </section>
+      <div class="scene-interactions">
+        <span class="title-hover" aria-hidden="true"></span>
+        <button class="house-touch" type="button" aria-label="집을 톡 건드리기"></button>
+        <button class="bush-touch" type="button" aria-label="덤불을 부시럭거리기"></button>
+      </div>
     </div>
     <div class="leaf-breeze" aria-hidden="true"></div>
     <div class="diary-positioner"><section class="notebook" aria-label="메인 메뉴">
@@ -64,6 +67,6 @@
       </nav>
     </section></div>
   </main>
-  <script src="./app.js?v=door-bush-leaf-027"></script>
+  <script src="./app.js?v=title-font-click-028"></script>
 </body>
 </html>

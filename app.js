@@ -8,9 +8,9 @@ const reducedMotion=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
 houseTouch?.addEventListener("click",()=>{
   houseReaction?.cancel();
   signReaction?.cancel();
-  if(reducedMotion()) return;
+  const calm=reducedMotion();
   // Two springy hops settle at the original position; no colour/filter changes.
-  houseReaction=house.animate([
+  houseReaction=house.animate(calm?[{transform:"translateY(0)"},{transform:"translateY(-.35%)"},{transform:"translateY(0)"}]:[
     {transform:"translateY(0) scale(1)"},
     {transform:"translateY(.4%) scale(1.016,.98)",offset:.12},
     {transform:"translateY(-1.8%) scale(.989,1.016)",offset:.3},
@@ -18,11 +18,11 @@ houseTouch?.addEventListener("click",()=>{
     {transform:"translateY(-.9%) scale(.994,1.008)",offset:.65},
     {transform:"translateY(0) scale(1.006,.994)",offset:.82},
     {transform:"translateY(0) scale(1)"}
-  ],{duration:900,easing:"ease-in-out"});
-  signReaction=sign.animate([
+  ],{duration:calm?320:900,easing:"ease-in-out"});
+  signReaction=sign.animate(calm?[{transform:"rotate(0deg)"},{transform:"rotate(2deg)"},{transform:"rotate(0deg)"}]:[
     {transform:"rotate(0deg)"},{transform:"rotate(-7deg)"},
     {transform:"rotate(5deg)"},{transform:"rotate(-2deg)"},{transform:"rotate(0deg)"}
-  ],{duration:1150,easing:"ease-in-out"});
+  ],{duration:calm?320:1150,easing:"ease-in-out"});
 });
 
 const bush=document.querySelector(".bush-art");
@@ -32,8 +32,8 @@ let bushReaction;
 bushTouch?.addEventListener("click",()=>{
   bushReaction?.cancel();
   bushLeaves.replaceChildren();
-  if(reducedMotion()) return;
-  bushReaction=bush.animate([
+  const calm=reducedMotion();
+  bushReaction=bush.animate(calm?[{transform:"rotate(0deg)"},{transform:"rotate(-1deg)"},{transform:"rotate(1deg)"},{transform:"rotate(0deg)"}]:[
     {transform:"rotate(0deg)"},
     {transform:"rotate(-3deg) skewX(-2deg)",offset:.12},
     {transform:"rotate(3.5deg) skewX(2.5deg)",offset:.27},
@@ -41,10 +41,10 @@ bushTouch?.addEventListener("click",()=>{
     {transform:"rotate(2deg) skewX(1.2deg)",offset:.6},
     {transform:"rotate(-.8deg)",offset:.78},
     {transform:"rotate(0deg)"}
-  ],{duration:850,easing:"ease-in-out"});
+  ],{duration:calm?320:850,easing:"ease-in-out"});
   const greens=["#397e63","#4f8b58","#7fa95d","#a4bb70"];
   const scale=bushLeaves.clientWidth/278;
-  for(let i=0;i<7;i++){
+  for(let i=0;i<(calm?3:7);i++){
     const leaf=document.createElement("span");
     leaf.className="bush-leaf";
     leaf.style.left=`${20+Math.random()*60}%`;
