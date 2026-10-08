@@ -186,7 +186,5 @@
     }catch{if(previewSound) status.textContent="소리를 재생하지 못했어요";return false;}
   }
   dialog.querySelectorAll("[data-sound-check]").forEach(button=>button.addEventListener("click",()=>playSound(button.dataset.soundCheck,{previewSound:true})));
-  // Each UI button has a fixed tap sound; voice preview keeps its own audio.
-  dialog.querySelectorAll('button:not([data-sound-check])').forEach(button=>button.addEventListener("click",()=>{void playSound("effects",{target:"menu"});}));
   syncControls();apply();
 })();

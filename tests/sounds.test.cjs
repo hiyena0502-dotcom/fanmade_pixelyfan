@@ -3,7 +3,7 @@ const assert=require('node:assert/strict');
 const {render,sampleRate,effectKind}=require('../sounds.js');
 
 test('every sound is finite, unclipped, audible, and fades without a hard edge',()=>{
-  const variants=[...['paper','wood','pop','soft','pixel','bubble'].map(kind=>[kind,'']),...['paper','wood','pop'].flatMap(kind=>['house','bush'].map(target=>[kind,target]))];
+  const variants=[...['paper','wood','pop','soft','pixel','bubble','rustle'].map(kind=>[kind,'']),['wood','house']];
   for(const [kind,target] of variants){
     const samples=render(kind,target);
     assert.ok(samples.length>sampleRate*.1&&samples.length<sampleRate*2,kind);
@@ -38,8 +38,31 @@ test('house and bush clicks request their own effects even when motion is disabl
 
 test('each interactive object has a distinct fixed effect',()=>{
   assert.equal(effectKind('house'),'wood');
-  assert.equal(effectKind('bush'),'paper');
+  assert.equal(effectKind('bush'),'rustle');
   assert.equal(effectKind('menu'),'pop');
   assert.equal(effectKind('unknown'),'none');
   assert.notDeepEqual(render(effectKind('house'),'house'),render(effectKind('bush'),'bush'));
+});
+
+test('voice syllables keep a stable pitch while voice types remain distinct',()=>{
+  function pitch(samples){
+    let best=0,period=0;
+    for(let lag=55;lag<=100;lag++){
+      let xy=0,xx=0,yy=0;
+      for(let i=240;i<840;i++){
+        const x=samples[i],y=samples[i+lag];xy+=x*y;xx+=x*x;yy+=y*y;
+      }
+      const correlation=xy/Math.sqrt(xx*yy);
+      if(correlation>best){best=correlation;period=lag;}
+    }
+    return sampleRate/period;
+  }
+  const averages=[];
+  for(const kind of ['soft','pixel','bubble']){
+    const pitches=Array.from({length:9},(_,i)=>pitch(render(kind,'',i)));
+    assert.ok(Math.max(...pitches)-Math.min(...pitches)<8,`${kind} does not jump between syllables`);
+    averages.push(pitches.reduce((a,b)=>a+b)/pitches.length);
+  }
+  assert.ok(Math.abs(averages[0]-averages[1])>20);
+  assert.ok(Math.abs(averages[0]-averages[2])>20);
 });

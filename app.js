@@ -96,8 +96,11 @@ function setActive(item){
   items.forEach((button)=>button.setAttribute("aria-current",button===item?"true":"false"));
 }
 
-items.forEach((item)=>{
+document.querySelectorAll(".main-menu .menu-item").forEach(item=>{
   item.addEventListener("click",()=>{void window.PixelySettings.playEffect("menu");});
+});
+
+items.forEach((item)=>{
   item.addEventListener("mouseenter",()=>setActive(item));
   item.addEventListener("focus",()=>setActive(item));
 });
