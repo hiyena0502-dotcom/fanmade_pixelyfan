@@ -1,15 +1,16 @@
+@font-face{font-family:"Diary Print";src:url("./assets/fonts/gowun-ui-bold-v2.woff") format("woff");font-weight:700;font-style:normal;font-display:swap}
 .journal-heading{position:absolute;left:12.573099%;top:6.571741%;width:75.877193%;text-align:left;font-weight:700}
 .anniversary-art{position:relative;width:100%;overflow:hidden}
 .anniversary-art img{position:absolute;height:auto;max-width:none}
-.fan-label{display:flex;align-items:center;gap:.35em;width:fit-content;margin:1.8cqh 0 0 3%;font-family:"Game Hand","Malgun Gothic",sans-serif;font-size:clamp(23px,3.7cqh,37px);font-weight:700;line-height:1.1;letter-spacing:-.04em;white-space:nowrap;color:#754027;transform:rotate(-2deg);transform-origin:left center}
+.fan-label{display:flex;align-items:center;gap:.35em;width:fit-content;margin:1.8cqh 0 0 3%;font-family:"Diary Print","Malgun Gothic",serif;font-size:clamp(19px,2.75cqh,28px);font-weight:700;line-height:1.1;letter-spacing:-.04em;white-space:nowrap;color:#754027;transform:rotate(-2deg);transform-origin:left center;pointer-events:auto;transition:transform .2s ease}
 .main-menu{position:absolute;left:20%;right:15%;top:52.5%;bottom:17%;display:grid;grid-template-rows:repeat(4,minmax(0,1fr));gap:0}
-.menu-item{appearance:none;position:relative;border:0;background:transparent;color:#65391e;cursor:pointer;touch-action:manipulation}
+.menu-item{font-family:"Diary Print","Malgun Gothic",serif;transition:transform .2s ease;appearance:none;position:relative;border:0;background:transparent;color:#65391e;cursor:pointer;touch-action:manipulation}
 .main-menu .menu-item{display:grid;grid-template-columns:clamp(28px,4.7cqh,48px) minmax(0,1fr);align-items:center;gap:clamp(9px,1.5cqh,17px);padding:0 0 7px;text-align:left;min-height:0}
 .main-menu .menu-item::after{content:"";position:absolute;left:0;right:0;bottom:12%;height:2px;background:#986c4b;border-radius:60% 35% 55% 20%;transform:rotate(.7deg)}
 .main-menu .menu-item:nth-child(2)::after{transform:rotate(-1deg)}
 .main-menu .menu-item:nth-child(3)::after{transform:rotate(.2deg)}
 .main-menu .menu-item:nth-child(4)::after{transform:rotate(-.6deg)}
-.menu-name{font-weight:700;font-size:clamp(29px,5.1cqh,53px);line-height:1.1;letter-spacing:-.07em;white-space:nowrap;transition:color .16s ease}
+.menu-name{font-weight:700;font-size:clamp(26px,3.7cqh,38px);line-height:1.1;letter-spacing:-.025em;white-space:nowrap;transition:color .16s ease}
 .menu-icon{display:grid;place-items:center;width:100%;aspect-ratio:1;border:2px solid currentColor;border-radius:48% 52% 50% 46%;background:#fffaf04d;transition:background .16s ease,transform .16s ease}
 .menu-icon svg{width:70%;height:70%;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .menu-icon .icon-fill{fill:currentColor;stroke-width:1}
@@ -22,7 +23,7 @@
 .menu-item:hover .menu-name,.menu-item.is-active .menu-name{color:#905331}
 .menu-item:hover .menu-icon,.menu-item.is-active .menu-icon{background:#fff8eacb;transform:rotate(-6deg)}
 .menu-item:focus-visible{outline:3px dashed #cf8a54;outline-offset:4px;border-radius:5px;background:#fff5da35}
-.wardrobe-tag{position:absolute;left:64.327485%;top:35.37897%;width:27.923977%;height:10.952902%;padding:0;font-size:clamp(18px,2.9cqh,31px);font-weight:700;line-height:1.05;letter-spacing:-.07em;white-space:nowrap}
+.wardrobe-tag{position:absolute;left:64.327485%;top:35.37897%;width:27.923977%;height:10.952902%;padding:0;font-size:clamp(17px,2.55cqh,26px);font-weight:700;line-height:1.05;letter-spacing:-.025em;white-space:nowrap}
 .wardrobe-backing{position:absolute;inset:0;overflow:hidden;pointer-events:none}
 .wardrobe-backing img{position:absolute;width:1072.251309%;height:auto;max-width:none;left:-865.445026%;top:-358%}
 .wardrobe-content{position:absolute;inset:18% 8% 18% 6%;display:flex;align-items:center;justify-content:center;gap:5px;transform:rotate(9deg)}
@@ -44,3 +45,7 @@
 
 .sticker-vine{left:8.33333333%;top:67.57940854%;width:20.17543860%;height:30.23001095%}
 .sticker-vine img{width:1484.05797101%;left:-920.28985507%;top:-236.23188406%}
+
+.fan-label:hover{transform:rotate(1deg) scale(1.055)}
+.main-menu .menu-item:hover,.main-menu .menu-item:focus-visible{transform:translateX(7px) rotate(-.35deg)}
+.wardrobe-tag:hover,.wardrobe-tag:focus-visible{transform:translateY(-3px) rotate(-3deg)}
