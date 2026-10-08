@@ -3,23 +3,33 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#7ccff2" />
+  <meta name="theme-color" content="#68caf1" />
   <title>꿈뜰이의 우당탕탕 대환장 나들이!!</title>
-  <link rel="stylesheet" href="./style.css?v=gravity-leaf-breeze-024" />
-  <link rel="stylesheet" href="./diary.css?v=gravity-leaf-breeze-024" />
+  <link rel="stylesheet" href="./style.css?v=user-layer-stack-025" />
+  <link rel="stylesheet" href="./diary.css?v=user-layer-stack-025" />
   <link rel="preload" href="./assets/fonts/gaegu-ui-bold-v2.woff" as="font" type="font/woff" crossorigin />
 </head>
 <body>
   <main class="title-screen" id="title-screen">
-    <div class="scene" aria-hidden="true">
-      <img class="scene-render" draggable="false" src="./assets/title/storybook-garden-oct8.webp" alt="" />
+    <div class="art-stage">
+      <div class="scene">
+        <img class="scene-layer layer-sky" draggable="false" src="./assets/title/layers-oct8/sky.webp" alt="" />
+        <img class="scene-layer layer-clouds" draggable="false" src="./assets/title/layers-oct8/clouds.webp" alt="" />
+        <img class="scene-layer layer-garden" draggable="false" src="./assets/title/layers-oct8/garden.webp" alt="" />
+        <div class="scene-layer layer-house">
+          <img class="scene-layer" draggable="false" src="./assets/title/layers-oct8/house.webp" alt="" />
+          <button class="house-touch" type="button" aria-label="집을 톡 건드리기"></button>
+        </div>
+        <img class="scene-layer layer-stones" draggable="false" src="./assets/title/layers-oct8/stones.webp" alt="" />
+        <img class="scene-layer layer-bush" draggable="false" src="./assets/title/layers-oct8/bush.webp" alt="" />
+      </div>
+      <section class="hero" aria-labelledby="game-title">
+        <h1 id="game-title" class="sr-only">꿈뜰이의 우당탕탕 대환장 나들이!!</h1>
+        <img class="scene-layer layer-subtitle" draggable="false" src="./assets/title/layers-oct8/subtitle.webp" alt="초대는 받았고, 귀가는 미정!" />
+        <img class="scene-layer layer-title" draggable="false" src="./assets/title/layers-oct8/title.webp" alt="꿈뜰이의 우당탕탕 대환장 나들이!!" />
+      </section>
     </div>
     <div class="leaf-breeze" aria-hidden="true"></div>
-    <section class="hero" aria-labelledby="game-title">
-      <h1 id="game-title" class="sr-only">꿈뜰이의 우당탕탕 대환장 나들이!!</h1>
-      <div class="title-art"><img class="main-title" draggable="false" src="./assets/title/title-user-oct8.webp" alt="꿈뜰이의 우당탕탕 대환장 나들이!!" /></div>
-      <p class="subtitle"><span class="ribbon-star" aria-hidden="true">★</span><span>초대는 받았고, 귀가는 <em>미정!</em></span><span class="ribbon-heart" aria-hidden="true">♥</span></p>
-    </section>
     <div class="diary-positioner"><section class="notebook" aria-label="메인 메뉴">
       <div class="journal-base"><img class="journal-art" draggable="false" src="./assets/title/journal-user-v2-oct8.webp" alt="" /></div>
       <div class="note-stickers" aria-hidden="true">
@@ -49,6 +59,6 @@
       </nav>
     </section></div>
   </main>
-  <script src="./app.js?v=gravity-leaf-breeze-024"></script>
+  <script src="./app.js?v=user-layer-stack-025"></script>
 </body>
 </html>

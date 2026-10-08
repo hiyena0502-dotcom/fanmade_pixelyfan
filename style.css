@@ -2,29 +2,33 @@
 @font-face{font-family:"Game Hand";src:url("./assets/fonts/gaegu-ui-regular.woff") format("woff");font-weight:400;font-style:normal;font-display:swap}
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;overflow:hidden}
-body{font-family:"Game Hand","Malgun Gothic",sans-serif;color:#66391e;background:#7ccff2}
+body{font-family:"Game Hand","Malgun Gothic",sans-serif;color:#66391e;background:linear-gradient(#68caf1,#9de4f8)}
 button{font:inherit}
 .title-screen{position:relative;width:100%;height:100svh;min-height:540px;overflow:hidden;isolation:isolate;-webkit-user-select:none;user-select:none}
 .title-screen img{-webkit-user-drag:none;pointer-events:none}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
-.scene{position:absolute;inset:0;z-index:-1;background:#7ccff2 url("./assets/title/storybook-garden-oct8.webp") center/cover no-repeat}
-.scene-render{position:absolute;left:0;bottom:0;width:auto;height:100%;max-width:none}
+.art-stage,.diary-positioner{position:absolute;left:50%;top:50%;width:min(100vw,208.341811svh);aspect-ratio:2048/983;transform:translate(-50%,-50%);pointer-events:none}
+.art-stage{z-index:0}
+.scene{position:absolute;inset:0;z-index:0}
+.scene-layer{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:contain}
+.layer-sky{z-index:0}
+.layer-clouds{z-index:1}
+.layer-garden{z-index:2}
+.layer-house{z-index:3;transform-origin:31% 94%}
+.layer-stones{z-index:4}
+.layer-bush{z-index:5;transform-origin:46% 98%;animation:bush-sway 4.8s ease-in-out infinite}
+.house-touch{position:absolute;left:9%;top:14%;width:43%;height:83%;pointer-events:auto;cursor:pointer;border:0;background:transparent;padding:0;clip-path:polygon(2% 30%,46% 0,98% 25%,91% 36%,94% 98%,6% 98%,8% 38%)}
+.house-touch:focus-visible{background:#fff3c51a;outline:3px dashed #fff5d2;outline-offset:-8px}
+@keyframes bush-sway{0%,100%{transform:rotate(-.6deg) skewX(-.5deg)}35%{transform:rotate(.8deg) skewX(.7deg)}65%{transform:rotate(.1deg) skewX(-.2deg)}}
 .leaf-breeze{position:absolute;inset:0;z-index:4;overflow:hidden;pointer-events:none}
 .drifting-leaf{position:absolute;left:0;top:0;will-change:transform}
 .leaf-blade{display:block;width:100%;height:100%;overflow:visible;color:var(--leaf-color);filter:drop-shadow(0 1px 1px #244e373b)}
 .leaf-vein{fill:none;stroke:#f1ffd4;stroke-opacity:.48;stroke-width:1.25;stroke-linecap:round}
-.hero{position:absolute;z-index:2;left:1.8vw;top:1.2svh;width:min(46vw,74svh)}
-.title-art{position:relative;width:100%;aspect-ratio:1492/839;overflow:hidden}
-.main-title{position:absolute;width:137.2654%;max-width:none;height:auto;left:-19.6381%;top:-18.236%;filter:drop-shadow(0 2px 2px #87533215)}
-.subtitle{position:relative;display:flex;align-items:center;justify-content:center;gap:10px;width:91%;margin:-2px auto 0;padding:5px 14px 8px;background:linear-gradient(180deg,#fffce7,#fff0c8);border:2px solid #dca15c;border-radius:14px 9px 13px 10px;outline:4px solid #fffaf0;box-shadow:0 5px 0 #ad714331;transform:rotate(-2deg);font-size:clamp(21px,3.7svh,38px);font-weight:700;line-height:1.2;letter-spacing:-.05em;white-space:nowrap;color:#693b20}
-.subtitle::before,.subtitle::after{content:"";position:absolute;bottom:-12px;width:21px;height:26px;background:#ffe5b5;border:2px solid #dca15c;z-index:-1}
-.subtitle::before{left:0;transform:rotate(20deg)}
-.subtitle::after{right:0;transform:rotate(-20deg)}
-.subtitle em{color:#f1697a;font-style:normal}
-.ribbon-star{color:#ffc544;font-size:.8em;text-shadow:1px 1px 0 #d39c32}
-.ribbon-heart{color:#f98191;font-size:.8em;text-shadow:1px 1px 0 #d06a74}
-.diary-positioner{position:absolute;z-index:3;left:50%;top:50%;width:min(100vw,208.341811svh);aspect-ratio:2048/983;transform:translate(-50%,-50%);pointer-events:none}
+.hero{position:absolute;inset:0;z-index:1}
+.layer-subtitle{z-index:0}
+.layer-title{z-index:1}
+.diary-positioner{z-index:3}
 .notebook{position:absolute;left:59.228515625%;top:3.560529%;width:33.3984375%;height:92.879959%;container-type:size;pointer-events:auto}
 .journal-base{position:absolute;inset:0;overflow:hidden;pointer-events:none}
 .journal-art{position:absolute;width:299.415205%;height:auto;max-width:none;left:-177.339181%;top:-3.833516%}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}.layer-bush{animation:none}}
