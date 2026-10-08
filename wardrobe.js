@@ -1,5 +1,5 @@
 "use strict";
-(()=>{const KEY="pixely-wardrobe-v1",LAYOUT_KEY="pixely-wardrobe-layout-v2";
+(()=>{const KEY="pixely-wardrobe-v1",LAYOUT_KEY="pixely-wardrobe-layout-v3";
 const outfits={basic:{name:"기본 의상"},outing:{name:"나들이 의상"}};
 const avatar=document.getElementById("dream-avatar"),preview=document.getElementById("preview-name"),status=document.getElementById("equipped-status"),wear=document.getElementById("wear-outfit");
 let equipped="basic",selected="basic";try{const value=localStorage.getItem(KEY);if(outfits[value])equipped=value}catch{}selected=equipped;
