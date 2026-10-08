@@ -6,6 +6,7 @@ const sign=document.querySelector(".door-sign");
 let houseReaction,signReaction;
 const reducedMotion=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
 houseTouch?.addEventListener("click",()=>{
+  void window.PixelySettings.playEffect("house");
   if(!window.PixelySettings.get().motion) return;
   houseReaction?.cancel();
   signReaction?.cancel();
@@ -38,6 +39,7 @@ const bushTouch=document.querySelector(".bush-touch");
 const bushLeaves=document.querySelector(".bush-leaves");
 let bushReaction;
 bushTouch?.addEventListener("click",()=>{
+  void window.PixelySettings.playEffect("bush");
   if(!window.PixelySettings.get().motion) return;
   bushReaction?.cancel();
   bushLeaves.querySelectorAll(".bush-leaf").forEach(leaf=>leaf.getAnimations().forEach(animation=>animation.cancel()));
@@ -95,6 +97,7 @@ function setActive(item){
 }
 
 items.forEach((item)=>{
+  item.addEventListener("click",()=>{void window.PixelySettings.playEffect("menu");});
   item.addEventListener("mouseenter",()=>setActive(item));
   item.addEventListener("focus",()=>setActive(item));
 });

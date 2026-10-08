@@ -17,6 +17,8 @@ test('volume and delay values stay in range and master mute overrides every soun
   assert.equal(settings.autoDelay,3500);
   assert.equal(volume(settings,'effects'),.4);
   for(const bus of ['effects','text']) assert.equal(volume({...settings,masterVolume:0},bus),0);
+  assert.equal(volume({...settings,effectsEnabled:false},'effects'),0);
+  assert.equal(volume({...settings,effectsEnabled:false},'text'),.5);
 });
 test('read-only skipping protects unseen dialogue while toggles survive JSON persistence',()=>{
   assert.equal(canSkip(DEFAULTS,false),false);
@@ -37,12 +39,15 @@ test('older effect preferences migrate to one switch, with explicit new choices 
   for(const key of ['animations','leaves','smoke']) assert.equal(key in migrated,false);
 });
 
-test('no default sound is assigned until a valid candidate is selected and music is removed',()=>{
-  assert.equal(normalize().effectsSound,'none');
+test('object effects default on, preserve a saved toggle, and no effect selection remains',()=>{
+  assert.equal(normalize().effectsEnabled,true);
+  assert.equal(normalize({effectsEnabled:false}).effectsEnabled,false);
+  const old=normalize({effectsSound:'none',musicVolume:70});
+  assert.equal(old.effectsEnabled,true);
+  assert.equal('effectsSound' in old,false);
+  assert.equal('musicVolume' in old,false);
   assert.equal(normalize().textSound,'none');
-  assert.equal(normalize({effectsSound:'wood',textSound:'soft'}).effectsSound,'wood');
-  assert.equal(normalize({effectsSound:'unknown'}).effectsSound,'none');
-  assert.equal('musicVolume' in normalize({musicVolume:70}),false);
-  const selected=normalize({effectsSound:'paper',textSound:'bubble'});
+  assert.equal(normalize({textSound:'unknown'}).textSound,'none');
+  const selected=normalize({effectsEnabled:false,textSound:'bubble'});
   assert.deepEqual(normalize(JSON.parse(JSON.stringify(selected))),selected);
 });
