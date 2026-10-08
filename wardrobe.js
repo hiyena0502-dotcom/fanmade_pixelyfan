@@ -1,0 +1,21 @@
+"use strict";
+(()=>{const KEY="pixely-wardrobe-v1",LAYOUT_KEY="pixely-wardrobe-layout-v1";
+const outfits={basic:{name:"기본 의상"},outing:{name:"나들이 의상"}};
+const avatar=document.getElementById("dream-avatar"),preview=document.getElementById("preview-name"),status=document.getElementById("equipped-status"),wear=document.getElementById("wear-outfit");
+let equipped="basic",selected="basic";try{const value=localStorage.getItem(KEY);if(outfits[value])equipped=value}catch{}selected=equipped;
+function render(){avatar.classList.toggle("outing",selected==="outing");preview.textContent=outfits[selected].name;status.textContent="현재 의상: "+outfits[equipped].name;wear.textContent=selected===equipped?"✓ 착용 중":"♧ 이 의상 입기";wear.disabled=selected===equipped;document.querySelectorAll("[data-outfit]").forEach(card=>{const id=card.dataset.outfit;card.classList.toggle("selected",id===selected);card.querySelector("small").textContent=id===equipped?"착용 중":"선택 가능";card.setAttribute("aria-pressed",String(id===selected))})}
+document.querySelectorAll("[data-outfit]").forEach(card=>card.addEventListener("click",()=>{selected=card.dataset.outfit;render()}));
+wear.addEventListener("click",()=>{equipped=selected;try{localStorage.setItem(KEY,equipped)}catch{}render()});render();
+const controls=[["book-x","옷장 X",-450,450,1,0,"px"],["book-y","옷장 Y",-300,300,1,0,"px"],["book-scale","옷장 크기",.5,1.5,.01,1,""],["mirror-x","거울 X",-180,180,1,0,"px"],["mirror-y","거울 Y",-180,180,1,0,"px"],["mirror-scale","거울 크기",.5,1.5,.01,1,""],["avatar-x","꿈뜰이 X",-160,160,1,0,"px"],["avatar-y","꿈뜰이 Y",-160,160,1,0,"px"],["avatar-scale","꿈뜰이 크기",.4,2,.01,1,""],["grid-x","의상 목록 X",-150,150,1,0,"px"],["grid-y","의상 목록 Y",-150,150,1,0,"px"],["grid-scale","의상 목록 크기",.5,1.5,.01,1,""]];
+let values={};try{values=JSON.parse(localStorage.getItem(LAYOUT_KEY))||{}}catch{}
+const defaults=Object.fromEntries(controls.map(([key,,,,defaultValue])=>[key,defaultValue]));
+values={...defaults,...values};
+const panel=document.getElementById("wardrobe-dev"),controlRoot=document.getElementById("dev-controls");
+function apply(){controls.forEach(([key,,,,defaultValue,unit])=>{const value=Number(values[key]);values[key]=Number.isFinite(value)?value:defaultValue;document.body.style.setProperty("--"+key,values[key]+unit)});try{localStorage.setItem(LAYOUT_KEY,JSON.stringify(values))}catch{}}
+controls.forEach(([key,label,min,max,step,defaultValue])=>{const row=document.createElement("label");row.className="dev-control";const span=document.createElement("span"),input=document.createElement("input"),output=document.createElement("output");span.textContent=label;input.type="range";input.min=min;input.max=max;input.step=step;input.value=values[key];output.textContent=values[key];input.addEventListener("input",()=>{values[key]=Number(input.value);output.textContent=input.value;apply()});row.append(span,input,output);controlRoot.append(row)});apply();
+document.getElementById("wardrobe-dev-toggle").addEventListener("click",()=>{panel.hidden=!panel.hidden});
+document.getElementById("dev-close").addEventListener("click",()=>{panel.hidden=true});
+document.getElementById("dev-reset").addEventListener("click",()=>{values={...defaults};controlRoot.querySelectorAll("input").forEach((input,i)=>{input.value=values[controls[i][0]];input.nextElementSibling.textContent=input.value});apply()});
+document.getElementById("dev-export").addEventListener("click",async()=>{const data=JSON.stringify(values,null,2);try{await navigator.clipboard.writeText(data);alert("설정 JSON을 복사했어요")}catch{prompt("설정 JSON",data)}});
+document.addEventListener("keydown",event=>{if(event.key==="Escape"&&!panel.hidden){panel.hidden=true}});
+})();
