@@ -25,7 +25,7 @@ button{font:inherit}
 .bush-leaves{position:absolute;left:38.7%;top:79%;width:13.6%;height:19%;pointer-events:none}
 .bush-leaf{position:absolute;display:block;width:9%;aspect-ratio:1;opacity:0}
 .bush-leaf svg{display:block;width:100%;height:100%;fill:currentColor}
-.door-sign{position:absolute;left:28.9%;top:69.7%;width:4.6%;aspect-ratio:960/795;overflow:hidden;transform-origin:50% 4%;pointer-events:none}
+.door-sign{position:absolute;left:28.241992%;top:70.9%;width:4.6%;aspect-ratio:960/795;overflow:hidden;transform-origin:50% 4%;animation:sign-sway 3.4s ease-in-out infinite;pointer-events:none}
 .door-sign img{position:absolute;max-width:none;width:174.166667%;height:auto;left:-37.083333%;top:-10.440252%}
 .house-touch{position:absolute;left:9%;top:14%;width:43%;height:83%;pointer-events:auto;cursor:pointer;border:0;background:transparent;padding:0;touch-action:manipulation;clip-path:polygon(2% 30%,46% 0,98% 25%,91% 36%,94% 98%,6% 98%,8% 38%)}
 .house-touch:focus-visible{outline:3px dashed #fff5d2;outline-offset:-8px}
@@ -37,12 +37,14 @@ button{font:inherit}
 .layer-subtitle{z-index:0}
 .layer-title{z-index:1;transform-origin:18% 23%;animation:title-rock 5.8s ease-in-out infinite}
 .art-stage:has(.title-hover:hover) .layer-title{animation-duration:2.6s}
-.art-stage:has(.house-touch:hover) .door-sign{animation:sign-hover .8s ease-in-out infinite}
+.art-stage:has(.house-touch:hover) .door-sign{animation-duration:1.4s}
 .art-stage:has(.bush-touch:hover) .bush-art{transform:scale(1.006)}
-@keyframes title-rock{0%,100%{transform:rotate(-.65deg) translateY(0)}50%{transform:rotate(.65deg) translateY(-.15%)}}
-@keyframes sign-hover{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+@keyframes title-rock{0%,100%{transform:rotate(-1.2deg) translateY(0)}50%{transform:rotate(1.2deg) translateY(-.15%)}}
+@keyframes sign-sway{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+@keyframes title-rock-calm{0%,100%{transform:rotate(-.35deg)}50%{transform:rotate(.35deg)}}
+@keyframes sign-sway-calm{0%,100%{transform:rotate(-1deg)}50%{transform:rotate(1deg)}}
 .diary-positioner{z-index:3}
 .notebook{position:absolute;left:59.228515625%;top:3.560529%;width:33.3984375%;height:92.879959%;container-type:size;pointer-events:auto}
 .journal-base{position:absolute;inset:0;overflow:hidden;pointer-events:none}
 .journal-art{position:absolute;width:299.415205%;height:auto;max-width:none;left:-177.339181%;top:-3.833516%}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}.layer-title,.art-stage:has(.house-touch:hover) .door-sign{animation:none}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}.layer-title{animation-name:title-rock-calm;animation-duration:12s!important}.door-sign{animation-name:sign-sway-calm;animation-duration:6s!important}}

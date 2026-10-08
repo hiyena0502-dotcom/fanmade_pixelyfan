@@ -9,16 +9,17 @@ houseTouch?.addEventListener("click",()=>{
   houseReaction?.cancel();
   signReaction?.cancel();
   const calm=reducedMotion();
-  // Two springy hops settle at the original position; no colour/filter changes.
-  houseReaction=house.animate(calm?[{transform:"translateY(0)"},{transform:"translateY(-.35%)"},{transform:"translateY(0)"}]:[
+  // Squash, stretch and three diminishing hops, with the foundation as pivot.
+  houseReaction=house.animate(calm?[{transform:"translateY(0)"},{transform:"translateY(-.8%)"},{transform:"translateY(0)"}]:[
     {transform:"translateY(0) scale(1)"},
-    {transform:"translateY(.4%) scale(1.016,.98)",offset:.12},
-    {transform:"translateY(-1.8%) scale(.989,1.016)",offset:.3},
-    {transform:"translateY(0) scale(1.014,.984)",offset:.48},
-    {transform:"translateY(-.9%) scale(.994,1.008)",offset:.65},
-    {transform:"translateY(0) scale(1.006,.994)",offset:.82},
+    {transform:"translateY(.5%) scale(1.06,.9)",offset:.14},
+    {transform:"translateY(-3.2%) scale(.95,1.085)",offset:.32},
+    {transform:"translateY(.1%) scale(1.05,.925)",offset:.52},
+    {transform:"translateY(-1.7%) scale(.975,1.045)",offset:.66},
+    {transform:"translateY(0) scale(1.025,.97)",offset:.8},
+    {transform:"translateY(-.55%) scale(.99,1.015)",offset:.91},
     {transform:"translateY(0) scale(1)"}
-  ],{duration:calm?320:900,easing:"ease-in-out"});
+  ],{duration:calm?400:1150,easing:"ease-in-out"});
   signReaction=sign.animate(calm?[{transform:"rotate(0deg)"},{transform:"rotate(2deg)"},{transform:"rotate(0deg)"}]:[
     {transform:"rotate(0deg)"},{transform:"rotate(-7deg)"},
     {transform:"rotate(5deg)"},{transform:"rotate(-2deg)"},{transform:"rotate(0deg)"}
