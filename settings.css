@@ -40,17 +40,18 @@
 .settings-done{padding:12px 30px;background:#91a573;border:1px solid #718852;color:#fffef2;border-radius:10px;font:700 17px "Malgun Gothic","Noto Sans KR",sans-serif;cursor:pointer;box-shadow:0 3px 0 #6d824b}
 .settings-dialog button:hover{filter:brightness(1.035)}
 .settings-dialog :is(button,input,select):focus-visible{outline:3px solid #c9944e;outline-offset:4px}
-.settings-help{margin:5px 0;font-size:16px;line-height:1.7}
-.settings-help div{display:flex;align-items:center;gap:26px;padding:18px 0;border-bottom:1px dashed #cdbb9b}
-.settings-help dt{min-width:125px;font-weight:700}
-.settings-help dd{margin:0;color:#91704f}
-.settings-help kbd{display:inline-block;padding:3px 10px;background:#eee1c8;border:1px solid #c6af8d;border-bottom-width:3px;border-radius:6px;font:inherit;font-size:14px}
-.animations-off .layer-title,.animations-off .door-sign{animation:none!important;transform:none!important}
-.animations-off :is(.menu-item,.menu-content,.menu-icon,.wardrobe-tag){transition:none!important}
-.animations-off .menu-item:hover .menu-content,.animations-off .menu-item:focus-visible .menu-content,.animations-off .menu-item:hover .menu-icon,.animations-off .menu-item.is-active .menu-icon,.animations-off .wardrobe-tag:hover,.animations-off .wardrobe-tag:focus-visible{transform:none!important}
-.leaves-off .leaf-breeze,.leaves-off .bush-leaves{visibility:hidden}
-.smoke-off .chimney-smoke{visibility:hidden}
-.smoke-off .chimney-smoke span{animation-play-state:paused}
-.interaction-hints .house-touch::after,.interaction-hints .bush-touch::after{content:"?";position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);display:grid;place-items:center;width:34px;height:34px;border:2px dashed #a47a45;border-radius:50%;background:#fff6d9;color:#89603b;font:700 21px "Malgun Gothic",sans-serif;box-shadow:0 2px 8px #65412830;pointer-events:none}
+.motions-off .layer-title,.motions-off .door-sign{animation:none!important;transform:none!important}
+.motions-off :is(.menu-item,.menu-content,.menu-icon,.wardrobe-tag,.settings-switch input),.motions-off .settings-switch input::before{transition:none!important}
+.motions-off .menu-item:hover .menu-content,.motions-off .menu-item:focus-visible .menu-content,.motions-off .menu-item:hover .menu-icon,.motions-off .menu-item.is-active .menu-icon,.motions-off .wardrobe-tag:hover,.motions-off .wardrobe-tag:focus-visible{transform:none!important}
+.motions-off .leaf-breeze,.motions-off .bush-leaves{visibility:hidden}
+.motions-off .chimney-smoke{visibility:hidden}
+.motions-off .chimney-smoke span{animation-play-state:paused}
+.interaction-hints .house-touch::before,.interaction-hints .house-touch::after,.interaction-hints .bush-touch::before,.interaction-hints .bush-touch::after{content:"";position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);pointer-events:none}
+.interaction-hints .house-touch::before,.interaction-hints .bush-touch::before{width:22px;height:40px;background:#9a7246}
+.interaction-hints .house-touch::after,.interaction-hints .bush-touch::after{width:17px;height:32px;background:#fff4d4}
 .dialogue-text{font-size:var(--dialogue-font-size,22px)}
 @media(prefers-reduced-motion:reduce){.settings-switch input,.settings-switch input::before{transition:none}}
+
+.sound-choice{display:flex;align-items:center;gap:10px}
+.sound-choice-row{min-height:64px;padding:12px 0}
+.settings-dialog button:disabled{opacity:.45;cursor:default;filter:none}
