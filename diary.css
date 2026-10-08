@@ -1,20 +1,16 @@
-.journal-heading{position:absolute;left:17%;right:11%;top:8.8%;text-align:left;font-weight:700;transform:rotate(-3deg)}
-.journal-heading h2{display:flex;justify-content:space-between;align-items:baseline;gap:5px;margin:0;font-size:clamp(32px,6.2svh,68px);line-height:1.1;letter-spacing:-.08em;white-space:nowrap}
-.channel-name{color:#318bc6}
-.anniversary-years{color:#f26283}
-.anniversary-word{position:relative;width:fit-content;margin:1.6svh 0 0;font-size:clamp(30px,5.9svh,65px);line-height:1.05;letter-spacing:-.075em;color:#f2b84d;transform:rotate(-1deg)}
-.anniversary-word::after{content:"";position:absolute;left:0;right:1%;bottom:-5px;height:3px;background:#f2c967;border-radius:55% 40% 50% 35%;transform:rotate(-1deg)}
-.fan-label{margin:2.1svh 0 0;font-size:clamp(18px,2.6svh,28px);line-height:1.2;color:#8c5936}
+.journal-heading{position:absolute;left:17%;right:11%;top:9%;text-align:left;font-weight:700;transform:rotate(-3deg)}
+.anniversary-art{position:relative;width:100%;overflow:hidden}
+.anniversary-art img{position:absolute;height:auto;max-width:none}
+.fan-label{margin:2.1cqh 0 0;font-size:clamp(18px,2.6cqh,28px);line-height:1.2;color:#8c5936}
 .fan-label span{display:inline-block;color:#f58696;font-size:1.25em;transform:rotate(-10deg)}
-.header-star{position:absolute;left:-6%;top:57%;width:4svh;fill:none;stroke:#efb844;stroke-width:3;stroke-linejoin:round;transform:rotate(-8deg)}
 .main-menu{position:absolute;left:20%;right:15%;top:48.5%;bottom:21%;display:grid;grid-template-rows:repeat(4,minmax(0,1fr));gap:0}
 .menu-item{appearance:none;position:relative;border:0;background:transparent;color:#65391e;cursor:pointer;touch-action:manipulation}
-.main-menu .menu-item{display:grid;grid-template-columns:clamp(28px,4.7svh,48px) minmax(0,1fr) clamp(25px,4svh,42px);align-items:center;gap:clamp(9px,1.5svh,17px);padding:0 0 7px;text-align:left;min-height:0}
+.main-menu .menu-item{display:grid;grid-template-columns:clamp(28px,4.7cqh,48px) minmax(0,1fr) clamp(25px,4cqh,42px);align-items:center;gap:clamp(9px,1.5cqh,17px);padding:0 0 7px;text-align:left;min-height:0}
 .main-menu .menu-item::after{content:"";position:absolute;left:0;right:0;bottom:12%;height:2px;background:#986c4b;border-radius:60% 35% 55% 20%;transform:rotate(.7deg)}
 .main-menu .menu-item:nth-child(2)::after{transform:rotate(-1deg)}
 .main-menu .menu-item:nth-child(3)::after{transform:rotate(.2deg)}
 .main-menu .menu-item:nth-child(4)::after{transform:rotate(-.6deg)}
-.menu-name{font-weight:700;font-size:clamp(29px,5.1svh,53px);line-height:1.1;letter-spacing:-.07em;white-space:nowrap;transition:color .16s ease}
+.menu-name{font-weight:700;font-size:clamp(29px,5.1cqh,53px);line-height:1.1;letter-spacing:-.07em;white-space:nowrap;transition:color .16s ease}
 .menu-icon{display:grid;place-items:center;width:100%;aspect-ratio:1;border:2px solid currentColor;border-radius:48% 52% 50% 46%;background:#fffaf04d;transition:background .16s ease,transform .16s ease}
 .menu-icon svg{width:70%;height:70%;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .menu-icon .icon-fill{fill:currentColor;stroke-width:1}
@@ -27,12 +23,25 @@
 .menu-item:hover .menu-name,.menu-item.is-active .menu-name{color:#905331}
 .menu-item:hover .menu-icon,.menu-item.is-active .menu-icon{background:#fff8eacb;transform:rotate(-6deg)}
 .menu-item:focus-visible{outline:3px dashed #cf8a54;outline-offset:4px;border-radius:5px;background:#fff5da35}
-.row-doodle{display:grid;place-items:center;font-size:clamp(25px,4.8svh,50px);font-weight:700;line-height:1;transform:rotate(8deg)}
+.row-doodle{display:grid;place-items:center;font-size:clamp(25px,4.8cqh,50px);font-weight:700;line-height:1;transform:rotate(8deg)}
 .row-doodle svg{width:100%;fill:#90bd4e;stroke:#78a942;stroke-width:2;stroke-linecap:round}
 .heart-doodle{color:#f78491;transform:rotate(-12deg)}
 .star-doodle{color:#ffc54c}
 .flower-doodle{color:#74c5e5}
-.wardrobe-tag{position:absolute;left:65%;top:85.2%;width:25%;height:7.5%;display:flex;align-items:center;justify-content:center;gap:5px;padding:3px 5px;text-align:left;transform:rotate(3deg);font-size:clamp(16px,2.5svh,27px);font-weight:700;line-height:1.05;letter-spacing:-.07em;white-space:nowrap}
+.wardrobe-tag{position:absolute;left:65%;top:85.2%;width:25%;height:7.5%;display:flex;align-items:center;justify-content:center;gap:5px;padding:3px 5px;text-align:left;transform:rotate(3deg);font-size:clamp(16px,2.5cqh,27px);font-weight:700;line-height:1.05;letter-spacing:-.07em;white-space:nowrap}
 .wardrobe-tag svg{width:1.05em;height:1.05em;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .wardrobe-tag:hover,.wardrobe-tag.is-active{color:#9e6041}
 .wardrobe-tag:focus-visible{outline-offset:1px}
+
+.note-stickers{position:absolute;inset:0;pointer-events:none}
+.note-sticker{position:absolute;overflow:hidden}
+.note-sticker img{position:absolute;height:auto;max-width:none}
+.sticker-sprig{left:10.81871345%;top:39.32092004%;width:18.27485380%;height:13.14348302%}
+.sticker-sprig img{width:1638.40000000%;left:-1080.00000000%;top:-326.66666667%}
+.sticker-daisy{left:72.95321637%;top:36.91128149%;width:17.54385965%;height:12.04819277%}
+.sticker-daisy img{width:1706.66666667%;left:-1479.16666667%;top:-336.36363636%}
+.sticker-vine{left:8.18713450%;top:68.01752464%;width:19.29824561%;height:29.79189485%}
+.sticker-vine img{width:1551.51515152%;left:-1009.09090909%;top:-240.44117647%}
+
+.anniversary-art{aspect-ratio:1587/653}
+.anniversary-art img{width:111.78323882%;left:-6.49023314%;top:-22.35834609%}

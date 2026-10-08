@@ -19,7 +19,8 @@ button{font:inherit}
 .subtitle em{color:#f1697a;font-style:normal}
 .ribbon-star{color:#ffc544;font-size:.8em;text-shadow:1px 1px 0 #d39c32}
 .ribbon-heart{color:#f98191;font-size:.8em;text-shadow:1px 1px 0 #d06a74}
-.notebook{position:absolute;z-index:3;right:1.4vw;top:0;height:99svh;aspect-ratio:684/913}
+.diary-positioner{position:absolute;z-index:3;left:50%;top:50%;width:min(100vw,208.341811svh);aspect-ratio:2048/983;transform:translate(-50%,-50%);pointer-events:none}
+.notebook{position:absolute;left:62.3046875%;top:3.35707%;width:33.3984375%;height:92.879959%;container-type:size;pointer-events:auto}
 .journal-base{position:absolute;inset:0;overflow:hidden;pointer-events:none}
 .journal-art{position:absolute;width:299.415205%;height:auto;max-width:none;left:-186.549708%;top:-3.614458%}
 .menu-note{position:absolute;z-index:5;left:50%;bottom:10px;transform:translateX(-50%);max-width:80vw;margin:0;padding:8px 18px;background:#fff6e5f2;border:1px solid #c9976c;border-radius:8px;font-size:20px;line-height:1.2;box-shadow:0 2px 10px #633a2522}
