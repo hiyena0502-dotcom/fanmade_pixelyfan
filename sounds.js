@@ -16,10 +16,11 @@
     if(t<=0||t>=duration) return 0;
     return Math.min(1,t/attack)*Math.pow(Math.sin(Math.PI*t/duration),.65);
   }
-  function render(kind){
+  function render(kind,target=""){
     const notes=effects[kind],voice=voices[kind];
     if(!notes&&!voice) return new Float32Array(0);
-    const duration=notes?Math.max(...notes.map(note=>note.time+note.duration))+.03:phrase.length*(voice.duration+voice.gap)+.11;
+    const baseDuration=notes?Math.max(...notes.map(note=>note.time+note.duration))+.03:phrase.length*(voice.duration+voice.gap)+.11;
+    const duration=notes&&target==="bush"?Math.max(baseDuration,.58):notes&&target==="house"?Math.max(baseDuration,.29):baseDuration;
     const samples=new Float32Array(Math.ceil(duration*RATE));
     if(notes){
       for(const note of notes){
@@ -31,6 +32,25 @@
           phase+=2*Math.PI*pitch/RATE;
           const tone=Math.sin(phase)+note.bell*Math.sin(phase*2.76)*Math.exp(-u*5)+.055*Math.sin(phase*2);
           samples[offset+i]+=tone*envelope(t,note.duration)*Math.exp(-u*2.4)*note.level;
+        }
+      }
+      if(target==="house"){
+        // A quiet low spring underneath the chosen UI timbre.
+        let phase=0;
+        for(let i=0;i<Math.ceil(.26*RATE);i++){
+          const t=i/RATE;
+          phase+=2*Math.PI*(110+85*Math.exp(-t*21))/RATE;
+          samples[i]+=Math.sin(phase)*envelope(t,.26,.009)*Math.exp(-t*11)*.11;
+        }
+      }else if(target==="bush"){
+        // Filtered noise in three soft strokes, like leaves brushing together.
+        let seed=173,low=0;
+        for(let i=0;i<samples.length;i++){
+          seed=(Math.imul(seed,1664525)+1013904223)>>>0;
+          const noise=seed/4294967296*2-1,t=i/RATE;
+          low+=.17*(noise-low);
+          const stroke=[.025,.17,.32].reduce((sum,start)=>sum+envelope(t-start,.19,.027),0);
+          samples[i]+=(noise-low)*stroke*.045;
         }
       }
     }else{

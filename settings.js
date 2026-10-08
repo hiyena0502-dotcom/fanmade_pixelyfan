@@ -70,6 +70,7 @@
   window.PixelySettings=Object.freeze({
     get:()=>({...settings}),
     getVolume:bus=>volume(settings,bus),
+    playEffect:target=>playSound("effects",{target}),
     canSkip:alreadyRead=>canSkip(settings,alreadyRead),
     registerAudio:(element,bus="effects")=>{element.dataset.audioBus=bus;media.add(element);element.volume=volume(settings,bus);return ()=>media.delete(element);},
     saveProgress:progress=>{
@@ -136,30 +137,37 @@
   });
   dialog.querySelector("[data-replay-preview]").addEventListener("click",showPreview);
 
-  async function soundCheck(bus){
+  async function playSound(bus,{target="",previewSound=false}={}){
     const kind=settings[`${bus}Sound`];
     if(kind==="none") return;
     const Audio=window.AudioContext||window.webkitAudioContext;
-    if(!Audio){status.textContent="이 브라우저에서는 소리 미리듣기를 사용할 수 없어요";return;}
+    if(!Audio){if(previewSound) status.textContent="이 브라우저에서는 소리 미리듣기를 사용할 수 없어요";return false;}
     try{
       audioContext??=new Audio();
       if(audioContext.state==="suspended") await audioContext.resume();
       const level=volume(settings,bus);
-      if(!level){status.textContent="현재 음량이 0으로 설정돼 있어요";return;}
-      const samples=window.PixelySounds.render(kind);
+      if(!level){if(previewSound) status.textContent="현재 음량이 0으로 설정돼 있어요";return false;}
+      const samples=window.PixelySounds.render(kind,target);
       const buffer=audioContext.createBuffer(1,samples.length,window.PixelySounds.sampleRate);
       buffer.copyToChannel(samples,0);
-      // Repeated previews replace the previous phrase instead of overlapping it.
-      if(activeSound){activeSound.source.stop();activeSound.source.disconnect();activeSound.gain.disconnect();}
+      // A short fade replaces the previous click/preview without a hard audio cut.
+      if(activeSound){
+        const previous=activeSound,time=audioContext.currentTime;
+        previous.gain.gain.cancelScheduledValues(time);
+        previous.gain.gain.setValueAtTime(previous.gain.gain.value,time);
+        previous.gain.gain.linearRampToValueAtTime(0,time+.018);
+        previous.source.stop(time+.02);
+      }
       const source=audioContext.createBufferSource(),gain=audioContext.createGain();
       source.buffer=buffer;gain.gain.value=level;
       source.connect(gain);gain.connect(audioContext.destination);
       activeSound={source,gain,bus};
       source.onended=()=>{source.disconnect();gain.disconnect();if(activeSound?.source===source) activeSound=null;};
       source.start();
-      status.textContent="선택한 소리를 들려드려요";
-    }catch{status.textContent="소리를 재생하지 못했어요";}
+      if(previewSound) status.textContent="선택한 소리를 들려드려요";
+      return true;
+    }catch{if(previewSound) status.textContent="소리를 재생하지 못했어요";return false;}
   }
-  dialog.querySelectorAll("[data-sound-check]").forEach(button=>button.addEventListener("click",()=>soundCheck(button.dataset.soundCheck)));
+  dialog.querySelectorAll("[data-sound-check]").forEach(button=>button.addEventListener("click",()=>playSound(button.dataset.soundCheck,{previewSound:true})));
   syncControls();apply();
 })();
