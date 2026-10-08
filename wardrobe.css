@@ -29,3 +29,9 @@ html,body{min-height:100%;overflow:hidden}.wardrobe-page{--book-x:0px;--book-y:0
 .dev-image-editor button{padding:8px;border:1px solid #bf9970;border-radius:8px;background:#fff7ec;cursor:pointer}
 .dev-image-editor small{font-size:11px;line-height:1.5}
 @media(max-width:800px){.dream-avatar{transform:translate(-50%,-50%) translate(var(--avatar-x),var(--avatar-y)) scale(var(--avatar-scale));}}
+
+/* Wide desktop book sizing: fills the viewport without clipping. */
+.wardrobe-book{width:min(96vw,1720px);height:min(89svh,920px);min-height:0;}
+.wardrobe-header{height:15%;min-height:0;padding-top:clamp(14px,2.6vh,28px)}
+.wardrobe-pages{height:83%;}
+@media(max-width:800px){.wardrobe-book{width:97vw;height:88svh;min-height:0}}
