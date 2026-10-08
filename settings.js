@@ -31,7 +31,7 @@
   const status=dialog.querySelector(".settings-status");
   const preview=dialog.querySelector(".dialogue-preview-text");
   const media=new Set();
-  let settings,storageAvailable=true,audioContext,activeSound,previewFrame=0;
+  let settings,storageAvailable=true,audioContext,activeSound,previewFrame=0,voiceEpoch=0;
   try{settings=normalize(JSON.parse(localStorage.getItem(KEY)));}catch{settings=normalize();}
 
   function persist(){
@@ -84,15 +84,29 @@
     if(element instanceof HTMLMediaElement&&element.dataset.audioBus){media.add(element);element.volume=volume(settings,element.dataset.audioBus);}
   },true);
 
-  function showPreview(){
+  function stopDialoguePreview(){
     cancelAnimationFrame(previewFrame);
+    voiceEpoch++;
+    if(activeSound?.bus==="text"){
+      activeSound.source.stop();activeSound.source.disconnect();activeSound.gain.disconnect();activeSound=null;
+    }
+  }
+  function showPreview(){
+    stopDialoguePreview();
     const text="초대는 받았고, 귀가는 미정!";
     if(!settings.textSpeed){preview.textContent=text;return;}
     preview.textContent="";
     const start=performance.now();
+    const epoch=voiceEpoch;
+    let previousCount=0,lastVoice=-Infinity,syllable=0;
     function tick(now){
       const count=Math.min(text.length,Math.floor((now-start)/1000*settings.textSpeed));
       preview.textContent=text.slice(0,count);
+      if(count>previousCount&&now-lastVoice>=82&&/[\p{L}\p{N}]/u.test(text.slice(previousCount,count))){
+        void playSound("text",{syllableIndex:syllable++,typingEpoch:epoch});
+        lastVoice=now;
+      }
+      previousCount=count;
       if(count<text.length&&dialog.open&&!document.querySelector("#settings-dialogue").hidden) previewFrame=requestAnimationFrame(tick);
     }
     previewFrame=requestAnimationFrame(tick);
@@ -100,7 +114,7 @@
   function selectTab(tab,focus=false){
     tabs.forEach(item=>{const selected=item===tab;item.setAttribute("aria-selected",String(selected));item.tabIndex=selected?0:-1;});
     panels.forEach(panel=>{panel.hidden=panel.id!==tab.getAttribute("aria-controls");});
-    cancelAnimationFrame(previewFrame);
+    stopDialoguePreview();
     if(tab.getAttribute("aria-controls")==="settings-dialogue") showPreview();
     if(focus) tab.focus({preventScroll:true});
   }
@@ -130,7 +144,7 @@
     const rect=dialog.getBoundingClientRect();
     if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom) dialog.close();
   });
-  dialog.addEventListener("close",()=>{cancelAnimationFrame(previewFrame);document.querySelector('[data-action="settings"]').focus({preventScroll:true});});
+  dialog.addEventListener("close",()=>{stopDialoguePreview();document.querySelector('[data-action="settings"]').focus({preventScroll:true});});
   dialog.querySelector("[data-reset-settings]").addEventListener("click",()=>{
     settings=normalize();syncControls();apply();persist();
     status.textContent="기본 설정으로 되돌렸어요";
@@ -138,7 +152,7 @@
   });
   dialog.querySelector("[data-replay-preview]").addEventListener("click",showPreview);
 
-  async function playSound(bus,{target="",previewSound=false}={}){
+  async function playSound(bus,{target="",previewSound=false,syllableIndex=null,typingEpoch=null}={}){
     if(bus==="effects"&&!settings.effectsEnabled) return false;
     const kind=bus==="effects"?window.PixelySounds.effectKind(target):settings.textSound;
     if(kind==="none") return;
@@ -147,9 +161,10 @@
     try{
       audioContext??=new Audio();
       if(audioContext.state==="suspended") await audioContext.resume();
+      if(typingEpoch!==null&&typingEpoch!==voiceEpoch) return false;
       const level=volume(settings,bus);
       if(!level){if(previewSound) status.textContent="현재 음량이 0으로 설정돼 있어요";return false;}
-      const samples=window.PixelySounds.render(kind,target);
+      const samples=window.PixelySounds.render(kind,target,syllableIndex);
       const buffer=audioContext.createBuffer(1,samples.length,window.PixelySounds.sampleRate);
       buffer.copyToChannel(samples,0);
       // A short fade replaces the previous click/preview without a hard audio cut.

@@ -8,18 +8,19 @@
     wood:[{time:0,pitch:470,end:300,duration:.19,level:.36,bell:.03}],
     pop:[{time:0,pitch:660,end:720,duration:.18,level:.26,bell:.22},{time:.095,pitch:990,end:1020,duration:.25,level:.22,bell:.24}]
   };
-  const voices={soft:{pitch:290,duration:.077,gap:.014,level:.3},pixel:{pitch:390,duration:.061,gap:.01,level:.27},bubble:{pitch:235,duration:.09,gap:.023,level:.32}};
+  const voices={soft:{pitch:365,duration:.063,gap:.013,level:.3},pixel:{pitch:380,duration:.054,gap:.012,level:.28},bubble:{pitch:345,duration:.074,gap:.017,level:.3}};
   const vowels=[[730,1090,2440],[270,2290,3010],[300,870,2240],[530,1840,2480],[570,840,2410]];
   const phrase=[0,2,1,4,3,1,2,0,4];
-  const melody=[1,1.12,.95,1.2,1.06,.91,1.15,1.03,.88];
+  const melody=[1,1.015,.992,1.012,1.003,.988,1.008,1,.995];
   function envelope(t,duration,attack=.006){
     if(t<=0||t>=duration) return 0;
     return Math.min(1,t/attack)*Math.pow(Math.sin(Math.PI*t/duration),.65);
   }
-  function render(kind,target=""){
+  function render(kind,target="",syllableIndex=null){
     const notes=effects[kind],voice=voices[kind];
     if(!notes&&!voice) return new Float32Array(0);
-    const baseDuration=notes?Math.max(...notes.map(note=>note.time+note.duration))+.03:phrase.length*(voice.duration+voice.gap)+.11;
+    const single=Number.isInteger(syllableIndex)&&syllableIndex>=0;
+    const baseDuration=notes?Math.max(...notes.map(note=>note.time+note.duration))+.03:(single?1:phrase.length)*(voice.duration+voice.gap)+.11;
     const duration=notes&&target==="bush"?Math.max(baseDuration,.58):notes&&target==="house"?Math.max(baseDuration,.29):baseDuration;
     const samples=new Float32Array(Math.ceil(duration*RATE));
     if(notes){
@@ -55,19 +56,20 @@
       }
     }else{
       let offset=0;
-      for(let syllable=0;syllable<phrase.length;syllable++){
+      for(let step=0;step<(single?1:phrase.length);step++){
+        const syllable=single?syllableIndex%phrase.length:step;
         const length=voice.duration*(syllable%3===1?.88:1.08),formants=vowels[phrase[syllable]];
         let phase=0;
         const base=voice.pitch*melody[syllable];
-        const weights=Array.from({length:28},(_,h)=>{
+        const weights=Array.from({length:Math.min(28,Math.floor(RATE*.45/(base*1.055)))},(_,h)=>{
           const frequency=(h+1)*base;
           // A smooth harmonic source with vowel resonances, rather than a beep.
-          return (.45/(h+1)+formants.reduce((sum,f,index)=>sum+[1,.7,.28][index]*Math.exp(-.5*Math.pow((frequency-f)/(index===0?160:240),2)),0))/Math.pow(h+1,.45);
+          return (.6/(h+1)+formants.reduce((sum,f,index)=>sum+[1,.42,.12][index]*Math.exp(-.5*Math.pow((frequency-f*1.1)/(index===0?175:250),2)),0))/Math.pow(h+1,.5);
         });
         const scale=voice.level/weights.reduce((sum,w)=>sum+w,0);
         for(let i=0;i<Math.ceil(length*RATE);i++){
           const t=i/RATE,u=t/length;
-          const pitch=base*(1+.055*Math.sin(u*Math.PI)-.08*u);
+          const pitch=base*(1+.009*Math.sin(u*Math.PI)-.012*u);
           phase+=2*Math.PI*pitch/RATE;
           let sample=0;
           for(let h=0;h<weights.length;h++) sample+=weights[h]*Math.sin(phase*(h+1));
