@@ -48,10 +48,14 @@ button{font:inherit}
 .journal-art{position:absolute;width:299.415205%;height:auto;max-width:none;left:-177.339181%;top:-3.833516%}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}.layer-title{animation-name:title-rock-calm;animation-duration:12s!important}.door-sign{animation-name:sign-sway-calm;animation-duration:6s!important}}
 
-.chimney-smoke{position:absolute;left:40.65%;top:21.5%;width:3%;height:4%;pointer-events:none}
-.chimney-smoke span{position:absolute;left:20%;bottom:0;width:70%;aspect-ratio:1;background:radial-gradient(circle at 35% 42%,#fff9ed 0 35%,transparent 37%),radial-gradient(circle at 66% 48%,#f4eee5 0 35%,transparent 37%),radial-gradient(circle at 48% 67%,#fff9ed 0 36%,transparent 38%);filter:blur(1.2px);animation:chimney-rise 6.4s linear infinite;transform-origin:50% 80%;opacity:0}
-.chimney-smoke span:nth-child(2){animation-delay:-1.6s;left:4%;width:60%}
-.chimney-smoke span:nth-child(3){animation-delay:-3.2s;left:27%;width:76%}
-.chimney-smoke span:nth-child(4){animation-delay:-4.8s;left:14%;width:65%}
-@keyframes chimney-rise{0%{transform:translate(0,0) scale(.45);opacity:0}12%{opacity:.62}38%{transform:translate(-45%,-160%) scale(1.1);opacity:.5}72%{transform:translate(-145%,-365%) scale(1.7);opacity:.26}100%{transform:translate(-240%,-560%) scale(2.1);opacity:0}}
+.chimney-smoke{position:absolute;left:40.15%;top:21.5%;width:4%;height:4%;pointer-events:none}
+.chimney-smoke span{position:absolute;left:20%;bottom:0;width:70%;aspect-ratio:1;background:radial-gradient(circle at 35% 42%,#fff9ed 0 35%,transparent 37%),radial-gradient(circle at 66% 48%,#f4eee5 0 35%,transparent 37%),radial-gradient(circle at 48% 67%,#fff9ed 0 36%,transparent 38%);filter:blur(1.6px);animation:chimney-rise 7.2s linear infinite;transform-origin:50% 80%;opacity:0}
+.chimney-smoke span:nth-child(2){animation-delay:-.9s;left:4%;width:65%}
+.chimney-smoke span:nth-child(3){animation-delay:-1.8s;left:25%;width:76%}
+.chimney-smoke span:nth-child(4){animation-delay:-2.7s;left:14%;width:68%}
+.chimney-smoke span:nth-child(5){animation-delay:-3.6s;left:8%;width:78%}
+.chimney-smoke span:nth-child(6){animation-delay:-4.5s;left:24%;width:66%}
+.chimney-smoke span:nth-child(7){animation-delay:-5.4s;left:12%;width:74%}
+.chimney-smoke span:nth-child(8){animation-delay:-6.3s;left:20%;width:70%}
+@keyframes chimney-rise{0%{transform:translate(0,0) scale(.45);opacity:0}10%{opacity:.88}38%{transform:translate(-32%,-130%) scale(1.1);opacity:.7}72%{transform:translate(-115%,-290%) scale(1.65);opacity:.4}100%{transform:translate(-185%,-430%) scale(2.2);opacity:0}}
 @media(prefers-reduced-motion:reduce){.chimney-smoke span{animation-duration:14s}}
