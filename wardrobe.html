@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>꿈뜰이 옷장 | 꿈뜰이의 대환장 나들이</title>
+<link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="./wardrobe.css?v=1"></head>
+<body class="wardrobe-page">
+<div class="wardrobe-background" aria-hidden="true">
+<img class="scene-layer" src="./assets/title/layers-oct8/sky.webp" alt="">
+<img class="scene-layer" src="./assets/title/layers-oct8/clouds.webp" alt="">
+<img class="scene-layer" src="./assets/title/layers-oct8/garden.webp" alt="">
+<img class="scene-layer" src="./assets/title/layers-oct8/stones.webp" alt="">
+<img class="scene-layer" src="./assets/title/layers-oct8/bush.webp" alt="">
+</div>
+<main class="wardrobe-book" id="wardrobe-book" aria-label="꿈뜰이 옷장">
+  <div class="book-spine" aria-hidden="true"></div>
+  <header class="wardrobe-header"><a class="wardrobe-back" href="./index.html">❮ 돌아가기</a><h1>✿ 꿈뜰이 옷장 ✿</h1><button class="wardrobe-dev-toggle" id="wardrobe-dev-toggle" type="button">⚙ 개발자 설정</button></header>
+  <div class="wardrobe-pages">
+    <section class="wardrobe-left" aria-label="의상 미리보기">
+      <div class="wardrobe-mirror" id="wardrobe-mirror"><div class="mirror-shine" aria-hidden="true"></div>
+        <div class="dream-avatar" id="dream-avatar" aria-label="꿈뜰이 미리보기">
+          <span class="avatar-wing left-wing"></span><span class="avatar-wing right-wing"></span>
+          <span class="avatar-body"><span class="avatar-eyes"><i></i><i></i></span><span class="avatar-mouth">ᴗ</span><span class="avatar-blush blush-left"></span><span class="avatar-blush blush-right"></span></span>
+          <span class="avatar-hat">▰</span><span class="avatar-outfit" id="avatar-outfit"></span><span class="avatar-bag" id="avatar-bag">✿</span>
+        </div>
+      </div>
+      <div class="wardrobe-preview-label"><small>✿ 미리보기 ✿</small><strong id="preview-name">기본 의상</strong></div>
+    </section>
+    <section class="wardrobe-right" aria-label="의상 목록">
+      <div class="wardrobe-grid" id="wardrobe-grid">
+        <button class="outfit-card selected" data-outfit="basic" type="button"><span class="outfit-icon">🌼</span><span class="outfit-check">✓</span><strong>기본 의상</strong><small>착용 중</small></button>
+        <button class="outfit-card" data-outfit="outing" type="button"><span class="outfit-icon">👕</span><span class="outfit-check">✓</span><strong>나들이 의상</strong><small>선택 가능</small></button>
+        <div class="outfit-card locked"><span class="outfit-icon">🔒</span><strong>아직 열지 못한 의상</strong></div>
+        <div class="outfit-card locked"><span class="outfit-icon">🔒</span><strong>아직 열지 못한 의상</strong></div>
+      </div>
+      <div class="wardrobe-bottom"><span id="equipped-status">현재 의상: 기본 의상</span><button id="wear-outfit" type="button">♧ 이 의상 입기</button></div>
+    </section>
+  </div>
+</main>
+<aside class="wardrobe-dev" id="wardrobe-dev" hidden aria-label="옷장 개발자 설정"><div class="dev-heading"><strong>⚙ 옷장 개발자 설정</strong><button id="dev-close" type="button" aria-label="닫기">×</button></div>
+<p>위치·크기 조정값은 이 브라우저에 자동 저장돼요</p><div class="dev-controls" id="dev-controls"></div>
+<div class="dev-actions"><button id="dev-reset" type="button">기본값 복원</button><button id="dev-export" type="button">설정 JSON 복사</button></div>
+</aside>
+<script src="./wardrobe.js?v=1"></script></body></html>
