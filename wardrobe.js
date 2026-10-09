@@ -12,14 +12,21 @@
   }
   async function updateSizes(entries){
     for(const [key,blob] of entries){
-      try{const image=await createImageBitmap(blob);sizes.set(key,{width:image.width,height:image.height});image.close();}catch{sizes.delete(key);}
+      let image;
+      try{
+        image=await createImageBitmap(blob);
+        const canvas=document.createElement("canvas");canvas.width=image.width;canvas.height=image.height;
+        const context=canvas.getContext("2d",{willReadFrequently:true});context.drawImage(image,0,0);
+        const painted=M.alphaBounds(context.getImageData(0,0,image.width,image.height).data,image.width,image.height);
+        sizes.set(key,{width:image.width,height:image.height,painted});
+      }catch{sizes.delete(key);}finally{image?.close();}
     }
   }
   function current(){return M.record(state);}
   const hasImage=id=>images.has(M.imageKey(id));
   const visibleLayers=(source=state)=>[{...source.base,id:"base",name:"꿈뜰이 베이스 이미지"},...source.parts].filter(p=>p.visible!==false&&images.has(M.imageKey(p.id))&&sizes.has(M.imageKey(p.id)));
   function fitPreview(){
-    const stage=$("preview-stage"),frame=M.previewFrame(visibleLayers().map(part=>M.imagePlacement(sizes.get(M.imageKey(part.id)),part)),{width:stage.clientWidth,height:stage.clientHeight});
+    const stage=$("preview-stage"),frame=M.previewFrame(visibleLayers().map(part=>M.previewPlacement(sizes.get(M.imageKey(part.id)),part)),{width:stage.clientWidth,height:stage.clientHeight});
     $("stage-layers").style.transform=`translate(${frame.x}px,${frame.y}px) scale(${frame.scale})`;
   }
   new ResizeObserver(fitPreview).observe($("preview-stage"));

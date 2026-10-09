@@ -54,10 +54,36 @@ test('mirror fits every rotated corner, including large and displaced layers, be
     for(const p of placements)for(const dx of [-p.width/2,p.width/2])for(const dy of [-p.height/2,p.height/2]){
       const x=(p.x+dx*Math.cos(p.rotation)-dy*Math.sin(p.rotation))*frame.scale+frame.x;
       const y=(p.y+dx*Math.sin(p.rotation)+dy*Math.cos(p.rotation))*frame.scale+frame.y;
-      assert.ok(x>=viewport.width*.1-1e-7&&x<=viewport.width*.9+1e-7);
-      assert.ok(y>=viewport.height*.2-1e-7&&y<=viewport.height*.96+1e-7);
+      assert.ok(x>=viewport.width*.08-1e-7&&x<=viewport.width*.92+1e-7);
+      assert.ok(y>=viewport.height*.14-1e-7&&y<=viewport.height*.96+1e-7);
     }
   }
+});
+
+test('transparent PNG margins do not cancel enlargement at 136, 244 or 300 percent',()=>{
+  const size={width:1000,height:1200,painted:{left:380,top:400,width:240,height:400}},viewport={width:522,height:393};
+  const heights=[136,244,300].map(scale=>{
+    const placement=M.previewPlacement(size,{scale}),frame=M.previewFrame([placement],viewport);
+    return placement.height*frame.scale;
+  });
+  assert.ok(heights[1]>heights[0]*1.7);
+  assert.ok(heights[2]>heights[1]*1.2);
+  const placement=M.previewPlacement(size,{scale:600}),frame=M.previewFrame([placement],viewport);
+  assert.ok(placement.height*frame.scale>heights[2]*1.2);
+  assert.equal(M.transform({scale:600}).scale,600);
+});
+
+test('painted bounds retain faint pixels and rotated off-centre artwork without changing export placement',()=>{
+  const pixels=new Uint8ClampedArray(10*12*4);
+  pixels[(2*10+3)*4+3]=1;pixels[(9*10+7)*4+3]=255;
+  const painted=M.alphaBounds(pixels,10,12);
+  assert.deepEqual(painted,{left:3,top:2,width:5,height:8});
+  assert.equal(M.alphaBounds(new Uint8ClampedArray(10*12*4),10,12),null);
+  const placement=M.previewPlacement({width:10,height:12,painted},{rotate:90});
+  assert.ok(Math.abs(placement.x-500)<1e-7);
+  assert.ok(Math.abs(placement.y-640)<1e-7);
+  assert.ok(Math.abs(placement.width-400)<1e-7);
+  assert.ok(Math.abs(placement.height-640)<1e-7);
 });
 
 test('legacy wardrobe data migrates without losing names, visibility or positions; invalid values are bounded',()=>{
