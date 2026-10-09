@@ -18,6 +18,11 @@
   function current(){return M.record(state);}
   const hasImage=id=>images.has(M.imageKey(id));
   const visibleLayers=(source=state)=>[{...source.base,id:"base",name:"꿈뜰이 베이스 이미지"},...source.parts].filter(p=>p.visible!==false&&images.has(M.imageKey(p.id))&&sizes.has(M.imageKey(p.id)));
+  function fitPreview(){
+    const stage=$("preview-stage"),frame=M.previewFrame(visibleLayers().map(part=>M.imagePlacement(sizes.get(M.imageKey(part.id)),part)),{width:stage.clientWidth,height:stage.clientHeight});
+    $("stage-layers").style.transform=`translate(${frame.x}px,${frame.y}px) scale(${frame.scale})`;
+  }
+  new ResizeObserver(fitPreview).observe($("preview-stage"));
   function drawPreview(){
     const root=$("stage-layers");root.replaceChildren();
     for(const part of visibleLayers()){
@@ -26,6 +31,7 @@
       Object.assign(img.style,{left:placement.x/M.WIDTH*100+"%",top:placement.y/M.HEIGHT*100+"%",width:placement.width/M.WIDTH*100+"%",height:placement.height/M.HEIGHT*100+"%",transform:`translate(-50%,-50%) rotate(${part.rotate}deg)`});
       root.append(img);
     }
+    fitPreview();
     $("empty-stage").hidden=hasImage("base")||visibleLayers().length>0;
     const worn=state.parts.filter(p=>p.visible!==false&&hasImage(p.id));
     $("look-status").textContent=worn.length?worn.map(p=>p.name).join(" · "):hasImage("base")?"베이스만 표시":"베이스 이미지 미등록";
