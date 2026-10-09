@@ -17,3 +17,4 @@
 @media(max-width:1100px){.book-shell{width:90vw}.book-page{padding-left:17px;padding-right:17px;gap:10px}.chapter-grid{gap:17px 12px}.collection-grid{gap:10px}.collection-card{padding:6px}.collection-card[aria-pressed=true]{padding:5px}.hand-note{display:none}.collection-tabs{right:-33px}.collection-tabs button{width:37px}.collection-tabs button[aria-selected=true]{width:40px}.detail-meta{gap:3px 8px}}
 
 .page-corner{position:absolute;right:26px;top:18px;display:flex;gap:2px;align-items:center;pointer-events:none;color:#9eb48a}.page-corner .icon:first-child{width:31px;height:31px;transform:rotate(-12deg)}.page-corner .icon:last-child{width:27px;height:27px;transform:rotate(10deg)}.chapter-card>.sticker{bottom:65px;right:18px;width:28px;height:28px}
+.collection-card{container-type:size}.collection-card .card-number,.collection-card strong{flex:none}.collection-card .image-area{width:min(100%,max(20px,calc(100cqh - 66px)))}
