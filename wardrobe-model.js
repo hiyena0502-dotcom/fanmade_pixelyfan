@@ -35,6 +35,18 @@
     const t=transform(part),fit=.8*Math.min(WIDTH/size.width,HEIGHT/size.height);
     return {x:WIDTH/2+t.x,y:HEIGHT/2+t.y,width:size.width*fit*t.scale/100,height:size.height*fit*t.scale/100,rotation:t.rotate*Math.PI/180};
   }
+  function previewFrame(placements,viewport){
+    let left=0,top=0,right=WIDTH,bottom=HEIGHT;
+    for(const p of placements){
+      const c=Math.abs(Math.cos(p.rotation)),s=Math.abs(Math.sin(p.rotation));
+      const halfWidth=(p.width*c+p.height*s)/2,halfHeight=(p.width*s+p.height*c)/2;
+      left=Math.min(left,p.x-halfWidth);right=Math.max(right,p.x+halfWidth);
+      top=Math.min(top,p.y-halfHeight);bottom=Math.max(bottom,p.y+halfHeight);
+    }
+    // Keep the whole composition inside the flat, safe area below the mirror arch.
+    const scale=Math.min(viewport.width*.8/(right-left),viewport.height*.76/(bottom-top));
+    return {scale,x:viewport.width/2-(left+right)/2*scale,y:viewport.height*.2+(viewport.height*.76-(bottom-top)*scale)/2-top*scale};
+  }
   function makeSnapshot(state,images,name,thumbnail,now=Date.now()){
     const copy=normalize(state),entries=[];
     for(const id of ["base",...copy.parts.map(part=>part.id)]){
@@ -51,6 +63,6 @@
     saved.nextId=Math.max(saved.nextId,current.nextId||1);
     return saved;
   }
-  const api=Object.freeze({SLOT_COUNT,WIDTH,HEIGHT,groups,clamp,transform,defaults,normalize,imageKey,record,move,imagePlacement,makeSnapshot,restoreSnapshot});
+  const api=Object.freeze({SLOT_COUNT,WIDTH,HEIGHT,groups,clamp,transform,defaults,normalize,imageKey,record,move,imagePlacement,previewFrame,makeSnapshot,restoreSnapshot});
   if(typeof module!=="undefined"&&module.exports)module.exports=api;else window.WardrobeModel=api;
 })();

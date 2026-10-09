@@ -44,6 +44,22 @@ test('preview and PNG share exact fitted placement, scale, rotation and transpar
   assert.equal(fitted.width,400);assert.equal(fitted.height,480);assert.equal(fitted.rotation,Math.PI/2);
 });
 
+test('mirror fits every rotated corner, including large and displaced layers, below its arch',()=>{
+  const placements=[
+    M.imagePlacement({width:1800,height:500},{x:500,y:-600,scale:300,rotate:45}),
+    M.imagePlacement({width:500,height:1800},{x:-500,y:600,scale:300,rotate:-70})
+  ];
+  for(const viewport of [{width:520,height:390},{width:300,height:500}]){
+    const frame=M.previewFrame(placements,viewport);
+    for(const p of placements)for(const dx of [-p.width/2,p.width/2])for(const dy of [-p.height/2,p.height/2]){
+      const x=(p.x+dx*Math.cos(p.rotation)-dy*Math.sin(p.rotation))*frame.scale+frame.x;
+      const y=(p.y+dx*Math.sin(p.rotation)+dy*Math.cos(p.rotation))*frame.scale+frame.y;
+      assert.ok(x>=viewport.width*.1-1e-7&&x<=viewport.width*.9+1e-7);
+      assert.ok(y>=viewport.height*.2-1e-7&&y<=viewport.height*.96+1e-7);
+    }
+  }
+});
+
 test('legacy wardrobe data migrates without losing names, visibility or positions; invalid values are bounded',()=>{
   const normalized=M.normalize({parts:[{id:'p1',type:'clothes',name:'내 옷',x:22,scale:145,visible:false},{id:'p1',type:'face'},{id:'bad',type:'invalid'}],base:{x:'broken',y:99999,scale:-5},selected:'missing'});
   assert.equal(normalized.parts.length,1);assert.equal(normalized.parts[0].x,22);assert.equal(normalized.parts[0].name,'내 옷');assert.equal(normalized.parts[0].visible,false);

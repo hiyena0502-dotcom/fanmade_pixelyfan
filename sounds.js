@@ -17,9 +17,9 @@
   // Both object effects use the same soft bandwidth and perceived level.
   // Each is a single gesture: a wooden rebound or a continuous leaf brush.
   function objectSound(kind){
-    const wood=kind==="wood",duration=wood?.66:.96;
+    const wood=kind==="wood",duration=wood?.34:.48;
     const samples=new Float32Array(Math.ceil(duration*RATE));
-    const modes=[180,378,612],phases=[0,0,0];
+    let phase=0;
     let seed=173,noiseFast=0,noiseSlow=0,low=0,bass=0;
     const cutoff=1-Math.exp(-2*Math.PI*1700/RATE);
     const highpass=1-Math.exp(-2*Math.PI*120/RATE);
@@ -31,20 +31,17 @@
       const brush=noiseFast-noiseSlow;
       let source=brush;
       if(wood){
-        // A broad, low wooden resonance blooms as the pressed house rebounds.
-        source=brush*.18;
-        for(let m=0;m<modes.length;m++){
-          phases[m]+=2*Math.PI*modes[m]*(1+.04*Math.exp(-t*14))/RATE;
-          source+=Math.sin(phases[m])*[.42,.14,.05][m]*Math.exp(-t*[4,8,14][m]);
-        }
+        // One small, rounded plop; no separate thump or noisy after-hit.
+        phase+=2*Math.PI*(310+75*Math.exp(-t*18))/RATE;
+        source=Math.sin(phase)*.5+Math.sin(phase*2)*.035;
       }
       low+=cutoff*(source-low);bass+=highpass*(low-bass);
-      const gesture=wood?envelope(t,duration,.07)*Math.exp(-u*2):envelope(t,duration,.07)*Math.exp(-u*.8);
+      const gesture=envelope(t,duration,.035)*Math.exp(-u*2);
       samples[i]=(low-bass)*gesture;
     }
     let energy=0,peak=0;
     for(const sample of samples){energy+=sample*sample;peak=Math.max(peak,Math.abs(sample));}
-    const gain=Math.min(.043/Math.sqrt(energy/samples.length),.24/peak);
+    const gain=Math.min(.024/Math.sqrt(energy/samples.length),.13/peak);
     for(let i=0;i<samples.length;i++) samples[i]*=gain;
     samples[0]=0;samples[samples.length-1]=0;
     return samples;

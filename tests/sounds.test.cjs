@@ -44,6 +44,19 @@ test('each interactive object has a distinct fixed effect',()=>{
   assert.notDeepEqual(render(effectKind('house'),'house'),render(effectKind('bush'),'bush'));
 });
 
+test('object sounds are short, quiet single gestures with no second house hit',()=>{
+  for(const kind of ['wood','rustle']){
+    const samples=render(kind),rms=Math.sqrt(samples.reduce((sum,v)=>sum+v*v,0)/samples.length);
+    assert.ok(samples.length<=sampleRate*.5);
+    assert.ok(rms>=.015&&rms<=.025);
+    assert.ok(Math.max(...samples.map(Math.abs))<=.131);
+  }
+  const samples=render('wood'),windows=[];
+  for(let start=0;start+480<=samples.length;start+=480)windows.push(Math.sqrt(samples.slice(start,start+480).reduce((sum,v)=>sum+v*v,0)/480));
+  const peak=windows.indexOf(Math.max(...windows));
+  for(let i=peak+2;i<windows.length;i++)assert.ok(windows[i]<=windows[i-1]*1.08,'no second attack after the plop');
+});
+
 test('voice syllables keep a stable pitch while voice types remain distinct',()=>{
   function pitch(samples){
     let best=0,period=0;
