@@ -95,7 +95,7 @@
     if(isChapter){view.chapterSelected=record.id;view.chapterPage=Math.floor(normalized.chapters.findIndex(e=>e.id===record.id)/4);}else{view.selections[group]=record.id;view.pages[group]=Math.floor(normalized.collections[group].findIndex(e=>e.id===record.id)/6);}
     dirty=true;render();if(state==="registered"&&!wasRegistered)collectionStamp([record.id]);void saveView();await cacheDraft();controls();return !!db;
   });}
-  async function playerProgress(){progress=M.progress(legacy?.progress);try{const active=await PixelyGameStore.active(),slots=await PixelyGameStore.slots(),saved=active&&(active.type==="auto"?slots.auto:slots.manual).get(active.slot);if(saved)progress=M.progress({chapters:saved.state.chapters,collections:saved.state.collections});}catch{}}
+  async function playerProgress(){progress=M.progress(legacy?.progress);try{const suspended=await PixelyGameStore.resume(),active=await PixelyGameStore.active(),slots=await PixelyGameStore.slots(),saved=active&&(active.type==="auto"?slots.auto:slots.manual).get(active.slot);const current=suspended||saved?.state;if(current)progress=M.progress({chapters:current.chapters,collections:current.collections});}catch{}}
   async function cacheDraft(){if(db)await R.writeDraft(db,{content:{...draftContent,catalogue},images:[...images],progress,baseRevision,dirty});}
   function contentImages(value){images=new Map(Object.entries(value?.assets||{}));syncUrls();catalogue=M.catalogue(value?.catalogue);}
   async function switchMode(){editing=admin.isEditor();preview=false;if(editing){const local=db&&await R.readDraft(db);draftContent=await admin.request("draft");baseRevision=draftContent.revision;if(local?.dirty&&local.baseRevision===baseRevision){draftContent=local.content;catalogue=M.catalogue(local.content.catalogue);images=new Map(local.images);progress=M.progress(local.progress);dirty=true;syncUrls();}else{contentImages(draftContent);progress=M.progress();dirty=false;}}else{contentImages(admin.getPublished());await playerProgress();}render();controls();}
@@ -115,6 +115,7 @@
   }
   const ready=(async()=>{
     try{db=await R.open();legacy=await R.read(db);view=M.view(legacy.view,catalogue);}catch{db=null;banner("브라우저 저장 공간을 사용할 수 없어요");}
+    if(new URLSearchParams(location.search).get('from')==='game'){const back=document.querySelector('.back-link');if(back){back.href='./game.html?mode=resume';back.textContent='‹ 모험으로 돌아가기';}}
     await admin.ready;authorControls();await switchMode();
     adapter={startChapter:async id=>{if(editorMode()||preview){banner("미리보기에서는 게임을 시작하지 않아요");return;}location.href='./game.html?mode=chapter&chapter='+encodeURIComponent(id);}};renderDetail();
     addEventListener('pixely:developer-mode',()=>switchMode().catch(e=>banner(e.message)));
