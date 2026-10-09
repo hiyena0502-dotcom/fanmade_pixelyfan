@@ -25,6 +25,8 @@
     tx.objectStore("metadata").put(catalogue,"catalogue");tx.objectStore("progress").put(progress,"game");
     for(const [key,image]of updates)tx.objectStore("images").put(image,key);for(const key of removed)tx.objectStore("images").delete(key);
   });
+  const writeDraft=(db,draft)=>transaction(db,"metadata","readwrite",tx=>tx.objectStore("metadata").put(draft,"author-draft"));
+  const readDraft=db=>transaction(db,"metadata","readonly",tx=>{const r=tx.objectStore("metadata").get("author-draft");return ()=>r.result;});
   const writeView=(db,view)=>transaction(db,"view","readwrite",tx=>tx.objectStore("view").put(view,"book"));
-  window.PixelyBookStore=Object.freeze({DB,open,read,writeCatalogue,writeProgress,writeRecord,writeView});
+  window.PixelyBookStore=Object.freeze({DB,open,read,writeCatalogue,writeProgress,writeRecord,writeView,writeDraft,readDraft});
 })();

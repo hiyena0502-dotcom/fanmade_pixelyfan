@@ -231,3 +231,6 @@ addEventListener("pixely:settingschange",event=>{
 document.querySelector('[data-action="wardrobe"]')?.addEventListener('click',()=>{window.location.href='./wardrobe.html';});
 document.querySelector('[data-action="chapter"]')?.addEventListener('click',()=>{window.location.href='./chapters.html';});
 document.querySelector('[data-action="collection"]')?.addEventListener('click',()=>{window.location.href='./collection.html';});
+
+document.querySelector('[data-action="new"]')?.addEventListener('click',()=>{location.href='./game.html?mode=new';});
+document.querySelector('[data-action="continue"]')?.addEventListener('click',()=>{location.href='./game.html?mode=continue';});
