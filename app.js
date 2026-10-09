@@ -226,3 +226,6 @@ addEventListener("pixely:settingschange",event=>{
     bushLeaves.replaceChildren();
   }
 });
+
+// Open the dedicated wardrobe scene without affecting the title screen.
+document.querySelector('[data-action="wardrobe"]')?.addEventListener('click',()=>{window.location.href='./wardrobe.html';});

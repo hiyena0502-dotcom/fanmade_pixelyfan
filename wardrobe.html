@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#926039">
+<title>꿈뜰이 옷장 | 꿈뜰이의 대환장 나들이</title>
+<link rel="stylesheet" href="./wardrobe.css?v=wood-slots-06">
+<link rel="preload" href="./assets/fonts/gaegu-wardrobe-bold.woff" as="font" type="font/woff" crossorigin>
+</head>
+<body>
+<svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+<symbol id="icon-hanger" viewBox="0 0 32 32"><path d="M13 8a3 3 0 1 1 5 2l-2 2v3L3 25h26L16 15"/></symbol>
+<symbol id="icon-save" viewBox="0 0 32 32"><path d="M6 4h17l4 5v19H5V4Zm4 0v9h12V4M10 28V18h12v10"/></symbol>
+<symbol id="icon-edit" viewBox="0 0 32 32"><path d="m7 21 15-15 4 4-15 15-6 2Zm12-12 4 4"/></symbol>
+<symbol id="icon-image" viewBox="0 0 32 32"><rect x="4" y="5" width="24" height="22" rx="3"/><circle cx="11" cy="12" r="2"/><path d="m5 24 8-8 4 4 5-7 5 8"/></symbol>
+</defs></svg>
+<main class="cabinet" id="cabinet" aria-busy="true">
+<header class="cabinet-header">
+<a class="wood-button back" href="./index.html">‹ 돌아가기</a>
+<div class="hanging-sign"><svg class="icon" aria-hidden="true"><use href="#icon-hanger"/></svg><h1>꿈뜰이 옷장</h1></div>
+<span class="header-note">나만의 모습을 차곡차곡</span>
+</header>
+<div class="cabinet-content">
+<section class="mirror-panel" aria-labelledby="preview-heading">
+<h2 id="preview-heading" class="mirror-label">의상 미리보기</h2>
+<div class="mirror-frame"><span class="mirror-carving" aria-hidden="true">✿</span><div class="preview-stage" id="preview-stage"><div id="stage-layers" class="stage-layers"></div><p id="empty-stage" class="empty-stage"><svg class="icon" aria-hidden="true"><use href="#icon-image"/></svg><strong>꿈뜰이를 기다리는 중</strong><span>베이스 이미지를 먼저 추가해 주세요</span></p></div></div>
+<div class="preview-caption"><strong>꿈뜰이</strong><span id="look-status">베이스 이미지 미등록</span></div>
+<button class="blue-button export-button" id="export-character" type="button" disabled><svg class="icon" aria-hidden="true"><use href="#icon-save"/></svg>캐릭터 PNG 저장</button>
+<p class="export-note">거울과 배경 없이 캐릭터만 저장돼요</p>
+</section>
+<section class="paper-panel" aria-label="옷장 파츠 꾸미기">
+<div class="paper-heading"><h2>꿈뜰이 꾸미기</h2><span id="part-count">0개 적용 중</span></div>
+<nav class="editor-tabs" role="tablist" aria-label="옷장 편집"><button id="tab-parts" role="tab" aria-controls="panel-parts" aria-selected="true" data-panel="parts">파츠 목록</button><button id="tab-register" role="tab" aria-controls="panel-register" aria-selected="false" tabindex="-1" data-panel="register">이미지 등록</button><button id="tab-adjust" role="tab" aria-controls="panel-adjust" aria-selected="false" tabindex="-1" data-panel="adjust">레이어 조정</button></nav>
+<section class="editor-page" id="panel-parts" role="tabpanel" aria-labelledby="tab-parts">
+<nav class="category-tabs" aria-label="파츠 분류"><button type="button" data-category="clothes" aria-pressed="true">옷</button><button type="button" data-category="items" aria-pressed="false">소품</button><button type="button" data-category="face" aria-pressed="false">얼굴</button><button type="button" data-category="decor" aria-pressed="false">장식</button></nav>
+<p class="category-note" id="category-note">상의·하의·겉옷·신발을 여러 개 함께 입을 수 있어요</p>
+<div class="parts-list" id="parts-list"></div>
+<div class="list-footer"><span>체크하면 입기 · 편집하면 파츠 수정</span><button class="cream-button" type="button" id="go-register">+ 새 파츠 등록</button></div>
+</section>
+<section class="editor-page" id="panel-register" role="tabpanel" aria-labelledby="tab-register" hidden>
+<div class="section-heading"><h3 id="register-heading">새 파츠 등록</h3><button type="button" class="text-button" id="cancel-edit" hidden>수정 취소</button></div>
+<form id="part-form">
+<div class="form-grid"><label>분류<select id="new-type"><option value="clothes">옷</option><option value="items">소품</option><option value="face">얼굴</option><option value="decor">장식</option></select></label><label>세부 파츠<select id="new-subtype"></select></label><label class="name-field">이름<input id="new-name" type="text" placeholder="예: 나들이 의상" maxlength="40" autocomplete="off"></label><label class="upload-button cream-button" for="new-file"><svg class="icon" aria-hidden="true"><use href="#icon-image"/></svg><span id="upload-label">파일 선택</span><input class="file-input" id="new-file" type="file" accept="image/png,image/jpeg,image/webp,image/gif"></label></div>
+<p id="file-status" class="file-status" role="status">선택된 파일 없음</p><button type="submit" class="blue-button register-button" id="add-part" disabled>등록하고 켜기</button>
+</form>
+<div class="base-upload"><div><strong>베이스 이미지</strong><span>항상 가장 아래에 놓이는 몸체 이미지</span></div><label class="cream-button upload-button" for="base-file">추가 / 교체<input class="file-input" id="base-file" type="file" accept="image/png,image/jpeg,image/webp,image/gif"></label></div>
+<p class="form-note">투명 배경 이미지를 그대로 겹쳐 사용할 수 있어요</p>
+</section>
+<section class="editor-page" id="panel-adjust" role="tabpanel" aria-labelledby="tab-adjust" hidden>
+<label class="layer-picker">편집할 이미지<select id="layer-select"></select></label><p id="layer-order" class="category-note">베이스는 항상 맨 아래</p>
+<div class="sliders">
+<label><span>좌우 <output data-value="x">0</output></span><div><input type="range" data-adjust="x" min="-500" max="500" step="1" disabled><input type="number" data-number="x" min="-500" max="500" step="1" aria-label="좌우 위치 숫자 입력" disabled></div></label>
+<label><span>위아래 <output data-value="y">0</output></span><div><input type="range" data-adjust="y" min="-600" max="600" step="1" disabled><input type="number" data-number="y" min="-600" max="600" step="1" aria-label="위아래 위치 숫자 입력" disabled></div></label>
+<label><span>크기 <output data-value="scale">100%</output></span><div><input type="range" data-adjust="scale" min="20" max="300" step="1" disabled><input type="number" data-number="scale" min="20" max="300" step="1" aria-label="크기 퍼센트 숫자 입력" disabled></div></label>
+<label><span>회전 <output data-value="rotate">0°</output></span><div><input type="range" data-adjust="rotate" min="-180" max="180" step="1" disabled><input type="number" data-number="rotate" min="-180" max="180" step="1" aria-label="회전 각도 숫자 입력" disabled></div></label>
+</div>
+<div class="layer-actions"><button class="cream-button" data-move="bottom" type="button" disabled>맨 아래</button><button class="cream-button" data-move="down" type="button" disabled>↓ 한 칸</button><button class="cream-button" data-move="up" type="button" disabled>↑ 한 칸</button><button class="cream-button" data-move="top" type="button" disabled>맨 위</button></div>
+<div class="adjust-actions"><button class="cream-button" id="layer-hide" type="button" disabled>이미지 숨기기</button><button class="cream-button" id="reset-image" type="button" disabled>위치 초기화</button><button class="text-button" id="layer-remove" type="button" disabled>베이스 이미지 제거</button></div>
+<p class="form-note">위치와 크기는 선택한 이미지에만 적용돼요</p>
+</section>
+<p id="save-status" class="save-status" role="status" aria-live="polite">옷장을 열고 있어요</p>
+</section>
+</div>
+<section class="slot-drawer" aria-labelledby="slots-heading"><div class="slots-heading"><h2 id="slots-heading"><svg class="icon" aria-hidden="true"><use href="#icon-save"/></svg>저장한 모습</h2><span>저장 슬롯 5개 · 이 브라우저에 보관돼요</span></div><div class="save-slots" id="save-slots"></div></section>
+</main>
+<dialog id="confirm-dialog" aria-labelledby="confirm-heading"><form method="dialog"><h2 id="confirm-heading">저장한 모습을 바꿀까요?</h2><p id="confirm-description"></p><div><button class="cream-button" value="cancel">취소</button><button class="blue-button" id="confirm-yes" value="confirm">확인</button></div></form></dialog>
+<script src="./wardrobe-model.js?v=wood-slots-06"></script><script src="./wardrobe-store.js?v=wood-slots-06"></script><script src="./wardrobe.js?v=wood-slots-06"></script>
+</body></html>
