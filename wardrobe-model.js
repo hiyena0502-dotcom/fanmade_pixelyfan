@@ -8,7 +8,7 @@
     decor:["이펙트","스티커","주변 장식","기타 장식"]
   };
   const clamp=(value,min,max,fallback=0)=>Number.isFinite(Number(value))?Math.min(max,Math.max(min,Number(value))):fallback;
-  const transform=source=>({x:clamp(source?.x,-500,500),y:clamp(source?.y,-600,600),scale:clamp(source?.scale,20,300,100),rotate:clamp(source?.rotate,-180,180),visible:source?.visible!==false});
+  const transform=source=>({x:clamp(source?.x,-500,500),y:clamp(source?.y,-600,600),scale:clamp(source?.scale,20,600,100),rotate:clamp(source?.rotate,-180,180),visible:source?.visible!==false});
   const defaults=()=>({version:2,parts:[],base:transform(),selected:"base",nextId:1});
   function normalize(source){
     const result=defaults(),seen=new Set();
@@ -36,16 +36,36 @@
     return {x:WIDTH/2+t.x,y:HEIGHT/2+t.y,width:size.width*fit*t.scale/100,height:size.height*fit*t.scale/100,rotation:t.rotate*Math.PI/180};
   }
   function previewFrame(placements,viewport){
-    let left=0,top=0,right=WIDTH,bottom=HEIGHT;
+    let left=Infinity,top=Infinity,right=-Infinity,bottom=-Infinity;
     for(const p of placements){
+      if(!p)continue;
       const c=Math.abs(Math.cos(p.rotation)),s=Math.abs(Math.sin(p.rotation));
       const halfWidth=(p.width*c+p.height*s)/2,halfHeight=(p.width*s+p.height*c)/2;
       left=Math.min(left,p.x-halfWidth);right=Math.max(right,p.x+halfWidth);
       top=Math.min(top,p.y-halfHeight);bottom=Math.max(bottom,p.y+halfHeight);
     }
-    // Keep the whole composition inside the flat, safe area below the mirror arch.
-    const scale=Math.min(viewport.width*.8/(right-left),viewport.height*.76/(bottom-top));
-    return {scale,x:viewport.width/2-(left+right)/2*scale,y:viewport.height*.2+(viewport.height*.76-(bottom-top)*scale)/2-top*scale};
+    // Scale controls stay visible until the painted artwork actually fills the mirror.
+    // Transparent PNG margins neither force a zoom-out nor push the artwork down.
+    const safe={left:viewport.width*.08,right:viewport.width*.92,top:viewport.height*.14,bottom:viewport.height*.96};
+    const baseScale=Math.min(viewport.width*.84/WIDTH,viewport.height*.82/HEIGHT);
+    if(!Number.isFinite(left))return {scale:baseScale,x:viewport.width/2-WIDTH/2*baseScale,y:viewport.height*.55-HEIGHT/2*baseScale};
+    const scale=Math.min(baseScale,(safe.right-safe.left)/(right-left),(safe.bottom-safe.top)/(bottom-top));
+    return {scale,x:clamp(viewport.width/2-WIDTH/2*scale,safe.left-left*scale,safe.right-right*scale),y:clamp(viewport.height*.55-HEIGHT/2*scale,safe.top-top*scale,safe.bottom-bottom*scale)};
+  }
+  function alphaBounds(pixels,width,height){
+    let left=width,top=height,right=-1,bottom=-1;
+    for(let y=0;y<height;y++)for(let x=0;x<width;x++)if(pixels[(y*width+x)*4+3]){
+      left=Math.min(left,x);right=Math.max(right,x);top=Math.min(top,y);bottom=Math.max(bottom,y);
+    }
+    return right<0?null:{left,top,width:right-left+1,height:bottom-top+1};
+  }
+  function previewPlacement(size,part){
+    const p=imagePlacement(size,part),bounds=size.painted;
+    if(bounds===null)return null;
+    if(!bounds)return p;
+    const dx=(bounds.left+bounds.width/2-size.width/2)*p.width/size.width;
+    const dy=(bounds.top+bounds.height/2-size.height/2)*p.height/size.height;
+    return {...p,x:p.x+dx*Math.cos(p.rotation)-dy*Math.sin(p.rotation),y:p.y+dx*Math.sin(p.rotation)+dy*Math.cos(p.rotation),width:bounds.width*p.width/size.width,height:bounds.height*p.height/size.height};
   }
   function makeSnapshot(state,images,name,thumbnail,now=Date.now()){
     const copy=normalize(state),entries=[];
@@ -63,6 +83,6 @@
     saved.nextId=Math.max(saved.nextId,current.nextId||1);
     return saved;
   }
-  const api=Object.freeze({SLOT_COUNT,WIDTH,HEIGHT,groups,clamp,transform,defaults,normalize,imageKey,record,move,imagePlacement,previewFrame,makeSnapshot,restoreSnapshot});
+  const api=Object.freeze({SLOT_COUNT,WIDTH,HEIGHT,groups,clamp,transform,defaults,normalize,imageKey,record,move,imagePlacement,previewFrame,alphaBounds,previewPlacement,makeSnapshot,restoreSnapshot});
   if(typeof module!=="undefined"&&module.exports)module.exports=api;else window.WardrobeModel=api;
 })();
