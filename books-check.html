@@ -1,0 +1,55 @@
+<!doctype html><meta charset="utf-8"><title>Book integration checks</title><style>body{font:16px system-ui;background:#f5efdf;margin:16px}button{padding:10px}li{margin:5px}#framebox{height:575px;overflow:hidden}iframe{border:0;width:1920px;height:911px;transform:scale(.62);transform-origin:0 0}</style>
+<h1>일기장·도감 통합 검사</h1><p>검사용 배포에서만 단색 도형과 임시 기록으로 저장 및 편집을 확인합니다.</p><button id="start">검사 실행</button><p id="result">대기 중</p><ol id="checks"></ol><div id="framebox"><iframe id="frame" src="./chapters.html"></iframe></div>
+<script>
+const frame=document.getElementById('frame'),result=document.getElementById('result'),checks=document.getElementById('checks');let w,d,B;
+const pause=ms=>new Promise(r=>setTimeout(r,ms));
+async function until(fn,msg){for(let i=0;i<160;i++){if(await fn())return;await pause(40);}throw Error(msg||'timeout');}
+const $=id=>d.getElementById(id);
+function assert(value,label){if(!value)throw Error(label);const li=document.createElement('li');li.textContent='PASS · '+label;checks.append(li);}
+async function ready(){await until(()=>frame.contentWindow.PixelyBooks,'Book API missing');w=frame.contentWindow;d=frame.contentDocument;B=w.PixelyBooks;await B.ready;}
+async function go(url){frame.src=url;await pause(80);await until(()=>frame.contentWindow.location.pathname.endsWith(url.split('?')[0].replace('./','')),'Navigation failed');await ready();}
+async function settled(){await pause(120);await until(()=>!$('editor-save')?.disabled,'Editor save stayed busy');}
+async function click(id){$(id).click();await settled();}
+async function save(){await click('editor-save');await until(()=>$('editor-status').textContent.includes('저장했어요'),'Record did not persist');}
+function set(id,value){$(id).value=value;}
+function adjust(prop,value){const input=d.querySelector('[data-image-number="'+prop+'"]');input.value=value;input.dispatchEvent(new w.Event('input',{bubbles:true}));}
+async function imageFile(color){const canvas=d.createElement('canvas');canvas.width=140;canvas.height=140;const context=canvas.getContext('2d');context.fillStyle=color;context.fillRect(35,25,70,90);return new w.File([await new Promise(r=>canvas.toBlob(r,'image/png'))],'qa-book-image.png',{type:'image/png'});}
+async function upload(file){const transfer=new w.DataTransfer();transfer.items.add(file);$('editor-upload').files=transfer.files;$('editor-upload').dispatchEvent(new w.Event('change',{bubbles:true}));await until(()=>$('editor-image-preview').querySelector('img'),'Image upload did not decode');await pause(50);}
+async function stored(){const db=await w.PixelyBookStore.open();try{return await w.PixelyBookStore.read(db);}finally{db.close();}}
+document.getElementById('start').onclick=async()=>{
+ document.getElementById('start').disabled=true;
+ try{
+  await ready();assert(d.querySelectorAll('.chapter-card').length===4,'Chapter page shows exactly four cards');
+  assert($('chapter-start').disabled,'Chapter launch stays disabled without a real game adapter');
+  assert($('edit-launch').hidden,'Normal player view hides editor entry');
+  const box=d.querySelector('.book-shell').getBoundingClientRect();assert(box.left>=0&&box.right<=1920&&box.top>=0&&box.bottom<=911,'Open book fits 1920×911 PC viewport');
+  d.querySelector('[data-record-id="chapter-001"]').click();assert($('record-detail').textContent.includes('아직 열리지 않은')&&!$('record-detail').querySelector('img'),'Locked chapters hide detail image and story');
+  let launched='';await B.connectGame({getProgress:async()=>({chapters:{prologue:{unlocked:true}}}),startChapter:async id=>{launched=id;}});d.querySelector('[data-record-id="prologue"]').click();$('chapter-start').click();await pause(100);assert(launched==='prologue','Chapter selection calls the connected game adapter only');
+  await go('./chapters.html?edit=1');await click('edit-launch');assert($('book-editor').open,'Developer query opens dedicated record editor');
+  set('editor-name','QA 모험 기록');set('editor-description','QA 설명');set('editor-state','cleared');await upload(await imageFile('#93b48a'));
+  const before=d.querySelector('.book-shell').getBoundingClientRect();adjust('scale',170);adjust('rotate',23);adjust('x',12);adjust('y',-7);const after=d.querySelector('.book-shell').getBoundingClientRect();assert(before.width===after.width&&before.height===after.height&&before.x===after.x&&before.y===after.y,'Image transforms never move or scale the book');
+  await save();let record=B.getImage('prologue:main');assert(record.blob instanceof w.Blob&&record.transform.scale===170&&record.transform.rotate===23&&record.transform.x===12&&record.transform.y===-7,'Uploaded Blob and independent transforms persist');
+  await click('editor-close');assert(d.querySelector('[data-record-id="prologue"] .clear-stamp')&&$('record-detail').textContent.includes('QA 모험 기록'),'Clear state renders flower stamp and updated detail');
+  await click('edit-launch');set('editor-name','버리기');await click('editor-image-delete');await click('editor-cancel');assert(B.getCatalogue().chapters[0].title==='QA 모험 기록'&&B.getImage('prologue:main'),'Cancelling metadata/image deletion preserves saved record');
+  await click('edit-launch');set('editor-record','chapter-001');$('editor-record').dispatchEvent(new w.Event('change'));set('editor-name','노출되면 안 되는 비밀');set('editor-description','비밀 설명');set('editor-state','locked');await save();await click('editor-close');assert(!$('record-detail').textContent.includes('비밀')&&!$('record-grid').textContent.includes('비밀'),'Edited locked metadata remains hidden in both list and detail');
+  await click('edit-launch');await click('add-record');set('editor-name','QA 다섯 번째 챕터');set('editor-state','available');await save();await click('editor-close');assert($('page-count').value==='02 / 02'&&$('page-next').disabled&&!$('page-prev').disabled,'Adding a fifth chapter creates second page with correct navigation limits');
+  await click('page-prev');await pause(350);assert($('page-count').value==='01 / 02'&&$('page-prev').disabled,'Previous-page animation updates real records');await click('page-next');await pause(350);
+  await go('./chapters.html?edit=1');assert($('page-count').value==='02 / 02'&&B.getImage('prologue:main').transform.scale===170,'Reload restores chapter page, images and transforms');
+  await go('./collection.html');assert(d.querySelectorAll('.collection-card').length===6,'Person catalogue shows six entries in a 3×2 grid');assert($('record-detail').textContent.includes('NO. ???')&&!$('record-grid').textContent.includes('잠뜰'),'Unregistered person names and descriptions remain hidden');
+  d.querySelector('[data-category="cards"]').click();assert(d.querySelectorAll('.collection-card').length===0&&d.querySelectorAll('.empty-card').length===6,'Empty card category shows tidy empty slots without fabricated cards');
+  d.querySelector('[data-category="items"]').click();assert(d.querySelectorAll('.collection-card').length===3,'Item category renders reserved uncollected item records');
+  await go('./collection.html?edit=1');d.querySelector('[data-category="people"]').click();await click('edit-launch');set('editor-description','QA 인물 소개');set('editor-location','QA 등장 콘텐츠');set('editor-state','registered');await upload(await imageFile('#92c9e8'));await save();await click('editor-close');assert($('record-detail').textContent.includes('잠뜰')&&$('record-detail').textContent.includes('QA 인물 소개')&&$('record-detail').querySelector('img'),'Registered collectible reveals uploaded illustration and complete metadata');
+  await click('edit-launch');set('editor-image-role','decoration');$('editor-image-role').dispatchEvent(new w.Event('change'));await upload(await imageFile('#e9bd70'));await save();assert(B.getImage('person-1:main')&&B.getImage('person-1:decoration'),'Main and decorative image assets save independently');
+  set('editor-image-role','main');$('editor-image-role').dispatchEvent(new w.Event('change'));const original=await B.getImage('person-1:main').blob.arrayBuffer();await upload(await imageFile('#c99494'));await click('editor-cancel');assert(new Uint8Array(await B.getImage('person-1:main').blob.arrayBuffer()).join(',')===new Uint8Array(original).join(','),'Cancelling replacement preserves original image bytes');
+  await click('edit-launch');await click('editor-image-delete');await save();await click('editor-close');assert(!B.getImage('person-1:main')&&B.getImage('person-1:decoration'),'Deleting main asset keeps independent decoration and entry');
+  await click('edit-launch');await click('add-record');set('editor-name','QA 일곱 번째 인물');set('editor-state','registered');await save();await click('editor-close');assert($('page-count').value==='02 / 02','Seventh collectible creates a second six-item page');
+  d.querySelector('[data-category="items"]').click();await pause(150);d.querySelector('[data-category="people"]').click();assert($('page-count').value==='02 / 02','Category switching retains independent page positions');
+  await go('./collection.html?edit=1');assert(B.getView().category==='people'&&$('page-count').value==='02 / 02','Category and collectible page survive reload');
+  const saved=await stored();assert(saved.progress.collections['person-1']&&saved.catalogue.chapters[0].title==='QA 모험 기록'&&saved.images.has('person-1:decoration'),'Chapter and collection share book storage without losing unrelated records');
+  assert(w.PixelyBookStore.DB==='pixely-adventure-books','Books use a separate database from wardrobe');
+  frame.src='./index.html';await until(()=>frame.contentDocument.querySelector('[data-action="chapter"]'));frame.contentDocument.querySelector('[data-action="chapter"]').click();await until(()=>frame.contentWindow.location.pathname.endsWith('/chapters.html'));assert(true,'Existing main chapter button navigates to chapter book');
+  frame.src='./index.html';await until(()=>frame.contentDocument.querySelector('[data-action="collection"]'));frame.contentDocument.querySelector('[data-action="collection"]').click();await until(()=>frame.contentWindow.location.pathname.endsWith('/collection.html'));assert(true,'Existing main collection button navigates to catalogue book');
+  result.textContent='PASS · '+checks.children.length+' integration checks';result.style.color='#386343';
+ }catch(error){result.textContent='FAIL · '+error.message;result.style.color='#9c4935';console.error(error);}
+};
+</script>

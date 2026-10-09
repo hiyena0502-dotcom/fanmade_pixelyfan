@@ -229,3 +229,5 @@ addEventListener("pixely:settingschange",event=>{
 
 // Open the dedicated wardrobe scene without affecting the title screen.
 document.querySelector('[data-action="wardrobe"]')?.addEventListener('click',()=>{window.location.href='./wardrobe.html';});
+document.querySelector('[data-action="chapter"]')?.addEventListener('click',()=>{window.location.href='./chapters.html';});
+document.querySelector('[data-action="collection"]')?.addEventListener('click',()=>{window.location.href='./collection.html';});
