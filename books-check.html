@@ -1,21 +1,22 @@
 <!doctype html><meta charset="utf-8"><title>Book integration checks</title><style>body{font:16px system-ui;background:#f5efdf;margin:16px}button{padding:10px}li{margin:5px}#framebox{height:575px;overflow:hidden}iframe{border:0;width:1920px;height:911px;transform:scale(.62);transform-origin:0 0}</style>
-<h1>일기장·도감 통합 검사</h1><p>검사용 배포에서만 단색 도형과 임시 기록으로 저장 및 편집을 확인합니다.</p><button id="start">검사 실행</button><p id="result">대기 중</p><ol id="checks"></ol><div id="framebox"><iframe id="frame" src="./chapters.html"></iframe></div>
+<h1>일기장·도감 통합 검사</h1><p>검사용 배포에서만 단색 도형과 임시 기록으로 저장 및 편집을 확인합니다.</p><button id="start">검사 실행</button><button id="reset">검사용 책 데이터 초기화</button><p id="result">대기 중</p><ol id="checks"></ol><div id="framebox"><iframe id="frame" src="./chapters.html"></iframe></div>
 <script>
 const frame=document.getElementById('frame'),result=document.getElementById('result'),checks=document.getElementById('checks');let w,d,B;
 const pause=ms=>new Promise(r=>setTimeout(r,ms));
 async function until(fn,msg){for(let i=0;i<160;i++){if(await fn())return;await pause(40);}throw Error(msg||'timeout');}
 const $=id=>d.getElementById(id);
 function assert(value,label){if(!value)throw Error(label);const li=document.createElement('li');li.textContent='PASS · '+label;checks.append(li);}
-async function ready(){await until(()=>frame.contentWindow.PixelyBooks,'Book API missing');w=frame.contentWindow;d=frame.contentDocument;B=w.PixelyBooks;await B.ready;}
-async function go(url){frame.src=url;await pause(80);await until(()=>frame.contentWindow.location.pathname.endsWith(url.split('?')[0].replace('./','')),'Navigation failed');await ready();}
+async function ready(){await until(()=>frame.contentWindow.PixelyBooks,'Book API missing');w=frame.contentWindow;d=frame.contentDocument;B=w.PixelyBooks;await Promise.race([B.ready,pause(6500).then(()=>{throw Error('Book initialization timeout');})]);}
+async function go(url){const previous=frame.contentDocument,target=new URL(url,location.href);result.textContent='이동 중 · '+url;frame.src=url;await until(()=>frame.contentDocument!==previous&&frame.contentWindow.location.pathname===target.pathname&&frame.contentWindow.location.search===target.search&&frame.contentWindow.PixelyBooks,'Navigation failed');await ready();result.textContent='검사 중 · '+url;}
 async function settled(){await pause(120);await until(()=>!$('editor-save')?.disabled,'Editor save stayed busy');}
-async function click(id){$(id).click();await settled();}
+async function click(id){result.textContent='검사 중 · '+id;$(id).click();await settled();}
 async function save(){await click('editor-save');await until(()=>$('editor-status').textContent.includes('저장했어요'),'Record did not persist');}
 function set(id,value){$(id).value=value;}
 function adjust(prop,value){const input=d.querySelector('[data-image-number="'+prop+'"]');input.value=value;input.dispatchEvent(new w.Event('input',{bubbles:true}));}
 async function imageFile(color){const canvas=d.createElement('canvas');canvas.width=140;canvas.height=140;const context=canvas.getContext('2d');context.fillStyle=color;context.fillRect(35,25,70,90);return new w.File([await new Promise(r=>canvas.toBlob(r,'image/png'))],'qa-book-image.png',{type:'image/png'});}
 async function upload(file){const transfer=new w.DataTransfer();transfer.items.add(file);$('editor-upload').files=transfer.files;$('editor-upload').dispatchEvent(new w.Event('change',{bubbles:true}));await until(()=>$('editor-image-preview').querySelector('img'),'Image upload did not decode');await pause(50);}
 async function stored(){const db=await w.PixelyBookStore.open();try{return await w.PixelyBookStore.read(db);}finally{db.close();}}
+document.getElementById('reset').onclick=async()=>{frame.src='about:blank';await until(()=>frame.contentWindow.location.href==='about:blank');await new Promise((resolve,reject)=>{const req=indexedDB.deleteDatabase('pixely-adventure-books');req.onsuccess=resolve;req.onerror=()=>reject(req.error);req.onblocked=()=>reject(Error('Close other QA book tabs'));});document.getElementById('start').disabled=false;checks.replaceChildren();result.textContent='검사용 책 데이터 초기화 완료';await go('./chapters.html');};
 document.getElementById('start').onclick=async()=>{
  document.getElementById('start').disabled=true;
  try{
