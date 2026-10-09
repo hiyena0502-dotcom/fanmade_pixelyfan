@@ -2,7 +2,6 @@
 (async()=>{
   const M=window.WardrobeModel,R=window.WardrobeStore,$=id=>document.getElementById(id);
   const categoryLabels={clothes:"옷",items:"소품",face:"얼굴",decor:"장식"};
-  const categoryNotes={clothes:"상의·하의·겉옷·신발을 여러 개 함께 입을 수 있어요",items:"손에 들거나 몸에 착용하는 소품을 함께 켤 수 있어요",face:"눈·입·눈썹·볼을 각각 등록하고 겹칠 수 있어요",decor:"주변 이펙트·스티커·장식을 함께 켤 수 있어요"};
   let db,state=M.defaults(),images=new Map(),urls=new Map(),sizes=new Map(),slots=new Map();
   let activeCategory="clothes",pendingFile=null,editingId=null,locked=false,saveTimer=0,saveQueue=Promise.resolve(),lastSaved=structuredClone(state);
   const cabinet=$("cabinet"),status=$("save-status");
@@ -38,16 +37,15 @@
   }
   function refreshCategories(){
     document.querySelectorAll("[data-category]").forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.category===activeCategory)));
-    $("category-note").textContent=categoryNotes[activeCategory];
   }
   function renderParts(){
     const list=$("parts-list");list.replaceChildren();refreshCategories();
     const parts=state.parts.filter(p=>p.type===activeCategory);
     if(!parts.length){
       const box=document.createElement("div");box.className="list-empty";
-      const strong=document.createElement("strong"),note=document.createElement("span");
-      strong.textContent="아직 등록된 "+categoryLabels[activeCategory]+" 파츠가 없어요";note.textContent="이미지 등록에서 나만의 파츠를 추가해 보세요";
-      box.innerHTML='<svg class="icon" aria-hidden="true"><use href="#icon-hanger"/></svg>';box.append(strong,note);list.append(box);
+      const strong=document.createElement("strong");
+      strong.textContent="등록된 "+categoryLabels[activeCategory]+" 없음";
+      box.innerHTML='<svg class="icon" aria-hidden="true"><use href="#icon-hanger"/></svg>';box.append(strong);list.append(box);
     }
     for(const part of parts){
       const card=document.createElement("article");card.className="part-card"+(part.visible!==false?" is-worn":"")+(part.id===state.selected?" is-selected":"");
@@ -73,7 +71,7 @@
       const key=input.dataset.adjust||input.dataset.number;input.value=part[key];input.disabled=!ready;
       document.querySelector(`[data-value="${key}"]`).textContent=part[key]+(key==="scale"?"%":key==="rotate"?"°":"");
     }
-    $("layer-order").textContent=state.selected==="base"?"베이스는 항상 맨 아래":`현재 레이어 ${index+1} / ${state.parts.length} · 맨 위일수록 앞에 표시돼요`;
+    $("layer-order").textContent=state.selected==="base"?"베이스 · 맨 아래":`레이어 ${index+1} / ${state.parts.length}`;
     document.querySelectorAll("[data-move]").forEach(button=>button.disabled=!ready||state.selected==="base"||(["top","up"].includes(button.dataset.move)?index===state.parts.length-1:index===0));
     for(const id of ["layer-hide","layer-remove","reset-image"])$(id).disabled=!ready;
     $("layer-hide").textContent=part.visible===false?"이미지 표시":"이미지 숨기기";
