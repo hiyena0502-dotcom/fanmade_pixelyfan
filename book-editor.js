@@ -75,4 +75,5 @@
   dialog.querySelectorAll('input:not([type=file]),textarea,select').forEach(input=>input.addEventListener('focus',()=>{if(draft)checkpoint();}));
   addEventListener('pixely:developer-mode',()=>{if(!B.editorMode&&dialog.open)close();});
   addEventListener("pagehide",revoke);
+  if(B.editorMode&&new URLSearchParams(location.search).get("edit")==="1")$("edit-launch").click();
 })();
