@@ -1,7 +1,7 @@
 'use strict';
 (()=>{let session={authenticated:false},published=null;const MODE='pixely-developer-mode';let enabled=sessionStorage.getItem(MODE)==='1';
 async function request(action,body){const r=await fetch('/api/content?action='+action,{method:body?'POST':'GET',credentials:'same-origin',headers:{'Content-Type':'application/json','x-pixely-request':'1',...(session.csrf?{'x-pixely-csrf':session.csrf}:{})},...(body?{body:JSON.stringify(body)}:{}),signal:AbortSignal.timeout(30000)});let data;try{data=await r.json();}catch{throw Error('서버 응답을 읽지 못했어요');}if(!r.ok)throw Error(data.error||'저장하지 못했어요');return data;}
-function setMode(value){enabled=value&&session.authenticated;sessionStorage.setItem(MODE,enabled?'1':'0');dispatchEvent(new CustomEvent('pixely:developer-mode',{detail:{enabled}}));refresh();}
+function setMode(value){const next=!!(value&&session.authenticated);if(enabled===next){refresh();return;}enabled=next;sessionStorage.setItem(MODE,enabled?'1':'0');dispatchEvent(new CustomEvent('pixely:developer-mode',{detail:{enabled}}));refresh();}
 const isEditor=()=>session.authenticated&&enabled;
 let hub, switcher;const leaveHandlers=new Set();
 function refresh(){document.querySelectorAll('[data-developer-login]').forEach(b=>b.textContent=isEditor()?'개발자 편집 메뉴':'개발자 모드');if(switcher)switcher.hidden=!isEditor();}
