@@ -52,7 +52,7 @@
     document.querySelectorAll("[data-category]").forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.category===activeCategory)));
   }
   let nameFrame=0;
-  function fitNames(){cancelAnimationFrame(nameFrame);nameFrame=requestAnimationFrame(()=>{for(const box of document.querySelectorAll('.part-name')){if(!box.clientWidth)continue;const text=box.firstElementChild;text.classList.remove('is-truncated');let size=16;text.style.fontSize=size+'px';while(size>12&&text.getBoundingClientRect().height>box.clientHeight+.5){text.style.fontSize=--size+'px';}if(text.getBoundingClientRect().height>box.clientHeight+.5)text.classList.add('is-truncated');box.dataset.fontSize=size;}});}
+  function fitNames(){cancelAnimationFrame(nameFrame);nameFrame=requestAnimationFrame(()=>{for(const box of document.querySelectorAll('.part-name')){if(!box.clientWidth)continue;const text=box.firstElementChild;text.classList.remove('is-truncated');let size=16;text.style.fontSize=size+'px';while(size>12&&text.offsetHeight>box.clientHeight+.5){text.style.fontSize=--size+'px';}if(text.offsetHeight>box.clientHeight+.5)text.classList.add('is-truncated');box.dataset.fontSize=size;}});}
   new ResizeObserver(fitNames).observe($('parts-list'));document.fonts.ready.then(fitNames);
   function renderParts(){
     const list=$("parts-list");list.replaceChildren();refreshCategories();
