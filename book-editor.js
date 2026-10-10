@@ -49,7 +49,7 @@
       bitmap=await createImageBitmap(file);if(bitmap.width*bitmap.height>25000000)throw new Error("이미지 크기를 조금 줄여 주세요");
       if(epoch!==uploadEpoch||!dialog.open)return;
       if(urls.has(currentKey)){URL.revokeObjectURL(urls.get(currentKey));urls.delete(currentKey);}
-      checkpoint();draftImages.set(currentKey,{blob:file,transform:M.imageTransform()});removed.delete(currentKey);notify("이미지를 골랐어요 · 기록 저장을 누르면 반영돼요");draw();
+      checkpoint();draftImages.set(currentKey,{blob:file,transform:M.imageTransform()});removed.delete(currentKey);notify("이미지를 골랐어요 · 저장 또는 미리보기를 눌러 주세요");draw();
     }catch(error){notify(error.message||"이미지를 읽지 못했어요",true);}finally{bitmap?.close();$("editor-upload").value="";}
   };
   $("editor-image-delete").onclick=()=>{if(!draft)return;checkpoint();const k=key();draftImages.delete(k);removed.add(k);if(urls.has(k)){URL.revokeObjectURL(urls.get(k));urls.delete(k);}notify("이미지를 뺐어요 · 저장 전에는 취소할 수 있어요");draw();};
@@ -57,14 +57,20 @@
   for(const input of dialog.querySelectorAll("[data-image-range],[data-image-number]"))input.oninput=()=>{
     const image=draftImages.get(key());if(!image||!input.value)return;checkpoint();const prop=input.dataset.imageRange||input.dataset.imageNumber;image.transform=M.imageTransform({...image.transform,[prop]:input.value});draw();
   };
-  $("editor-save").onclick=async()=>{
+  async function commit(action='save'){
     if(!draft||saving)return;saving=true;dialog.querySelectorAll("button,input,select,textarea").forEach(e=>e.disabled=true);
     try{
       for(const [field,id]of [["number","number"],["title","name"],["intro","intro"],["description","description"],["chapter","chapter"],["location","location"],["related","related"],["decoration","decoration"]])draft[field]=$("editor-"+id).value;
-      const persistent=await B.saveRecord(group,draft,$("editor-state").value,[...draftImages], [...removed]);
-      begin(activeEntries().find(e=>e.id===draft.id));notify(persistent?"편집을 적용했어요 · 아래 임시 저장으로 서버에 보관해 주세요":"편집을 적용했어요 · 페이지를 닫기 전에 임시 저장을 눌러 주세요");
+      await B.saveRecord(group,draft,$("editor-state").value,[...draftImages], [...removed]);
+      if(action==='publish')await B.publishDraft();else if(action==='save')await B.saveDraft();
+      begin(activeEntries().find(e=>e.id===draft.id));
+      notify(action==='publish'?"사이트 반영 완료":action==='save'?"저장 완료 · 사이트에는 아직 반영되지 않았어요":"미리보기에 적용했어요");
+      if(action==='preview'){dialog.close();B.setPreview(true);}
     }catch(error){notify(error.message||"저장하지 못했어요",true);}finally{saving=false;dialog.querySelectorAll("button,input,select,textarea").forEach(e=>e.disabled=false);draw();}
-  };
+  }
+  $("editor-save").onclick=()=>commit('save');
+  $("editor-publish").onclick=()=>commit('publish');
+  $("editor-preview-action").onclick=()=>commit('preview');
   const root=$("editor-image-preview");root.onpointerdown=e=>{if(!draftImages.has(key())||e.button!==0)return;checkpoint();drag={x:e.clientX,y:e.clientY,t:{...draftImages.get(key()).transform},key:key()};root.setPointerCapture(e.pointerId);root.classList.add('is-dragging');};root.onpointermove=e=>{if(!drag)return;const r=root.getBoundingClientRect(),image=draftImages.get(drag.key);image.transform=M.imageTransform({...drag.t,x:drag.t.x+(e.clientX-drag.x)/r.width*100,y:drag.t.y+(e.clientY-drag.y)/r.height*100});draw();};root.onpointerup=root.onpointercancel=()=>{drag=null;root.classList.remove('is-dragging');};
   dialog.querySelectorAll('input:not([type=file]),textarea,select').forEach(input=>input.addEventListener('focus',()=>{if(draft)checkpoint();}));
   addEventListener('pixely:developer-mode',()=>{if(!B.editorMode&&dialog.open)close();});

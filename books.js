@@ -102,16 +102,22 @@
   let bar;
   function controls(){
     $("edit-launch").hidden=!editorMode();
-    if(bar){bar.hidden=!editing;bar.querySelector('[data-draft-status]').textContent=dirty?"편집 적용됨 · 임시 저장 전":baseRevision==="initial"?"아직 임시 저장 전":"임시 저장됨";bar.querySelector('[data-preview]').textContent=preview?"편집으로":"미리보기";}
+    if(bar){bar.hidden=!editing;bar.querySelector('[data-draft-status]').textContent=dirty?"저장 전 · 편집 내용 보관 중":baseRevision==="initial"?"아직 서버 저장 전":"저장됨";bar.querySelector('[data-preview]').textContent=preview?"편집으로":"미리보기";}
   }
-  function authorControls(){bar=el("div","author-bar");bar.hidden=true;bar.innerHTML='<span data-draft-status></span><button type="button" data-save>임시 저장</button><button type="button" data-preview>미리보기</button><button type="button" data-publish>사이트에 반영</button><button type="button" data-import>브라우저 기록 가져오기</button><button type="button" data-off>모드 끄기</button>';document.body.append(bar);
+  async function saveDraft(){
+    const raw=await admin.prepare({...draftContent,catalogue},images);
+    draftContent=await admin.save(raw,baseRevision);baseRevision=draftContent.revision;dirty=false;
+    contentImages(draftContent);await cacheDraft();render();controls();banner("저장 완료 · 사이트에는 아직 반영되지 않았어요");
+  }
+  async function publishDraft(){if(dirty||baseRevision==="initial")await saveDraft();await admin.publish(baseRevision);banner("사이트 반영 완료");}
+  function setPreview(value){preview=value;document.body.classList.toggle('is-author-preview',preview);render();controls();}
+  function authorControls(){
+    bar=el("div","author-bar");bar.hidden=true;bar.innerHTML='<span data-draft-status></span><button type="button" data-save>저장</button><button type="button" data-preview>미리보기</button><button type="button" data-publish>사이트에 반영</button><details><summary>고급</summary><button type="button" data-import>예전 브라우저 기록 가져오기</button></details>';document.body.append(bar);
     const run=async fn=>{bar.querySelectorAll('button').forEach(b=>b.disabled=true);try{await fn();}catch(e){banner(e.message);}finally{bar.querySelectorAll('button').forEach(b=>b.disabled=false);controls();}};
-    bar.querySelector('[data-save]').onclick=()=>run(async()=>{const raw=await admin.prepare({...draftContent,catalogue},images);draftContent=await admin.save(raw,baseRevision);baseRevision=draftContent.revision;dirty=false;contentImages(draftContent);await cacheDraft();render();banner("임시 저장했어요 · 일반 화면에는 아직 반영되지 않았어요");});
-    bar.querySelector('[data-preview]').onclick=()=>{preview=!preview;document.body.classList.toggle('is-author-preview',preview);render();controls();};
-    bar.querySelector('[data-publish]').onclick=()=>run(async()=>{if(dirty)throw Error("먼저 임시 저장을 해 주세요");await admin.publish(baseRevision);banner("사이트에 반영했어요 · 일반 화면에서도 같은 콘텐츠가 보여요");});
-    bar.querySelector('[data-import]').onclick=()=>run(async()=>{if(!legacy?.catalogue)throw Error("가져올 예전 브라우저 기록이 없어요");catalogue=M.catalogue(legacy.catalogue);images=new Map(legacy.images);syncUrls();dirty=true;await cacheDraft();render();banner("예전 기록을 가져왔어요 · 확인한 뒤 임시 저장을 눌러 주세요");});
-    bar.querySelector('[data-off]').onclick=()=>admin.setMode(false);
-    const toggle=el('button','developer-link','개발자 모드');toggle.style.cssText='position:fixed;right:20px;top:12px;z-index:8';toggle.hidden=!admin.getSession().authenticated;toggle.onclick=()=>admin.setMode(!editing);document.body.append(toggle);
+    bar.querySelector('[data-save]').onclick=()=>run(saveDraft);
+    bar.querySelector('[data-preview]').onclick=()=>setPreview(!preview);
+    bar.querySelector('[data-publish]').onclick=()=>run(publishDraft);
+    bar.querySelector('[data-import]').onclick=()=>run(async()=>{if(!legacy?.catalogue)throw Error("가져올 예전 브라우저 기록이 없어요");catalogue=M.catalogue(legacy.catalogue);images=new Map(legacy.images);syncUrls();dirty=true;await cacheDraft();render();banner("예전 기록을 가져왔어요 · 확인한 뒤 저장해 주세요");});
   }
   const ready=(async()=>{
     try{db=await R.open();legacy=await R.read(db);view=M.view(legacy.view,catalogue);}catch{db=null;banner("브라우저 저장 공간을 사용할 수 없어요");}
@@ -121,6 +127,6 @@
     addEventListener('pixely:developer-mode',()=>switchMode().catch(e=>banner(e.message)));
     if(new URLSearchParams(location.search).get('edit')==='1'&&!editing)void admin.loginOpen();
   })();
-  window.PixelyBooks=Object.freeze({ready,kind,get editorMode(){return editorMode();},categories:D.categories,el,icon,paintImage,getCatalogue:()=>structuredClone(catalogue),getProgress:()=>structuredClone(progress),getView:()=>structuredClone(view),getImage:key=>images.get(key),saveRecord,applyProgress,connectGame,requestChapter,turn,isPersistent:()=>!!db});
+  window.PixelyBooks=Object.freeze({ready,kind,saveDraft,publishDraft,setPreview,get editorMode(){return editorMode();},categories:D.categories,el,icon,paintImage,getCatalogue:()=>structuredClone(catalogue),getProgress:()=>structuredClone(progress),getView:()=>structuredClone(view),getImage:key=>images.get(key),saveRecord,applyProgress,connectGame,requestChapter,turn,isPersistent:()=>!!db});
   addEventListener("pagehide",()=>{for(const url of urls.values())URL.revokeObjectURL(url);db?.close();});
 })();
