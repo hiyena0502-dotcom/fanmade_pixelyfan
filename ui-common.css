@@ -1,0 +1,8 @@
+@font-face{font-family:"Pixely Text";src:url('./assets/fonts/gowun-wardrobe-bold.woff') format('woff');font-weight:700;font-display:swap}
+:root{--ui-font:"Pixely Text","Malgun Gothic",serif}
+body,button,input,select,textarea,dialog,.menu-item,.menu-name,.fan-label,.wardrobe-content,.settings-dialog,.settings-tabs button,.settings-done,.game-panel,.book-editor,.author-bar,.developer-menu,.developer-switcher{font-family:var(--ui-font)!important}
+.settings-dialog{border:3px solid #a86d42;border-radius:19px;background:#fff4df;color:#68482f;box-shadow:0 5px 0 #a86d4220}
+.settings-heading{border-bottom-color:#eac99b}.settings-tabs button[aria-selected=true]{background:#fff4df;color:#68482f}.settings-done{background:#c2e0ee;color:#68482f;border-color:#82b5d0;box-shadow:none}.settings-slider input{accent-color:#9eb48a}
+.main-menu .menu-item{transition:transform .16s ease,color .16s ease}.main-menu .menu-item.is-active,.main-menu .menu-item:focus-visible{transform:translateX(4px);color:var(--menu-accent)}.main-menu .menu-item.is-active .menu-icon{transform:scale(1.04)}
+.title-screen{min-height:0}.art-stage,.diary-positioner{width:min(100vw,208.341811svh)}
+@media(prefers-reduced-motion:reduce){.main-menu .menu-item,.main-menu .menu-icon{transition:none;transform:none!important}}
