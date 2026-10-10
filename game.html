@@ -1,78 +1,11 @@
-<!doctype html>
-<html lang="ko">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#68caf1" />
-  <title>꿈뜰이의 우당탕탕 대환장 나들이!!</title>
-  <link rel="stylesheet" href="./style.css?v=3000-1" />
-  <link rel="stylesheet" href="./diary.css?v=fan-corner-lower-10b" />
-  <link rel="stylesheet" href="./settings.css?v=3000-1" />
-  <link rel="preload" href="./assets/fonts/gowun-wardrobe-bold.woff" as="font" type="font/woff" crossorigin />
-<link rel="stylesheet" href="./admin.css?v=3000-1"><link rel="stylesheet" href="./ui-common.css?v=3000-1"><link rel="stylesheet" href="./stage.css?v=3000-1"><script src="./stage.js?v=3000-1"></script></head>
-<body>
-  <main class="title-screen" id="title-screen">
-    <div class="art-stage">
-      <div class="scene">
-        <img class="scene-layer layer-sky" draggable="false" src="./assets/title/layers-oct8/sky.webp" alt="" />
-        <img class="scene-layer layer-clouds" draggable="false" src="./assets/title/layers-oct8/clouds.webp" alt="" />
-        <img class="scene-layer layer-garden" draggable="false" src="./assets/title/layers-oct8/garden.webp" alt="" />
-        <div class="scene-layer layer-house">
-          <div class="chimney-smoke" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-          <img class="scene-layer" draggable="false" src="./assets/title/layers-oct8/house.webp" alt="" />
-          <span class="door-sign"><img draggable="false" src="./assets/title/door-sign-user-oct8.webp" alt="PIXELY" /></span>
-        </div>
-        <img class="scene-layer layer-stones" draggable="false" src="./assets/title/layers-oct8/stones.webp" alt="" />
-        <div class="scene-layer layer-bush">
-          <img class="scene-layer bush-art" draggable="false" src="./assets/title/layers-oct8/bush.webp" alt="" />
-          <div class="bush-leaves" aria-hidden="true"></div>
-        </div>
-      </div>
-      <section class="hero" aria-labelledby="game-title">
-        <h1 id="game-title" class="sr-only">꿈뜰이의 우당탕탕 대환장 나들이!!</h1>
-        <img class="scene-layer layer-subtitle" draggable="false" src="./assets/title/layers-oct8/subtitle.webp" alt="초대는 받았고, 귀가는 미정!" />
-        <img class="scene-layer layer-title" draggable="false" src="./assets/title/layers-oct8/title.webp" alt="꿈뜰이의 우당탕탕 대환장 나들이!!" />
-      </section>
-      <div class="scene-interactions">
-        <span class="title-hover" aria-hidden="true"></span>
-        <button class="house-touch" type="button" aria-label="집을 톡 건드리기"></button>
-        <button class="bush-touch" type="button" aria-label="덤불을 부시럭거리기"></button>
-      </div>
-    </div>
-    <div class="leaf-breeze" aria-hidden="true"></div>
-    <div class="diary-positioner"><section class="notebook" aria-label="메인 메뉴">
-      <div class="journal-base"><img class="journal-art" draggable="false" src="./assets/title/journal-user-v2-oct8.webp" alt="" /></div>
-      <div class="note-stickers" aria-hidden="true">
-        <span class="note-sticker sticker-sprig"><img draggable="false" src="./assets/title/diary-stickers-user-v2-oct8.webp" alt="" /></span>
-        <span class="note-sticker sticker-daisy"><img draggable="false" src="./assets/title/diary-stickers-user-v2-oct8.webp" alt="" /></span>
-        <span class="note-sticker sticker-vine"><img draggable="false" src="./assets/title/diary-stickers-user-v2-oct8.webp" alt="" /></span>
-      </div>
-      <header class="journal-heading">
-        <p class="fan-label">fan made game</p>
-        <h2 class="sr-only">잠뜰TV 13주년 ANNIVERSARY</h2>
-        <div class="anniversary-art"><img draggable="false" src="./assets/title/anniversary-lettering-user-oct8.webp" alt="잠뜰TV 13주년 ANNIVERSARY" /></div>
-      </header>
-      <button class="menu-item wardrobe-tag" type="button" data-action="wardrobe" aria-label="꿈뜰이 옷장"><span class="wardrobe-backing"><img draggable="false" src="./assets/title/wardrobe-label-user-oct8.webp" alt="" /></span><span class="wardrobe-content"><span>꿈뜰이 옷장</span><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M13 8a3 3 0 1 1 5 2l-2 2v3L3 25h26L16 15"/></svg></span></button>
-      <nav class="main-menu" aria-label="게임 메뉴">
-        <button class="menu-item menu-new is-active" type="button" data-action="new" aria-current="true">
-          <span class="menu-content"><span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path class="icon-fill" d="m11 7 14 9-14 9Z"/></svg></span><span class="menu-name">새 게임</span></span>
-        </button>
-        <button class="menu-item menu-continue" type="button" data-action="continue">
-          <span class="menu-content"><span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M9 5h14v23l-7-5-7 5Z"/><path d="M12 9h8"/></svg></span><span class="menu-name">이어하기</span></span>
-        </button>
-        <button class="menu-item menu-chapter" type="button" data-action="chapter">
-          <span class="menu-content"><span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M16 9Q10 4 4 7v18q6-3 12 1 6-4 12-1V7q-6-3-12 2Zm0 0v17M8 12l4 1m-4 4 4 1m8-5 4-1m-4 6 4-1"/></svg></span><span class="menu-name">챕터</span></span>
-        </button>
-        <button class="menu-item menu-collection" type="button" data-action="collection">
-          <span class="menu-content"><span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><rect x="5" y="7" width="22" height="21" rx="2"/><path d="M5 12h22M11 7v21m8-12 1.4 3 3.2.4-2.3 2.2.6 3.2-2.9-1.5-2.9 1.5.6-3.2-2.3-2.2 3.2-.4Z"/></svg></span><span class="menu-name">콜렉션</span></span>
-        </button>
-        <button class="menu-item menu-settings" type="button" data-action="settings">
-          <span class="menu-content"><span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="m13 4 6 0 1 4 4 2 4-1 3 5-3 3-1 4 2 3-5 4-3-2-4 1-2 3-6-2v-4l-3-3-4-1 1-6 4-1 2-3Z"/><circle cx="16" cy="17" r="4"/></svg></span><span class="menu-name">설정</span></span>
-        </button>
-      </nav>
-    </section></div>
-  </main>
-  <dialog id="settings-dialog" class="settings-dialog" aria-labelledby="settings-title" aria-describedby="settings-description">
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>꿈뜰이의 우당탕탕 대환장 나들이!! · 플레이</title><link rel="stylesheet" href="./game.css?v=3000-1"><link rel="stylesheet" href="./admin.css?v=3000-1"><link rel="stylesheet" href="./settings.css?v=3000-1"><link rel="stylesheet" href="./ui-common.css?v=3000-1"><link rel="stylesheet" href="./stage.css?v=3000-1"><script src="./stage.js?v=3000-1"></script></head><body>
+<main id="game-shell" class="game-shell" aria-label="꿈뜰이의 나들이"><section id="slot-screen" class="slot-screen"><a href="./index.html" class="return-link">‹ 돌아가기</a><div class="slot-book"><section><h1 id="slots-title">새로운 나들이</h1><p class="small" id="slots-subtitle">기록을 담을 일기장을 골라줘</p><div id="slot-list" class="slot-list"></div></section><section class="slot-detail"><span class="invitation-seal" aria-hidden="true">✿</span><h2 id="slot-title">초대는 받았고, 귀가는 미정!</h2><div id="slot-description"></div><button id="slot-start" class="primary" disabled>이 기록으로 시작</button><p class="small">진행 기록은 이 기기의 브라우저에 저장돼요</p></section></div></section>
+<section id="play-screen" class="play-screen" hidden><div id="scene-background" class="scene-background"></div><div id="scene-layers-back" class="scene-image-host image-host-back"></div><div id="scene-layers-front" class="scene-image-host image-host-front"></div><div id="scene-actors" class="scene-actors"></div><div id="scene-objects" class="scene-objects"></div><div id="scene-effects" class="scene-effects" aria-hidden="true"></div><div id="scene-overlay" class="scene-overlay"></div><section id="monologue-screen" class="monologue-screen" aria-label="프롤로그 독백" hidden><span class="monologue-heading">프롤로그</span><div id="monologue-layers" class="monologue-layers" aria-hidden="true"><div id="monologue-images-back" class="scene-image-host image-host-back"></div><div id="monologue-images-front" class="scene-image-host image-host-front"></div></div><button id="monologue-next" class="monologue-next" aria-label="다음 독백"><span id="monologue-speaker" class="monologue-speaker"></span><span id="monologue-text"></span><span class="monologue-cue">다음 <span aria-hidden="true">›</span></span></button><nav class="monologue-controls" aria-label="독백 도구"><button id="monologue-auto" aria-pressed="false">AUTO</button><button id="monologue-skip" aria-pressed="false">SKIP</button><button id="monologue-log">LOG</button></nav></section><aside id="collection-notice" class="collection-notice" role="status" hidden></aside><p id="place-name" class="place-name" aria-live="polite"></p><nav class="play-tools" aria-label="게임 도구"><button id="open-bag" title="가방" aria-label="가방"><svg viewBox="0 0 32 32"><path d="M9 11V8a7 7 0 0 1 14 0v3M6 11h20v18H6ZM6 20h20"/></svg></button><button id="open-journal" title="모험 일기" aria-label="모험 일기"><svg viewBox="0 0 32 32"><path d="M3 6h11l2 3 2-3h11v21H18l-2 3-2-3H3ZM16 9v21"/></svg></button><button id="open-menu" title="게임 메뉴" aria-label="게임 메뉴"><svg viewBox="0 0 32 32"><path d="M5 8h22M5 16h22M5 24h22"/></svg></button></nav><span id="test-label" class="test-label">프롤로그 · 시스템 테스트</span><span id="selected-item" class="selected-item" hidden></span><div id="choices" class="choices" hidden></div>
+<div id="caption-back" class="caption-host caption-back" aria-live="polite"></div><div id="caption-front" class="caption-host caption-front" aria-live="polite"></div><section id="dialogue" class="dialogue parchment" aria-label="대화" hidden><div class="speaker" id="speaker-name"></div><button id="dialogue-next" class="dialogue-next" aria-label="다음 대사"><span id="dialogue-text"></span><span class="next-mark" aria-hidden="true">▾</span></button><span id="dialogue-page-number" class="dialogue-page-number"></span><nav class="dialogue-tools" aria-label="대화 도구"><button id="dialogue-auto" aria-pressed="false">AUTO</button><button id="dialogue-skip" aria-pressed="false">SKIP</button><button id="dialogue-log">LOG</button></nav></section>
+</section><p id="game-status" class="game-status" role="status" aria-live="polite"></p></main>
+<dialog id="game-panel" class="game-panel" aria-labelledby="panel-title"><header><h2 id="panel-title"></h2><button id="panel-close" aria-label="닫기">×</button></header><div id="panel-content"></div></dialog>
+<dialog id="game-confirm" class="game-panel"><h2 id="confirm-title"></h2><p id="confirm-description"></p><div class="confirm-buttons"><button id="confirm-cancel">취소</button><button id="confirm-accept" class="primary">덮어쓰기</button></div></dialog>
+<button data-action="settings" hidden></button>  <dialog id="settings-dialog" class="settings-dialog" aria-labelledby="settings-title" aria-describedby="settings-description">
     <div class="settings-shell">
       <header class="settings-heading">
         <span class="settings-emblem" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="m13 4 6 0 1 4 4 2 4-1 3 5-3 3-1 4 2 3-5 4-3-2-4 1-2 3-6-2v-4l-3-3-4-1 1-6 4-1 2-3Z"/><circle cx="16" cy="17" r="4"/></svg></span>
@@ -84,8 +17,4 @@
       <footer class="settings-footer"><button type="button" class="settings-small-button" data-reset-settings>기본값으로</button><button class="developer-link" type="button" data-developer-login>개발자 모드</button><p class="settings-status" role="status" aria-live="polite">변경하면 바로 저장돼요</p><button type="button" class="settings-done" data-close-settings>완료</button></footer>
     </div>
   </dialog>
-  <script src="./image-slot.js?v=slots-3"></script><script src="./sounds.js?v=soft-object-effects-10"></script>
-  <script src="./settings.js?v=footer-font-042"></script>
-  <script src="./app.js?v=play-1"></script>
-<script src="./book-admin.js?v=slots-3"></script><script src="./viewport-preview.js?v=3000-1"></script></body>
-</html>
+<script src="./image-slot.js?v=slots-3"></script><script src="./assets/runtime/blob-client.js?v=same-site-2"></script><script src="./book-admin.js?v=slots-3"></script><script src="./game-data.js?v=monologue-1"></script><script src="./dialogue-model.js?v=slots-3"></script><script src="./monologue-model.js?v=slots-3"></script><script src="./game-model.js?v=slots-3"></script><script src="./game-store.js?v=play-1"></script><script src="./wardrobe-model.js"></script><script src="./wardrobe-store.js"></script><script src="./sounds.js?v=soft-object-effects-10"></script><script src="./settings.js?v=footer-font-042"></script><script src="./image-layers.js?v=slots-3"></script><script src="./dialogue-captions.js?v=slots-3"></script><script src="./game.js?v=3000-2"></script><script src="./game-editor.js?v=slots-3"></script><script src="./viewport-preview.js?v=3000-1"></script></body></html>

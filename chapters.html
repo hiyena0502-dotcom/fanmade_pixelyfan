@@ -1,0 +1,56 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#fff4df"><title>꿈뜰이의 모험 일기장 | 꿈뜰이의 우당탕탕 대환장 나들이!!</title><link rel="stylesheet" href="./books.css?v=3000-1"><link rel="preload" href="./assets/fonts/gowun-wardrobe-bold.woff" as="font" type="font/woff" crossorigin><link rel="stylesheet" href="./admin.css?v=3000-1"><link rel="stylesheet" href="./ui-common.css?v=3000-1"><link rel="stylesheet" href="./stage.css?v=3000-1"><script src="./stage.js?v=3000-1"></script></head>
+<body data-book="chapters"><svg class="sr-only" aria-hidden="true"><defs>
+<symbol id="book-back" viewBox="0 0 32 32"><path d="m19 7-9 9 9 9"/></symbol>
+<symbol id="book-next" viewBox="0 0 32 32"><path d="m13 7 9 9-9 9"/></symbol>
+<symbol id="book-image" viewBox="0 0 32 32"><rect x="5" y="5" width="22" height="22" rx="3"/><circle cx="12" cy="12" r="2"/><path d="m6 23 7-7 4 4 4-6 6 7"/></symbol>
+<symbol id="book-lock" viewBox="0 0 32 32"><rect x="7" y="14" width="18" height="13" rx="3"/><path d="M11 14V9a5 5 0 0 1 10 0v5M16 19v3"/></symbol>
+<symbol id="book-flower" viewBox="0 0 32 32"><path fill="#e8ddb1" stroke="#9eb48a" d="M16 10C8-3 2 11 10 14-3 15 6 29 13 21c-1 14 15 8 9 0 13 6 16-10 3-10 9-8-6-16-9-1Z"/><circle cx="17" cy="16" r="4" fill="#e8ba68" stroke="none"/></symbol>
+<symbol id="book-clover" viewBox="0 0 32 32"><path fill="#b5c69d" d="M16 15C2 14 7 1 15 8 17-4 30 6 23 14c14 4 5 16-3 8-3 12-16 5-10-2Z"/><path d="m15 18 8 11"/></symbol>
+<symbol id="book-letter" viewBox="0 0 32 32"><rect x="4" y="7" width="24" height="18" rx="3"/><path d="m5 9 11 9L27 9"/></symbol>
+<symbol id="book-crystal" viewBox="0 0 32 32"><path fill="#c0e2ee" d="m16 3 10 10-4 15H10L6 13Z"/><path d="m16 3 4 10-4 15-4-15ZM6 13h20"/></symbol>
+<symbol id="book-magnifier" viewBox="0 0 32 32"><circle cx="14" cy="13" r="8"/><path d="m20 20 8 8"/></symbol>
+<symbol id="book-drop" viewBox="0 0 32 32"><path fill="#c0e2ee" d="M16 3S6 14 6 21a10 10 0 0 0 20 0C26 14 16 3 16 3Z"/></symbol>
+<symbol id="book-people" viewBox="0 0 32 32"><circle cx="16" cy="10" r="5"/><path d="M6 27v-3a10 10 0 0 1 20 0v3"/></symbol>
+<symbol id="book-cards" viewBox="0 0 32 32"><rect x="7" y="3" width="18" height="26" rx="3"/><path d="m16 9 5 7-5 7-5-7Z"/></symbol>
+<symbol id="book-items" viewBox="0 0 32 32"><path d="m5 10 11-6 11 6v15L16 30 5 25ZM5 10l11 6 11-6M16 16v14"/></symbol>
+<symbol id="book-memories" viewBox="0 0 32 32"><path d="M16 27 5 16C-4 6 10-2 16 9 22-2 36 6 27 16Z"/></symbol>
+</defs></svg><div class="book-backdrop" aria-hidden="true"></div>
+<main class="book-shell" aria-labelledby="book-title"><a class="back-link" href="./index.html"><svg class="icon" aria-hidden="true"><use href="#book-back"/></svg>돌아가기</a>
+<div class="open-book chapter-book"><span class="bookmark" aria-hidden="true"></span>
+<section class="book-page left-page" aria-labelledby="book-title"><div class="page-corner" aria-hidden="true"><svg class="icon"><use href="#book-flower"/></svg><svg class="icon"><use href="#book-clover"/></svg></div><span class="hand-note" aria-hidden="true">오늘도 한 장!</span><header class="page-heading"><h1 id="book-title">꿈뜰이의 모험 일기장</h1><small id="list-subtitle">차곡차곡, 우리들의 나들이</small></header>
+<div class="chapter-grid" id="record-grid" aria-label="챕터 목록"></div>
+<nav class="page-navigation" aria-label="책 페이지 이동"><button type="button" id="page-prev" aria-label="이전 페이지"><svg class="icon" aria-hidden="true"><use href="#book-back"/></svg></button><output id="page-count" aria-live="polite">01 / 01</output><button type="button" id="page-next" aria-label="다음 페이지"><svg class="icon" aria-hidden="true"><use href="#book-next"/></svg></button></nav>
+<footer class="page-footer"><span id="list-summary"></span><span class="page-number" id="left-page-number">01</span></footer></section>
+<div class="binding" aria-hidden="true"></div>
+<section class="book-page right-page" aria-label="선택한 기록 상세"><div class="detail" id="record-detail" aria-live="polite"></div><footer class="page-footer"><span id="detail-footer">꿈뜰이의 여행 기록</span><span class="page-number" id="right-page-number">02</span></footer></section>
+</div></main>
+<button type="button" class="edit-launch" id="edit-launch" hidden>기록 편집</button><p class="save-banner" id="save-banner" role="status" hidden></p><dialog id="book-editor" class="book-editor" aria-labelledby="editor-title">
+<header class="editor-heading"><h2 id="editor-title">기록 편집</h2><button type="button" class="editor-close" id="editor-close" aria-label="편집 창 닫기">×</button></header>
+<p class="editor-notice">내용과 이미지를 고친 뒤 저장 · 일반 화면에 공개하려면 사이트에 반영</p>
+<div class="editor-layout"><section class="editor-column" aria-label="기록 정보">
+<label class="editor-field">편집할 기록<select id="editor-record"></select></label>
+<div class="editor-actions"><button type="button" id="add-record">새 기록 추가</button></div>
+<div class="editor-pair"><label class="editor-field">번호<input id="editor-number" type="number" min="0" max="9999"></label><label class="editor-field">장식<select id="editor-decoration"><option value="flower">꽃</option><option value="clover">네잎클로버</option><option value="letter">편지</option><option value="crystal">결정</option><option value="magnifier">돋보기</option><option value="drop">물방울</option><option value="none">없음</option></select></label></div>
+<label class="editor-field">제목 · 이름<input id="editor-name" maxlength="80"></label>
+<label class="editor-field">짧은 메모<input id="editor-intro" maxlength="120"></label>
+<label class="editor-field">소개 · 설명<textarea id="editor-description" maxlength="600"></textarea></label>
+<label class="editor-field">관련 챕터<input id="editor-chapter" maxlength="100"></label>
+<div class="editor-pair"><label class="editor-field">위치 · 등장 콘텐츠<input id="editor-location" maxlength="100"></label><label class="editor-field">관련 인물<input id="editor-related" maxlength="160"></label></div>
+<label class="editor-field">미리보기 상태<select id="editor-state"></select></label>
+</section><section class="editor-column" aria-label="이미지 편집">
+<label class="editor-field">편집할 이미지<select id="editor-image-role"><option value="main">주요 이미지</option><option value="decoration">작은 장식 이미지</option></select></label>
+<div id="editor-image-preview" class="image-area editor-preview"></div><p id="editor-source-size" class="small">이미지 등록 전</p><details><summary>이미지 표시 방식</summary><div class="editor-pair"><label class="editor-field">이미지 종류<select id="editor-slot-type"><option value="background">전체 배경 · 권장 16:9</option><option value="chapter">챕터 사진 · 권장 4:3</option><option value="postcard">엽서 · 권장 3:2</option><option value="card">카드 · 권장 2:3</option><option value="item">아이템 · 권장 1:1</option><option value="character">캐릭터 · 원본 비율</option><option value="decoration">장식 · 원본 비율</option></select></label><label class="editor-field">슬롯 비율<select id="editor-slot-ratio"><option value="frame">기존 표시 영역</option><option value="native">원본 비율</option><option>21:9</option><option>16:9</option><option>16:10</option><option>4:3</option><option>3:2</option><option>2:3</option><option>1:1</option></select></label><label class="editor-field">이미지 맞춤<select id="editor-slot-fit"><option value="contain">전체 표시 (contain)</option><option value="cover">영역 채우기 (cover · 잘림 가능)</option></select></label><label><input type="checkbox" id="editor-slot-flip"> 좌우 반전</label></div><p class="small">확대·이동·회전 또는 cover를 선택하면 잘릴 수 있어요. 미리보기에서 확인해 주세요.</p></details>
+<div class="editor-actions"><label class="upload-label">이미지 업로드 · 교체<input type="file" id="editor-upload" accept="image/png,image/jpeg,image/webp,image/gif" aria-label="기록 이미지 업로드"></label><button type="button" id="editor-image-delete">이미지 삭제</button></div>
+<div class="image-adjust">
+<label>크기 (%)<div><input data-image-range="scale" type="range" min="20" max="400" step="1"><input data-image-number="scale" aria-label="이미지 크기 숫자 입력" type="number" min="20" max="400"></div></label>
+<label>회전 (°)<div><input data-image-range="rotate" type="range" min="-180" max="180" step="1"><input data-image-number="rotate" aria-label="이미지 회전 숫자 입력" type="number" min="-180" max="180"></div></label>
+<label>좌우 (%)<div><input data-image-range="x" type="range" min="-50" max="50" step="1"><input data-image-number="x" aria-label="이미지 좌우 숫자 입력" type="number" min="-50" max="50"></div></label>
+<label>위아래 (%)<div><input data-image-range="y" type="range" min="-50" max="50" step="1"><input data-image-number="y" aria-label="이미지 위아래 숫자 입력" type="number" min="-50" max="50"></div></label>
+</div>
+<div class="editor-actions"><button type="button" id="editor-image-reset">이미지 위치 초기화</button><button type="button" id="editor-undo">되돌리기</button><button type="button" id="editor-redo">다시 실행</button></div>
+<p class="small">조정은 선택한 이미지에만 적용돼요</p><p class="editor-status" id="editor-status" role="status" aria-live="polite"></p>
+</section></div>
+<footer class="editor-bottom"><small>미리보기 상태는 플레이어 진행 기록과 별도예요</small><div class="editor-actions"><button type="button" id="editor-cancel">취소</button><button type="button" id="editor-save">저장</button><button type="button" id="editor-preview-action">미리보기</button><button class="primary" type="button" id="editor-publish">사이트에 반영</button></div></footer>
+</dialog>
+<script src="./image-slot.js?v=slots-3"></script><script src="./assets/runtime/blob-client.js?v=same-site-2"></script><script src="./book-admin.js?v=slots-3"></script><script src="./game-data.js?v=play-1"></script><script src="./dialogue-model.js?v=slots-3"></script><script src="./monologue-model.js?v=slots-3"></script><script src="./game-model.js?v=slots-3"></script><script src="./game-store.js?v=play-1"></script><script src="./book-data.js?v=same-site-2"></script><script src="./book-model.js?v=same-site-2"></script><script src="./book-store.js?v=same-site-2"></script><script src="./book-audio.js?v=same-site-2"></script><script src="./books.js?v=slots-3"></script><script src="./book-editor.js?v=slots-3"></script>
+<script src="./viewport-preview.js?v=3000-1"></script></body></html>

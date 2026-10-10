@@ -1,9 +1,61 @@
-/* PIXELY : LOST SKY · stylesheet entry v73
-   Feature styles are split so each screen can be maintained without stacked patch blocks. */
-@import url("./styles/core.css?v=75");
-@import url("./styles/home.css?v=75");
-@import url("./styles/chapters.css?v=75");
-@import url("./styles/collection.css?v=75");
-@import url("./styles/story.css?v=75");
-@import url("./styles/wardrobe.css?v=75");
-@import url("./styles/editor.css?v=75");
+@font-face{font-family:"Game Hand";src:url("./assets/fonts/gaegu-ui-bold-v2.woff") format("woff");font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:"Game Hand";src:url("./assets/fonts/gaegu-ui-regular.woff") format("woff");font-weight:400;font-style:normal;font-display:swap}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden}
+body{font-family:"Game Hand","Malgun Gothic",sans-serif;color:#66391e;background:linear-gradient(#68caf1,#9de4f8)}
+button{font:inherit}
+.title-screen{position:relative;width:100%;height:calc(100 * var(--stage-vh));min-height:540px;overflow:hidden;isolation:isolate;-webkit-user-select:none;user-select:none}
+.title-screen img{-webkit-user-drag:none;pointer-events:none}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+.art-stage,.diary-positioner{position:absolute;left:50%;top:50%;width:max(calc(100 * var(--stage-vw)),calc(208.341811 * var(--stage-vh)));aspect-ratio:2048/983;transform:translate(-50%,-50%);pointer-events:none}
+.art-stage{z-index:0}
+.scene{position:absolute;inset:0;z-index:0}
+.scene-interactions{position:absolute;inset:0;z-index:2;pointer-events:none}
+.title-hover{position:absolute;left:1%;top:0;width:34%;height:39%;z-index:2;pointer-events:auto}
+.scene-layer{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:contain}
+.layer-sky{z-index:0}
+.layer-clouds{z-index:1}
+.layer-garden{z-index:2}
+.layer-house{z-index:3;transform-origin:31% 94%}
+.layer-stones{z-index:4}
+.layer-bush{z-index:5}
+.bush-art{transform-origin:46% 98%}
+.bush-touch{position:absolute;z-index:1;left:38.7%;top:79%;width:13.6%;height:19%;border:0;padding:0;background:transparent;pointer-events:auto;cursor:pointer;border-radius:50% 50% 20% 20%;touch-action:manipulation}
+.bush-touch:focus-visible{outline:3px dashed #fff5d2;outline-offset:-6px}
+.bush-leaves{position:absolute;left:38.7%;top:79%;width:13.6%;height:19%;pointer-events:none}
+.bush-leaf{position:absolute;display:block;width:9%;aspect-ratio:1;opacity:0}
+.bush-leaf svg{display:block;width:100%;height:100%;fill:currentColor}
+.door-sign{position:absolute;left:28.241992%;top:68.4%;width:4.6%;aspect-ratio:960/795;overflow:hidden;transform-origin:50% 4%;animation:sign-sway 2.8s ease-in-out infinite;pointer-events:none}
+.door-sign img{position:absolute;max-width:none;width:174.166667%;height:auto;left:-37.083333%;top:-10.440252%}
+.house-touch{position:absolute;left:9%;top:14%;width:43%;height:83%;pointer-events:auto;cursor:pointer;border:0;background:transparent;padding:0;touch-action:manipulation;clip-path:polygon(2% 30%,46% 0,98% 25%,91% 36%,94% 98%,6% 98%,8% 38%)}
+.house-touch:focus-visible{outline:3px dashed #fff5d2;outline-offset:-8px}
+.leaf-breeze{position:absolute;inset:0;z-index:2;overflow:hidden;pointer-events:none}
+.drifting-leaf{position:absolute;left:0;top:0;will-change:transform}
+.leaf-blade{display:block;width:100%;height:100%;overflow:visible;color:var(--leaf-color);filter:drop-shadow(0 1px 1px #244e373b)}
+.leaf-vein{fill:none;stroke:#f1ffd4;stroke-opacity:.48;stroke-width:1.25;stroke-linecap:round}
+.hero{position:absolute;inset:0;z-index:1}
+.layer-subtitle{z-index:0}
+.layer-title{z-index:1;transform-origin:18% 23%;animation:title-rock 3.8s ease-in-out infinite}
+.art-stage:has(.title-hover:hover) .layer-title{animation-duration:3.8s}
+.art-stage:has(.house-touch:hover) .door-sign{animation-duration:2.8s}
+@keyframes title-rock{0%,100%{transform:rotate(-2.4deg) translate(0,0)}50%{transform:rotate(2.4deg) translate(.18%,-.25%)}}
+@keyframes sign-sway{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+@keyframes title-rock-calm{0%,100%{transform:rotate(-.7deg)}50%{transform:rotate(.7deg)}}
+@keyframes sign-sway-calm{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+.diary-positioner{z-index:3}
+.notebook{position:absolute;left:59.228515625%;top:3.560529%;width:33.3984375%;height:92.879959%;container-type:size;pointer-events:auto}
+.journal-base{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.journal-art{position:absolute;width:299.415205%;height:auto;max-width:none;left:-177.339181%;top:-3.833516%}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}.layer-title{animation-name:title-rock-calm;animation-duration:12s!important}.door-sign{animation-name:sign-sway-calm;animation-duration:6s!important}}
+
+.chimney-smoke{position:absolute;left:40.15%;top:21.5%;width:4%;height:4%;pointer-events:none}
+.chimney-smoke span{position:absolute;left:20%;bottom:0;width:70%;aspect-ratio:1;background:radial-gradient(circle at 35% 42%,#fff9ed 0 35%,transparent 37%),radial-gradient(circle at 66% 48%,#f4eee5 0 35%,transparent 37%),radial-gradient(circle at 48% 67%,#fff9ed 0 36%,transparent 38%);filter:blur(1.6px);animation:chimney-rise 7.2s linear infinite;transform-origin:50% 80%;opacity:0}
+.chimney-smoke span:nth-child(2){animation-delay:-.9s;left:4%;width:65%}
+.chimney-smoke span:nth-child(3){animation-delay:-1.8s;left:25%;width:76%}
+.chimney-smoke span:nth-child(4){animation-delay:-2.7s;left:14%;width:68%}
+.chimney-smoke span:nth-child(5){animation-delay:-3.6s;left:8%;width:78%}
+.chimney-smoke span:nth-child(6){animation-delay:-4.5s;left:24%;width:66%}
+.chimney-smoke span:nth-child(7){animation-delay:-5.4s;left:12%;width:74%}
+.chimney-smoke span:nth-child(8){animation-delay:-6.3s;left:20%;width:70%}
+@keyframes chimney-rise{0%{transform:translate(0,0) scale(.45);opacity:0}10%{opacity:.88}38%{transform:translate(-32%,-130%) scale(1.1);opacity:.7}72%{transform:translate(-115%,-290%) scale(1.65);opacity:.4}100%{transform:translate(-185%,-430%) scale(2.2);opacity:0}}
+@media(prefers-reduced-motion:reduce){.chimney-smoke span{animation-duration:14s}}
