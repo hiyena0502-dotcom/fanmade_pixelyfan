@@ -51,6 +51,9 @@
   function refreshCategories(){
     document.querySelectorAll("[data-category]").forEach(button=>button.setAttribute("aria-pressed",String(button.dataset.category===activeCategory)));
   }
+  let nameFrame=0;
+  function fitNames(){cancelAnimationFrame(nameFrame);nameFrame=requestAnimationFrame(()=>{for(const box of document.querySelectorAll('.part-name')){if(!box.clientWidth)continue;const text=box.firstElementChild;text.classList.remove('is-truncated');let size=16;text.style.fontSize=size+'px';while(size>12&&text.getBoundingClientRect().height>box.clientHeight+.5){text.style.fontSize=--size+'px';}if(text.getBoundingClientRect().height>box.clientHeight+.5)text.classList.add('is-truncated');box.dataset.fontSize=size;}});}
+  new ResizeObserver(fitNames).observe($('parts-list'));document.fonts.ready.then(fitNames);
   function renderParts(){
     const list=$("parts-list");list.replaceChildren();refreshCategories();
     const parts=state.parts.filter(p=>p.type===activeCategory);
@@ -64,13 +67,14 @@
       const card=document.createElement("article");card.className="part-card"+(part.visible!==false?" is-worn":"")+(part.id===state.selected?" is-selected":"");
       const image=document.createElement("img");image.className="part-thumb";image.alt="";if(urls.has(M.imageKey(part.id)))image.src=urls.get(M.imageKey(part.id));
       const caption=document.createElement("div");caption.className="part-caption";
-      const name=document.createElement("strong"),subtype=document.createElement("small");name.textContent=part.name;subtype.textContent=part.subtype;
+      const name=document.createElement("strong"),subtype=document.createElement("small");name.className='part-name';name.tabIndex=0;name.title=part.name;name.setAttribute('aria-label',part.name);name.addEventListener('focus',()=>notify(part.name));const nameText=document.createElement('span');nameText.textContent=part.name;name.append(nameText);subtype.textContent=part.subtype;
       const label=document.createElement("label"),check=document.createElement("input"),text=document.createElement("span");check.type="checkbox";check.checked=part.visible!==false;check.disabled=!hasImage(part.id);check.setAttribute("aria-label",part.name+" 착용");text.textContent=check.checked?"착용 중":"입기";
       check.addEventListener("change",()=>run(async()=>{const next=M.normalize(state);M.record(next,part.id).visible=check.checked;next.selected=part.id;await commit(next);notify(part.name+(check.checked?" 파츠를 켰어요":" 파츠를 껐어요"));}));
       label.append(check,text);caption.append(name,subtype,label);
       const edit=document.createElement("button");edit.className="part-edit";edit.type="button";edit.textContent="편집";edit.setAttribute("aria-label",part.name+" 파츠 편집");edit.onclick=()=>beginEdit(part.id);
-      card.append(image,caption,edit);list.append(card);
+      image.draggable=false;card.append(image,caption,edit);list.append(card);
     }
+    fitNames();
   }
   function renderAdjust(){
     if(!M.record(state))state.selected="base";

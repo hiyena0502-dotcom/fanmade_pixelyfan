@@ -17,7 +17,7 @@
     const key=M.imageKey(id,role),record=images.get(key);
     if(!locked&&record&&urls.has(key)){
       const img=el("img");img.src=urls.get(key);img.alt="";img.draggable=false;
-      const t=M.imageTransform(record.transform);img.style.transform=`translate(${t.x}%,${t.y}%) scale(${t.scale/100}) rotate(${t.rotate}deg)`;container.append(img);
+      container.append(img);PixelyImageSlot.apply(img,record,role==='decoration'?'decoration':isChapter?'chapter':({people:'character',cards:'card',items:'item',memories:'postcard'}[view.category]));
     }else{const placeholder=el("span","image-placeholder");placeholder.append(icon(locked?"lock":"image"));if(!locked&&role==="main"&&editorMode())placeholder.append(el("span","","이미지 등록 전"));container.append(placeholder);}
   }
   function sticker(id,decoration){
@@ -127,6 +127,6 @@
     addEventListener('pixely:developer-mode',()=>switchMode().catch(e=>banner(e.message)));
     if(new URLSearchParams(location.search).get('edit')==='1'&&!editing)void admin.loginOpen();
   })();
-  window.PixelyBooks=Object.freeze({ready,kind,saveDraft,publishDraft,setPreview,get editorMode(){return editorMode();},categories:D.categories,el,icon,paintImage,getCatalogue:()=>structuredClone(catalogue),getProgress:()=>structuredClone(progress),getView:()=>structuredClone(view),getImage:key=>images.get(key),saveRecord,applyProgress,connectGame,requestChapter,turn,isPersistent:()=>!!db});
+  window.PixelyBooks=Object.freeze({ready,kind,saveDraft,publishDraft,setPreview,get editorMode(){return editorMode();},categories:D.categories,el,icon,paintImage,previewSnapshot:()=>({catalogue:structuredClone(catalogue),progress:structuredClone(progress),view:structuredClone(view),images:[...images]}),previewContent:value=>{if(!admin.isEditor()||!value)return;catalogue=M.catalogue(value.catalogue);progress=M.progress(value.progress);view=M.view(value.view,catalogue);images=new Map(value.images);syncUrls();preview=true;render();controls();},getCatalogue:()=>structuredClone(catalogue),getProgress:()=>structuredClone(progress),getView:()=>structuredClone(view),getImage:key=>images.get(key),saveRecord,applyProgress,connectGame,requestChapter,turn,isPersistent:()=>!!db});
   addEventListener("pagehide",()=>{for(const url of urls.values())URL.revokeObjectURL(url);db?.close();});
 })();

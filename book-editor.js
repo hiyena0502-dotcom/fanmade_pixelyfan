@@ -24,11 +24,11 @@
     $("editor-image-role").value="main";$("editor-upload").value="";notify("");draw();
   }
   function draw(){
-    if(!draft)return;const root=$("editor-image-preview"),image=draftImages.get(key());root.replaceChildren();
-    if(image){if(!urls.has(key()))urls.set(key(),image.blob instanceof Blob?URL.createObjectURL(image.blob):PixelyAdmin.imageURL(image.path));const img=B.el("img");img.src=urls.get(key());img.alt="편집할 이미지";const t=M.imageTransform(image.transform);img.style.transform=`translate(${t.x}%,${t.y}%) scale(${t.scale/100}) rotate(${t.rotate}deg)`;root.append(img);}
+    if(!draft)return;document.getElementById('editor-source-size').textContent='이미지 등록 전';const root=$("editor-image-preview"),image=draftImages.get(key());root.replaceChildren();
+    if(image){if(!urls.has(key()))urls.set(key(),image.blob instanceof Blob?URL.createObjectURL(image.blob):PixelyAdmin.imageURL(image.path));const img=B.el("img");img.src=urls.get(key());img.alt="편집할 이미지";root.append(img);PixelyImageSlot.apply(img,image,role()==='decoration'?'decoration':group==='chapters'?'chapter':'item');const dimensions=document.getElementById('editor-source-size');const showDimensions=()=>dimensions.textContent='원본 '+(image.source?.width||img.naturalWidth)+' × '+(image.source?.height||img.naturalHeight);img.addEventListener('load',showDimensions);showDimensions();}
     else{const placeholder=B.el("span","image-placeholder");placeholder.append(B.icon("image"),B.el("span","","이미지를 골라 주세요"));root.append(placeholder);}
     for(const input of dialog.querySelectorAll("[data-image-range],[data-image-number]")){const prop=input.dataset.imageRange||input.dataset.imageNumber;input.value=M.imageTransform(image?.transform)[prop];input.disabled=!image;}
-    $("editor-image-delete").disabled=$("editor-image-reset").disabled=!image;$("editor-undo").disabled=!undo.length;$("editor-redo").disabled=!redo.length;
+    const slot=PixelyImageSlot.normalize(image?.slot);for(const prop of ['type','ratio','fit','flip']){const input=$('editor-slot-'+prop);input.disabled=!image;if(prop==='flip')input.checked=slot.flip;else input.value=slot[prop];}$("editor-image-delete").disabled=$("editor-image-reset").disabled=!image;$("editor-undo").disabled=!undo.length;$("editor-redo").disabled=!redo.length;
   }
   $("edit-launch").onclick=()=>{if(!B.editorMode)return;
     group=B.kind==="chapters"?"chapters":B.getView().category;const selected=B.kind==="chapters"?B.getView().chapterSelected:B.getView().selections[group];const list=activeEntries(),entry=list.find(e=>e.id===selected)||list[0];
@@ -49,9 +49,10 @@
       bitmap=await createImageBitmap(file);if(bitmap.width*bitmap.height>25000000)throw new Error("이미지 크기를 조금 줄여 주세요");
       if(epoch!==uploadEpoch||!dialog.open)return;
       if(urls.has(currentKey)){URL.revokeObjectURL(urls.get(currentKey));urls.delete(currentKey);}
-      checkpoint();draftImages.set(currentKey,{blob:file,transform:M.imageTransform()});removed.delete(currentKey);notify("이미지를 골랐어요 · 저장 또는 미리보기를 눌러 주세요");draw();
+      checkpoint();const type=role()==='decoration'?'decoration':group==='chapters'?'chapter':({people:'character',cards:'card',items:'item',memories:'postcard'}[group]);draftImages.set(currentKey,{blob:file,transform:M.imageTransform(),source:{width:bitmap.width,height:bitmap.height},slot:PixelyImageSlot.normalize({type},type)});removed.delete(currentKey);notify("이미지를 골랐어요 · 저장 또는 미리보기를 눌러 주세요");draw();
     }catch(error){notify(error.message||"이미지를 읽지 못했어요",true);}finally{bitmap?.close();$("editor-upload").value="";}
   };
+  for(const prop of ['type','ratio','fit','flip'])$('editor-slot-'+prop).onchange=()=>{const image=draftImages.get(key());if(!image)return;checkpoint();image.slot={...PixelyImageSlot.normalize(image.slot),[prop]:prop==='flip'?$('editor-slot-'+prop).checked:$('editor-slot-'+prop).value};draw();};
   $("editor-image-delete").onclick=()=>{if(!draft)return;checkpoint();const k=key();draftImages.delete(k);removed.add(k);if(urls.has(k)){URL.revokeObjectURL(urls.get(k));urls.delete(k);}notify("이미지를 뺐어요 · 저장 전에는 취소할 수 있어요");draw();};
   $("editor-image-reset").onclick=()=>{const image=draftImages.get(key());if(image){checkpoint();image.transform=M.imageTransform();draw();}};
   for(const input of dialog.querySelectorAll("[data-image-range],[data-image-number]"))input.oninput=()=>{
