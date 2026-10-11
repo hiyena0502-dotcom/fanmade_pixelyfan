@@ -20,14 +20,14 @@ test('whole-stage scaling preserves legacy image and click coordinates when conv
   }
 });
 
-test('home keeps the menu coordinate system and readable interfaces keep a safe independent zoom',()=>{
+test('menus extend their reference canvas to fill the browser while keeping readable UI independent',()=>{
   for(const [w,h] of [[3440,1440],[2520,1080],[1920,1080],[1920,1200],[1600,1200],[800,600]]){
-    const home=S.homeFit(w,h),ui=S.uiFit(S.fit(w,h));
-    assert.equal(home.width,3000);assert.equal(home.height,1440);
-    assert.deepEqual(home,S.fit(w,h));
+    const home=S.homeFit(w,h),ui=S.uiFit(S.menuFit(w,h));
+    assert.ok(home.width>=3000-1e-9);assert.ok(home.height>=1440-1e-9);
+    assert.deepEqual(home,S.menuFit(w,h));assert.equal(home.left,0);assert.equal(home.top,0);assert.equal(home.displayWidth,w);assert.equal(home.displayHeight,h);
     assert.ok(Math.abs(home.width*home.scale-home.displayWidth)<1e-9);
-    assert.ok(ui.zoom>=1&&ui.zoom<=2);
-    assert.ok(ui.width*ui.zoom<=3000+1e-9&&ui.height*ui.zoom<=1440+1e-9);
+    assert.ok(ui.zoom>=1&&ui.zoom<=2.5);
+    assert.ok(Math.abs(ui.width*ui.zoom-home.width)<1e-9&&Math.abs(ui.height*ui.zoom-home.height)<1e-9);
   }
   assert.ok(Math.abs(S.uiFit(S.fit(2520,1080)).zoom*.75-1.18)<1e-9);
   assert.equal(S.uiFit(S.fit(3440,1440)).zoom,1.18);
@@ -52,7 +52,7 @@ test('a page changes coordinates only when actual play begins and restores menu 
  const html={clientWidth:2520,clientHeight:1080,dataset:{screen:'game'},style:{setProperty:(k,v)=>values.set(k,v)},classList:{add:k=>classes.add(k),toggle:(k,on)=>on?classes.add(k):classes.delete(k)}};
  const window={document:{documentElement:html},addEventListener(){}};
  vm.runInNewContext(fs.readFileSync(require.resolve('../stage.js'),'utf8'),{window});
- assert.equal(window.PixelyStage.frame.width,3000);assert.equal(values.get('--stage-height'),'1440px');
+ assert.equal(window.PixelyStage.frame.width,3360);assert.equal(values.get('--stage-height'),'1440px');
  window.PixelyStage.setPlaying(true);assert.equal(window.PixelyStage.frame.width,1920);assert.equal(values.get('--stage-height'),'1080px');assert.ok(classes.has('pixely-game-playing'));
- window.PixelyStage.setPlaying(false);assert.equal(window.PixelyStage.frame.width,3000);assert.ok(!classes.has('pixely-game-playing'));
+ window.PixelyStage.setPlaying(false);assert.equal(window.PixelyStage.frame.width,3360);assert.ok(!classes.has('pixely-game-playing'));
 });
