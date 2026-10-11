@@ -46,7 +46,22 @@
     samples[0]=0;samples[samples.length-1]=0;
     return samples;
   }
+  // Original warm membrane strikes. A short preparation hit and a fuller resonant hit.
+  function chapterDrum(full){
+    const duration=full?1.85:.30,samples=new Float32Array(Math.ceil(duration*RATE));
+    let phase=0,seed=491,noise=0;
+    for(let i=0;i<samples.length;i++){
+      const t=i/RATE;phase+=2*Math.PI*((full?62:82)+35*Math.exp(-t*24))/RATE;
+      seed=(Math.imul(seed,1664525)+1013904223)>>>0;noise+=.08*(seed/4294967296*2-1-noise);
+      const attack=Math.min(1,t/.012),tail=Math.pow(Math.max(0,1-t/duration),1.5);
+      const body=(Math.sin(phase)+.30*Math.sin(phase*1.58)+.13*Math.sin(phase*2.14))*Math.exp(-t*(full?2.1:8));
+      const room=full?.16*Math.sin(2*Math.PI*58*t)*Math.exp(-t*1.5)*Math.min(1,t/.13):0;
+      samples[i]=(body*.38+noise*.32*Math.exp(-t*30)+room)*attack*tail;
+    }
+    samples[0]=0;samples[samples.length-1]=0;return samples;
+  }
   function render(kind,target="",syllableIndex=null){
+    if(kind==="chapter-first"||kind==="chapter-second")return chapterDrum(kind==="chapter-second");
     if(kind==="wood"||kind==="rustle") return objectSound(kind);
     const voice=voices[kind];
     if(!voice) return new Float32Array(0);
@@ -81,7 +96,7 @@
     }
     return samples;
   }
-  function effectKind(target){return ({house:"wood",bush:"rustle"})[target]??"none";}
+  function effectKind(target){return ({house:"wood",bush:"rustle","chapter-first":"chapter-first","chapter-second":"chapter-second"})[target]??"none";}
   const api=Object.freeze({sampleRate:RATE,render,effectKind});
   if(typeof module!=="undefined"&&module.exports) module.exports=api;
   else window.PixelySounds=api;
