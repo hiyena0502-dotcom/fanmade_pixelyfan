@@ -18,3 +18,8 @@
 
 .page-corner{position:absolute;right:26px;top:18px;display:flex;gap:2px;align-items:center;pointer-events:none;color:#9eb48a}.page-corner .icon:first-child{width:31px;height:31px;transform:rotate(-12deg)}.page-corner .icon:last-child{width:27px;height:27px;transform:rotate(10deg)}.chapter-card>.sticker{bottom:65px;right:18px;width:28px;height:28px}
 .collection-card{container-type:size}.collection-card .card-number,.collection-card strong{flex:none}.collection-card .image-area{width:min(100%,max(20px,calc(100cqh - 66px)))}
+
+/* Hide scrapbook ornaments without deleting uploaded decoration records. */
+.sticker,.page-corner,.hand-note,.bookmark{display:none!important}
+.chapter-card:before,.detail-photo:before,.detail-photo:after{content:none!important}
+.clear-stamp{display:none!important}

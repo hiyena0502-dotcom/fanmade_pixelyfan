@@ -13,3 +13,9 @@
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 
 .sr-only,.save-status:not([data-error="true"]){position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important;border:0!important}
+
+/* Give the mirror more vertical room; preview fitting keeps outfit coordinates intact. */
+.cabinet{height:min(calc(96 * var(--stage-vh)),1080px);grid-template-rows:68px minmax(0,1fr) 132px;gap:10px;padding-top:12px;padding-bottom:16px}
+.cabinet-content{padding-top:9px;padding-bottom:6px;gap:24px}
+.mirror-panel{gap:4px}.mirror-frame{padding:11px}.preview-caption{padding:4px 10px}.export-note{line-height:1.1}
+@container pixely-stage(max-height:780px){.cabinet{grid-template-rows:60px minmax(0,1fr) 118px;gap:8px;padding-top:10px;padding-bottom:12px}.slot-picture{height:59px}.slot-picture img{max-height:57px}.save-slot{padding-top:6px;padding-bottom:6px}.slots-heading>span{font-size:14px}}
