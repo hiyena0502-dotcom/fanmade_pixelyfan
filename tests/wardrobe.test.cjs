@@ -44,19 +44,25 @@ test('preview and PNG share exact fitted placement, scale, rotation and transpar
   assert.equal(fitted.width,400);assert.equal(fitted.height,480);assert.equal(fitted.rotation,Math.PI/2);
 });
 
-test('mirror fits every rotated corner, including large and displaced layers, below its arch',()=>{
+test('enlarged and displaced layers extend beyond the mirror without shrinking or recentering',()=>{
   const placements=[
     M.imagePlacement({width:1800,height:500},{x:500,y:-600,scale:300,rotate:45}),
     M.imagePlacement({width:500,height:1800},{x:-500,y:600,scale:300,rotate:-70})
   ];
   for(const viewport of [{width:520,height:390},{width:300,height:500}]){
     const frame=M.previewFrame(placements,viewport);
+    assert.deepEqual(frame,M.previewFrame([],viewport));
+    assert.deepEqual(frame,M.previewFrame([M.imagePlacement({width:1000,height:1200},{scale:100})],viewport));
+    let outside=false;
     for(const p of placements)for(const dx of [-p.width/2,p.width/2])for(const dy of [-p.height/2,p.height/2]){
       const x=(p.x+dx*Math.cos(p.rotation)-dy*Math.sin(p.rotation))*frame.scale+frame.x;
       const y=(p.y+dx*Math.sin(p.rotation)+dy*Math.cos(p.rotation))*frame.scale+frame.y;
-      assert.ok(x>=viewport.width*.08-1e-7&&x<=viewport.width*.92+1e-7);
-      assert.ok(y>=viewport.height*.14-1e-7&&y<=viewport.height*.96+1e-7);
+      outside ||= x<0||x>viewport.width||y<0||y>viewport.height;
     }
+    assert.ok(outside);
+    const heights=[100,200,400].map(scale=>M.imagePlacement({width:1000,height:1200},{scale}).height*frame.scale);
+    assert.equal(heights[1],heights[0]*2);
+    assert.equal(heights[2],heights[0]*4);
   }
 });
 
