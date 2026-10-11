@@ -121,7 +121,7 @@
   }
   const ready=(async()=>{
     try{db=await R.open();legacy=await R.read(db);view=M.view(legacy.view,catalogue);}catch{db=null;banner("브라우저 저장 공간을 사용할 수 없어요");}
-    if(new URLSearchParams(location.search).get('from')==='game'){const back=document.querySelector('.back-link');if(back){back.href='./game.html?mode=resume';back.textContent='‹ 모험으로 돌아가기';}}
+    if(new URLSearchParams(location.search).get('from')==='game'){const back=document.querySelector('.back-link');if(back){back.href='./game.html?mode=resume';back.textContent='‹ 모험으로 돌아가기';if(new URLSearchParams(location.search).get('overlay')==='1'&&parent!==window){back.onclick=e=>{e.preventDefault();parent.postMessage({type:'pixely:collection-close'},location.origin);};addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.querySelector('dialog[open]')){e.preventDefault();parent.postMessage({type:'pixely:collection-close'},location.origin);}});}}}
     await admin.ready;authorControls();await switchMode();
     adapter={startChapter:async id=>{if(editorMode()||preview){banner("미리보기에서는 게임을 시작하지 않아요");return;}location.href='./game.html?mode=chapter&chapter='+encodeURIComponent(id);}};renderDetail();
     addEventListener('pixely:developer-mode',()=>switchMode().catch(e=>banner(e.message)));
