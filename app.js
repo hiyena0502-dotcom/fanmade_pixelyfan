@@ -4,20 +4,13 @@ const house=document.querySelector(".layer-house");
 const houseTouch=document.querySelector(".house-touch");
 const sign=document.querySelector(".door-sign");
 let houseReaction,signReaction;
-const reducedMotion=()=>matchMedia("(prefers-reduced-motion: reduce)").matches;
 houseTouch?.addEventListener("click",()=>{
   void window.PixelySettings.playEffect("house");
   if(!window.PixelySettings.get().motion) return;
   houseReaction?.cancel();
   signReaction?.cancel();
-  const calm=reducedMotion();
   // A shallow press, one crisp hop, then a small landing recoil.
-  houseReaction=house.animate(calm?[
-    {transform:"translateY(0) scale(1)"},
-    {transform:"translateY(.1%) scale(1.01,.98)",offset:.25},
-    {transform:"translateY(-.6%) scale(1)",offset:.55},
-    {transform:"translateY(0) scale(1)"}
-  ]:[
+  houseReaction=house.animate([
     {transform:"translateY(0) scale(1)",easing:"ease-out"},
     {transform:"translateY(.15%) scale(1.025,.955)",offset:.16},
     {transform:"translateY(.15%) scale(1.025,.955)",offset:.22,easing:"cubic-bezier(.12,.72,.25,1)"},
@@ -25,13 +18,13 @@ houseTouch?.addEventListener("click",()=>{
     {transform:"translateY(0) scale(1.018,.977)",offset:.7,easing:"ease-out"},
     {transform:"translateY(-.22%) scale(.997,1.005)",offset:.86},
     {transform:"translateY(0) scale(1)"}
-  ],{duration:calm?360:780,easing:"ease-in-out"});
-  signReaction=sign.animate(calm?[{transform:"rotate(0deg)"},{transform:"rotate(2deg)"},{transform:"rotate(0deg)"}]:[
+  ],{duration:780,easing:"ease-in-out"});
+  signReaction=sign.animate([
     {transform:"rotate(0deg)",offset:0},{transform:"rotate(-18deg)",offset:.2},
     {transform:"rotate(14deg)",offset:.43},{transform:"rotate(-9deg)",offset:.63},
     {transform:"rotate(5deg)",offset:.8},{transform:"rotate(-2deg)",offset:.92},
     {transform:"rotate(0deg)"}
-  ],{duration:calm?320:2200,easing:"ease-in-out",composite:"add"});
+  ],{duration:2200,easing:"ease-in-out",composite:"add"});
 });
 
 const bush=document.querySelector(".bush-art");
@@ -44,8 +37,7 @@ bushTouch?.addEventListener("click",()=>{
   bushReaction?.cancel();
   bushLeaves.querySelectorAll(".bush-leaf").forEach(leaf=>leaf.getAnimations().forEach(animation=>animation.cancel()));
   bushLeaves.replaceChildren();
-  const calm=reducedMotion();
-  bushReaction=bush.animate(calm?[{transform:"rotate(0deg)"},{transform:"rotate(-1deg)"},{transform:"rotate(1deg)"},{transform:"rotate(0deg)"}]:[
+  bushReaction=bush.animate([
     {transform:"rotate(0deg)"},
     {transform:"translateY(.3%) scale(1.045,.94) rotate(-1.2deg)",offset:.08},
     {transform:"translateX(-.28%) rotate(-4.8deg) skewX(-3deg) scale(.98,1.035)",offset:.19},
@@ -57,10 +49,10 @@ bushTouch?.addEventListener("click",()=>{
     {transform:"rotate(-.9deg)",offset:.82},
     {transform:"rotate(.45deg)",offset:.9},
     {transform:"rotate(0deg)"}
-  ],{duration:calm?320:1350,easing:"ease-in-out"});
+  ],{duration:1350,easing:"ease-in-out"});
   const greens=["#397e63","#4f8b58","#7fa95d","#a4bb70"];
   const scale=bushLeaves.clientWidth/278;
-  for(let i=0;i<(calm?3:8);i++){
+  for(let i=0;i<8;i++){
     const leaf=document.createElement("span");
     leaf.className="bush-leaf";
     leaf.style.left=`${12+Math.random()*75}%`;
@@ -80,7 +72,7 @@ bushTouch?.addEventListener("click",()=>{
       const progress=frame/18,t=progress*duration;
       const x=vx*t+Math.sin(t*5+phase)*9*scale*progress;
       const y=vy*t+.5*gravity*t*t;
-      const flip=calm?1:Math.cos(t*3+phase);
+      const flip=Math.cos(t*3+phase);
       return {offset:progress,opacity:Math.min(1,progress*9,(1-progress)*5),transform:`translate(${x}px,${y}px) rotate(${angle+turn*progress}deg) scaleX(${flip})`};
     });
     const animation=leaf.animate(keyframes,{duration:duration*1000,delay:30+Math.random()*360,easing:"linear",fill:"forwards"});
@@ -115,7 +107,6 @@ if(breeze){
   const greens=["#4f8b58","#669b50","#7fa95d","#a4bb70","#397e63","#6aa878"];
   const shapes=["M5 25C2 13 15 5 29 4C27 18 20 30 5 25Z","M5 25C4 10 20 3 29 4C30 18 16 32 5 25Z","M5 25C1 16 12 6 29 4C24 19 16 29 5 25Z"];
   const random=(min,max)=>min+Math.random()*(max-min);
-  const motionPreference=matchMedia("(prefers-reduced-motion: reduce)");
   let width=breeze.clientWidth,height=breeze.clientHeight;
   let frame=0,lastTime=0,windTime=0,nextEmission=random(3,6);
   const leaves=[];
@@ -154,7 +145,7 @@ if(breeze){
     if(!leaf.active) return;
     leaf.age+=dt;
     const gust=Math.sin(time*.47+leaf.phase)*.3+Math.sin(time*1.07+leaf.phase)*.15;
-    const flutter=motionPreference.matches?0:Math.sin(leaf.age*leaf.flutter+leaf.phase);
+    const flutter=Math.sin(leaf.age*leaf.flutter+leaf.phase);
     leaf.vx+=(leaf.wind*(1+gust)-leaf.vx)*dt*.7;
     leaf.vy+=(leaf.gravity-leaf.vy*leaf.drag)*dt;
     leaf.x+=(leaf.vx+flutter*leaf.sway*width/1920)*dt;
@@ -170,7 +161,7 @@ if(breeze){
     if(!leaf.active) return;
     leaf.element.style.opacity=leaf.opacity*Math.min(1,leaf.age/.65);
     leaf.element.style.transform=`translate3d(${leaf.x.toFixed(2)}px,${leaf.y.toFixed(2)}px,0)`;
-    const flip=motionPreference.matches?1:Math.cos(leaf.age*leaf.flipSpeed+leaf.phase);
+    const flip=Math.cos(leaf.age*leaf.flipSpeed+leaf.phase);
     leaf.blade.style.transform=`rotate(${leaf.angle.toFixed(2)}deg) scaleX(${flip.toFixed(3)}) scaleY(.72)`;
   }
 
@@ -189,7 +180,7 @@ if(breeze){
   function animate(time){
     const dt=lastTime?Math.min((time-lastTime)/1000,.05):0;
     lastTime=time;
-    const step=dt*(motionPreference.matches ? .35 : 1);
+    const step=dt;
     windTime+=step;
     leaves.forEach(leaf=>{advance(leaf,step,windTime);render(leaf);});
     if(windTime>=nextEmission){

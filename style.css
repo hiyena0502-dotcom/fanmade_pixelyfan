@@ -40,13 +40,13 @@ button{font:inherit}
 .art-stage:has(.house-touch:hover) .door-sign{animation-duration:2.8s}
 @keyframes title-rock{0%,100%{transform:rotate(-2.4deg) translate(0,0)}50%{transform:rotate(2.4deg) translate(.18%,-.25%)}}
 @keyframes sign-sway{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
-@keyframes title-rock-calm{0%,100%{transform:rotate(-.7deg)}50%{transform:rotate(.7deg)}}
-@keyframes sign-sway-calm{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+
+
 .diary-positioner{z-index:3}
 .notebook{position:absolute;left:59.228515625%;top:3.560529%;width:33.3984375%;height:92.879959%;container-type:size;pointer-events:auto}
 .journal-base{position:absolute;inset:0;overflow:hidden;pointer-events:none}
 .journal-art{position:absolute;width:299.415205%;height:auto;max-width:none;left:-177.339181%;top:-3.833516%}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}.layer-title{animation-name:title-rock-calm;animation-duration:12s!important}.door-sign{animation-name:sign-sway-calm;animation-duration:6s!important}}
+
 
 .chimney-smoke{position:absolute;left:40.15%;top:21.5%;width:4%;height:4%;pointer-events:none}
 .chimney-smoke span{position:absolute;left:20%;bottom:0;width:70%;aspect-ratio:1;background:radial-gradient(circle at 35% 42%,#fff9ed 0 35%,transparent 37%),radial-gradient(circle at 66% 48%,#f4eee5 0 35%,transparent 37%),radial-gradient(circle at 48% 67%,#fff9ed 0 36%,transparent 38%);filter:blur(1.6px);animation:chimney-rise 7.2s linear infinite;transform-origin:50% 80%;opacity:0}
@@ -58,4 +58,3 @@ button{font:inherit}
 .chimney-smoke span:nth-child(7){animation-delay:-5.4s;left:12%;width:74%}
 .chimney-smoke span:nth-child(8){animation-delay:-6.3s;left:20%;width:70%}
 @keyframes chimney-rise{0%{transform:translate(0,0) scale(.45);opacity:0}10%{opacity:.88}38%{transform:translate(-32%,-130%) scale(1.1);opacity:.7}72%{transform:translate(-115%,-290%) scale(1.65);opacity:.4}100%{transform:translate(-185%,-430%) scale(2.2);opacity:0}}
-@media(prefers-reduced-motion:reduce){.chimney-smoke span{animation-duration:14s}}

@@ -50,7 +50,7 @@
 .interaction-hints .house-touch::before,.interaction-hints .bush-touch::before{width:22px;height:40px;background:#9a7246}
 .interaction-hints .house-touch::after,.interaction-hints .bush-touch::after{width:17px;height:32px;background:#fff4d4}
 .dialogue-text{font-size:var(--dialogue-font-size,22px)}
-@media(prefers-reduced-motion:reduce){.settings-switch input,.settings-switch input::before{transition:none}}
+
 
 .sound-choice{display:flex;align-items:center;gap:10px}
 .sound-choice-row{min-height:64px;padding:12px 0}

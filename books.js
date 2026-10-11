@@ -66,7 +66,7 @@
   function render(){view=M.view(view,catalogue);renderGrid();renderDetail();}
   async function turn(delta){
     if(busy)return;const page=pageData(),next=page.page+delta;if(next<0||next>=page.total)return;
-    busy=true;renderGrid();const pageNode=document.querySelector(".left-page"),motion=A.preferences().motion&&!matchMedia("(prefers-reduced-motion:reduce)").matches;
+    busy=true;renderGrid();const pageNode=document.querySelector(".left-page"),motion=A.preferences().motion;
     let sheet;if(motion){sheet=el("div","turn-sheet"+(delta<0?" reverse":""));sheet.setAttribute("aria-hidden","true");pageNode.append(sheet);}void A.paper();
     if(motion)await new Promise(resolve=>setTimeout(resolve,240));
     if(isChapter){view.chapterPage=next;view.chapterSelected=M.paginate(entries(),next,4).entries[0]?.id||"";}else{view.pages[view.category]=next;view.selections[view.category]=M.paginate(entries(),next,6).entries[0]?.id||"";}

@@ -5,7 +5,7 @@ body,button,input,select,textarea,dialog,.menu-item,.menu-name,.fan-label,.wardr
 .settings-heading{border-bottom-color:#eac99b}.settings-tabs button[aria-selected=true]{background:#fff4df;color:#68482f}.settings-done{background:#c2e0ee;color:#68482f;border-color:#82b5d0;box-shadow:none}.settings-slider input{accent-color:#9eb48a}
 .main-menu .menu-item{transition:transform .16s ease,color .16s ease}.main-menu .menu-item.is-active,.main-menu .menu-item:focus-visible{transform:translateX(4px);color:var(--menu-accent)}.main-menu .menu-item.is-active .menu-icon{transform:scale(1.04)}
 .title-screen{min-height:0}.art-stage,.diary-positioner{width:min(calc(100 * var(--stage-vw)),calc(208.341811 * var(--stage-vh)))}
-@media(prefers-reduced-motion:reduce){.main-menu .menu-item,.main-menu .menu-icon{transition:none;transform:none!important}}
+
 
 /* A source image changes within its fixed slot; the surrounding book/card stays put. */
 .editor-image-thumb{position:relative;width:min(100%,408px);height:auto;max-height:none;aspect-ratio:16/9;overflow:hidden;margin-inline:auto}.editor-image-thumb img{max-width:none;max-height:none}.scene-image-layer .monologue-motion{position:absolute;inset:0}.scene-background>img:not(.game-layer){object-fit:contain}.actor{overflow:visible}.sticker{overflow:hidden}

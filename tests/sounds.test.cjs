@@ -36,6 +36,24 @@ test('house and bush clicks request their own effects even when motion is disabl
   assert.deepEqual(heard,['house','bush','house']);assert.deepEqual(animated,['house','sign']);
 });
 
+test('PC reduced motion does not shrink house and bush reactions; the site switch still stops them',()=>{
+  const vm=require('node:vm'),fs=require('node:fs'),handlers={},animations=[],leaves=[];
+  let motion=true;
+  const animated=name=>({addEventListener:(event,fn)=>handlers[name]=fn,animate:(frames,options)=>{animations.push({name,frames,options});return {cancel(){},addEventListener(){}};}});
+  const nodes={'.layer-house':animated('house'),'.house-touch':animated('houseClick'),'.door-sign':animated('sign'),'.bush-art':animated('bush'),'.bush-touch':animated('bushClick'),'.bush-leaves':{clientWidth:278,querySelectorAll:()=>[],replaceChildren:()=>{leaves.length=0;},append:leaf=>leaves.push(leaf)}};
+  const sandbox={document:{querySelector:s=>nodes[s]||null,querySelectorAll:()=>[],createElement:()=>Object.assign(animated('leaf'),{style:{},remove(){}})},window:{PixelySettings:{get:()=>({motion}),playEffect(){}}},matchMedia:()=>({matches:true}),addEventListener(){}};
+  vm.runInNewContext(fs.readFileSync(require.resolve('../app.js'),'utf8'),sandbox);
+  handlers.houseClick();handlers.bushClick();
+  assert.equal(animations.find(a=>a.name==='house').options.duration,780);
+  assert.ok(animations.find(a=>a.name==='house').frames.some(f=>f.transform.includes('-1.85%')));
+  assert.equal(animations.find(a=>a.name==='sign').options.duration,2200);
+  assert.ok(animations.find(a=>a.name==='sign').frames.some(f=>f.transform==='rotate(-18deg)'));
+  assert.equal(animations.find(a=>a.name==='bush').options.duration,1350);
+  assert.equal(leaves.length,8);assert.equal(animations.filter(a=>a.name==='leaf').length,8);
+  for(const leaf of animations.filter(a=>a.name==='leaf'))assert.ok(leaf.frames.every(f=>!f.transform.includes('NaN')));
+  const count=animations.length;motion=false;handlers.houseClick();handlers.bushClick();assert.equal(animations.length,count);
+});
+
 test('each interactive object has a distinct fixed effect',()=>{
   assert.equal(effectKind('house'),'wood');
   assert.equal(effectKind('bush'),'rustle');
