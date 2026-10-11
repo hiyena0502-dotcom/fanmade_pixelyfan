@@ -8,7 +8,8 @@
   function resize(){
     const w=html.clientWidth||root.innerWidth,h=html.clientHeight||root.innerHeight;
     const screen=html.dataset.screen;
-    const frame=screen==='game'&&playing?api.gameFit(w,h):api.menuFit(w,h);
+    const collectionOverlay=screen==='ui'&&root.parent!==root&&/(?:^|[?&])overlay=1(?:&|$)/.test(root.location?.search||'');
+    const frame=screen==='game'&&playing?api.gameFit(w,h):collectionOverlay?api.fit(w,h):api.menuFit(w,h);
     const ui=api.uiFit(frame);
     html.style.setProperty('--stage-width',frame.width+'px');
     html.style.setProperty('--stage-height',frame.height+'px');

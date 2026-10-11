@@ -56,3 +56,13 @@ test('a page changes coordinates only when actual play begins and restores menu 
  window.PixelyStage.setPlaying(true);assert.equal(window.PixelyStage.frame.width,1920);assert.equal(values.get('--stage-height'),'1080px');assert.ok(classes.has('pixely-game-playing'));
  window.PixelyStage.setPlaying(false);assert.equal(window.PixelyStage.frame.width,3360);assert.ok(!classes.has('pixely-game-playing'));
 });
+
+// The game opens this child window inside its existing collection popup.
+test('in-game collection keeps its existing embedded book coordinates',()=>{
+ const vm=require('node:vm'),fs=require('node:fs');
+ const html={clientWidth:1920,clientHeight:1080,dataset:{screen:'ui'},style:{setProperty(){}},classList:{add(){},toggle(){}}};
+ const window={document:{documentElement:html},location:{search:'?overlay=1'},parent:{},addEventListener(){}};
+ vm.runInNewContext(fs.readFileSync(require.resolve('../stage.js'),'utf8'),{window});
+ assert.equal(window.PixelyStage.frame.width,3000);assert.equal(window.PixelyStage.frame.height,1440);
+ assert.ok(Math.abs(window.PixelyStage.frame.top-79.2)<1e-9);
+});
