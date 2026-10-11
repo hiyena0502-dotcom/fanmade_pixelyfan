@@ -20,9 +20,9 @@ houseTouch?.addEventListener("click",()=>{
     {transform:"translateY(0) scale(1)"}
   ],{duration:780,easing:"ease-in-out"});
   signReaction=sign.animate([
-    {transform:"rotate(0deg)",offset:0},{transform:"rotate(-18deg)",offset:.2},
-    {transform:"rotate(14deg)",offset:.43},{transform:"rotate(-9deg)",offset:.63},
-    {transform:"rotate(5deg)",offset:.8},{transform:"rotate(-2deg)",offset:.92},
+    {transform:"rotate(0deg)",offset:0},{transform:"rotate(-12deg)",offset:.2},
+    {transform:"rotate(9deg)",offset:.43},{transform:"rotate(-6deg)",offset:.63},
+    {transform:"rotate(3.5deg)",offset:.8},{transform:"rotate(-1.5deg)",offset:.92},
     {transform:"rotate(0deg)"}
   ],{duration:2200,easing:"ease-in-out",composite:"add"});
 });

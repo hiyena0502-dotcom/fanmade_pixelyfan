@@ -47,7 +47,7 @@ test('PC reduced motion does not shrink house and bush reactions; the site switc
   assert.equal(animations.find(a=>a.name==='house').options.duration,780);
   assert.ok(animations.find(a=>a.name==='house').frames.some(f=>f.transform.includes('-1.85%')));
   assert.equal(animations.find(a=>a.name==='sign').options.duration,2200);
-  assert.ok(animations.find(a=>a.name==='sign').frames.some(f=>f.transform==='rotate(-18deg)'));
+  assert.ok(animations.find(a=>a.name==='sign').frames.some(f=>f.transform==='rotate(-12deg)'));
   assert.equal(animations.find(a=>a.name==='bush').options.duration,1350);
   assert.equal(leaves.length,8);assert.equal(animations.filter(a=>a.name==='leaf').length,8);
   for(const leaf of animations.filter(a=>a.name==='leaf'))assert.ok(leaf.frames.every(f=>!f.transform.includes('NaN')));
