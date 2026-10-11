@@ -3,12 +3,12 @@ html[data-screen="ui"].pixely-stage-ready .cabinet{
  width:min(calc(84 * var(--ui-vw)),1680px);
  height:min(calc(82 * var(--ui-vh)),1000px);
  min-width:0;min-height:0;overflow:hidden;
- grid-template-rows:80px minmax(0,1fr) 118px;
+ grid-template-rows:80px minmax(0,1fr) 144px;
  gap:8px;padding:12px 24px 14px;
 }
 html[data-screen="ui"] .cabinet-content{min-width:0;gap:22px;padding:9px 14px 6px}
 html[data-screen="ui"] .paper-panel{padding:15px 18px 9px;gap:8px}
-html[data-screen="ui"] .parts-list{min-width:0;min-height:0;overflow:auto}
+html[data-screen="ui"] .parts-list{min-width:0;min-height:0;overflow:auto;grid-auto-rows:max-content}
 html[data-screen="ui"] .hanging-sign{height:72px}
 html[data-screen="ui"] .hanging-sign:before,html[data-screen="ui"] .hanging-sign:after{top:-10px;height:10px}
 
