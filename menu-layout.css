@@ -3,13 +3,26 @@ html[data-screen="ui"].pixely-stage-ready .cabinet{
  width:min(calc(84 * var(--ui-vw)),1680px);
  height:min(calc(82 * var(--ui-vh)),1000px);
  min-width:0;min-height:0;overflow:hidden;
- grid-template-rows:80px minmax(0,1fr) 144px;
+ grid-template-rows:64px minmax(0,1fr);
  gap:8px;padding:12px 24px 14px;
 }
-html[data-screen="ui"] .cabinet-content{min-width:0;gap:22px;padding:9px 14px 6px}
+html[data-screen="ui"] .cabinet-content{min-width:0;grid-template-columns:minmax(0,.3fr) minmax(0,.7fr);gap:20px;padding:9px 14px 6px}
+html[data-screen="ui"] .mirror-panel{min-width:0;container-type:size}
+html[data-screen="ui"] .mirror-frame{flex:1;width:min(100%,calc((100cqh - 36px) * .6))}
+html[data-screen="ui"] .wardrobe-controls{min-width:0;min-height:0;display:grid;grid-template-rows:minmax(0,1fr) 168px;gap:10px}
+html[data-screen="ui"] .slot-drawer{padding:0;gap:5px}
+html[data-screen="ui"] .save-slots{gap:7px}
+html[data-screen="ui"] .save-slot{grid-template-columns:32px minmax(0,1fr);gap:5px;padding:5px 6px}
+html[data-screen="ui"] .slot-picture{width:32px;height:44px}
+html[data-screen="ui"] .slot-picture img{max-height:42px}
+html[data-screen="ui"] .slot-picture>.icon{width:25px;height:25px}
+html[data-screen="ui"] .slot-actions{display:grid;grid-template-columns:minmax(0,1fr);gap:3px}
+html[data-screen="ui"] .slot-actions button{font-size:14px;min-height:25px;padding:2px 3px}
+html[data-screen="ui"] .slot-name{font-size:15px}
+html[data-screen="ui"] .slot-meta{font-size:12px}
 html[data-screen="ui"] .paper-panel{padding:15px 18px 9px;gap:8px}
 html[data-screen="ui"] .parts-list{min-width:0;min-height:0;overflow:auto;grid-auto-rows:max-content}
-html[data-screen="ui"] .hanging-sign{height:72px}
+html[data-screen="ui"] .hanging-sign{height:60px}
 html[data-screen="ui"] .hanging-sign:before,html[data-screen="ui"] .hanging-sign:after{top:-10px;height:10px}
 
 /* Both standalone books share the same frame; the in-game collection overlay keeps its layout. */
