@@ -1,0 +1,35 @@
+/* Panel footprints use the readable UI viewport. Fonts, stage fit and image data stay independent. */
+html[data-screen="ui"].pixely-stage-ready .cabinet{
+ width:min(calc(84 * var(--ui-vw)),1680px);
+ height:min(calc(82 * var(--ui-vh)),1000px);
+ min-width:0;min-height:0;
+ grid-template-rows:60px minmax(0,1fr) 106px;
+ gap:8px;padding:12px 24px 14px;
+}
+html[data-screen="ui"] .cabinet-content{min-width:0;gap:22px;padding:9px 14px 6px}
+html[data-screen="ui"] .paper-panel{padding:15px 18px 9px;gap:8px}
+html[data-screen="ui"] .parts-list{min-width:0;min-height:0;overflow:auto}
+
+/* Both standalone books share the same frame; the in-game collection overlay keeps its layout. */
+html[data-screen="ui"].pixely-stage-ready:not(.collection-overlay) .book-shell{
+ width:min(calc(82 * var(--ui-vw)),1640px);
+ height:min(calc(80 * var(--ui-vh)),900px);
+}
+html[data-screen="ui"]:not(.collection-overlay) .book-page{padding:24px 26px 18px;gap:12px}
+html[data-screen="ui"]:not(.collection-overlay) .chapter-grid{gap:18px 20px;padding:8px 4px}
+html[data-screen="ui"]:not(.collection-overlay) .collection-grid{gap:15px 12px}
+
+/* Main-menu settings only: leave all game dialogs and developer editors unchanged. */
+html[data-screen="home"].pixely-stage-ready .settings-dialog{
+ width:min(760px,calc(76 * var(--ui-vw)));
+ height:min(650px,calc(74 * var(--ui-vh)));
+ max-width:calc(76 * var(--ui-vw));max-height:calc(74 * var(--ui-vh));
+}
+html[data-screen="home"] .settings-heading{padding:20px 28px 16px;gap:16px;flex:none}
+html[data-screen="home"] .settings-close{top:22px;right:22px;width:44px;height:44px}
+html[data-screen="home"] .settings-tabs{padding:14px 28px 0;flex:none}
+html[data-screen="home"] .settings-tabs button{padding:11px 8px}
+html[data-screen="home"] .settings-panels{margin:0 28px;padding:12px 18px 14px;overflow-y:auto}
+html[data-screen="home"] .settings-row{min-height:64px;padding:12px 0;gap:18px}
+html[data-screen="home"] .settings-footer{padding:14px 28px;gap:14px;flex:none}
+html[data-screen="home"] .dialogue-preview{margin-top:14px;padding:18px}
