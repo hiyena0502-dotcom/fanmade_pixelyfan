@@ -26,7 +26,7 @@ test('home fills the browser and readable interfaces keep a safe independent zoo
     assert.equal(home.displayWidth,w);assert.equal(home.displayHeight,h);
     assert.equal(home.left,0);assert.equal(home.top,0);
     assert.ok(Math.abs(home.width*home.scale-w)<1e-9);
-    assert.ok(ui.zoom>=1&&ui.zoom<=1.5);
+    assert.ok(ui.zoom>=1&&ui.zoom<=2);
     assert.ok(ui.width*ui.zoom<=3000+1e-9&&ui.height*ui.zoom<=1440+1e-9);
   }
   assert.equal(S.uiFit(S.fit(2520,1080)).zoom,4/3);

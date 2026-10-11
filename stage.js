@@ -35,7 +35,7 @@
     return {width:w/scale,height:h/scale,scale,displayWidth:w,displayHeight:h,left:0,top:0};
   }
   function uiFit(frame){
-    const zoom=Math.max(1,Math.min(1.5,1/frame.scale));
+    const zoom=Math.max(1,Math.min(2,1/frame.scale));
     return {zoom,width:frame.width/zoom,height:frame.height/zoom};
   }
   return {width,height,fit,homeFit,uiFit};
