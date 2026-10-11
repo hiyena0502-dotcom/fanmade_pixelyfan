@@ -31,3 +31,4 @@ html.opening-plain body>:not(.game-shell){visibility:hidden!important;pointer-ev
 .inspection-back{position:absolute;left:3%;bottom:3%;z-index:8;background:#fff4df;font-size:calc(18px * var(--ui-zoom,1))}
 
 html.opening-plain #game-status{visibility:hidden!important}
+html.opening-plain .game-editor-launch,html.opening-plain .ratio-preview-launch,html.opening-plain .developer-toolbar{display:none!important}
