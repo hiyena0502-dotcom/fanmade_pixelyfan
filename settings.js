@@ -71,6 +71,7 @@
   window.PixelySettings=Object.freeze({
     get:()=>({...settings}),
     getVolume:bus=>volume(settings,bus),
+    primeEffects:async()=>{if(!settings.effectsEnabled||!volume(settings,"effects"))return;const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;try{audioContext??=new Audio();if(audioContext.state==="suspended")await audioContext.resume();}catch{}},
     playEffect:target=>playSound("effects",{target}),
     canSkip:alreadyRead=>canSkip(settings,alreadyRead),
     registerAudio:(element,bus="effects")=>{element.dataset.audioBus=bus;media.add(element);element.volume=volume(settings,bus);return ()=>media.delete(element);},
