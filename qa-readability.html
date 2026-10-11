@@ -23,7 +23,7 @@ if(page==='index.html'){
 }else if(page.startsWith('game')){
  assert('slot screen fills browser',Math.abs(body.width-w)<.1&&Math.abs(body.height-h)<.1);const g=d.querySelector('.game-shell');assert('slot screen keeps full browser ratio',Math.abs(g.clientWidth/g.clientHeight-w/h)<.01);for(const selector of ['.return-link','.slot-book','#slot-start'])assert('slot control fits '+selector,within(d.querySelector(selector).getBoundingClientRect(),viewport));assert('game slots preserved',d.querySelectorAll('#slot-list>button').length===5);
 }else {for(const s of ['.book-shell','.back-link',...(page==='collection.html'?['.collection-tabs']:[])])assert('book fits '+s,within(d.querySelector(s).getBoundingClientRect(),viewport));assert('book text readable',w<1600||18*physicalUI>=16);}
-frame.style.width='1100px';frame.style.height='750px';await sleep(80);assert(page+' resize fits',within(d.body.getBoundingClientRect(),{left:0,top:0,right:1100,bottom:750}));
+frame.style.width='1100px';frame.style.height='750px';for(let i=0;i<160&&(d.documentElement.clientWidth!==1100||d.documentElement.clientHeight!==750||!within(d.body.getBoundingClientRect(),{left:0,top:0,right:1100,bottom:750}));i++)await sleep(40);assert(page+' resize fits',within(d.body.getBoundingClientRect(),{left:0,top:0,right:1100,bottom:750}));
 }
 result.textContent=count+' readability checks passed';await open('index.html',2520,1080);
 }catch(e){result.textContent='FAIL after '+count+': '+e.message;}};
