@@ -18,6 +18,7 @@ html[data-screen="ui"] .slot-picture img{max-height:42px}
 html[data-screen="ui"] .slot-picture>.icon{width:25px;height:25px}
 html[data-screen="ui"] .slot-actions{display:grid;grid-template-columns:minmax(0,1fr);gap:3px}
 html[data-screen="ui"] .slot-actions button{font-size:14px;min-height:25px;padding:2px 3px}
+html[data-screen="ui"] .slot-top{font-size:12px;white-space:nowrap}
 html[data-screen="ui"] .slot-name{font-size:15px}
 html[data-screen="ui"] .slot-meta{font-size:12px}
 html[data-screen="ui"] .paper-panel{padding:15px 18px 9px;gap:8px}
