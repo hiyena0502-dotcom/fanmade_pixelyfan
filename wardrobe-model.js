@@ -36,21 +36,9 @@
     return {x:WIDTH/2+t.x,y:HEIGHT/2+t.y,width:size.width*fit*t.scale/100,height:size.height*fit*t.scale/100,rotation:t.rotate*Math.PI/180};
   }
   function previewFrame(placements,viewport){
-    let left=Infinity,top=Infinity,right=-Infinity,bottom=-Infinity;
-    for(const p of placements){
-      if(!p)continue;
-      const c=Math.abs(Math.cos(p.rotation)),s=Math.abs(Math.sin(p.rotation));
-      const halfWidth=(p.width*c+p.height*s)/2,halfHeight=(p.width*s+p.height*c)/2;
-      left=Math.min(left,p.x-halfWidth);right=Math.max(right,p.x+halfWidth);
-      top=Math.min(top,p.y-halfHeight);bottom=Math.max(bottom,p.y+halfHeight);
-    }
-    // Scale controls stay visible until the painted artwork actually fills the mirror.
-    // Transparent PNG margins neither force a zoom-out nor push the artwork down.
-    const safe={left:viewport.width*.08,right:viewport.width*.92,top:viewport.height*.14,bottom:viewport.height*.96};
-    const baseScale=Math.min(viewport.width*.84/WIDTH,viewport.height*.82/HEIGHT);
-    if(!Number.isFinite(left))return {scale:baseScale,x:viewport.width/2-WIDTH/2*baseScale,y:viewport.height*.55-HEIGHT/2*baseScale};
-    const scale=Math.min(baseScale,(safe.right-safe.left)/(right-left),(safe.bottom-safe.top)/(bottom-top));
-    return {scale,x:clamp(viewport.width/2-WIDTH/2*scale,safe.left-left*scale,safe.right-right*scale),y:clamp(viewport.height*.55-HEIGHT/2*scale,safe.top-top*scale,safe.bottom-bottom*scale)};
+    // Keep a stable canvas: saved enlargement, movement and rotation may extend beyond the glass.
+    const scale=Math.min(viewport.width*.84/WIDTH,viewport.height*.82/HEIGHT);
+    return {scale,x:viewport.width/2-WIDTH/2*scale,y:viewport.height*.55-HEIGHT/2*scale};
   }
   function alphaBounds(pixels,width,height){
     let left=width,top=height,right=-1,bottom=-1;
