@@ -7,8 +7,8 @@ html[data-screen="ui"].pixely-stage-ready .cabinet{
  gap:8px;padding:12px 24px 14px;
 }
 html[data-screen="ui"] .cabinet-content{min-width:0;grid-template-columns:minmax(0,.3fr) minmax(0,.7fr);gap:20px;padding:9px 14px 6px}
-html[data-screen="ui"] .mirror-panel{min-width:0;container-type:size}
-html[data-screen="ui"] .mirror-frame{flex:1;width:min(100%,calc((100cqh - 36px) * .6))}
+html[data-screen="ui"] .mirror-panel{min-width:0;container-type:size;padding:0 24px 0 12px}
+html[data-screen="ui"] .mirror-frame{flex:1;width:min(calc(100% - 16px),calc((100cqh - 36px) * .56))}
 html[data-screen="ui"] .wardrobe-controls{min-width:0;min-height:0;display:grid;grid-template-rows:minmax(0,1fr) 168px;gap:10px}
 html[data-screen="ui"] .slot-drawer{padding:0;gap:5px}
 html[data-screen="ui"] .save-slots{gap:7px}
