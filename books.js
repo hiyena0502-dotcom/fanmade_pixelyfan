@@ -20,14 +20,7 @@
       container.append(img);PixelyImageSlot.apply(img,record,role==='decoration'?'decoration':isChapter?'chapter':({people:'character',cards:'card',items:'item',memories:'postcard'}[view.category]));
     }else{const placeholder=el("span","image-placeholder");placeholder.append(icon(locked?"lock":"image"));if(!locked&&role==="main"&&editorMode())placeholder.append(el("span","","이미지 등록 전"));container.append(placeholder);}
   }
-  function sticker(id,decoration){return null;
-
-    if(decoration==="none"&&!images.has(M.imageKey(id,"decoration")))return null;
-    const node=el("span","sticker sticker-"+decoration);node.setAttribute("aria-hidden","true");
-    if(images.has(M.imageKey(id,"decoration")))paintImage(node,id,false,"decoration");else node.append(icon(decoration));return node;
-  }
-  const entries=()=>isChapter?catalogue.chapters:catalogue.collections[view.category];
-  const selected=()=>isChapter?view.chapterSelected:view.selections[view.category];
+  function sticker(){return null;}
   function pageData(){return M.paginate(entries(),isChapter?view.chapterPage:view.pages[view.category],isChapter?4:6);}
   function saveView(){const snapshot=structuredClone(view);return serial(async()=>{if(db)await R.writeView(db,snapshot);}).catch(()=>banner("페이지 위치를 저장하지 못했어요"));}
   function stamp(){const node=el("span","clear-stamp");node.setAttribute("aria-label","클리어");node.append(icon("flower"));return node;}

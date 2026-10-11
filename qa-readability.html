@@ -9,7 +9,7 @@ document.getElementById('run').onclick=async()=>{let count=0;const assert=(label
 try{for(const [w,h]of [[3440,1440],[2520,1080],[1920,1080],[1920,1200],[1600,1200],[800,600]])for(const page of ['index.html','wardrobe.html','chapters.html','collection.html','game.html?mode=new']){
 const [d,win]=await open(page,w,h);await win.PixelyAdmin.ready;await win.PixelyBooks?.ready;await win.PixelyGame?.ready;for(let i=0;i<140&&d.querySelector('.cabinet')?.getAttribute('aria-busy')==='true';i++)await sleep(50);
 const viewport={left:0,top:0,right:w,bottom:h},body=d.body.getBoundingClientRect(),stage=win.PixelyStage,ui=stage.uiFit(stage.frame),physicalUI=stage.frame.scale*ui.zoom;
-assert(page+' body fits',within(body,viewport));assert(page+' original images available',[...d.querySelectorAll('img[src]')].every(e=>e.complete&&e.naturalWidth>0));
+assert(page+' body fits',within(body,viewport));for(let i=0;i<160&&[...d.querySelectorAll('img[src]')].some(e=>!e.complete);i++)await sleep(50);assert(page+' original images available',[...d.querySelectorAll('img[src]')].every(e=>e.complete&&e.naturalWidth>0));
 if(page==='index.html'){
  assert('home fills entire viewport',Math.abs(body.width-w)<.1&&Math.abs(body.height-h)<.1&&Math.abs(body.left)<.1&&Math.abs(body.top)<.1);
  const art=d.querySelector('.art-stage').getBoundingClientRect();assert('home covers screen without stretching',art.width>=w-.1&&art.height>=h-.1&&Math.abs(art.width/art.height-2048/983)<.001);
