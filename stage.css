@@ -20,7 +20,7 @@ html.pixely-stage-ready .cabinet,html.pixely-stage-ready .book-shell{
   position:absolute;left:50%;top:50%;margin:0;
   transform:translate(-50%,-50%) scale(var(--ui-zoom));transform-origin:center;
 }
-/* Preserve the existing home composition inside the 25:12 menu stage. */
+/* Preserve the existing home composition within the extended menu canvas. */
 html[data-screen="home"] .art-stage{
   width:max(calc(100 * var(--stage-vw)),calc(208.341811 * var(--stage-vh)));
 }
