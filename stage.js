@@ -8,7 +8,8 @@
   function resize(){
     const w=html.clientWidth||root.innerWidth,h=html.clientHeight||root.innerHeight;
     const screen=html.dataset.screen;
-    const frame=screen==='game'&&playing?api.gameFit(w,h):api.fit(w,h);
+    const collectionOverlay=screen==='ui'&&root.parent!==root&&/(?:^|[?&])overlay=1(?:&|$)/.test(root.location?.search||'');
+    const frame=screen==='game'&&playing?api.gameFit(w,h):collectionOverlay?api.fit(w,h):api.menuFit(w,h);
     const ui=api.uiFit(frame);
     html.style.setProperty('--stage-width',frame.width+'px');
     html.style.setProperty('--stage-height',frame.height+'px');
@@ -32,12 +33,19 @@
     return {width,height,scale,displayWidth:width*scale,displayHeight:height*scale,
       left:(w-width*scale)/2,top:(h-height*scale)/2};
   }
-  // Main/menu and play coordinates are independent; saved normalized positions stay intact.
-  function homeFit(viewWidth,viewHeight){return fit(viewWidth,viewHeight);}
+  // Extend the menu canvas to the browser ratio; never crop UI or stretch its contents.
+  function menuFit(viewWidth,viewHeight){
+    const w=Math.max(0,Number(viewWidth)||0),h=Math.max(0,Number(viewHeight)||0);
+    const scale=Math.min(w/width,h/height);
+    if(!scale)return fit(w,h);
+    return {width:w/scale,height:h/scale,scale,displayWidth:w,displayHeight:h,left:0,top:0};
+  }
+  // Gameplay alone retains the 16:9 stage and symmetric pillars.
+  function homeFit(viewWidth,viewHeight){return menuFit(viewWidth,viewHeight);}
   function gameFit(viewWidth,viewHeight){return fit(viewWidth,viewHeight,1920,1080);}
   function uiFit(frame){
     const zoom=Math.max(1,Math.min(1.18/Math.max(frame.scale,.001),frame.width/1200,frame.height/800));
     return {zoom,width:frame.width/zoom,height:frame.height/zoom};
   }
-  return {width,height,gameWidth:1920,gameHeight:1080,fit,homeFit,gameFit,uiFit};
+  return {width,height,gameWidth:1920,gameHeight:1080,fit,menuFit,homeFit,gameFit,uiFit};
 });

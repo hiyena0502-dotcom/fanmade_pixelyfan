@@ -20,7 +20,7 @@ html.pixely-stage-ready .cabinet,html.pixely-stage-ready .book-shell{
   position:absolute;left:50%;top:50%;margin:0;
   transform:translate(-50%,-50%) scale(var(--ui-zoom));transform-origin:center;
 }
-/* Preserve the existing home composition inside the 25:12 menu stage. */
+/* Preserve the existing home composition within the extended menu canvas. */
 html[data-screen="home"] .art-stage{
   width:max(calc(100 * var(--stage-vw)),calc(208.341811 * var(--stage-vh)));
 }
@@ -58,7 +58,9 @@ html[data-screen="game"]:not(.pixely-game-playing) .return-link{top:12px;left:70
 .place-name,.speaker,.next-mark{font-size:calc(18px * var(--ui-zoom))}
 .dialogue-tools button,.monologue-controls button{font-size:calc(15px * var(--ui-zoom))}
 
-/* Pillars belong to the viewport, outside all interactive play content. */
+/* Menus fill the browser; pillars belong only to the 16:9 gameplay viewport. */
 html.pixely-stage-ready.pixely-game-playing{background:#303A32}
 html.pixely-game-playing body{background:#303A32}
 html.pixely-game-playing .game-shell{width:100%;height:100%;aspect-ratio:16/9}
+/* Crop scene backgrounds to fill play, preserving source bytes and saved transforms. */
+html.pixely-game-playing .scene-background>img{object-fit:cover!important}
