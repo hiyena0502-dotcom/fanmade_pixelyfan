@@ -19,3 +19,16 @@ test('whole-stage scaling preserves legacy image and click coordinates when conv
     assert.ok(Math.abs((pointer.y-f.top)/f.scale-point.y)<1e-9);
   }
 });
+
+test('home fills the browser and readable interfaces keep a safe independent zoom',()=>{
+  for(const [w,h] of [[3440,1440],[2520,1080],[1920,1080],[1920,1200],[1600,1200],[800,600]]){
+    const home=S.homeFit(w,h),ui=S.uiFit(S.fit(w,h));
+    assert.equal(home.displayWidth,w);assert.equal(home.displayHeight,h);
+    assert.equal(home.left,0);assert.equal(home.top,0);
+    assert.ok(Math.abs(home.width*home.scale-w)<1e-9);
+    assert.ok(ui.zoom>=1&&ui.zoom<=2);
+    assert.ok(ui.width*ui.zoom<=3000+1e-9&&ui.height*ui.zoom<=1440+1e-9);
+  }
+  assert.equal(S.uiFit(S.fit(2520,1080)).zoom,4/3);
+  assert.equal(S.uiFit(S.fit(3440,1440)).zoom,1);
+});
