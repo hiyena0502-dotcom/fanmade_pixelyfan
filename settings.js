@@ -32,6 +32,7 @@
   const preview=dialog.querySelector(".dialogue-preview-text");
   const media=new Set();
   let settings,storageAvailable=true,audioContext,activeSound,previewFrame=0,voiceEpoch=0;
+  const chapterSoundURL="./assets/audio/chapter-dungdu-higher-oct12.wav";let chapterBuffer,chapterLoading;
   try{settings=normalize(JSON.parse(localStorage.getItem(KEY)));}catch{settings=normalize();}
 
   function persist(){
@@ -72,6 +73,7 @@
     get:()=>({...settings}),
     getVolume:bus=>volume(settings,bus),
     primeEffects:async()=>{if(!settings.effectsEnabled||!volume(settings,"effects"))return;const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;try{audioContext??=new Audio();if(audioContext.state==="suspended")await audioContext.resume();}catch{}},
+    prepareEffect,
     playEffect:target=>playSound("effects",{target}),
     canSkip:alreadyRead=>canSkip(settings,alreadyRead),
     registerAudio:(element,bus="effects")=>{element.dataset.audioBus=bus;media.add(element);element.volume=volume(settings,bus);return ()=>media.delete(element);},
@@ -153,9 +155,16 @@
   });
   dialog.querySelector("[data-replay-preview]").addEventListener("click",showPreview);
 
+  // Decode the selected recording ahead of the cinematic, preserving its original samples.
+  async function prepareEffect(target){
+    if(target!=="chapter-opening")return true;
+    const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return false;
+    if(chapterBuffer)return true;
+    try{audioContext??=new Audio();chapterLoading??=fetch(chapterSoundURL).then(response=>{if(!response.ok)throw Error("효과음을 불러오지 못했어요");return response.arrayBuffer();}).then(bytes=>audioContext.decodeAudioData(bytes)).then(buffer=>chapterBuffer=buffer).catch(()=>{chapterLoading=null;return null;});return !!await chapterLoading;}catch{return false;}
+  }
   async function playSound(bus,{target="",previewSound=false,syllableIndex=null,typingEpoch=null}={}){
     if(bus==="effects"&&!settings.effectsEnabled) return false;
-    const kind=bus==="effects"?window.PixelySounds.effectKind(target):settings.textSound;
+    const kind=bus==="effects"?(target==="chapter-opening"?"chapter-opening":window.PixelySounds.effectKind(target)):settings.textSound;
     if(kind==="none") return;
     const Audio=window.AudioContext||window.webkitAudioContext;
     if(!Audio){if(previewSound) status.textContent="이 브라우저에서는 소리 미리듣기를 사용할 수 없어요";return false;}
@@ -163,11 +172,18 @@
       audioContext??=new Audio();
       if(audioContext.state==="suspended") await audioContext.resume();
       if(typingEpoch!==null&&typingEpoch!==voiceEpoch) return false;
-      const level=volume(settings,bus);
+      let level=volume(settings,bus);
       if(!level){if(previewSound) status.textContent="현재 음량이 0으로 설정돼 있어요";return false;}
-      const samples=window.PixelySounds.render(kind,target,syllableIndex);
-      const buffer=audioContext.createBuffer(1,samples.length,window.PixelySounds.sampleRate);
-      buffer.copyToChannel(samples,0);
+      let buffer;
+      if(kind==="chapter-opening"){
+        if(!await prepareEffect(target))return false;
+        level=volume(settings,bus);if(!settings.effectsEnabled||!level)return false;
+        buffer=chapterBuffer;
+      }else{
+        const samples=window.PixelySounds.render(kind,target,syllableIndex);
+        buffer=audioContext.createBuffer(1,samples.length,window.PixelySounds.sampleRate);
+        buffer.copyToChannel(samples,0);
+      }
       // A short fade replaces the previous click/preview without a hard audio cut.
       if(activeSound){
         const previous=activeSound,time=audioContext.currentTime;
