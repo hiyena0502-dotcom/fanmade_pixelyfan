@@ -32,3 +32,6 @@ html.opening-plain body>:not(.game-shell){visibility:hidden!important;pointer-ev
 
 html.opening-plain #game-status{visibility:hidden!important}
 html.opening-plain .game-editor-launch,html.opening-plain .ratio-preview-launch,html.opening-plain .developer-toolbar{display:none!important}
+
+/* Slot frames are present at first paint; readiness controls clicks, not their visibility. */
+#slot-list[aria-busy="true"]>button{opacity:1;cursor:progress}
