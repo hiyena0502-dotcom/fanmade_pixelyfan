@@ -74,7 +74,7 @@
   }
   $("page-prev").onclick=()=>turn(-1);$("page-next").onclick=()=>turn(1);
   document.querySelectorAll("[data-category]").forEach((tab,index,tabs)=>{
-    tab.onclick=()=>{if(busy)return;view.category=tab.dataset.category;render();void saveView();};
+    tab.onclick=()=>{if(busy||$("record-grid").getAttribute("aria-busy")==="true")return;view.category=tab.dataset.category;render();void saveView();};
     tab.onkeydown=event=>{if(!["ArrowUp","ArrowDown","Home","End"].includes(event.key))return;event.preventDefault();const next=event.key==="Home"?0:event.key==="End"?tabs.length-1:(index+(event.key==="ArrowDown"?1:-1)+tabs.length)%tabs.length;tabs[next].click();tabs[next].focus();};
   });
   async function applyProgress(patch){return serial(async()=>{const next=M.updateProgress(progress,patch),newly=Object.keys(next.collections).filter(id=>next.collections[id]&&!progress.collections[id]);if(db)await R.writeProgress(db,next);progress=next;render();collectionStamp(newly);dispatchEvent(new CustomEvent("pixely:books-progress",{detail:structuredClone(progress)}));});}
