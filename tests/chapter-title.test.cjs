@@ -1,6 +1,19 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict');
 const C=require('../chapter-title.js'),M=require('../game-model.js'),D=require('../game-data.js'),P=require('../monologue-model.js'),S=require('../sounds.js'),Settings=require('../settings.js');
+test('chapter wings, orbit and sparkle motions stay enabled and seekable with motion preferences off',()=>{
+ const vm=require('node:vm'),fs=require('node:fs'),runs=[],classes=new Set();
+ const element=()=>({style:{},dataset:{},classList:{add:v=>classes.add(v),remove:v=>classes.delete(v)},setAttribute(){},append(){},remove(){this.removed=true;},getTotalLength:()=>100,
+  animate(frames,options){const a={frames,options,currentTime:0,pause(){this.paused=true;},cancel(){this.cancelled=true;}};runs.push(a);return a;}});
+ const document={documentElement:element(),createElement(){const n=element(),nodes={};n.querySelector=s=>nodes[s]||=element();n.querySelectorAll=s=>s==='.ct-feather'?[{...element(),dataset:{feather:'2'}}]:[n.querySelector(s)];return n;}};
+ const box={module:{exports:{}},document,structuredClone};vm.runInNewContext(fs.readFileSync(require.resolve('../chapter-title.js'),'utf8'),box);
+ const title=box.module.exports.create(element());title.mount({number:0,title:'초대'},{motion:false});
+ assert.ok(runs.filter(a=>a.frames.some(f=>f.transform?.includes('rotate'))).length>=3,'both wings and circle unfold');
+ assert.ok(runs.some(a=>a.options.iterations===2&&a.frames.some(f=>f.transform?.includes('scale'))),'sparkles still pulse');
+ assert.ok(runs.some(a=>a.options.delay===C.soundStart&&a.options.duration===280&&a.frames.some(f=>f.transform==='scale(1.13)')),'title settles on the second strike');
+ assert.ok(runs.every(a=>a.paused));title.seek(2321);assert.ok(runs.every(a=>a.currentTime===2321));title.seek(9000);assert.ok(runs.every(a=>a.currentTime===C.duration));
+ const root=title.element;title.hide();assert.ok(runs.every(a=>a.cancelled));assert.ok(root.removed);assert.equal(title.element,null);assert.equal(classes.size,0);
+});
 test('prologue title is inserted after monologue without changing original events or preview',()=>{
  const d=M.content(D.defaults()),original=P.opening(d),copy=structuredClone(original),steps=C.opening(original);
  assert.deepEqual(original,copy);assert.equal(steps[0].type,'monologue');assert.deepEqual(steps[1],{type:'chapter-title',number:0,title:'초대'});assert.deepEqual(steps.slice(2),original.slice(1));assert.deepEqual(P.opening(d,0,true),[{type:'monologue',page:0}]);
