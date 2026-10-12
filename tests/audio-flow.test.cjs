@@ -1,8 +1,8 @@
 const test=require('node:test'),assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('node:fs');
 const sounds=require('../sounds.js');
 
-function setup(preferences={}){
-  const rendered=[],played=[],nodes=new Map(),frames=new Map();
+function setup(preferences={},options={}){
+  const fetched=[],decoded=[],rendered=[],played=[],nodes=new Map(),frames=new Map();
   let clock=0,nextFrame=0;
   function node(key){
     if(!nodes.has(key)) nodes.set(key,{listeners:{},style:{setProperty(){}},classList:{toggle(){}},dataset:{},addEventListener(event,fn){this.listeners[event]=fn;},setAttribute(){},focus(){},getAttribute(){return null;}});
@@ -17,15 +17,16 @@ function setup(preferences={}){
   const document={body:node('body'),documentElement:node('root'),querySelector:selector=>selector==='#settings-dialog'?dialog:selector==='#settings-dialogue'?panel:node(selector),querySelectorAll:()=>[],addEventListener(){}};
   class AudioContext{
     constructor(){this.state='running';this.currentTime=0;this.destination={};}
+    async decodeAudioData(bytes){if(options.decodeFailure)throw Error('bad audio');const buffer={duration:3.68,bytes};decoded.push(buffer);return buffer;}
     createBuffer(channels,length,rate){assert.equal(channels,1);assert.ok(length>0);assert.equal(rate,sounds.sampleRate);return {copyToChannel(data){assert.equal(data.length,length);}};}
-    createBufferSource(){return {connect(){},disconnect(){},start(){played.push(this);},stop(){this.stopped=true;}};}
+    createBufferSource(){return {connect(node){this.gainNode=node;},disconnect(){},start(){played.push(this);},stop(){this.stopped=true;}};}
     createGain(){return {gain:{value:0,setValueAtTime(value){this.value=value;},cancelScheduledValues(){},linearRampToValueAtTime(value){this.value=value;}},connect(){},disconnect(){}};}
   }
   const window={AudioContext,PixelySounds:{...sounds,render(...args){rendered.push(args);return sounds.render(...args);}}};
-  const sandbox={window,document,localStorage:{getItem:()=>JSON.stringify({textSound:'soft',...preferences}),setItem(){}},CustomEvent:class{},dispatchEvent(){},performance:{now:()=>clock},requestAnimationFrame:fn=>{const id=++nextFrame;frames.set(id,fn);return id;},cancelAnimationFrame:id=>frames.delete(id)};
+  const sandbox={window,document,fetch:async url=>{fetched.push(url);if(options.fetchFailure)throw Error("offline");return {ok:true,arrayBuffer:async()=>new ArrayBuffer(8)};},localStorage:{getItem:()=>JSON.stringify({textSound:'soft',...preferences}),setItem(){}},CustomEvent:class{},dispatchEvent(){},performance:{now:()=>clock},requestAnimationFrame:fn=>{const id=++nextFrame;frames.set(id,fn);return id;},cancelAnimationFrame:id=>frames.delete(id)};
   vm.runInNewContext(fs.readFileSync(require.resolve('../settings.js'),'utf8'),sandbox);
   function frame(time){clock=time;const queued=[...frames.values()];frames.clear();queued.forEach(fn=>fn(time));}
-  return {api:window.PixelySettings,rendered,played,controls,node,replay,dialog,frame,frames};
+  return {api:window.PixelySettings,fetched,decoded,rendered,played,controls,node,replay,dialog,frame,frames};
 }
 
 test('actual playback routes each object and the switch mutes all effects without muting voice',async()=>{
@@ -59,4 +60,21 @@ test('unselected, muted, and instantly displayed dialogue remain silent',()=>{
     const app=setup(preferences);app.replay.listeners.click();app.frame(100);app.frame(200);
     assert.equal(app.played.length,0);
   }
+});
+
+
+test('selected chapter recording is decoded once and played without synthesized extra hits',async()=>{
+ const app=setup();await Promise.all([app.api.prepareEffect('chapter-opening'),app.api.prepareEffect('chapter-opening')]);
+ assert.deepEqual(app.fetched,['./assets/audio/chapter-dungdu-higher-oct12.wav']);assert.equal(app.decoded.length,1);
+ assert.equal(await app.api.playEffect('chapter-opening'),true);assert.equal(app.played.length,1);assert.equal(app.played[0].buffer,app.decoded[0]);assert.equal(app.rendered.length,0);
+ assert.ok(Math.abs(app.played[0].gainNode.gain.value-.6)<.001);
+ await app.api.playEffect('chapter-opening');assert.equal(app.fetched.length,1);
+});
+test('selected chapter recording obeys mute, effects toggle and live volume changes',async()=>{
+ for(const prefs of [{effectsEnabled:false},{masterVolume:0},{effectsVolume:0}]){const app=setup(prefs);assert.equal(await app.api.playEffect('chapter-opening'),false);assert.equal(app.played.length,0);}
+ const app=setup();await app.api.playEffect('chapter-opening');const toggle=app.node('effectsEnabled');toggle.checked=false;toggle.listeners.change();assert.equal(app.played[0].gainNode.gain.value,0);assert.equal(app.api.getVolume('effects'),0);assert.equal(await app.api.playEffect('chapter-opening'),false);assert.equal(app.played.length,1);
+});
+test('an unavailable recording stays silent and a later request can recover',async()=>{
+ const options={fetchFailure:true},app=setup({},options);assert.equal(await app.api.prepareEffect('chapter-opening'),false);options.fetchFailure=false;assert.equal(await app.api.prepareEffect('chapter-opening'),true);assert.equal(await app.api.playEffect('chapter-opening'),true);assert.equal(app.rendered.length,0);
+ const broken=setup({}, {decodeFailure:true});assert.equal(await broken.api.playEffect('chapter-opening'),false);assert.equal(broken.played.length,0);
 });

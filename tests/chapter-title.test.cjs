@@ -10,9 +10,9 @@ test('chapter numbers use Roman numerals and no extra English subtitle',()=>{
  for(const [n,label] of [[0,'PROLOGUE 0'],[1,'CHAPTER I'],[2,'CHAPTER II'],[3,'CHAPTER III'],[14,'CHAPTER XIV']])assert.equal(C.label(n),label);
  for(const n of [-1,1.2,4000,Infinity])assert.throws(()=>C.label(n));assert.ok(!C.ornament().includes('Invitation'));
 });
-test('two hits fire once across frame boundaries, resume does not repeat old hits, exit is 4.8 seconds',()=>{
+test('the selected two-hit recording starts once, resume does not repeat it, exit is 4.8 seconds',()=>{
  let elapsed=0,heard=[];while(elapsed<C.duration){const next=Math.min(C.duration,elapsed+17);heard.push(...C.crossed(elapsed,next).map(h=>h.id));elapsed=next;}
- assert.deepEqual(heard,['chapter-first','chapter-second']);assert.deepEqual(C.crossed(1500,4800),[]);assert.equal(C.hits[1].at,1440);assert.equal(C.duration,4800);
+ assert.deepEqual(heard,['chapter-opening']);assert.deepEqual(C.crossed(1500,4800),[]);assert.equal(C.hits[0].at,1120);assert.equal(C.titleSettle-C.soundStart,280);assert.equal(C.duration,4800);
 });
 test('saved cinematic elapsed time is bounded and future chapter data validates',()=>{
  const d=M.content(D.defaults()),s=M.create(d,0);s.run={id:'prologue-opening',steps:C.opening(P.opening(d)),index:1,presentation:{index:1,elapsed:2321}};

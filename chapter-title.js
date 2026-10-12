@@ -1,7 +1,7 @@
 'use strict';
 // Original SVG ornament and a single seekable cinematic clock, in gameplay coordinates.
 (()=>{
- const duration=4800,hits=Object.freeze([{at:1120,id:'chapter-first'},{at:1440,id:'chapter-second'}]);
+ const duration=4800,soundStart=1120,titleSettle=1400,hits=Object.freeze([{at:soundStart,id:'chapter-opening'}]);
  function roman(value){let n=value,out='';for(const [amount,letters] of [[1000,'M'],[900,'CM'],[500,'D'],[400,'CD'],[100,'C'],[90,'XC'],[50,'L'],[40,'XL'],[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']])while(n>=amount){out+=letters;n-=amount;}return out;}
  function label(number=0){if(!Number.isInteger(number)||number<0||number>3999)throw Error('챕터 번호는 0~3999로 지정해 주세요');return number===0?'PROLOGUE 0':'CHAPTER '+roman(number);}
  function opening(steps){const result=structuredClone(steps),at=result[0]?.type==='monologue'?1:0;if(!result.some(s=>s.type==='chapter-title'))result.splice(at,0,{type:'chapter-title',number:0,title:'초대'});return result;}
@@ -21,13 +21,13 @@
    animate(root,[{opacity:0,offset:0},{opacity:1,offset:.065},{opacity:1,offset:.84},{opacity:0,offset:1}],{duration});
    for(const path of root.querySelectorAll('.ct-draw')){const n=path.getTotalLength();path.style.strokeDasharray=String(n);animate(path,[{strokeDashoffset:n,opacity:0},{strokeDashoffset:0,opacity:1}],{delay:260,duration:880,easing:'cubic-bezier(.2,.6,.25,1)'});}
    const show=(selector,delay,ms=480)=>root.querySelectorAll(selector).forEach(el=>animate(el,[{opacity:0},{opacity:1}],{delay,duration:ms}));
-   show('.ct-shade,.ct-halo',250);show('.ct-orbits',150,700);show('.ct-wings',460,670);show('.ct-ticks,.ct-beads',470);show('.ct-crown',590);show('.ct-footer',690);show('.ct-gems,.ct-medal',750);show('.ct-label',900,260);show('.ct-title',1120,320);show('.ct-sparkles',960,650);
+   show('.ct-shade,.ct-halo',250);show('.ct-orbits',150,700);show('.ct-wings',460,670);show('.ct-ticks,.ct-beads',470);show('.ct-crown',590);show('.ct-footer',690);show('.ct-gems,.ct-medal',750);show('.ct-label',900,260);show('.ct-title',soundStart,titleSettle-soundStart);show('.ct-sparkles',960,650);
    animate(root.querySelector('.ct-seed'),[{opacity:0},{opacity:1,offset:.3},{opacity:0}],{duration:700});
-   if(motion){animate(root.querySelector('.ct-orbits'),[{transform:'rotate(-7deg) scale(.9)'},{transform:'rotate(0deg) scale(1)'}],{delay:150,duration:950,easing:'ease-out'});animate(title,[{transform:'scale(1.1)'},{transform:'scale(1)'}],{delay:1120,duration:320,easing:'cubic-bezier(.16,.7,.3,1)'});animate(root.querySelector('.ct-sweep'),[{opacity:0,strokeDashoffset:0},{opacity:.8,offset:.12},{opacity:0,strokeDashoffset:-600}],{delay:2200,duration:1100});root.querySelectorAll('.ct-sparkles path').forEach((el,i)=>animate(el,[{opacity:.3},{opacity:.9},{opacity:.3}],{delay:1700+i*90,duration:1300}));}else root.querySelector('.ct-sweep').style.opacity='0';
+   if(motion){animate(root.querySelector('.ct-orbits'),[{transform:'rotate(-7deg) scale(.9)'},{transform:'rotate(0deg) scale(1)'}],{delay:150,duration:950,easing:'ease-out'});animate(title,[{transform:'scale(1.1)'},{transform:'scale(1)'}],{delay:soundStart,duration:titleSettle-soundStart,easing:'cubic-bezier(.16,.7,.3,1)'});animate(root.querySelector('.ct-sweep'),[{opacity:0,strokeDashoffset:0},{opacity:.8,offset:.12},{opacity:0,strokeDashoffset:-600}],{delay:2200,duration:1100});root.querySelectorAll('.ct-sparkles path').forEach((el,i)=>animate(el,[{opacity:.3},{opacity:.9},{opacity:.3}],{delay:1700+i*90,duration:1300}));}else root.querySelector('.ct-sweep').style.opacity='0';
    seek(0);
   }
   function seek(elapsed){for(const a of animations)a.currentTime=Math.max(0,Math.min(duration,elapsed));if(root)root.dataset.elapsed=String(Math.round(elapsed));}
   return {mount,seek,hide,get element(){return root;}};
  }
- const api=Object.freeze({duration,hits,label,opening,crossed,create,ornament});if(typeof module!=='undefined'&&module.exports)module.exports=api;else window.PixelyChapterTitle=api;
+ const api=Object.freeze({duration,soundStart,titleSettle,hits,label,opening,crossed,create,ornament});if(typeof module!=='undefined'&&module.exports)module.exports=api;else window.PixelyChapterTitle=api;
 })();
