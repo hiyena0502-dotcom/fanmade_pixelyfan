@@ -220,6 +220,6 @@
   window.addEventListener("pagehide",()=>{if(saveTimer){clearTimeout(saveTimer);saveTimer=0;queueSave();}try{localStorage.setItem("pixely-dressup-editor-v1",JSON.stringify(state));}catch{}for(const url of urls.values())URL.revokeObjectURL(url);});
   cabinet.inert=true;
   try{
-    db=await R.open();const workspace=await R.readWorkspace(db);state=M.normalize(workspace.state);images=workspace.images;slots=await R.readSlots(db);await updateSizes(images);syncUrls();lastSaved=structuredClone(state);render();refreshSubtypes();cabinet.inert=false;cabinet.setAttribute("aria-busy","false");notify("파츠와 배치는 자동 저장돼요 · 마음에 드는 모습은 아래 슬롯에 담아 주세요");
+    db=await R.open();const [workspace,savedSlots]=await Promise.all([R.readWorkspace(db),R.readSlots(db)]);state=M.normalize(workspace.state);images=workspace.images;slots=savedSlots;syncUrls();renderParts();renderSlots();refreshSubtypes();await updateSizes(images);lastSaved=structuredClone(state);drawPreview();renderAdjust();renderSlots();cabinet.inert=false;cabinet.setAttribute("aria-busy","false");notify("파츠와 배치는 자동 저장돼요 · 마음에 드는 모습은 아래 슬롯에 담아 주세요");
   }catch(error){cabinet.inert=false;cabinet.setAttribute("aria-busy","false");render();refreshSubtypes();notify(error.message||"옷장 저장을 열지 못했어요 · 페이지를 다시 열어 주세요",true);}
 })();

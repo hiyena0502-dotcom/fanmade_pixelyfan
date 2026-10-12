@@ -63,7 +63,7 @@
     if(!locked&&!isChapter){const meta=el("dl","detail-meta");const fields=view.category==="people"?[["등장 콘텐츠",data.location],["관련 챕터",data.chapter]]:view.category==="cards"?[["획득 챕터",data.chapter],["획득 장소",data.location]]:view.category==="items"?[["획득 위치",data.location],["관련 챕터",data.chapter]]:[["관련 인물",data.related],["발견한 챕터",data.chapter]];for(const [label,value]of fields){meta.append(el("dt","",label),el("dd","",value||"기록 전"));}root.append(meta);}
     if(isChapter){const button=el("button","chapter-start","이 챕터 선택");button.type="button";button.id="chapter-start";button.disabled=locked||typeof adapter?.startChapter!=="function";button.onclick=()=>requestChapter(entry.id);root.append(button);if(editorMode()&&!locked&&!adapter?.startChapter)root.append(el("p","connection-note","게임 진행 연결 전"));}
   }
-  function render(){view=M.view(view,catalogue);renderGrid();renderDetail();}
+  function render(){view=M.view(view,catalogue);renderGrid();renderDetail();$("record-grid").inert=false;$("record-grid").setAttribute("aria-busy","false");}
   async function turn(delta){
     if(busy)return;const page=pageData(),next=page.page+delta;if(next<0||next>=page.total)return;
     busy=true;renderGrid();const pageNode=document.querySelector(".left-page"),motion=A.preferences().motion;
@@ -91,10 +91,10 @@
     if(isChapter){view.chapterSelected=record.id;view.chapterPage=Math.floor(normalized.chapters.findIndex(e=>e.id===record.id)/4);}else{view.selections[group]=record.id;view.pages[group]=Math.floor(normalized.collections[group].findIndex(e=>e.id===record.id)/6);}
     dirty=true;render();if(state==="registered"&&!wasRegistered)collectionStamp([record.id]);void saveView();await cacheDraft();controls();return !!db;
   });}
-  async function playerProgress(){progress=M.progress(legacy?.progress);try{const suspended=await PixelyGameStore.resume(),active=await PixelyGameStore.active(),slots=await PixelyGameStore.slots(),saved=active&&(active.type==="auto"?slots.auto:slots.manual).get(active.slot);const current=suspended||saved?.state;if(current)progress=M.progress({chapters:current.chapters,collections:current.collections});}catch{}}
+  async function playerProgress(){progress=M.progress(legacy?.progress);try{const [suspended,active,slots]=await Promise.all([PixelyGameStore.resume(),PixelyGameStore.active(),PixelyGameStore.slots()]),saved=active&&(active.type==="auto"?slots.auto:slots.manual).get(active.slot);const current=suspended||saved?.state;if(current)progress=M.progress({chapters:current.chapters,collections:current.collections});}catch{}}
   async function cacheDraft(){if(db)await R.writeDraft(db,{content:{...draftContent,catalogue},images:[...images],progress,baseRevision,dirty});}
   function contentImages(value){images=new Map(Object.entries(value?.assets||{}));syncUrls();catalogue=M.catalogue(value?.catalogue);}
-  async function switchMode(){editing=admin.isEditor();preview=false;if(editing){const local=db&&await R.readDraft(db);draftContent=await admin.request("draft");baseRevision=draftContent.revision;if(local?.dirty&&local.baseRevision===baseRevision){draftContent=local.content;catalogue=M.catalogue(local.content.catalogue);images=new Map(local.images);progress=M.progress(local.progress);dirty=true;syncUrls();}else{contentImages(draftContent);progress=M.progress(local?.baseRevision===baseRevision?local.progress:null);dirty=false;}}else{contentImages(admin.getPublished());await playerProgress();}render();controls();}
+  async function switchMode(progressReady){editing=admin.isEditor();preview=false;if(editing){const local=db&&await R.readDraft(db);draftContent=await admin.request("draft");baseRevision=draftContent.revision;if(local?.dirty&&local.baseRevision===baseRevision){draftContent=local.content;catalogue=M.catalogue(local.content.catalogue);images=new Map(local.images);progress=M.progress(local.progress);dirty=true;syncUrls();}else{contentImages(draftContent);progress=M.progress(local?.baseRevision===baseRevision?local.progress:null);dirty=false;}}else{contentImages(admin.getPublished());await (progressReady||playerProgress());}render();controls();}
   let bar;
   function controls(){
     $("edit-launch").hidden=!editorMode();
@@ -118,7 +118,7 @@
   const ready=(async()=>{
     try{db=await R.open();legacy=await R.read(db);view=M.view(legacy.view,catalogue);}catch{db=null;banner("브라우저 저장 공간을 사용할 수 없어요");}
     if(new URLSearchParams(location.search).get('from')==='game'){const back=document.querySelector('.back-link');if(back){back.href='./game.html?mode=resume';back.textContent='‹ 모험으로 돌아가기';if(new URLSearchParams(location.search).get('overlay')==='1'&&parent!==window){back.onclick=e=>{e.preventDefault();parent.postMessage({type:'pixely:collection-close'},location.origin);};addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.querySelector('dialog[open]')){e.preventDefault();parent.postMessage({type:'pixely:collection-close'},location.origin);}});}}}
-    await admin.ready;authorControls();await switchMode();
+    const progressReady=playerProgress();await Promise.all([admin.ready,progressReady]);authorControls();await switchMode(progressReady);
     adapter={startChapter:async id=>{if(editorMode()||preview){banner("미리보기에서는 게임을 시작하지 않아요");return;}location.href='./game.html?mode=chapter&chapter='+encodeURIComponent(id);}};renderDetail();
     addEventListener('pixely:developer-mode',()=>switchMode().catch(e=>banner(e.message)));
     if(new URLSearchParams(location.search).get('edit')==='1'&&!editing)void admin.loginOpen();

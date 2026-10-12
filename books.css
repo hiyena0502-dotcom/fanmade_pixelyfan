@@ -23,3 +23,6 @@
 .sticker,.page-corner,.hand-note,.bookmark{display:none!important}
 .chapter-card:before,.detail-photo:before,.detail-photo:after{content:none!important}
 .clear-stamp{display:none!important}
+
+/* Reserved cards keep the book populated before the current catalogue is ready. */
+#record-grid[aria-busy="true"] .loading-card{opacity:1;cursor:progress;color:#927956}
