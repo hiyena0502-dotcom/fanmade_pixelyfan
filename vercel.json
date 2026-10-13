@@ -1,0 +1,1 @@
+{"buildCommand": "npm run build", "functions": {"api/*.js": {"maxDuration": 60}}, "headers": [{"source": "/(book-admin.js|book-editor.js|books.js|game.js|game-editor.js|game.html|chapters.html|collection.html)", "headers": [{"key": "Cache-Control", "value": "no-cache"}]}], "outputDirectory": "public", "regions": ["icn1"]}
