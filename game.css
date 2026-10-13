@@ -35,3 +35,7 @@ html.opening-plain .game-editor-launch,html.opening-plain .ratio-preview-launch,
 
 /* Slot frames are present at first paint; readiness controls clicks, not their visibility. */
 #slot-list[aria-busy="true"]>button{opacity:1;cursor:progress}
+
+/* Uploaded house-front planes share one unchanged 1920 × 1080 canvas. */
+.scene-background.has-front-scene{z-index:0;isolation:isolate}
+.scene-background>.front-scene-layer,.image-host-front>.front-scene-layer{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:none;pointer-events:none;transform-origin:50% 75%}
