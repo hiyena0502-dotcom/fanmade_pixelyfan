@@ -46,9 +46,19 @@
 .motions-off .leaf-breeze,.motions-off .bush-leaves{visibility:hidden}
 .motions-off .chimney-smoke{visibility:hidden}
 .motions-off .chimney-smoke span{animation-play-state:paused}
-.interaction-hints .house-touch::before,.interaction-hints .house-touch::after,.interaction-hints .bush-touch::before,.interaction-hints .bush-touch::after{content:"";position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);pointer-events:none}
-.interaction-hints .house-touch::before,.interaction-hints .bush-touch::before{width:22px;height:40px;background:#9a7246}
-.interaction-hints .house-touch::after,.interaction-hints .bush-touch::after{width:17px;height:32px;background:#fff4d4}
+/* Investigation markers keep their own gentle motion even when scene motion is off. */
+.interaction-marker{position:absolute;width:34px;height:54px;display:block;pointer-events:none;color:#fff;transform:translate(-50%,var(--hint-y,-90%));transform-origin:50% 50%;filter:drop-shadow(0 2px 2px #302f2959);animation:investigation-breathe 2.4s ease-in-out infinite!important}
+.interaction-marker .hint-core,.interaction-marker::before,.interaction-marker::after{position:absolute;inset:0;background:#fff;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);pointer-events:none}
+.interaction-marker .hint-core{opacity:.88}
+.interaction-marker::before,.interaction-marker::after{content:"";transform-origin:50% 50%}
+.interaction-marker::before{opacity:.3;transform:scale(1.3)}
+.interaction-marker::after{opacity:.12;transform:scale(1.65);animation:investigation-halo 2.4s ease-out infinite!important}
+.motions-off .interaction-marker{animation:investigation-breathe 2.4s ease-in-out infinite!important}
+/* The title-screen reactions are discoverable, without investigation diamonds. */
+.house-touch::before,.house-touch::after,.bush-touch::before,.bush-touch::after{content:none!important}
+:is(.house-touch,.bush-touch) .interaction-marker{display:none!important}
+@keyframes investigation-breathe{0%,100%{transform:translate(-50%,var(--hint-y,-90%)) scale(.8);opacity:.78}50%{transform:translate(-50%,var(--hint-y,-90%)) scale(1.16);opacity:1}}
+@keyframes investigation-halo{0%{transform:scale(1.12);opacity:0}35%{opacity:.18}100%{transform:scale(1.85);opacity:0}}
 .dialogue-text{font-size:var(--dialogue-font-size,22px)}
 
 
