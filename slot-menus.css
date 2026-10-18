@@ -8,10 +8,8 @@ html[data-screen="game"]:not(.pixely-game-playing) .slot-screen{
 .slot-screen .slot-menu-bar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:20px;flex:none;min-height:48px}
 html[data-screen="game"]:not(.pixely-game-playing) .slot-screen .return-link{position:static;justify-self:start;font-size:17px;padding:9px 16px;border:1px solid #a98c65;border-radius:30px;background:#fff8e9f2;display:flex;align-items:center;gap:9px;box-shadow:0 2px 0 #795b3320}
 .slot-screen .return-link span{font-size:26px;line-height:20px}
-.slot-screen .slot-menu-label{font-size:16px;color:#4f593f;text-shadow:0 1px #fff8e9}
-.slot-screen .slot-mode-tabs{justify-self:end;display:flex;gap:4px;padding:4px;border:1px solid #9eaa89;border-radius:30px;background:#fff8e9f2}
-.slot-screen .slot-mode-tabs a{display:grid;place-items:center;min-width:94px;min-height:36px;padding:5px 16px;border-radius:22px;color:#5c634b;text-decoration:none;font-size:17px;white-space:nowrap}
-.slot-screen .slot-mode-tabs a[aria-current="page"]{background:#5e7653;color:#fffaf0;box-shadow:0 2px 3px #34432e20}
+.slot-screen .slot-menu-label{font-size:27px;line-height:1.35;letter-spacing:.02em;color:#53412b;text-align:center;text-shadow:0 2px #fff8e9}
+.slot-screen .slot-mode-label{justify-self:end;min-width:108px;padding:9px 20px;border:1px solid #8da07a;border-radius:25px;background:#fff8e9f2;color:#506641;font-size:19px;text-align:center;white-space:nowrap}
 .slot-screen .slot-book{position:relative;flex:1;min-height:0;height:auto;display:grid;grid-template-columns:1fr 1fr;isolation:isolate;border:6px solid #a8764c;border-bottom-width:10px;border-radius:22px;background:#fff4df;box-shadow:0 2px 0 2px #d9b17b,0 13px 32px #4d624133;overflow:visible}
 .slot-screen .slot-book::before{content:"";position:absolute;inset:8px;border:1px solid #dfc7a1;border-radius:12px;pointer-events:none;z-index:2}
 .slot-screen .slot-book::after{content:"";position:absolute;top:0;bottom:0;left:calc(50% - 13px);width:26px;background:linear-gradient(90deg,#ac865410,#c19d6850 44%,#fff8e9 52%,#c19d682c 58%,#ac865400);pointer-events:none;z-index:2}
@@ -19,11 +17,8 @@ html[data-screen="game"]:not(.pixely-game-playing) .slot-screen .return-link{pos
 .slot-screen .slot-book>section+section{border-left:0;background:linear-gradient(105deg,#f4e4c744,transparent 22%),#fff7e7;border-radius:0 15px 10px 0}
 .slot-screen .slot-page-heading{flex:none}
 .slot-screen .slot-eyebrow{font-size:14px;letter-spacing:.08em;color:#57704c;line-height:1.5;margin:0 0 6px}
-.slot-screen .slot-eyebrow::before{content:"";display:inline-block;width:14px;height:8px;margin-right:8px;border:1px solid #7e9567;border-radius:0 90% 0 90%;transform:rotate(-18deg)}
+.slot-screen .slot-eyebrow::before{content:"";display:inline-block;vertical-align:-2px;width:16px;height:16px;margin-right:8px;background:center/contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 19C2 8 8 3 21 3c0 12-6 19-17 16Z' fill='%23869e70'/%3E%3Cpath d='M3 21 17 7' fill='none' stroke='%23556f43' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E")}
 .slot-screen .slot-book h1{font-size:28px;line-height:1.35;letter-spacing:.02em;color:#60452f}
-.slot-screen #slots-subtitle{font-size:17px;line-height:1.5;color:#776047;margin-top:7px}
-.slot-screen .slot-list-heading{display:flex;justify-content:space-between;align-items:center;padding:7px 2px 0;font-size:14px;color:#7d654a;flex:none}
-.slot-screen .slot-list-heading span+span{font-size:13px;letter-spacing:.1em;color:#8d7352}
 .slot-screen #slot-list{display:flex;flex:1;flex-direction:column;gap:8px;min-height:0;overflow-y:auto;overflow-x:hidden;padding:3px 5px 5px 3px;scrollbar-width:thin;scrollbar-color:#c6b48a transparent;scroll-padding:6px}
 .slot-screen #slot-list>button{position:relative;display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;gap:13px;min-height:65px;flex:1 0 65px;padding:9px 15px;border:1.5px solid #d7c09c;border-radius:12px;background:#fffaf0;box-shadow:0 2px 0 #b99a6b12;text-align:left;transition:background .16s,border-color .16s,box-shadow .16s}
 .slot-screen #slot-list>button:hover:not(:disabled){border-color:#8ba174;background:#f2f5e6;box-shadow:0 2px 0 #8ba17433}
@@ -37,7 +32,6 @@ html[data-screen="game"]:not(.pixely-game-playing) .slot-screen .return-link{pos
 .slot-screen [data-record="saved"] .slot-status{background:#e0ead6;color:#4e6642}
 .slot-screen [data-record="invalid"] .slot-status{background:#f2dfcf;color:#895536}
 .slot-screen #slot-list>button[aria-pressed="true"] .slot-status::before{content:"✓ ";color:#4e6642}
-.slot-screen .slot-page-footnote{flex:none;font-size:13px;color:#7d684f;text-align:center;margin-top:0}
 .slot-screen .slot-detail{justify-content:flex-start}
 .slot-screen .slot-detail>.slot-eyebrow{margin:0}
 .slot-screen .slot-book h2{font-size:24px;line-height:1.45;letter-spacing:0;color:#60452f;flex:none}
@@ -56,12 +50,10 @@ html[data-screen="game"]:not(.pixely-game-playing) .slot-screen .return-link{pos
 .slot-screen .slot-record-info{margin:0;display:grid;grid-template-columns:90px minmax(0,1fr);gap:6px 10px;font-size:16px;line-height:1.55;padding:4px 7px;color:#604a34}
 .slot-screen .slot-record-info dt{color:#806d54}.slot-screen .slot-record-info dd{margin:0;overflow-wrap:anywhere}
 .slot-screen .slot-detail-footer{flex:none;border-top:1px solid #ddc9a5;padding-top:13px;display:flex;flex-direction:column;gap:9px}
-.slot-screen #slot-action-hint{font-size:14px;text-align:center;color:#715d46;margin:0;line-height:1.5}
 .slot-screen #slot-start{width:100%;display:flex;justify-content:center;align-items:center;gap:14px;min-height:49px;padding:10px 18px;font-size:20px;color:#fffaf0;background:#627b51;border:1px solid #4c653e;border-radius:10px;box-shadow:0 3px 0 #455d36;transition:background .16s}
 .slot-screen #slot-start:hover:not(:disabled){background:#506c40}
 .slot-screen #slot-start:disabled{opacity:1;color:#847c66;background:#e4dfcb;border-color:#c7bda1;box-shadow:0 2px 0 #c5b99b;cursor:default}
 .slot-screen .slot-start-arrow{font-size:23px;font-family:serif;line-height:1}
-.slot-screen .slot-storage-note{font-size:13px;line-height:1.5;text-align:center;color:#7a674f;margin:2px 0 0}
 .slot-screen :is(button,a):focus-visible{outline:3px solid #4f7e9b;outline-offset:3px}
 @container pixely-stage (max-height:1800px){
   .slot-screen .slot-book>section{padding:24px 28px 21px;gap:10px}
@@ -69,8 +61,8 @@ html[data-screen="game"]:not(.pixely-game-playing) .slot-screen .return-link{pos
 }
 @container pixely-stage (max-aspect-ratio: 4/3){
   .slot-screen .slot-layout{width:91%;height:88%}
-  .slot-screen .slot-menu-label{display:none}
-  .slot-screen .slot-menu-bar{grid-template-columns:1fr 1fr}
+  .slot-screen .slot-menu-bar{grid-template-columns:auto 1fr auto;gap:12px}
+  .slot-screen .slot-menu-label{font-size:22px}
   .slot-screen .slot-book>section{padding:22px 20px}
   .slot-screen .slot-status{display:none}
 }

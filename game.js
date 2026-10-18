@@ -105,16 +105,16 @@ function types(root,slot,change){const div=node('div',undefined,'confirm-buttons
 function slotHeading(){
  const continuing=mode==='continue';
  $('slots-title').textContent=continuing?'이어지는 나들이':'새로운 나들이';
- $('slots-subtitle').textContent=continuing?'다시 펼쳐 볼 일기장을 골라줘':'새 이야기를 담을 일기장을 골라줘';
+ $('slot-mode-label').textContent=continuing?'이어하기':'새 게임';
  $('slot-detail-label').textContent=continuing?'이야기 다시 펼치기':'새로운 이야기';
- for(const link of document.querySelectorAll('[data-slot-mode]')){if(link.dataset.slotMode===(continuing?'continue':'new'))link.setAttribute('aria-current','page');else link.removeAttribute('aria-current');}
 }
 function renderSlotList(records,enabled){
  const list=$('slot-list');
  for(let i=0;i<5;i++){
   const entry=records.manual.get(i)||records.auto.get(i),b=list.children[i]||node('button'),copy=node('span',undefined,'slot-copy');
   const location=entry&&!entry.invalid?(data.locations.find(l=>l.id===entry.state.location)?.name||'나들이 중'):'';
-  copy.append(node('strong',entry?entry.invalid?'확인이 필요한 기록':chapterName(entry.state.chapter):'빈 일기장'),node('small',entry?entry.invalid?'원본 기록은 보존되어 있어요':location+' · '+duration(entry.state.playMs):'새로운 이야기를 담아 보자'));
+  copy.append(node('strong',entry?entry.invalid?'확인이 필요한 기록':chapterName(entry.state.chapter):'빈 일기장'));
+  if(entry)copy.append(node('small',entry.invalid?'원본 기록 보존':location+' · '+duration(entry.state.playMs)));
   b.type='button';b.replaceChildren(node('span',String(i+1).padStart(2,'0'),'slot-number'),copy,node('span',entry?entry.invalid?'확인 필요':'기록 있음':'빈 기록','slot-status'));
   b.dataset.record=entry?entry.invalid?'invalid':'saved':'empty';b.disabled=!enabled;b.setAttribute('aria-pressed',String(selectedSlot===i));
   b.onclick=enabled?()=>{selectedSlot=i;selectedType=slotData.manual.has(i)?'manual':'auto';drawSlotDetail();document.querySelectorAll('#slot-list>button').forEach((x,j)=>x.setAttribute('aria-pressed',String(j===i)));}:null;
@@ -139,22 +139,19 @@ function drawSlotDetail(){
  $('slot-title').textContent=selectedSlot===null?'초대는 받았고, 귀가는 미정!':'나들이 일기장 '+String(selectedSlot+1).padStart(2,'0');
  root.append(slotScenePreview(continuing?entry:null));
  if(selectedSlot===null){
-  root.append(node('p',continuing?'왼쪽에서 기록을 골라줘\n마지막 나들이를 이어갈 수 있어':'왼쪽에서 일기장을 골라줘\n꿈뜰이의 나들이가 시작돼','slot-lead'));
-  $('slot-action-hint').textContent=continuing?'저장된 기록을 선택하면 이어갈 수 있어요':'일기장을 선택하면 시작할 수 있어요';
+  if(!continuing)root.append(node('p','프롤로그 · 초대','slot-chapter-name'));
  }else if(continuing){
   types(root,selectedSlot,drawSlotDetail);root.lastElementChild.className='slot-record-types';
   if(entry&&!entry.invalid){
    const info=node('dl',undefined,'slot-record-info'),s=entry.state;
    for(const [label,value]of [['챕터',chapterName(s.chapter)],['장소',data.locations.find(l=>l.id===s.location)?.name||s.location],['플레이 시간',duration(s.playMs)],['저장한 때',new Date(entry.savedAt).toLocaleString('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'})]])info.append(node('dt',label),node('dd',value));
-   root.append(info);$('slot-action-hint').textContent='선택한 '+(selectedType==='auto'?'자동':'수동')+' 기록부터 이어가요';
+   root.append(info);
   }else{
-   root.append(node('p',entry?.invalid?'이 기록을 읽을 수 없어요\n다른 기록을 선택해 주세요':'아직 저장된 기록이 없어요\n새 게임에서 첫 나들이를 시작해 봐','slot-lead'));
-   $('slot-action-hint').textContent=entry?.invalid?'원본 기록은 그대로 보존되어 있어요':'기록이 있는 일기장을 선택해 주세요';
+   root.append(node('p',entry?.invalid?'이 기록을 읽을 수 없어요':'아직 저장된 기록이 없어요','slot-lead'));
   }
  }else{
-  root.append(node('p','프롤로그 · 초대','slot-chapter-name'),node('p',occupied?'이 일기장에 새로운 나들이를 시작할까?':'빈 일기장에 첫 번째 이야기를 담아 보자','slot-lead'));
-  if(occupied)root.append(node('p','시작하면 이 일기장의 수동·자동 기록이 바뀌어요\n시작 전 한 번 더 확인할게요','slot-overwrite-note'));
-  $('slot-action-hint').textContent=occupied?'기존 기록이 있는 일기장이에요':'선택한 일기장에 새 기록을 만들어요';
+  root.append(node('p','프롤로그 · 초대','slot-chapter-name'));
+  if(occupied)root.append(node('p','이 일기장의 기존 기록을 덮어써요','slot-overwrite-note'));
  }
  $('slot-start').disabled=selectedSlot===null||(continuing&&(!entry||entry.invalid));
  $('slot-start').replaceChildren(node('span',continuing?'이 기록 이어하기':'새 나들이 시작'),node('span','→','slot-start-arrow'));
