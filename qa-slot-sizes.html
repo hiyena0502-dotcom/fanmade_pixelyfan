@@ -1,0 +1,11 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><title>일기장 메뉴 크기 확인</title>
+<style>*{box-sizing:border-box}body{margin:0;background:#dedfcf;font:14px sans-serif;color:#4a583c}header{height:54px;display:flex;align-items:center;justify-content:center;gap:14px}select{font:inherit;padding:6px}#holder{position:absolute;top:54px;bottom:0;left:0;right:0;overflow:hidden}iframe{position:absolute;border:0;left:50%;top:50%;transform-origin:50% 50%}</style>
+<header><span>저장 없는 테스트 화면</span><label>화면 크기 <select id="size"><option value="1366,768">1366 × 768</option><option value="1920,1080" selected>1920 × 1080</option><option value="2560,1080">2560 × 1080 · 21:9</option><option value="3440,1440">3440 × 1440 · 21:9</option></select></label><label>메뉴 <select id="mode"><option value="new">새 게임</option><option value="continue">이어하기</option></select></label></header>
+<div id="holder"><iframe id="preview" title="크기별 일기장 메뉴" src="./qa-slot-fixture.html?mode=new"></iframe></div>
+<script>
+const f=document.getElementById('preview'),holder=document.getElementById('holder');
+function fit(){const [w,h]=document.getElementById('size').value.split(',').map(Number);f.width=w;f.height=h;f.style.transform='translate(-50%,-50%) scale('+Math.min(holder.clientWidth/w,holder.clientHeight/h)+')';}
+document.getElementById('size').onchange=fit;
+document.getElementById('mode').onchange=e=>{f.src='./qa-slot-fixture.html?mode='+e.target.value;};
+addEventListener('resize',fit);fit();
+</script></html>
