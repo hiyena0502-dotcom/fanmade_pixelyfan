@@ -1,0 +1,77 @@
+/* Both books share the start menu's paper, spacing and controls. */
+html[data-screen="ui"].pixely-stage-ready .book-shell.diary-menu{width:min(calc(84 * var(--ui-vw)),2250px);height:calc(84 * var(--ui-vh));display:flex;flex-direction:column;gap:14px}
+.diary-menu .diary-menu-bar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:20px;flex:none;min-height:48px}
+.diary-menu .back-link{position:static;justify-self:start;top:auto;left:auto;display:flex;align-items:center;gap:9px;padding:9px 16px;border:1px solid #a98c65;border-radius:30px;background:#fff8e9f2;font-size:17px;box-shadow:0 2px 0 #795b3320}
+.diary-menu .back-link:hover{transform:none;background:#fffaf0}
+.diary-menu #book-title{grid-column:2;text-align:center;font-size:27px;line-height:1.35;letter-spacing:.02em;color:#53412b;text-shadow:0 2px #fff8e9}
+.diary-menu .open-book{flex:1;min-height:0;height:auto;padding:0;grid-template-columns:minmax(0,1fr) 20px minmax(0,1fr);border:6px solid #a8764c;border-bottom-width:10px;border-radius:22px;background:#fff4df;box-shadow:0 2px 0 2px #d9b17b,0 13px 32px #4d624133}
+.diary-menu .open-book::before{inset:8px;border-color:#dfc7a1;border-radius:12px;z-index:4}
+html[data-screen="ui"] .diary-menu .book-page{padding:24px 28px 21px;gap:12px;border:0;border-radius:16px 0 0 11px;background:#fff4df;overflow:visible}
+html[data-screen="ui"] .diary-menu .right-page{padding-left:18px;background:#fff7e7;border-radius:0 16px 11px 0}
+.diary-menu .binding{background:linear-gradient(90deg,#ac865410,#c19d6850 44%,#fff8e9 52%,#c19d682c 58%,#ac865400);border:0;box-shadow:none}
+.diary-menu .page-heading{padding:0;border:0;gap:6px;flex:none}
+.diary-menu .chapter-eyebrow{font-size:14px;line-height:1.5;letter-spacing:.08em;color:#57704c;margin:0}
+.diary-menu .chapter-eyebrow::before{content:"";display:inline-block;vertical-align:-2px;width:16px;height:16px;margin-right:8px;background:center/contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 19C2 8 8 3 21 3c0 12-6 19-17 16Z' fill='%23869e70'/%3E%3Cpath d='M3 21 17 7' fill='none' stroke='%23556f43' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E")}
+.diary-menu .page-heading h2{font-size:28px;line-height:1.35;letter-spacing:.02em;color:#60452f}
+.diary-menu .page-footer{display:none}
+html[data-screen="ui"] .diary-menu .chapter-grid{gap:12px;padding:3px;overflow:visible}
+.diary-menu .chapter-card{padding:10px 12px;border:1.5px solid #d7c09c;border-radius:12px;background:#fffaf0;transform:none;box-shadow:0 2px 0 #b99a6b12;gap:6px}
+.diary-menu .chapter-card:hover,.diary-menu .chapter-card.is-locked:hover{transform:none;border-color:#8ba174}
+.diary-menu .chapter-card[aria-pressed="true"]{padding:10px 12px;border:1.5px solid #6a8655;background:#edf2df;box-shadow:inset 4px 0 #6a8655,0 2px 0 #8ba17426}
+.diary-menu .chapter-card.is-locked{background:#f2ead9;border-color:#d9c6a8}
+.diary-menu .chapter-card strong{font-size:18px;line-height:1.4}
+.diary-menu .chapter-card .card-number{font-size:14px;line-height:1.45}
+.diary-menu .chapter-card .image-area{border-radius:7px;min-height:0}
+.diary-menu .page-navigation{height:36px;font-size:16px;padding:0;flex:none}
+.diary-menu .detail{height:100%;display:flex;flex-direction:column;gap:11px;overflow:visible}
+.diary-menu .detail-header,.diary-menu .detail-heading,.diary-menu .detail-description,.diary-menu .detail-meta{flex:none}
+.diary-menu .detail-header{min-height:24px;flex:none}
+.diary-menu .detail-number{font-size:14px;color:#57704c}
+.diary-menu .status-label{font-size:13px;padding:4px 11px;background:#e0ead6;color:#4e6642}
+.diary-menu .status-label.is-locked{background:#eee4cf;color:#806b50}
+.diary-menu .detail-heading h2{font-size:24px;line-height:1.35;color:#60452f}
+.diary-menu .detail-heading p{font-size:16px;line-height:1.45;color:#776047}
+.diary-menu .detail-photo{padding:2px;max-height:none;min-height:0;aspect-ratio:auto;flex:1;display:grid;place-items:center;container-type:size;border:0;background:transparent;box-shadow:none;transform:none}
+.diary-menu .detail-photo .image-area{position:relative;width:min(100cqw,calc(100cqh * 16 / 9));height:auto;min-height:0;max-height:none;aspect-ratio:16/9;flex:none;overflow:hidden;border:5px solid #fffaf0;outline:1px solid #d8c4a2;border-radius:4px;box-shadow:0 3px 6px #81613715;background:#eee2c9}
+.diary-menu .detail-description{font-size:18px;line-height:1.65;color:#604a34;margin:0;padding:0 2px;max-height:none;overflow:visible;white-space:pre-line;word-break:keep-all;overflow-wrap:anywhere}
+.diary-menu .chapter-start{width:100%;max-width:none;min-height:49px;padding:10px 18px;margin:0;font-size:20px;color:#fffaf0;background:#627b51;border:1px solid #4c653e;border-radius:10px;box-shadow:0 3px 0 #455d36;flex:none}
+.diary-menu .chapter-start:hover:not(:disabled){background:#506c40}
+.diary-menu .chapter-start:disabled{opacity:1;color:#847c66;background:#e4dfcb;border-color:#c7bda1;box-shadow:0 2px 0 #c5b99b}
+.diary-menu :is(button,a):focus-visible{outline:3px solid #4f7e9b;outline-offset:3px}
+.collection-menu{--index-ink:#4e6642;--index-paper:#edf2df;--index-border:#94a77f;--index-tab:#d4e1c6}
+body[data-category="cards"] .collection-menu{--index-ink:#745987;--index-paper:#f0e8f5;--index-border:#b8a0cb;--index-tab:#e1d3ec}
+body[data-category="items"] .collection-menu{--index-ink:#4a7186;--index-paper:#e8f1f5;--index-border:#96b8c9;--index-tab:#cfe3ed}
+body[data-category="memories"] .collection-menu{--index-ink:#895f6d;--index-paper:#f7ecef;--index-border:#d2a8b5;--index-tab:#edd4dc}
+.collection-menu .chapter-eyebrow{color:var(--index-ink)}
+.collection-menu .collection-index-heading{display:flex;justify-content:space-between;align-items:center;gap:16px}
+.collection-menu .collection-index-heading h2{font-size:28px;line-height:1.35;color:#60452f}
+.collection-menu #collection-summary{font-size:14px;line-height:1.5;color:var(--index-ink);padding:5px 13px;border:1px solid var(--index-border);border-radius:20px;background:var(--index-paper);font-variant-numeric:tabular-nums}
+html[data-screen="ui"] .collection-menu .collection-grid{padding:3px;gap:12px;overflow:visible}
+.collection-menu .collection-card{display:grid;grid-template-rows:auto minmax(0,1fr) auto auto;align-items:center;justify-items:center;gap:5px;padding:11px 10px 9px;background:#fffaf0;border:1.5px solid #d7c09c;border-radius:12px;box-shadow:0 2px 0 #b99a6b12;transform:none;overflow:visible;container-type:size}
+.collection-menu .collection-card[aria-pressed="true"]{padding:11px 10px 9px;background:var(--index-paper);border-color:var(--index-border);box-shadow:inset 0 3px var(--index-border),0 2px 0 #8ba17420}
+.collection-menu .collection-card:hover,.collection-menu .collection-card:not(.is-locked):hover{transform:none;background:var(--index-paper);border-color:var(--index-border)}
+.collection-menu .collection-card.is-locked{background:#f4eddf;border-color:#dfd1ba}
+.collection-menu .collection-card .card-number{justify-self:stretch;display:flex;font-size:12px;line-height:1.5;letter-spacing:.06em;color:#8c785c}
+.collection-menu .collection-card .image-area{width:min(100%,max(20px,calc(100cqh - 80px)));height:auto;aspect-ratio:1;min-height:0;flex:none;align-self:center;justify-self:center;border-radius:8px;background:#f3e8d2}
+.collection-menu .collection-card:not(.is-locked) .image-area{background:#fffcf5}
+.collection-menu .collection-card .image-placeholder{width:100%;height:100%;border:1px dashed #d5c5aa;border-radius:8px;color:#b4a186}
+.collection-menu .collection-card strong{max-width:100%;font-size:17px;line-height:1.4;color:#604a34;text-align:center}
+.collection-menu .collection-state-label{font-size:12px;line-height:1.4;padding:2px 10px;color:#8b785c;border:1px solid #dfd1ba;border-radius:12px;background:#f9f2e6}
+.collection-menu .collection-card:not(.is-locked) .collection-state-label{color:var(--index-ink);border-color:var(--index-border);background:var(--index-paper)}
+.collection-menu .collection-tabs{top:16%;right:-60px;width:66px;gap:9px}
+.collection-menu .collection-tabs button{writing-mode:horizontal-tb;letter-spacing:0;flex-direction:column;gap:6px;height:75px;width:62px;min-height:0;padding:9px 5px;border:1px solid #bca783;border-left:0;border-radius:0 13px 13px 0;font-size:15px;color:#66543e;background:var(--tab);transform:none;box-shadow:inset 0 -2px #8e714a12}
+.collection-menu .collection-tabs button[aria-selected="true"]{width:66px;transform:translateX(1px);color:#493f2f;box-shadow:inset -4px 0 #ffffff80,0 2px 4px #765d3f16;border-color:var(--index-border)}
+.collection-menu .collection-tabs button:hover{transform:translateX(1px)}
+.collection-menu .collection-tabs .icon{width:21px;height:21px}
+.collection-menu .detail-heading{text-align:left}
+.collection-menu .detail-header{border:0;padding:0}
+.collection-menu .detail-number{color:var(--index-ink)}
+.collection-menu .status-label{color:var(--index-ink);background:var(--index-paper)}
+.collection-menu .detail-meta{display:grid;grid-template-columns:88px minmax(0,1fr);gap:5px 10px;padding:12px 2px 0;margin:0;border:0;border-top:1px solid #ddc9a5;font-size:15px;line-height:1.5}
+.collection-menu .detail-meta dt{color:#887254}.collection-menu .detail-meta dd{color:#604a34;margin:0;overflow-wrap:anywhere}
+@container pixely-stage (max-aspect-ratio:4/3){
+ html[data-screen="ui"].pixely-stage-ready .book-shell.diary-menu{width:calc(91 * var(--ui-vw));height:calc(88 * var(--ui-vh))}
+ .diary-menu .diary-menu-bar{grid-template-columns:auto 1fr auto;gap:12px}
+ .diary-menu #book-title{font-size:22px}
+ html[data-screen="ui"] .diary-menu .book-page{padding:20px 18px}
+}

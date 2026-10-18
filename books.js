@@ -39,7 +39,7 @@
       const card=el("button",(isChapter?"chapter-card":"collection-card")+(locked?" is-locked":""));card.type="button";card.dataset.recordId=entry.id;card.setAttribute("aria-pressed",String(selected()===entry.id));card.setAttribute("aria-label",isChapter?`${entry.number===0?"프롤로그":"챕터 "+entry.number} · ${data.title} · ${locked?"잠김":data.status==="cleared"?"클리어":"진행 가능"}`:`${String(entry.number).padStart(3,"0")} · ${data.title} · ${locked?"미등록":"등록 완료"}`);
       const number=el("span","card-number",isChapter?entry.number===0?"프롤로그":`챕터 ${String(entry.number).padStart(2,"0")}`:`NO.${String(entry.number).padStart(3,"0")}`),image=el("div","image-area");paintImage(image,entry.id,locked);
       const title=el("strong","",data.title);if(isChapter){card.append(image,title,number);number.append(el("span","card-status",locked?"잠김":data.status==="cleared"?"클리어":"진행 가능"));if(data.status==="cleared")card.append(stamp());if(!locked){const decor=sticker(entry.id,data.decoration);if(decor)card.append(decor);}}
-      else card.append(number,image,title);
+      else card.append(number,image,title,el("span","collection-state-label",locked?"미등록":"등록"));
       card.ondblclick=()=>{if(editorMode())$("edit-launch").click();};card.onclick=()=>{if(isChapter)view.chapterSelected=entry.id;else view.selections[view.category]=entry.id;renderGrid();renderDetail();void saveView();};root.append(card);
     }
     const max=isChapter?4:6;
@@ -48,7 +48,7 @@
     $("page-count").value=`${String(page.page+1).padStart(2,"0")} / ${String(page.total).padStart(2,"0")}`;
     $("left-page-number").textContent=String(page.page*2+1).padStart(2,"0");$("right-page-number").textContent=String(page.page*2+2).padStart(2,"0");
     $("list-summary").textContent=isChapter?`${entries().filter(e=>M.chapterState(e,progress)==="cleared").length}개의 이야기를 마쳤어`:`${entries().filter(e=>progress.collections[e.id]).length} / ${entries().length} 등록`;
-    if(!isChapter){$("list-subtitle").textContent=D.categories[view.category].label+" · 모험에서 발견한 기록";document.querySelectorAll("[data-category]").forEach(tab=>{const active=tab.dataset.category===view.category;tab.setAttribute("aria-selected",String(active));tab.tabIndex=active?0:-1;});}
+    if(!isChapter){document.body.dataset.category=view.category;if($("collection-section-title"))$("collection-section-title").textContent=D.categories[view.category].label;if($("collection-summary"))$("collection-summary").textContent=`${entries().filter(e=>progress.collections[e.id]).length} / ${entries().length}`;$("list-subtitle").textContent=D.categories[view.category].label+" · 모험에서 발견한 기록";document.querySelectorAll("[data-category]").forEach(tab=>{const active=tab.dataset.category===view.category;tab.setAttribute("aria-selected",String(active));tab.tabIndex=active?0:-1;});}
   }
   function renderDetail(){
     const root=$("record-detail"),entry=entries().find(e=>e.id===selected());root.replaceChildren();
@@ -58,9 +58,9 @@
     const title=el("div","detail-heading");title.append(el("h2","",data.title));if(data.intro)title.append(el("p","",data.intro));
     const photo=el("div","detail-photo"),area=el("div","image-area");paintImage(area,entry.id,locked);photo.append(area);
     if(!locked&&(isChapter||images.has(M.imageKey(entry.id,"decoration")))){const decor=sticker(entry.id,data.decoration);if(decor)photo.append(decor);}
-    const description=el("p","detail-description",locked?isChapter?"아직 열리지 않은 이야기야\n모험을 이어 가면 이 페이지도 펼쳐질 거야":"아직 발견하지 못한 기록이야\n모험을 진행하면 새로운 정보가 열릴지도?":data.description||"아직 작성되지 않은 기록이야");
+    const description=el("p","detail-description",locked?isChapter?"아직 열리지 않은 이야기":"아직 등록되지 않은 기록":data.description||"아직 작성되지 않은 기록이야");
     root.append(header,title,photo,description);
-    if(!locked&&!isChapter){const meta=el("dl","detail-meta");const fields=view.category==="people"?[["등장 콘텐츠",data.location],["관련 챕터",data.chapter]]:view.category==="cards"?[["획득 챕터",data.chapter],["획득 장소",data.location]]:view.category==="items"?[["획득 위치",data.location],["관련 챕터",data.chapter]]:[["관련 인물",data.related],["발견한 챕터",data.chapter]];for(const [label,value]of fields){meta.append(el("dt","",label),el("dd","",value||"기록 전"));}root.append(meta);}
+    if(!locked&&!isChapter){const meta=el("dl","detail-meta");const fields=view.category==="people"?[["등장 콘텐츠",data.location],["관련 챕터",data.chapter]]:view.category==="cards"?[["획득 챕터",data.chapter],["획득 장소",data.location]]:view.category==="items"?[["획득 위치",data.location],["관련 챕터",data.chapter]]:[["관련 인물",data.related],["발견한 챕터",data.chapter]];for(const [label,value]of fields){if(value)meta.append(el("dt","",label),el("dd","",value));}if(meta.children.length)root.append(meta);}
     if(isChapter){const button=el("button","chapter-start","이 챕터 선택");button.type="button";button.id="chapter-start";button.disabled=locked||typeof adapter?.startChapter!=="function";button.onclick=()=>requestChapter(entry.id);root.append(button);if(editorMode()&&!locked&&!adapter?.startChapter)root.append(el("p","connection-note","게임 진행 연결 전"));}
   }
   function render(){view=M.view(view,catalogue);renderGrid();renderDetail();$("record-grid").inert=false;$("record-grid").setAttribute("aria-busy","false");}
