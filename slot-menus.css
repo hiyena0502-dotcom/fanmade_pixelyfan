@@ -24,10 +24,10 @@ html[data-screen="game"]:not(.pixely-game-playing) .slot-screen .return-link{pos
 .slot-screen #slots-subtitle{font-size:17px;line-height:1.5;color:#776047;margin-top:7px}
 .slot-screen .slot-list-heading{display:flex;justify-content:space-between;align-items:center;padding:7px 2px 0;font-size:14px;color:#7d654a;flex:none}
 .slot-screen .slot-list-heading span+span{font-size:13px;letter-spacing:.1em;color:#8d7352}
-.slot-screen #slot-list{display:flex;flex:1;flex-direction:column;gap:9px;min-height:0;overflow-y:auto;overflow-x:hidden;padding:3px 5px 5px 3px;scrollbar-width:thin;scrollbar-color:#c6b48a transparent;scroll-padding:6px}
-.slot-screen #slot-list>button{position:relative;display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;gap:13px;min-height:69px;flex:1 0 69px;padding:11px 15px;border:1.5px solid #d7c09c;border-radius:12px;background:#fffaf0;box-shadow:0 2px 0 #b99a6b12;text-align:left;transition:background .16s,border-color .16s,box-shadow .16s}
+.slot-screen #slot-list{display:flex;flex:1;flex-direction:column;gap:8px;min-height:0;overflow-y:auto;overflow-x:hidden;padding:3px 5px 5px 3px;scrollbar-width:thin;scrollbar-color:#c6b48a transparent;scroll-padding:6px}
+.slot-screen #slot-list>button{position:relative;display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;gap:13px;min-height:65px;flex:1 0 65px;padding:9px 15px;border:1.5px solid #d7c09c;border-radius:12px;background:#fffaf0;box-shadow:0 2px 0 #b99a6b12;text-align:left;transition:background .16s,border-color .16s,box-shadow .16s}
 .slot-screen #slot-list>button:hover:not(:disabled){border-color:#8ba174;background:#f2f5e6;box-shadow:0 2px 0 #8ba17433}
-.slot-screen #slot-list>button[aria-pressed="true"]{padding:11px 15px;background:#edf2df;border-color:#6a8655;box-shadow:inset 4px 0 #6a8655,0 2px 0 #8ba17426}
+.slot-screen #slot-list>button[aria-pressed="true"]{padding:9px 15px;background:#edf2df;border-color:#6a8655;box-shadow:inset 4px 0 #6a8655,0 2px 0 #8ba17426}
 .slot-screen #slot-list .slot-number{width:43px;height:43px;border:1px solid #dbc19a;border-radius:8px;background:#f4e4c7;font-size:22px;line-height:1;color:#806040;font-variant-numeric:tabular-nums}
 .slot-screen #slot-list>button[aria-pressed="true"] .slot-number{background:#dce6cb;border-color:#9aaa83;color:#4f663d}
 .slot-screen .slot-copy{display:flex;flex-direction:column;gap:3px;min-width:0}
