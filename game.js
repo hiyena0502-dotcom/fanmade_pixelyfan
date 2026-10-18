@@ -124,14 +124,19 @@ function renderSlotList(records,enabled){
 }
 async function showSlots(records){await readSlots(records);slotHeading();renderSlotList(slotData,true);$('slot-start').onclick=safeAction(startSlot);drawSlotDetail();}
 function slotScenePreview(entry){
- const preview=node('div',undefined,'slot-scene-preview');
+ const space=node('div',undefined,'slot-preview-space'),preview=node('div',undefined,'slot-scene-preview');
+ space.append(preview);
  if(entry&&!entry.invalid){
   const thumb=image(entry.state.thumbnail,'slot-saved-image');
   if(thumb){thumb.alt='저장한 장면';preview.classList.add('has-saved-image');preview.append(thumb);}
   else if(entry.state.builtin!=='house'){preview.classList.add('without-scene');preview.append(node('span',chapterName(entry.state.chapter),'slot-scene-caption'));}
  }
  else preview.setAttribute('aria-hidden','true');
- return preview;
+ return space;
+}
+function appendStoryIntro(root){
+ const text=manifest?.catalogue?.chapters?.find(chapter=>chapter.id==='prologue')?.description||'잠뜰TV 13주년 기념으로 초대장을 받고 찾아간 픽셀리의 집! 과연 꿈뜰이는 무사히 축하를 마치고 집에 갈 수 있을까?';
+ root.append(node('p',text,'slot-story-description'));
 }
 function drawSlotDetail(){
  const root=$('slot-description');root.replaceChildren();
@@ -139,7 +144,7 @@ function drawSlotDetail(){
  $('slot-title').textContent=selectedSlot===null?'초대는 받았고, 귀가는 미정!':'나들이 일기장 '+String(selectedSlot+1).padStart(2,'0');
  root.append(slotScenePreview(continuing?entry:null));
  if(selectedSlot===null){
-  if(!continuing)root.append(node('p','프롤로그 · 초대','slot-chapter-name'));
+  if(!continuing){root.append(node('p','프롤로그 · 초대','slot-chapter-name'));appendStoryIntro(root);}
  }else if(continuing){
   types(root,selectedSlot,drawSlotDetail);root.lastElementChild.className='slot-record-types';
   if(entry&&!entry.invalid){
@@ -150,7 +155,7 @@ function drawSlotDetail(){
    root.append(node('p',entry?.invalid?'이 기록을 읽을 수 없어요':'아직 저장된 기록이 없어요','slot-lead'));
   }
  }else{
-  root.append(node('p','프롤로그 · 초대','slot-chapter-name'));
+  root.append(node('p','프롤로그 · 초대','slot-chapter-name'));appendStoryIntro(root);
  }
  $('slot-start').disabled=selectedSlot===null||(continuing&&(!entry||entry.invalid));
  $('slot-start').replaceChildren(node('span',continuing?'이 기록 이어하기':'새 나들이 시작'),node('span','→','slot-start-arrow'));
