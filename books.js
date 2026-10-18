@@ -48,7 +48,7 @@
     $("page-count").value=`${String(page.page+1).padStart(2,"0")} / ${String(page.total).padStart(2,"0")}`;
     $("left-page-number").textContent=String(page.page*2+1).padStart(2,"0");$("right-page-number").textContent=String(page.page*2+2).padStart(2,"0");
     $("list-summary").textContent=isChapter?`${entries().filter(e=>M.chapterState(e,progress)==="cleared").length}개의 이야기를 마쳤어`:`${entries().filter(e=>progress.collections[e.id]).length} / ${entries().length} 등록`;
-    if(!isChapter){document.body.dataset.category=view.category;if($("collection-section-title"))$("collection-section-title").textContent=D.categories[view.category].label;if($("collection-summary"))$("collection-summary").textContent=`${entries().filter(e=>progress.collections[e.id]).length} / ${entries().length}`;$("list-subtitle").textContent=D.categories[view.category].label+" · 모험에서 발견한 기록";document.querySelectorAll("[data-category]").forEach(tab=>{const active=tab.dataset.category===view.category;tab.setAttribute("aria-selected",String(active));tab.tabIndex=active?0:-1;});}
+    if(!isChapter){document.body.dataset.category=view.category;if($("collection-section-title"))$("collection-section-title").textContent=D.categories[view.category].label;if($("collection-summary"))$("collection-summary").textContent=`${entries().filter(e=>progress.collections[e.id]).length} / ${entries().length}`;$("list-subtitle").textContent=D.categories[view.category].label+" · 모험에서 발견한 기록";document.querySelectorAll(".collection-tabs [data-category]").forEach(tab=>{const active=tab.dataset.category===view.category;tab.setAttribute("aria-selected",String(active));tab.tabIndex=active?0:-1;});}
   }
   function renderDetail(){
     const root=$("record-detail"),entry=entries().find(e=>e.id===selected());root.replaceChildren();
@@ -73,7 +73,7 @@
     render();if(motion)await new Promise(resolve=>setTimeout(resolve,240));sheet?.remove();busy=false;renderGrid();void saveView();
   }
   $("page-prev").onclick=()=>turn(-1);$("page-next").onclick=()=>turn(1);
-  document.querySelectorAll("[data-category]").forEach((tab,index,tabs)=>{
+  document.querySelectorAll(".collection-tabs [data-category]").forEach((tab,index,tabs)=>{
     tab.onclick=()=>{if(busy||$("record-grid").getAttribute("aria-busy")==="true")return;view.category=tab.dataset.category;render();void saveView();};
     tab.onkeydown=event=>{if(!["ArrowUp","ArrowDown","Home","End"].includes(event.key))return;event.preventDefault();const next=event.key==="Home"?0:event.key==="End"?tabs.length-1:(index+(event.key==="ArrowDown"?1:-1)+tabs.length)%tabs.length;tabs[next].click();tabs[next].focus();};
   });
