@@ -102,10 +102,63 @@ function recordInfo(entry){if(entry.invalid)return '읽을 수 없는 기록 · 
 async function readSlots(records){slotData=records||await R.slots();for(const records of [slotData.manual,slotData.auto])for(const record of records.values()){if(record.invalid)continue;try{M.restore(record.state,data);}catch(e){record.invalid=true;record.error=e.message;}}return slotData;}
 function slotButton(slot,entry){const b=node('button'),number=node('span',String(slot+1).padStart(2,'0'),'slot-number'),text=node('span');text.append(node('strong',entry?entry.invalid?'확인이 필요한 기록':'모험 기록':'빈 일기장'),node('small',entry?recordInfo(entry):'아직 나들이 기록이 없어'));if(entry&&!entry.invalid){const thumb=image(entry.state.thumbnail,'record-thumb')||(entry.state.builtin==='house'?node('img',undefined,'record-thumb'):node('span','◇','record-thumb empty'));if(thumb.tagName==='IMG'&&!thumb.src)thumb.src='./assets/title/layers-oct8/house.webp';if(thumb.tagName==='IMG'){thumb.alt='';thumb.draggable=false;}number.classList.add('with-thumb');number.append(thumb);}b.append(number,text);return b;}
 function types(root,slot,change){const div=node('div',undefined,'confirm-buttons');for(const type of ['manual','auto']){const b=node('button',type==='manual'?'수동 기록':'자동 기록');b.disabled=!slotData[type].get(slot)||slotData[type].get(slot).invalid;b.setAttribute('aria-pressed',String(selectedType===type));b.onclick=()=>{selectedType=type;change();};div.append(b);}root.append(div);}
-function slotHeading(){const continuing=mode==='continue';$('slots-title').textContent=continuing?'이어지는 나들이':'새로운 나들이';$('slots-subtitle').textContent=continuing?'일기 속 마지막 순간으로 돌아가자':'기록을 담을 일기장을 골라줘';}
-function renderSlotList(records,enabled){const list=$('slot-list');for(let i=0;i<5;i++){const entry=records.manual.get(i)||records.auto.get(i),content=slotButton(i,entry),b=list.children[i]||node('button');b.type='button';b.replaceChildren(...content.childNodes);b.disabled=!enabled;b.setAttribute('aria-pressed',String(selectedSlot===i));b.onclick=enabled?()=>{selectedSlot=i;selectedType=slotData.manual.has(i)?'manual':'auto';drawSlotDetail();document.querySelectorAll('#slot-list>button').forEach((x,j)=>x.setAttribute('aria-pressed',String(j===i)));}:null;if(!b.isConnected)list.append(b);}list.setAttribute('aria-busy',String(!enabled));}
+function slotHeading(){
+ const continuing=mode==='continue';
+ $('slots-title').textContent=continuing?'이어지는 나들이':'새로운 나들이';
+ $('slots-subtitle').textContent=continuing?'다시 펼쳐 볼 일기장을 골라줘':'새 이야기를 담을 일기장을 골라줘';
+ $('slot-detail-label').textContent=continuing?'이야기 다시 펼치기':'새로운 이야기';
+ for(const link of document.querySelectorAll('[data-slot-mode]')){if(link.dataset.slotMode===(continuing?'continue':'new'))link.setAttribute('aria-current','page');else link.removeAttribute('aria-current');}
+}
+function renderSlotList(records,enabled){
+ const list=$('slot-list');
+ for(let i=0;i<5;i++){
+  const entry=records.manual.get(i)||records.auto.get(i),b=list.children[i]||node('button'),copy=node('span',undefined,'slot-copy');
+  const location=entry&&!entry.invalid?(data.locations.find(l=>l.id===entry.state.location)?.name||'나들이 중'):'';
+  copy.append(node('strong',entry?entry.invalid?'확인이 필요한 기록':chapterName(entry.state.chapter):'빈 일기장'),node('small',entry?entry.invalid?'원본 기록은 보존되어 있어요':location+' · '+duration(entry.state.playMs):'새로운 이야기를 담아 보자'));
+  b.type='button';b.replaceChildren(node('span',String(i+1).padStart(2,'0'),'slot-number'),copy,node('span',entry?entry.invalid?'확인 필요':'기록 있음':'빈 기록','slot-status'));
+  b.dataset.record=entry?entry.invalid?'invalid':'saved':'empty';b.disabled=!enabled;b.setAttribute('aria-pressed',String(selectedSlot===i));
+  b.onclick=enabled?()=>{selectedSlot=i;selectedType=slotData.manual.has(i)?'manual':'auto';drawSlotDetail();document.querySelectorAll('#slot-list>button').forEach((x,j)=>x.setAttribute('aria-pressed',String(j===i)));}:null;
+  if(!b.isConnected)list.append(b);
+ }
+ list.setAttribute('aria-busy',String(!enabled));
+}
 async function showSlots(records){await readSlots(records);slotHeading();renderSlotList(slotData,true);$('slot-start').onclick=safeAction(startSlot);drawSlotDetail();}
-function drawSlotDetail(){const root=$('slot-description');root.replaceChildren();const entry=slotData?.[selectedType]?.get(selectedSlot);$('slot-title').textContent=selectedSlot===null?'초대는 받았고, 귀가는 미정!':'나들이 기록 '+String(selectedSlot+1).padStart(2,'0');if(selectedSlot!==null){if(mode==='continue'){types(root,selectedSlot,drawSlotDetail);if(entry&&!entry.invalid){const thumb=image(entry.state.thumbnail,'slot-thumb')||(entry.state.builtin==='house'?node('img',undefined,'slot-thumb'):null);if(thumb){if(!thumb.src)thumb.src='./assets/title/layers-oct8/house.webp';root.append(thumb);}root.append(node('p',recordInfo(entry)));}else root.append(node('p',entry?.invalid?'이 기록을 읽을 수 없어요 · 다른 기록을 골라 주세요 · 원본은 보존돼요':'아직 저장된 기록이 없어'));}else root.append(node('p',entry?'새 나들이를 시작하면 이 슬롯의 기록을 덮어써':'빈 일기장에 새로운 모험을 담자'));}else root.append(node('p','프롤로그의 집 앞에서 시작하는\n포인트 앤 클릭 시스템 테스트'));$('slot-start').disabled=selectedSlot===null||(mode==='continue'&&(!entry||entry.invalid));$('slot-start').textContent=mode==='continue'?'이 기록 이어하기':'새 나들이 시작';}
+function slotScenePreview(entry){
+ const preview=node('div',undefined,'slot-scene-preview');
+ if(entry&&!entry.invalid){
+  const thumb=image(entry.state.thumbnail,'slot-saved-image');
+  if(thumb){thumb.alt='저장한 장면';preview.classList.add('has-saved-image');preview.append(thumb);}
+  else if(entry.state.builtin!=='house'){preview.classList.add('without-scene');preview.append(node('span',chapterName(entry.state.chapter),'slot-scene-caption'));}
+ }
+ else preview.setAttribute('aria-hidden','true');
+ return preview;
+}
+function drawSlotDetail(){
+ const root=$('slot-description');root.replaceChildren();
+ const entry=slotData?.[selectedType]?.get(selectedSlot),continuing=mode==='continue',occupied=selectedSlot!==null&&(slotData.manual.has(selectedSlot)||slotData.auto.has(selectedSlot));
+ $('slot-title').textContent=selectedSlot===null?'초대는 받았고, 귀가는 미정!':'나들이 일기장 '+String(selectedSlot+1).padStart(2,'0');
+ root.append(slotScenePreview(continuing?entry:null));
+ if(selectedSlot===null){
+  root.append(node('p',continuing?'왼쪽에서 기록을 골라줘\n마지막 나들이를 이어갈 수 있어':'왼쪽에서 일기장을 골라줘\n꿈뜰이의 나들이가 시작돼','slot-lead'));
+  $('slot-action-hint').textContent=continuing?'저장된 기록을 선택하면 이어갈 수 있어요':'일기장을 선택하면 시작할 수 있어요';
+ }else if(continuing){
+  types(root,selectedSlot,drawSlotDetail);root.lastElementChild.className='slot-record-types';
+  if(entry&&!entry.invalid){
+   const info=node('dl',undefined,'slot-record-info'),s=entry.state;
+   for(const [label,value]of [['챕터',chapterName(s.chapter)],['장소',data.locations.find(l=>l.id===s.location)?.name||s.location],['플레이 시간',duration(s.playMs)],['저장한 때',new Date(entry.savedAt).toLocaleString('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'})]])info.append(node('dt',label),node('dd',value));
+   root.append(info);$('slot-action-hint').textContent='선택한 '+(selectedType==='auto'?'자동':'수동')+' 기록부터 이어가요';
+  }else{
+   root.append(node('p',entry?.invalid?'이 기록을 읽을 수 없어요\n다른 기록을 선택해 주세요':'아직 저장된 기록이 없어요\n새 게임에서 첫 나들이를 시작해 봐','slot-lead'));
+   $('slot-action-hint').textContent=entry?.invalid?'원본 기록은 그대로 보존되어 있어요':'기록이 있는 일기장을 선택해 주세요';
+  }
+ }else{
+  root.append(node('p','프롤로그 · 초대','slot-chapter-name'),node('p',occupied?'이 일기장에 새로운 나들이를 시작할까?':'빈 일기장에 첫 번째 이야기를 담아 보자','slot-lead'));
+  if(occupied)root.append(node('p','시작하면 이 일기장의 수동·자동 기록이 바뀌어요\n시작 전 한 번 더 확인할게요','slot-overwrite-note'));
+  $('slot-action-hint').textContent=occupied?'기존 기록이 있는 일기장이에요':'선택한 일기장에 새 기록을 만들어요';
+ }
+ $('slot-start').disabled=selectedSlot===null||(continuing&&(!entry||entry.invalid));
+ $('slot-start').replaceChildren(node('span',continuing?'이 기록 이어하기':'새 나들이 시작'),node('span','→','slot-start-arrow'));
+}
 async function wardrobeSnapshot(){const db=await WardrobeStore.open();try{const w=await WardrobeStore.readWorkspace(db);return {state:WardrobeModel.normalize(w.state),images:[...w.images]};}finally{db.close();}}
 async function startSlot(){if(starting||selectedSlot===null)return;void PixelySettings.primeEffects();starting=true;$('slot-start').disabled=true;document.querySelectorAll('#slot-list>button').forEach(b=>b.disabled=true);try{if(mode==='continue'){const entry=slotData[selectedType].get(selectedSlot);if(!entry||entry.invalid)return;state=M.restore(entry.state,data);await R.setActive(selectedSlot,selectedType);}else{const occupied=slotData.manual.has(selectedSlot)||slotData.auto.has(selectedSlot);if(occupied&&!await confirm('기록을 덮어쓸까?','슬롯 '+(selectedSlot+1)+'의 수동·자동 기록을 새로운 나들이로 바꿔'))return;let outfit;try{outfit=await wardrobeSnapshot();}catch(e){notify('옷장 모습을 가져오지 못했어요 · '+e.message);}state=M.create(data,selectedSlot,outfit);if(A.isEditor())state.developerTest=true;beginOpening();if(!A.isEditor())await R.newGame(snapshot(),occupied);}await enterPlay();}finally{starting=false;document.querySelectorAll('#slot-list>button').forEach(b=>b.disabled=false);drawSlotDetail();}}
 async function enterPlay(){await Promise.all([prepareScene(),PixelySettings.prepareEffect("chapter-opening")]);$('test-label').textContent=state.developerTest?'개발자 미리보기 · 저장 기록과 별도':'프롤로그 · 시스템 테스트';$('slot-screen').hidden=true;window.PixelyStage?.setPlaying(true);$('play-screen').hidden=false;renderScene();showPlace();pump();dispatchEvent(new Event('pixely:game-start'));}
