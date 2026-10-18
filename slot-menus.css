@@ -41,7 +41,6 @@ html[data-screen="game"]:not(.pixely-game-playing) .slot-screen .return-link{pos
 .slot-screen .slot-scene-caption{height:100%;display:grid;place-items:center;font-size:22px;color:#688153;background:repeating-linear-gradient(0deg,transparent 0 26px,#b3bb981f 26px 27px)}
 .slot-screen .slot-lead{font-size:18px;color:#735b43;line-height:1.7;white-space:pre-line;margin:0;text-align:center}
 .slot-screen .slot-chapter-name{font-size:17px;color:#526e45;text-align:center;margin:3px 0 0}
-.slot-screen .slot-overwrite-note{font-size:15px;line-height:1.65;color:#855032;background:#f7e8d5;border:1px solid #dcc29c;border-radius:9px;padding:10px 13px;margin:0;white-space:pre-line;text-align:center}
 .slot-screen .slot-record-types{display:flex;gap:8px;flex:none;justify-content:center}
 .slot-screen .slot-record-types button{min-height:37px;padding:5px 16px;font-size:15px;background:#fffaf0;border-color:#c9b58e;border-radius:22px}
 .slot-screen .slot-record-types button[aria-pressed="true"]{background:#e0e9d2;border-color:#82986b;color:#435d37}

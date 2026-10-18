@@ -135,7 +135,7 @@ function slotScenePreview(entry){
 }
 function drawSlotDetail(){
  const root=$('slot-description');root.replaceChildren();
- const entry=slotData?.[selectedType]?.get(selectedSlot),continuing=mode==='continue',occupied=selectedSlot!==null&&(slotData.manual.has(selectedSlot)||slotData.auto.has(selectedSlot));
+ const entry=slotData?.[selectedType]?.get(selectedSlot),continuing=mode==='continue';
  $('slot-title').textContent=selectedSlot===null?'초대는 받았고, 귀가는 미정!':'나들이 일기장 '+String(selectedSlot+1).padStart(2,'0');
  root.append(slotScenePreview(continuing?entry:null));
  if(selectedSlot===null){
@@ -151,7 +151,6 @@ function drawSlotDetail(){
   }
  }else{
   root.append(node('p','프롤로그 · 초대','slot-chapter-name'));
-  if(occupied)root.append(node('p','이 일기장의 기존 기록을 덮어써요','slot-overwrite-note'));
  }
  $('slot-start').disabled=selectedSlot===null||(continuing&&(!entry||entry.invalid));
  $('slot-start').replaceChildren(node('span',continuing?'이 기록 이어하기':'새 나들이 시작'),node('span','→','slot-start-arrow'));
