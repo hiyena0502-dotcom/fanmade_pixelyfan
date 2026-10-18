@@ -12,7 +12,7 @@
  function ornament(){
   const beads=Array.from({length:44},(_,i)=>{const a=(i*360/44-90)*Math.PI/180,r=276;return `<circle cx="${960+Math.cos(a)*r}" cy="${540+Math.sin(a)*r}" r="${i%11===0?3.4:1.7}"/>`;}).join('');
   const foliage=Array.from({length:8},(_,i)=>{const a=(137+i*12)*Math.PI/180,x=960+Math.cos(a)*269,y=540+Math.sin(a)*269;return leaf(x,y,227+i*12,62+(i%3)*10,15,i);}).join('');
-  const flight=[[750,566,608,493,12],[752,552,631,455,12],[757,540,669,429,11],[765,539,712,442,10],[760,567,674,534,9],[769,555,720,501,8]].map(([bx,by,tx,ty,w],i)=>{
+  const flight=[[750,566,608,493,36],[752,552,631,455,34],[757,540,669,429,30],[765,539,712,442,25],[760,567,674,534,22],[769,555,720,501,19]].map(([bx,by,tx,ty,w],i)=>{
    const dx=tx-bx,dy=ty-by,len=Math.hypot(dx,dy),nx=-dy/len,ny=dx/len;
    const point=(t,n=0)=>`${(bx+dx*t+nx*n).toFixed(2)} ${(by+dy*t+ny*n).toFixed(2)}`;
    const barbs=[.28,.45,.62].map(t=>`M${point(t)}Q${point(t+.07,w*.32)} ${point(t+.15,w*.54)}M${point(t)}Q${point(t+.04,-w*.27)} ${point(t+.12,-w*.38)}`).join('');
