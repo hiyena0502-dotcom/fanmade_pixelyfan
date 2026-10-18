@@ -223,5 +223,5 @@ document.querySelector('[data-action="wardrobe"]')?.addEventListener('click',()=
 document.querySelector('[data-action="chapter"]')?.addEventListener('click',()=>{window.location.href='./chapters.html';});
 document.querySelector('[data-action="collection"]')?.addEventListener('click',()=>{window.location.href='./collection.html';});
 
-document.querySelector('[data-action="new"]')?.addEventListener('click',()=>{location.href='./game.html?mode=new';});
-document.querySelector('[data-action="continue"]')?.addEventListener('click',()=>{location.href='./game.html?mode=continue';});
+document.querySelector('[data-action="new"]')?.addEventListener('click',()=>{location.href='./game.html?mode=new&ui=menu-sync-31';});
+document.querySelector('[data-action="continue"]')?.addEventListener('click',()=>{location.href='./game.html?mode=continue&ui=menu-sync-31';});

@@ -105,7 +105,6 @@ function types(root,slot,change){const div=node('div',undefined,'confirm-buttons
 function slotHeading(){
  const continuing=mode==='continue';
  $('slots-title').textContent=continuing?'이어지는 나들이':'새로운 나들이';
- $('slot-mode-label').textContent=continuing?'이어하기':'새 게임';
  $('slot-start').replaceChildren(node('span',continuing?'이 기록 이어하기':'새 나들이 시작'),node('span','→','slot-start-arrow'));
  $('slot-detail-label').textContent=continuing?'이야기 다시 펼치기':'새로운 이야기';
 }
