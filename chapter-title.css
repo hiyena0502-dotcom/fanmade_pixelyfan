@@ -14,3 +14,5 @@ html.chapter-title-active .game-editor-launch,html.chapter-title-active .ratio-p
 .ct-wreath .ct-contour-leaf{fill-opacity:.38;stroke:#F2D99B;stroke-width:1.2}.ct-wreath .ct-vein{stroke-width:.65;opacity:.65}.ct-wreath .ct-branch{stroke:#B58A4B;stroke-width:1.3;opacity:.8}
 
 .ct-laurel-lobe{transform-box:view-box}.ct-under-title{transform-origin:960px 720px}.ct-under-title .ct-flower{fill-opacity:.6}.ct-lower-garland{opacity:.8}.ct-lower-garland .ct-flower{fill-opacity:.4}
+
+.ct-wreath .ct-inner-feather .ct-contour-leaf{fill-opacity:.46;stroke-width:1.35}
