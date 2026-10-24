@@ -1,6 +1,6 @@
 'use strict';
 const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs');
-const F=require('../front-scene.js'),D=require('../game-data.js'),Loader=require('../scene-transition.js');
+const F=require('../front-scene.js'),D=require('./fixtures/game-sandbox.cjs'),Loader=require('../scene-transition.js');
 const scene={id:'front',builtin:'house',background:''};
 test('all eleven full-canvas lossless images have a stable background-to-foreground order',()=>{
  assert.equal(F.sources(scene).length,11);assert.equal(new Set(F.sources(scene)).size,11);

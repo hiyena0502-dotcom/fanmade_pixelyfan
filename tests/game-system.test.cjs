@@ -1,5 +1,5 @@
 'use strict';
-const test=require('node:test'),assert=require('node:assert/strict'),D=require('../game-data.js'),M=require('../game-model.js');
+const test=require('node:test'),assert=require('node:assert/strict'),D=require('./fixtures/game-sandbox.cjs'),M=require('../game-model.js');
 test('new games have no dialogue log and older saves retain progress and read tracking',()=>{
  const data=M.content(D.defaults()),fresh=M.create(data,0);assert.equal(Object.hasOwn(fresh,'log'),false);assert.equal(Object.hasOwn(M.restore(fresh,data),'log'),false);
  const old=structuredClone(fresh);old.log=[{speaker:'꿈뜰이',text:'이전 대사'}];old.readLines={'opening:0':true};old.inventory.invite=1;M.start(old,data,'invitation');old.run.presentation={count:3,elapsed:10};
