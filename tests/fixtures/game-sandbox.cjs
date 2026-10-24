@@ -1,7 +1,7 @@
 'use strict';
 (()=>{
 const test=text=>'[테스트] '+text;
-function defaults(){return {version:1,contentVersion:2,start:'front',opening:'opening',autosave:{event:true,chapter:true,move:true,puzzle:true},locations:[
+function defaults(){return {version:1,contentVersion:2,outdoorVersion:1,start:'front',opening:'opening',autosave:{event:true,chapter:true,move:true,puzzle:true},locations:[
  {id:'front',name:'픽셀리의 집 · 집 앞',chapter:'prologue',background:'',builtin:'house',actors:[],objects:[
  {id:'invitation',name:'초대장',kind:'inspect',placeholder:true,rect:{x:14,y:62,w:13,h:17},event:'invitation',repeat:['invitation-again'],condition:[]},
  {id:'bush',name:'집 앞 덤불',kind:'inspect',rect:{x:58,y:79,w:17,h:18},event:'bush',repeat:['bush-again'],condition:[]},
