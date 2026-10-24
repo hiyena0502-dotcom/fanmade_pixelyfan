@@ -53,9 +53,9 @@ html.opening-plain .game-editor-launch,html.opening-plain .ratio-preview-launch,
 .place-name:before,.place-name:after{content:'';position:absolute;width:5px;height:5px;border-radius:50%;background:#ebc48a;box-shadow:0 1px 2px #51351f;top:15px}.place-name:before{left:9px}.place-name:after{right:9px}.place-time{font-size:13px;letter-spacing:.1em;color:#f0d3a3}.place-title{font-size:18px;line-height:1.4;overflow-wrap:anywhere}
 .exit-arrow.bottom{top:auto;right:auto;bottom:3.5%;left:50%;transform:translateX(-50%);width:140px;height:65px;border:1px solid #a48059;border-radius:28px;background:#fff4dfe8;box-shadow:0 3px 8px #45332228;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;font-size:15px}.exit-arrow.bottom svg{width:30px;height:25px;fill:none;stroke:#765334;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.exit-arrow.bottom:hover{background:#fff9eb}.is-busy .exit-arrow{pointer-events:none}
 
-/* Clouds cross the 16:9 illustration on two independent depth planes. */
+/* All six clouds drift behind the house; each crossing gets new random traits. */
 .scene-background>.front-cloud-plane{position:absolute;inset:0;overflow:hidden;pointer-events:none}
-.front-cloud-plane.behind{z-index:1}.front-cloud-plane.ahead{z-index:10}
+.front-cloud-plane.behind{z-index:1}
 .front-cloud{position:absolute;left:0;overflow:hidden;pointer-events:none;animation:front-cloud-flow linear infinite;will-change:transform}
 .front-cloud>img{position:absolute;max-width:none;object-fit:fill;pointer-events:none}
 @keyframes front-cloud-flow{from{transform:translateX(calc(100 * var(--stage-vw)))}to{transform:translateX(calc(-30 * var(--stage-vw)))}}
