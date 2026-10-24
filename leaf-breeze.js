@@ -92,17 +92,19 @@ window.PixelyLeafBreeze={create(breeze,{enabled=()=>true}={}){
     lastTime=0;
     if(active&&!document.hidden&&enabled()) frame=requestAnimationFrame(animate);
   }
-  addEventListener("resize",()=>{
+  function resize(){
     const previousWidth=width,previousHeight=height;
-    width=breeze.clientWidth;height=breeze.clientHeight;
+    const nextWidth=breeze.clientWidth,nextHeight=breeze.clientHeight;if(!nextWidth||!nextHeight)return;
+    width=nextWidth;height=nextHeight;
     leaves.filter(leaf=>leaf.active).forEach(leaf=>{
       leaf.x*=width/previousWidth;leaf.y*=height/previousHeight;
       leaf.wind*=width/previousWidth;leaf.vx*=width/previousWidth;
       leaf.vy*=height/previousHeight;leaf.gravity*=height/previousHeight;
     });
-  });
+  }
+  addEventListener("resize",resize);
   addEventListener("pixely:settingschange",syncVisibility);
   document.addEventListener("visibilitychange",syncVisibility);
   syncVisibility();
-return {setActive(value){if(active===value)return;active=value;syncVisibility();},refresh:syncVisibility};
+return {setActive(value){if(active===value)return;active=value;if(active)resize();syncVisibility();},refresh:syncVisibility};
 }};
