@@ -59,3 +59,7 @@ html.opening-plain .game-editor-launch,html.opening-plain .ratio-preview-launch,
 .front-cloud{position:absolute;left:0;overflow:hidden;pointer-events:none;animation:front-cloud-flow linear infinite;will-change:transform}
 .front-cloud>img{position:absolute;max-width:none;object-fit:fill;pointer-events:none}
 @keyframes front-cloud-flow{from{transform:translateX(calc(100 * var(--stage-vw)))}to{transform:translateX(calc(-30 * var(--stage-vw)))}}
+
+.choice-prompt{position:absolute;inset:18px 42px 36px;display:grid;place-items:center;text-align:center;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere}
+.has-choice-prompt .dialogue .speaker,.has-choice-prompt .dialogue-tools,.has-choice-prompt .dialogue-page-number{display:none}
+.has-choice-prompt .choices button{display:flex;align-items:center;gap:12px}.choice-arrow{flex:none;font-size:12px;color:#98744e}
