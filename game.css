@@ -39,3 +39,16 @@ html.opening-plain .game-editor-launch,html.opening-plain .ratio-preview-launch,
 /* Uploaded house-front planes share one unchanged 1920 × 1080 canvas. */
 .scene-background.has-front-scene{z-index:0;isolation:isolate}
 .scene-background>.front-scene-layer,.image-host-front>.front-scene-layer{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:none;pointer-events:none;transform-origin:50% 75%}
+
+.leaf-breeze{position:absolute;inset:0;z-index:2;overflow:hidden;pointer-events:none}
+.drifting-leaf{position:absolute;left:0;top:0;will-change:transform}
+.leaf-blade{display:block;width:100%;height:100%;overflow:visible;color:var(--leaf-color);filter:drop-shadow(0 1px 1px #244e373b)}
+.leaf-vein{fill:none;stroke:#f1ffd4;stroke-opacity:.48;stroke-width:1.25;stroke-linecap:round}
+
+#scene-leaves{z-index:3}.scene-reveal{position:absolute;inset:0;z-index:9;background:#fff9e8;pointer-events:none}.has-scene-reveal .play-tools,.has-scene-reveal .place-name,.has-scene-reveal .scene-objects,.has-scene-reveal .test-label{visibility:hidden!important;pointer-events:none!important}
+.play-screen.has-chapter-title>#scene-leaves{visibility:visible!important;pointer-events:none!important}
+.scene-crossfade{position:absolute;inset:0;z-index:4;pointer-events:none;overflow:hidden}.scene-crossfade .scene-image-host{position:absolute;inset:0}
+.scene-background>.porch-background{object-fit:cover}
+.place-name{top:3.3%;left:3%;min-width:210px;max-width:40%;display:flex;flex-direction:column;gap:3px;padding:12px 23px 13px;border:2px solid #9b6841;border-radius:9px 12px 10px 8px;background:linear-gradient(178deg,#bc8a58 0%,#96653e 9%,#a87648 12%,#8f5f39 96%);color:#fff3d6;box-shadow:inset 0 0 0 3px #d7ac7438,0 4px 9px #3e392e30;animation:none;text-shadow:0 1px 2px #523820}
+.place-name:before,.place-name:after{content:'';position:absolute;width:5px;height:5px;border-radius:50%;background:#ebc48a;box-shadow:0 1px 2px #51351f;top:15px}.place-name:before{left:9px}.place-name:after{right:9px}.place-time{font-size:13px;letter-spacing:.1em;color:#f0d3a3}.place-title{font-size:18px;line-height:1.4;overflow-wrap:anywhere}
+.exit-arrow.bottom{top:auto;right:auto;bottom:3.5%;left:50%;transform:translateX(-50%);width:140px;height:65px;border:1px solid #a48059;border-radius:28px;background:#fff4dfe8;box-shadow:0 3px 8px #45332228;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;font-size:15px}.exit-arrow.bottom svg{width:30px;height:25px;fill:none;stroke:#765334;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.exit-arrow.bottom:hover{background:#fff9eb}.is-busy .exit-arrow{pointer-events:none}
