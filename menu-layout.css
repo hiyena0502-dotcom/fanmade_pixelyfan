@@ -1,0 +1,51 @@
+/* Panel footprints use the readable UI viewport. Fonts, stage fit and image data stay independent. */
+html[data-screen="ui"].pixely-stage-ready .cabinet{
+ width:min(calc(84 * var(--ui-vw)),1680px);
+ height:min(calc(82 * var(--ui-vh)),1000px);
+ min-width:0;min-height:0;overflow:visible;
+ grid-template-rows:64px minmax(0,1fr);
+ gap:8px;padding:12px 24px 14px;
+}
+html[data-screen="ui"] .cabinet-content{min-width:0;grid-template-columns:calc((100% - 20px) * .34 + 48px) minmax(0,1fr);gap:20px;padding:9px 14px 6px}
+html[data-screen="ui"] .mirror-panel{min-width:0;container-type:size;padding:0 20px 0 8px;position:relative;z-index:3}
+html[data-screen="ui"] .mirror-frame{flex:1;width:min(100%,calc((100cqh - 36px) * .72 + 48px))}
+html[data-screen="ui"] .wardrobe-controls{min-width:0;min-height:0;display:grid;grid-template-rows:minmax(0,1fr) 168px;gap:10px}
+html[data-screen="ui"] .slot-drawer{padding:0;gap:5px}
+html[data-screen="ui"] .save-slots{gap:7px}
+html[data-screen="ui"] .save-slot{grid-template-columns:32px minmax(0,1fr);gap:5px;padding:5px 6px}
+html[data-screen="ui"] .slot-picture{width:32px;height:44px}
+html[data-screen="ui"] .slot-picture img{max-height:42px}
+html[data-screen="ui"] .slot-picture>.icon{width:25px;height:25px}
+html[data-screen="ui"] .slot-actions{display:grid;grid-template-columns:minmax(0,1fr);gap:3px}
+html[data-screen="ui"] .slot-actions button{font-size:14px;min-height:25px;padding:2px 3px}
+html[data-screen="ui"] .slot-top{font-size:12px;white-space:nowrap}
+html[data-screen="ui"] .slot-name{font-size:15px}
+html[data-screen="ui"] .slot-meta{font-size:12px}
+html[data-screen="ui"] .paper-panel{padding:15px 18px 9px;gap:8px}
+html[data-screen="ui"] .parts-list{min-width:0;min-height:0;overflow:auto;grid-auto-rows:max-content}
+html[data-screen="ui"] .hanging-sign{height:60px}
+html[data-screen="ui"] .hanging-sign:before,html[data-screen="ui"] .hanging-sign:after{top:-10px;height:10px}
+
+/* Both standalone books share the same frame; the in-game collection overlay keeps its layout. */
+html[data-screen="ui"].pixely-stage-ready:not(.collection-overlay) .book-shell{
+ width:min(calc(82 * var(--ui-vw)),1640px);
+ height:min(calc(80 * var(--ui-vh)),900px);
+}
+html[data-screen="ui"]:not(.collection-overlay) .book-page{padding:24px 26px 18px;gap:12px}
+html[data-screen="ui"]:not(.collection-overlay) .chapter-grid{gap:18px 20px;padding:8px 4px}
+html[data-screen="ui"]:not(.collection-overlay) .collection-grid{gap:15px 12px}
+
+/* Main-menu settings only: leave all game dialogs and developer editors unchanged. */
+html[data-screen="home"].pixely-stage-ready .settings-dialog{
+ width:min(760px,calc(76 * var(--ui-vw)));
+ height:min(650px,calc(74 * var(--ui-vh)));
+ max-width:calc(76 * var(--ui-vw));max-height:calc(74 * var(--ui-vh));
+}
+html[data-screen="home"] .settings-heading{padding:20px 28px 16px;gap:16px;flex:none}
+html[data-screen="home"] .settings-close{top:22px;right:22px;width:44px;height:44px}
+html[data-screen="home"] .settings-tabs{padding:14px 28px 0;flex:none}
+html[data-screen="home"] .settings-tabs button{padding:11px 8px}
+html[data-screen="home"] .settings-panels{margin:0 28px;padding:12px 18px 14px;overflow-y:auto}
+html[data-screen="home"] .settings-row{min-height:64px;padding:12px 0;gap:18px}
+html[data-screen="home"] .settings-footer{padding:14px 28px;gap:14px;flex:none}
+html[data-screen="home"] .dialogue-preview{margin-top:14px;padding:18px}

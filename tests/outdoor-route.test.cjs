@@ -1,0 +1,33 @@
+'use strict';
+const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs');
+const D=require('../game-data.js'),M=require('../game-model.js'),C=require('../chapter-title.js'),P=require('../monologue-model.js'),Sound=require('../outdoor-ambience.js'),Settings=require('../settings.js'),Sandbox=require('./fixtures/game-sandbox.cjs');
+test('house door and bottom-center return form a reversible route with no acquired items or repeated dialogue',()=>{
+ const d=M.content(D.defaults()),s=M.create(d,0),front=d.locations.find(l=>l.id==='front'),porch=d.locations.find(l=>l.id==='porch');
+ assert.equal(front.objects.find(o=>o.id==='front-door').to,'porch');assert.equal(porch.builtin,'porch');assert.equal(porch.exits[0].side,'bottom');assert.equal(porch.exits[0].to,'front');
+ for(let i=0;i<5;i++){assert.equal(M.move(s,d,'porch'),true);assert.equal(M.restore(s,d).location,'porch');assert.equal(M.move(s,d,'front'),true);assert.equal(s.run,null);assert.deepEqual(s.inventory,{});}
+ assert.equal(s.visits.front,6);assert.equal(s.visits.porch,5);assert.equal(M.move(s,d,'missing'),false);
+ for(const l of [front,porch]){assert.equal(l.time,'6월 1일 · 낮');assert.equal(l.ambience,'garden');}
+});
+test('published prototype becomes the new route once, preserving monologue and background layers',()=>{
+ const raw=Sandbox.defaults();delete raw.contentVersion;delete raw.outdoorVersion;raw.monologue=P.content();raw.locations[0].layers=[{id:'owner-sky',name:'하늘',asset:'scene:front:sky',animation:'none'}];const before=structuredClone(raw),d=M.content(raw);
+ assert.deepEqual(raw,before);assert.deepEqual(d.monologue,P.content(raw.monologue));assert.deepEqual(d.locations[0].layers,P.layers(raw.locations[0].layers));assert.equal(d.locations[0].objects.length,1);assert.deepEqual(d.items,[]);assert.deepEqual(D.migrate(d),d);
+ assert.deepEqual(d.events.opening.map(s=>[s.speaker,s.text]),[['꿈뜰이','여기구나!'],['꿈뜰이','생각보다 조용하네...\n다들 안에 계시려나?']]);
+ d.locations.find(l=>l.id==='front').objects[0].rect.x=47;assert.equal(M.content(d).locations[0].objects[0].rect.x,47);
+});
+test('old mid-monologue/title saves keep their progress while adopting new arrival speech',()=>{
+ const raw=D.defaults();raw.monologue={...P.content(),pages:[{id:'intro',name:'독백',text:'',lines:Array.from({length:6},(_,i)=>({id:'line-'+i,text:'원래 독백 '+i,delivery:'monologue'})),layers:[]}]};const d=M.content(raw);for(const index of [0,1,2]){const s=M.create(d,3);delete s.outdoorVersion;s.run={id:'prologue-opening',index,steps:[{type:'monologue',page:0},{type:'chapter-title',number:0,title:'초대'},{type:'say',speaker:'꿈뜰이',text:'초대는 받았고, 귀가는 미정!'}],presentation:{index,elapsed:2321,page:0,line:5,count:0}};const restored=M.restore(s,d);assert.equal(restored.run.index,index);if(index<2){assert.equal(restored.run.presentation.elapsed,2321);assert.equal(restored.run.presentation.line,5);}else assert.equal(restored.run.presentation,undefined);const speech=restored.run.steps.filter(step=>step.type==='say');assert.equal(speech[0].text,'여기구나!');assert.equal(speech[1].text,'생각보다 조용하네...\n다들 안에 계시려나?');assert.equal(restored.run.steps.some(step=>step.type==='scene-reveal'),index===0);}
+});
+test('bright scene reveal is saved independently of the monologue and chapter title clocks',()=>{
+ const d=M.content(D.defaults()),s=M.create(d,0),steps=C.opening(P.opening(d));steps.splice(steps.findIndex(s=>s.type==='chapter-title'),0,{type:'scene-reveal'});assert.deepEqual(steps.map(s=>s.type),['monologue','scene-reveal','chapter-title','say','say']);s.run={id:'prologue-opening',index:1,steps,presentation:{index:1,elapsed:731}};assert.equal(M.restore(s,d).run.presentation.elapsed,731);s.run.presentation.elapsed=9000;assert.equal(M.restore(s,d).run.presentation.elapsed,1200);M.next(s);assert.equal(M.current(s).type,'chapter-title');assert.equal(C.crossed(0,1500)[0].id,'chapter-opening');
+});
+test('original outdoor ambience is finite, quiet, seamless and uses the effects volume policy',()=>{
+ const samples=Sound.render();let peak=0,energy=0,jump=0;for(let i=0;i<samples.length;i++){const value=samples[i];assert.ok(Number.isFinite(value));peak=Math.max(peak,Math.abs(value));energy+=value*value;if(i)jump=Math.max(jump,Math.abs(value-samples[i-1]));}assert.equal(samples.length,Sound.sampleRate*Sound.duration);assert.ok(peak>.02&&peak<.2);assert.ok(energy>1);assert.ok(jump<.1);assert.equal(samples[0],0);assert.equal(samples.at(-1),0);assert.equal(Settings.volume({...Settings.DEFAULTS,effectsEnabled:false},'effects'),0);
+});
+test('the uploaded porch artwork is retained intact and both pages use the same leaf engine',()=>{
+ const bytes=fs.readFileSync('assets/scenes/porch-oct24.png');assert.equal(bytes.toString('hex',0,8),'89504e470d0a1a0a');assert.equal(bytes.readUInt32BE(16),1672);assert.equal(bytes.readUInt32BE(20),941);for(const file of ['index.html','game.html'])assert.match(fs.readFileSync(file,'utf8'),/leaf-breeze\.js\?v=outdoor-43/);
+});
+test('ambience loop follows live mute, volume, panel pause and tab visibility without restarting',async()=>{
+ const vm=require('node:vm'),events={},documentEvents={},values=[],counts={contexts:0,starts:0,stops:0};let settings={...Settings.DEFAULTS};const doc={hidden:false,addEventListener:(type,fn)=>documentEvents[type]=fn};
+ class Audio{constructor(){counts.contexts++;this.currentTime=0;this.state='running';this.destination={};}createGain(){return {gain:{value:0,cancelScheduledValues(){},setTargetAtTime(value){values.push(value);}},connect(){}};}createBuffer(){return {copyToChannel(){}};}createBufferSource(){return {connect(){},start(){counts.starts++;},stop(){counts.stops++;}};}close(){return Promise.resolve();}}
+ const window={AudioContext:Audio,PixelySettings:{getVolume:()=>Settings.volume(settings,'effects')},addEventListener:(type,fn)=>events[type]=fn};const box={window,document:doc,Float32Array,Math,module:{exports:{}}};vm.runInNewContext(fs.readFileSync(require.resolve('../outdoor-ambience.js'),'utf8'),box);const ambience=box.module.exports.create();await ambience.prime();ambience.setActive(true);assert.equal(values.at(-1),.6);settings.effectsVolume=50;events['pixely:settingschange']();assert.equal(values.at(-1),.4);settings.effectsEnabled=false;events['pixely:settingschange']();assert.equal(values.at(-1),0);settings.effectsEnabled=true;ambience.setActive(false);assert.equal(values.at(-1),0);ambience.setActive(true);doc.hidden=true;documentEvents.visibilitychange();assert.equal(values.at(-1),0);doc.hidden=false;documentEvents.visibilitychange();assert.equal(values.at(-1),.4);await ambience.prime();assert.deepEqual(counts,{contexts:1,starts:1,stops:0});events.pagehide();assert.equal(counts.stops,1);
+});

@@ -1,0 +1,4 @@
+'use strict';
+const {handleUpload}=require('@vercel/blob/client');
+const A=require('../lib/editor-auth.cjs'),C=require('../lib/content.cjs');
+module.exports=async(req,res)=>{res.setHeader('Cache-Control','no-store');try{if(req.method!=='POST')throw C.fail('사용할 수 없는 요청이에요',405);const result=await handleUpload({request:req,body:req.body,onBeforeGenerateToken:async pathname=>{A.authorize(req,true);const audio=C.soundPath(pathname);if(!audio&&!C.assetPath(pathname))throw C.fail('이미지 경로가 올바르지 않아요');return {allowedContentTypes:audio?['audio/mpeg','audio/ogg','audio/wav','audio/x-wav','audio/mp4']:['image/png','image/jpeg','image/webp','image/gif'],maximumSizeInBytes:(audio?10:20)*1024*1024,validUntil:Date.now()+300000,allowOverwrite:false,addRandomSuffix:false};},onUploadCompleted:async()=>{}});res.status(200).json(result);}catch(e){res.status(e.status||400).json({error:e.message||'이미지를 저장하지 못했어요'});}};

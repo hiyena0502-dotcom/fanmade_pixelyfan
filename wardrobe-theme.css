@@ -1,0 +1,56 @@
+/* Storybook furniture: decoration is separate from the saved image canvas. */
+html[data-screen="ui"] .cabinet{
+ --ink:#60432e;--muted:#8b7156;--cream:#fff7e9;
+ border-color:#775033;border-radius:34px 34px 24px 24px;
+ background:repeating-linear-gradient(2deg,#6d49270d 0 1px,transparent 2px 26px),linear-gradient(100deg,#ac7c4f,#c99966 20%,#dbb180 50%,#c59663 80%,#a57649);
+ box-shadow:inset 0 0 0 3px #e7c496,inset 0 0 0 8px #9a6e43,0 7px 0 #69442b,0 20px 45px #40271440;
+}
+html[data-screen="ui"] .cabinet-content{
+ background:linear-gradient(105deg,#f3dfbd,#faf0db 38%,#ecd4ad);border:5px solid #b68b59;border-radius:18px;
+ box-shadow:inset 0 0 0 2px #fff3da,inset 0 5px 18px #815b3020;
+}
+.cabinet-header .hanging-sign{
+ width:410px;gap:12px;transform:translate(-50%,-50%);border:2px solid #9d7444;border-radius:10px 10px 20px 20px;
+ background:linear-gradient(#fff9ea,#f2dfba);box-shadow:inset 0 0 0 3px #fffdf4,0 3px 0 #8c623c,0 5px 8px #55341920;
+}
+.hanging-sign h1{font-size:36px;letter-spacing:.01em;color:#60432e}.hanging-sign .icon{width:36px;height:36px;color:#a07846}
+html[data-screen="ui"] .hanging-sign:before,html[data-screen="ui"] .hanging-sign:after{width:5px;border-width:1px;background:#b39462}
+.wood-button{border-width:2px;border-color:#88613b;background:linear-gradient(#bd905e,#a77949);box-shadow:inset 0 0 0 2px #dfbd8a,0 2px 0 #79502e;border-radius:8px}
+.back{font-size:18px;padding:8px 17px;min-height:36px}
+.mirror-frame{
+ border-color:#8c633d;border-radius:49% 49% 18px 18px / 25% 25% 18px 18px;
+ background:linear-gradient(100deg,#ac7f46,#e3c593 25%,#c4a06b 55%,#e8cf9d 80%,#a5743e);
+ box-shadow:inset 0 0 0 2px #f7e5bd,inset 0 0 0 5px #c49e68,0 4px 0 #805832,0 8px 16px #75512d25;
+}
+.mirror-frame:before,.mirror-frame:after{content:"";position:absolute;top:25%;bottom:25px;width:2px;background:linear-gradient(transparent,#f5dfae 20%,#f5dfae 80%,transparent);pointer-events:none}
+.mirror-frame:before{left:5px}.mirror-frame:after{right:5px}
+.mirror-carving{width:164px;height:44px;top:-12px;color:#8c673b;filter:drop-shadow(0 1px 0 #fce8bc);pointer-events:none}
+.preview-stage{border-color:#d9be88;border-width:3px;border-radius:49% 49% 10px 10px / 25% 25% 10px 10px;background:linear-gradient(116deg,#fffaf0,#e8efea 30%,#fafcf4 31%,#eff4ed 54%,#dce8e1 82%,#fff7e5);box-shadow:inset 0 0 0 1px #fff9e1,inset 0 0 20px #758c7933}
+.preview-stage:after{background:linear-gradient(122deg,transparent 22%,#fff7 23% 25%,transparent 26% 66%,#fff4 67% 69%,transparent 70%)}
+.preview-caption{width:76%;border-color:#c3a174;border-radius:6px 6px 11px 11px;background:linear-gradient(#fff9e9,#f4e2bd);box-shadow:inset 0 0 0 2px #fffaf0,0 2px 0 #a98252;color:#6e5133}
+.preview-caption strong{font-size:20px;letter-spacing:.08em}
+.empty-stage{color:#8b9b8a;gap:13px}.empty-stage .icon{width:64px;height:64px;color:#a8b2a0;stroke-width:1.3}.empty-stage span{font-size:16px}
+html[data-screen="ui"] .paper-panel{border:3px solid #cdb18b;border-radius:16px;background:linear-gradient(#fffdf3,#fbf2e2);box-shadow:inset 0 0 0 3px #fffaf0,0 3px 0 #b99568,0 6px 14px #65452117;padding:16px 18px 10px;gap:9px}
+.paper-heading{padding-bottom:7px;border-bottom:1px solid #e5d4b7}.paper-heading h2{font-size:23px;letter-spacing:.01em}.paper-heading>span{font-size:14px;color:#8c8063;background:#f2e8d4;border:1px solid #e3d2b1;border-radius:20px;padding:3px 10px;white-space:nowrap}
+.editor-tabs{gap:7px}.editor-tabs button{font-size:18px;border:1px solid #d9c4a3;border-radius:9px 9px 5px 5px;background:#f0e6d4;color:#8a7357;padding:8px 7px}
+.editor-tabs button[aria-selected=true]{color:#624832;background:#fffaf0;border-color:#b79a6f;box-shadow:inset 0 -3px #bb9b68}
+.category-tabs{gap:7px}.category-tabs button{border-color:#deccb0;background:#fefaf1;border-radius:20px;font-size:17px;padding:5px 8px;color:#8a7559}
+.category-tabs button:nth-child(1){--tab:#eed4c2}.category-tabs button:nth-child(2){--tab:#dbe8e4}.category-tabs button:nth-child(3){--tab:#e8dfe8}.category-tabs button:nth-child(4){--tab:#e4e8ce}
+.category-tabs button[aria-pressed=true]{border-color:#b89a73;color:#634c33;box-shadow:none}
+.parts-list{gap:10px;padding:5px 2px}.part-card{border-color:#dfcfb6;background:#fffdf6;border-radius:10px;box-shadow:0 2px 4px #76532a0a}.part-card.is-worn{border-color:#93b5a1;background:#f2f7ee}.part-card.is-selected{box-shadow:inset 0 0 0 1px #a38557}.part-thumb{border:1px solid #e4d7c2;background:repeating-conic-gradient(#f1eee5 0 25%,#fffdf7 0 50%) 0 0/14px 14px}.part-caption input{accent-color:#789a83}
+.list-empty{background:linear-gradient(#fffaf0,#f8efdf);border:1px dashed #cdb48c;border-radius:10px;color:#9c896e}.list-empty .icon{stroke-width:1.35;color:#c0a680}
+.cream-button{border-width:1px;border-color:#c5ab82;border-radius:7px;background:linear-gradient(#fffdf5,#f5e9d2);box-shadow:inset 0 0 0 2px #fffaf0,0 2px 0 #d5bd99}
+.blue-button{border:2px solid #789588;border-radius:7px;background:linear-gradient(#a5bcaa,#829f8c);color:#fffef4;text-shadow:0 1px #6d8975;box-shadow:inset 0 0 0 1px #c9d8bf,0 2px 0 #647d6c}
+html[data-screen="ui"] .slot-drawer{gap:6px}.slots-heading{color:#795735;text-shadow:none;gap:10px}.slots-heading h2{font-size:19px;gap:6px}.slots-heading h2 .icon{width:18px;height:18px}.export-button{font-size:15px}
+html[data-screen="ui"] .save-slots{gap:7px}.save-slot{border:2px solid #bca075;border-radius:9px;background:linear-gradient(#fffaf0,#f5e8d0);box-shadow:inset 0 0 0 2px #fffef6,0 2px 0 #ab875a}
+.slot-picture{border-color:#d5c09b;background:#fffdf5;border-radius:5px;color:#c2ad89}.slot-top{color:#8c795a;letter-spacing:.02em}.slot-name{color:#6c5135;border-color:#decaab}.slot-meta{color:#a08a68}.slot-actions button{border-color:#d0b68c;background:#fffaf0;border-radius:5px;color:#8a7050}.slot-actions button:first-child{background:#e0ebda;border-color:#aabb9c;color:#627753}.slot-actions button:hover:not(:disabled){filter:brightness(.97)}
+.form-grid input,.form-grid select,.layer-picker select{border-color:#d9c7a7;background:#fffef7}.sliders input[type=range]{accent-color:#849f85}.sliders input[type=number]{border-color:#d3be99;background:#fffdf5}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline-color:#839b79}
+/* Small photo labels use the whole card width; the picture no longer squeezes the slot name. */
+html[data-screen="ui"] .save-slot{display:block;position:relative}
+html[data-screen="ui"] .slot-picture{position:absolute;top:5px;right:6px;width:26px;height:24px}
+html[data-screen="ui"] .slot-picture img{max-height:22px}
+html[data-screen="ui"] .slot-picture>.icon{width:19px;height:19px}
+.slot-body{height:100%;gap:2px}
+html[data-screen="ui"] .slot-top{height:24px;min-height:24px;padding-right:30px;letter-spacing:0}
+.slot-clear{position:absolute;top:2px;right:2px;z-index:1;width:15px;height:15px;border-radius:50%;background:#fffaf0}
+html[data-screen="ui"] .slot-meta{font-size:12px;line-height:1}
