@@ -60,7 +60,19 @@
     }
     samples[0]=0;samples[samples.length-1]=0;return samples;
   }
+  // Two original, dry wooden taps for the porch door.
+  function doorKnock(){
+    const samples=new Float32Array(Math.ceil(.65*RATE));let seed=1341,noise=0;
+    for(const offset of [.015,.245])for(let i=0;i<Math.ceil(.18*RATE);i++){
+      const t=i/RATE;seed=(Math.imul(seed,1664525)+1013904223)>>>0;noise+=.18*(seed/2147483648-1-noise);
+      const attack=Math.min(1,t/.005),tail=Math.pow(Math.max(0,1-t/.18),2)*Math.exp(-t*14);
+      const body=Math.sin(2*Math.PI*215*t)+.35*Math.sin(2*Math.PI*347*t)+noise*.6;
+      samples[Math.round(offset*RATE)+i]+=body*.25*attack*tail;
+    }
+    samples[0]=0;samples[samples.length-1]=0;return samples;
+  }
   function render(kind,target="",syllableIndex=null){
+    if(kind==="knock")return doorKnock();
     if(kind==="chapter-first"||kind==="chapter-second")return chapterDrum(kind==="chapter-second");
     if(kind==="wood"||kind==="rustle") return objectSound(kind);
     const voice=voices[kind];
@@ -96,7 +108,7 @@
     }
     return samples;
   }
-  function effectKind(target){return ({house:"wood",bush:"rustle","chapter-first":"chapter-first","chapter-second":"chapter-second"})[target]??"none";}
+  function effectKind(target){return ({"door-knock":"knock",house:"wood",bush:"rustle","chapter-first":"chapter-first","chapter-second":"chapter-second"})[target]??"none";}
   const api=Object.freeze({sampleRate:RATE,render,effectKind});
   if(typeof module!=="undefined"&&module.exports) module.exports=api;
   else window.PixelySounds=api;

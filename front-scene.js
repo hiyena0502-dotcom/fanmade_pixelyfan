@@ -18,7 +18,7 @@
  // A session seed gives each crossing fresh traits while preserving its position on redraw.
  function cloudState(cloud,elapsed,seed=cloudSeed){
   function random(cycle,salt){let n=(seed^Math.imul(cloud.id,0x9e3779b1)^Math.imul(cycle+1,0x85ebca6b)^salt)>>>0;n=Math.imul(n^(n>>>16),0x7feb352d);n=Math.imul(n^(n>>>15),0x846ca68b);return ((n^(n>>>16))>>>0)/4294967296;}
-  const variant=cycle=>({cycle,width:11+random(cycle,1)*8,top:5+random(cycle,2)*27,opacity:.66+random(cycle,3)*.22,duration:125+random(cycle,4)*80});
+  const variant=cycle=>({cycle,width:11+random(cycle,1)*8,top:2+random(cycle,2)*16,opacity:.66+random(cycle,3)*.22,duration:125+random(cycle,4)*80});
   let state=variant(0),start=-((cloud.id-1+random(0,5))/CLOUDS.length)*state.duration*1000;const time=Math.max(0,Number(elapsed)||0);
   while(time>=start+state.duration*1000){start+=state.duration*1000;state=variant(state.cycle+1);}
   return {...state,start};

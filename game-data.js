@@ -8,14 +8,21 @@ function defaults(){return outdoor({version:1,contentVersion:CONTENT_VERSION,sta
 ],characters:[{id:'jam',name:'잠뜰',images:{}},{id:'gak',name:'각별',images:{}},{id:'rad',name:'라더',images:{}},{id:'soo',name:'수현',images:{}},{id:'gong',name:'공룡',images:{}},{id:'duk',name:'덕개',images:{}},{id:'player',name:'꿈뜰이',images:{}}],items:[],puzzles:[],inspections:[],events:{opening:[]}});}
 const ARRIVAL_LINES=[{type:'say',actor:'player',speaker:'꿈뜰이',text:'여기구나!'},{type:'say',actor:'player',speaker:'꿈뜰이',text:'생각보다 조용하네...\n다들 안에 계시려나?'}];
 function outdoor(next){
- if(next.outdoorVersion>=1)return next;
+ if(next.outdoorVersion>=1)return porchDoor(next);
  const front=next.locations?.find(scene=>scene.id==='front');
  if(!front||next.start!=='front')return next;
  front.time='6월 1일 · 낮';front.ambience='garden';
  front.objects=front.objects||[];front.objects=front.objects.filter(object=>object.id!=='front-door');
  front.objects.push({id:'front-door',name:'현관문 앞으로',kind:'move',to:'porch',rect:{x:48,y:60,w:4,h:13},condition:[]});
  if(!next.locations.some(scene=>scene.id==='porch'))next.locations.push({id:'porch',name:'픽셀리의 집 · 현관문 앞',time:'6월 1일 · 낮',ambience:'garden',chapter:'prologue',background:'',builtin:'porch',actors:[],objects:[],exits:[{id:'porch-back',to:'front',label:'집 앞으로 돌아가기',side:'bottom',condition:[]}]});
- next.events||={};next.events[next.opening||'opening']=structuredClone(ARRIVAL_LINES);next.outdoorVersion=1;return next;
+ next.events||={};next.events[next.opening||'opening']=structuredClone(ARRIVAL_LINES);next.outdoorVersion=1;return porchDoor(next);
+}
+function porchDoor(next){
+ if(next.porchInteractionVersion>=1)return next;
+ const porch=next.locations?.find(scene=>scene.id==='porch');if(!porch)return next;
+ porch.objects||=[];if(!porch.objects.some(object=>object.id==='porch-door'))porch.objects.push({id:'porch-door',name:'현관문',kind:'inspect',rect:{x:38,y:20,w:24,h:62},event:'porch-door-choice',condition:[]});
+ next.events||={};next.events['porch-door-choice']||=[{type:'choice',id:'porch-knock',prompt:'노크를 할까?',options:[{text:'주변을 더 둘러본다',steps:[]},{text:'노크한다',steps:[{type:'sfx',id:'door-knock'},{type:'wait',ms:700},{type:'flag',id:'porch-knocked',value:true}]}]}];
+ next.porchInteractionVersion=1;return next;
 }
 function stepsWithoutDemo(steps){return (steps||[]).flatMap(step=>{
  if(['give','take','puzzle','complete','object','closeup','closeup-back'].includes(step.type))return [];
